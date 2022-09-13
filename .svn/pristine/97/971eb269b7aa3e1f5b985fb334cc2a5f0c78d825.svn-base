@@ -1,0 +1,351 @@
+﻿@page "/products"
+@using PoPoy.Client.Services.ProductService
+@using PoPoy.Shared.Dto;
+@inject IProductService _productSvc;
+@using PoPoy.Shared.Paging
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration _config;
+<PageInfos Title="Sản phẩm"></PageInfos>
+<div class="bg-main">
+    <div class="container">
+        <div class="box">
+            <div class="breadcumb">
+                <a href="./index.html">home</a>
+                <span><i class='bx bxs-chevrons-right'></i></span>
+                <a href="./products.html">all products</a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="row">
+                <div class="col-3" id="filter-col">
+                    <div class="box filter-toggle-box">
+                        <button class="btn-flat btn-hover" id="filter-close">close</button>
+                    </div>
+                    <div class="box">
+                        <span class="filter-header">
+                            Categories
+                        </span>
+                        <ul class="filter-list">
+                            <li><a href="#">Wireless</a></li>
+                            <li><a href="#">In-ear headphone</a></li>
+                            <li><a href="#">Over-ear headphone</a></li>
+                            <li><a href="#">sport headphone</a></li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <span class="filter-header">
+                            Price
+                        </span>
+                        <div class="price-range">
+                            <input type="text">
+                            <span>-</span>
+                            <input type="text">
+                        </div>
+                    </div>
+                    <div class="box">
+                        <ul class="filter-list">
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="status1">
+                                    <label for="status1">
+                                        On sale
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="status2">
+                                    <label for="status2">
+                                        In stock
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="status3">
+                                    <label for="status3">
+                                        Featured
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <span class="filter-header">
+                            Brands
+                        </span>
+                        <ul class="filter-list">
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1" checked="checked">
+                                    <label for="remember1">
+                                        JBL
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember2">
+                                    <label for="remember2">
+                                        Beat
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember3">
+                                    <label for="remember3">
+                                        Logitech
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember4">
+                                    <label for="remember4">
+                                        Samsung
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember5">
+                                    <label for="remember5">
+                                        Sony
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <span class="filter-header">
+                            Colors
+                        </span>
+                        <ul class="filter-list">
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1">
+                                    <label for="remember1">
+                                        Red
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember2">
+                                    <label for="remember2">
+                                        Blue
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember3">
+                                    <label for="remember3">
+                                        White
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember4">
+                                    <label for="remember4">
+                                        Pink
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember5">
+                                    <label for="remember5">
+                                        Yellow
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <span class="filter-header">
+                            rating
+                        </span>
+                        <ul class="filter-list">
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1">
+                                    <label for="remember1">
+                                        <span class="rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                        </span>
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1">
+                                    <label for="remember1">
+                                        <span class="rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bx-star'></i>
+                                        </span>
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1">
+                                    <label for="remember1">
+                                        <span class="rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bx-star'></i>
+                                            <i class='bx bx-star'></i>
+                                        </span>
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1">
+                                    <label for="remember1">
+                                        <span class="rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bx-star'></i>
+                                            <i class='bx bx-star'></i>
+                                            <i class='bx bx-star'></i>
+                                        </span>
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="group-checkbox">
+                                    <input type="checkbox" id="remember1">
+                                    <label for="remember1">
+                                        <span class="rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bx-star'></i>
+                                            <i class='bx bx-star'></i>
+                                            <i class='bx bx-star'></i>
+                                            <i class='bx bx-star'></i>
+                                        </span>
+                                        <i class='bx bx-check'></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="box filter-toggle-box">
+                        <button class="btn-flat btn-hover" id="filter-toggle">filter</button>
+                    </div>
+                    <div class="box">
+                        <div class="row" id="products">
+                            @if (ProductList.Count == 0)
+                            {
+                                <LoadingScreen></LoadingScreen>
+                            }
+                            else
+                            {
+                                foreach (var item in ProductList)
+                                {
+
+                                    <div class="col-4 col-md-6 col-sm-12">
+                                        <div class="product-card">
+                                            <div class="product-card-img">
+
+                                                @try
+                                                {
+                                                    @if (item.ProductImages.Any())
+                                                    {
+                                                        <img src="@item.ProductImages.FirstOrDefault().ImagePath" alt="">
+                                                        <img src="@item.ProductImages.Skip(1).FirstOrDefault().ImagePath" alt="">
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@_config["BackendApiUrl"]/uploads/no-photo-available.png" alt="">
+                                                    }
+
+
+
+                                                }
+                                                catch { }
+
+                                            </div>
+                                            <div class="product-card-info">
+                                                <div class="product-btn">
+                                                    <a href="/product-detail/@item.Id" class="btn-flat btn-hover btn-shop-now">shop now</a>
+                                                    <button class="btn-flat btn-hover btn-cart-add">
+                                                        <i class="bx bxs-cart-add"></i>
+                                                    </button>
+                                                    <button class="btn-flat btn-hover btn-cart-add">
+                                                        <i class="bx bxs-heart"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="product-card-name">
+                                                    @item.Title
+                                                </div>
+                                                <div class="product-card-price">
+                                                    <span><del>400</del></span>
+                                                    <span class="curr-price">@item.Price</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            }
+                        </div>
+                    </div>
+                    <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    public List<Product> ProductList { get; set; } = new List<Product>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    private ProductParameters _productParameters = new ProductParameters();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProducts();
+    }
+    private async Task SelectedPage(int page)
+    {
+        _productParameters.PageNumber = page;
+        await GetProducts();
+    }
+    private async Task GetProducts()
+    {
+        var pagingResponse = await _productSvc.GetAll(_productParameters);
+        ProductList = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
+}

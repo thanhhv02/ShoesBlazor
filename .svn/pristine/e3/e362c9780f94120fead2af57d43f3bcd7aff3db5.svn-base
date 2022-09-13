@@ -1,0 +1,97 @@
+﻿@page "/cart"
+@inject ICartService CartService
+@*@inject IPaymentService PaymentService*@
+@inject NavigationManager NavigationManager
+@inject ICartState CartState
+@using PoPoy.Client.Services.ProductService
+@using PoPoy.Client.Services.CartService;
+@using PoPoy.Client.State;
+@using PoPoy.Shared.Dto
+<PageInfos Title="Giỏ hàng"></PageInfos>
+
+<BackToTop></BackToTop>
+
+@if (carts is null)
+{
+<h2>Giỏ hàng</h2>
+                <LoadingScreen></LoadingScreen> }
+            else if (carts.Count == 0)
+            {
+<h2>Hiện tại không có sản phẩm nào trong giỏ hàng của bạn.</h2> }
+else
+{
+<h2>Giỏ hàng</h2>
+
+                <div class="row">
+                    <div class="col-sm-9">
+                        <hr />
+                        @foreach (var cart in carts)
+                        {
+        <div class="row">
+            @if (cart.Product.ProductImages != null && cart.Product.ProductImages.Any())
+            {
+<img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">}
+
+            <div class="col-sm-8">
+                <h4>@cart.Product.Title</h4>
+                <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" QuantityChanged="() => StateHasChanged()" />
+                <div class="d-flex flex-row align-items-center mt-3">
+                    <i class="oi oi-trash"></i>
+                    <a href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</a>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <h4>@cart.Product.Price.ToString("n0")</h4>
+            </div>
+        </div>
+                            <hr />}
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-subtitle mb-2">Tổng số @(CalcTotalQuantity()) sản phẩm (đã bao gồm thuế) </h5>
+                                <h4 class="card-title text-danger">@CalcTotalAmount().ToString("n0")</h4>
+                                <div class="d-grid gap-2 mx-auto">
+                                    <button class="btn btn-warning" @onclick="@(() => GoToPayment())" disabled="@buttonDisabled">Tiếp tục đặt hàng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+
+@code { private List<Cart> carts;
+    private bool buttonDisabled;
+
+    protected override async Task OnInitializedAsync()
+    {
+        carts = await CartService.GetAllAsync();
+        await CartState.UpdateAsync();
+    }
+
+    private decimal CalcTotalAmount()
+        => carts.Sum(x => x.CalcAmount());
+
+    private int CalcTotalQuantity()
+        => carts.Sum(x => x.Quantity);
+
+    private async Task RemoveCart(Cart cart)
+    {
+        await CartService.RemoveAsync(cart.Product.Id);
+        carts = await CartService.GetAllAsync();
+        StateHasChanged();
+    }
+
+    private async Task GoToPayment()
+    {
+        try
+        {
+            buttonDisabled = true;
+
+            //var checkoutUrl = await PaymentService.GetCheckoutUrlAsync(carts);
+            //NavigationManager.NavigateTo(checkoutUrl);
+        }
+        finally
+        {
+            buttonDisabled = false;
+        }
+    } }

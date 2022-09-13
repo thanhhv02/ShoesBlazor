@@ -1,0 +1,26 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <section class="dashboard-area">
+            <div class="dashboard_menu_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="dashboard_menu">
+                                <li>
+                                    <a href="/user/profile/@context.User.GetUserId()">
+                                        <i class='bx bx-file'></i> Hồ sơ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/user/setting">
+                                        <span class='bx bx-help-circle'></span> Cài đặt
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </Authorized>
+</AuthorizeView>

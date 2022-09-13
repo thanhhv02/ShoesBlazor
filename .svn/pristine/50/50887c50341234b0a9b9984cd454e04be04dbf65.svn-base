@@ -1,0 +1,30 @@
+﻿@*<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @foreach (var link in _links)
+        {
+            <li @onclick="@(()=> OnSelectedPage(link))"
+                style="cursor:pointer" class="page-item
+                @(link.Active?"active":null)
+                @(link.Enabled?null:"disabled") ">
+                <span class="page-link" href="#">@link.Text</span>
+            </li>
+        }
+    </ul>
+</nav>*@
+<div class="box">
+    <ul class="pagination justify-content-center">
+        @foreach (var link in _links)
+        {
+            <li @onclick="@(()=> OnSelectedPage(link))"
+                style="cursor:pointer" class="page-item
+                @(link.Active?"active":null)
+                @(link.Enabled?null:"disabled") ">
+                <span class="page-link" href="#">@link.Text</span>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+
+}

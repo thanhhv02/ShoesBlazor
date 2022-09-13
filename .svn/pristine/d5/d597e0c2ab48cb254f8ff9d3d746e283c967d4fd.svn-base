@@ -1,0 +1,95 @@
+﻿@page "/listProduct"
+
+@inject IConfiguration Configuration
+@inject IProductService ProductService
+
+<h1 class="mt-4 ml-3 mb-3">Danh sách sản phẩm</h1>
+<div class="input-group" style="left: 950px;">
+    <div class="form-outline">
+        <input @bind-value="searchText"
+               type="search"
+               list="users"
+               class="form-control"
+               placeholder="Search..." />
+    </div>
+    <button type="button" class="btn btn-primary" @onclick="SearchProducts">
+        <i class="fas fa-search"></i>
+    </button>
+</div>
+<td><a href="/createProduct" class="btn btn-primary">Tạo mới sản phẩm</a></td>
+<div class="row mt-4 ml-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    Mô tả
+                </th>
+                <th>
+                    Giá
+                </th>
+                <th>
+                    Giá gốc
+                </th>
+                <th>
+                    Số lượt xem
+                </th>
+                <th>
+                    Loại
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var items in Products)
+            {
+                <tr>
+                    <td>@items.Id</td>
+                    <td>@items.Title</td>
+                    <td>@items.Description</td>
+                    <td>@items.Price</td>
+                    <td>@items.OriginalPrice</td>
+                    <td>@items.Views</td>
+                    <td>@items.Categories.FirstOrDefault()</td>
+                    <td><a href="/updateProduct/@items.Id" class="btn btn-warning">Chỉnh sửa</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private string searchText = string.Empty;
+    private List<ProductVM> Products { get; set; } = new List<ProductVM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProducts();
+    }
+    private async Task GetProducts()
+    {
+        var pagingResponse = await ProductService.GetAllProducts();
+        if (searchText != null)
+        {
+            Products = pagingResponse;
+        }
+    }
+
+    public async Task SearchProducts()
+    {
+        var pagingResponse = await ProductService.GetAllProducts();
+        if (!String.IsNullOrEmpty(searchText))
+        {
+            Products = await ProductService.SearchProduct(searchText);
+        }
+        else
+        {
+            Products = pagingResponse;
+        }
+    }
+}

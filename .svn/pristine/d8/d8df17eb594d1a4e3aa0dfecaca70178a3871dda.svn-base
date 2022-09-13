@@ -1,0 +1,130 @@
+﻿@page "/listUser"
+
+@inject IConfiguration Configuration
+@inject IAuthService AuthService
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger">
+        <p>@Error</p>
+    </div>
+}
+else
+{
+    <h1 class="mt-4 ml-3 mb-3">Danh sách người dùng</h1>
+    <div class="input-group" style="left: 950px;">
+        <div class="form-outline">
+            <input @bind-value="searchText"
+                   type="search"
+                   list="users"
+                   class="form-control"
+                   placeholder="Search..." />
+        </div>
+        <button type="button" class="btn btn-primary" @onclick="SearchUsers">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+    <div class="row mt-4 ml-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Tên
+                    </th>
+                    <th>
+                        Họ
+                    </th>
+                    <th>
+                        Số điện thoại
+                    </th>
+                    <th>
+                        Tài khoản
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Users)
+                {
+                    <tr>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Email</td>
+                        <td><a href="/roles/@item.Id" class="btn btn-primary">Phân quyền</a></td>
+                        <td><a href="/updateUser/@item.Id" class="btn btn-warning">Chỉnh sửa</a></td>
+                        <td><button @onclick="()=> OnDeleteTask(item.Id)" class="btn btn-danger">Xóa</button></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+
+<Confirmation ConfirmationMessage="Bạn chắc chắn xóa người dùng này?"
+              ConfirmationTitle="Xóa người dùng"
+              @ref="DeleteConfirmation"
+              ConfirmationChanged="OnConfirmDeleteTask">
+
+</Confirmation>
+
+@code {
+    private string searchText = string.Empty;
+    private bool ShowErrors;
+    private List<User> Users { get; set; } = new List<User>();
+    private string Error = "";
+    private Guid DeleteId { set; get; }
+    private Confirmation DeleteConfirmation { set; get; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUsers();
+    }
+
+    public void OnDeleteTask(Guid deleteId)
+    {
+        DeleteId = deleteId;
+        DeleteConfirmation.Show();
+    }
+
+    public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await AuthService.DeleteUser(DeleteId);
+            await GetUsers();
+        }
+    }
+
+    private async Task GetUsers()
+    {
+        ShowErrors = false;
+        var pagingResponse = await AuthService.GetUsers();
+        if (searchText != null)
+        {
+            Users = pagingResponse;
+        }
+        if (pagingResponse.Count == 0)
+        {
+            Error = "Không tìm thấy người dùng";
+        }
+    }
+
+    public async Task SearchUsers()
+    {
+        var pagingResponse = await AuthService.GetUsers();
+        if (!String.IsNullOrEmpty(searchText))
+        {
+            Users = await AuthService.SearchUser(searchText);
+        }
+        else
+        {
+            Users = pagingResponse;
+        }
+    }
+}
