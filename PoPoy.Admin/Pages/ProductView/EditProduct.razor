@@ -55,7 +55,7 @@ else
                         {
                             <div class="photodetail w-25 p-1">
                                 <img class="w-100" src="@item.ImagePath" />
-                                <span class="btn btn-danger" @onclick="() => DeleteImage(int.Parse(Id))">Delete</span>
+                                <span class="btn btn-danger" @onclick="() => DeleteImage(item.Id)">Delete</span>
                             </div>
                             @*<div class="form-group">
                         <img src="images/food/@(item.FileName)" class="w-25 photodetail"/>
@@ -133,9 +133,9 @@ else
         StateHasChanged();
     }
 
-    private async void DeleteImage(int productId)
+    private async void DeleteImage(int imageId)
     {
-        await ProductService.DeleteFile(productId);
+        await ProductService.DeleteFile(imageId);
         Product = await ProductService.GetProductById(int.Parse(Id));
         StateHasChanged();
     }

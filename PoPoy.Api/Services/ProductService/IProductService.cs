@@ -20,7 +20,7 @@ namespace PoPoy.Api.Services.ProductService
         Task<int> DeleteProduct(int productId);
         Task<List<ProductVM>> SearchProduct(string searchText);
         Task<ServiceResponse<List<UploadResult>>> UploadProductImage(List<IFormFile> files, int productId);
-        Task<int> DeleteProductImage(int productId);
+        Task<bool> DeleteProductImage(int imageId);
         ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids);
     }
 }

@@ -56,9 +56,9 @@ namespace PoPoy.Admin.Services.ProductService
             await _httpClient.PutAsJsonAsync($"api/product/{product.Id}", product);
         }
 
-        public async Task DeleteFile(int productId)
+        public async Task DeleteFile(int imageId)
         {
-            await _httpClient.DeleteAsync($"api/product/delete-image/{productId}");
+            await _httpClient.DeleteAsync($"api/product/delete-image/{imageId}");
         }
     }
 }

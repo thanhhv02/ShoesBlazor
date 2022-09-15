@@ -110,10 +110,10 @@ namespace PoPoy.Api.Controllers
 
             return Ok(uploadResults.Data);
         }
-        [HttpDelete("delete-image/{productId}")]
-        public async Task<IActionResult> DeleteFile(int productId)
+        [HttpDelete("delete-image/{imageId}")]
+        public async Task<IActionResult> DeleteFile(int imageId)
         {
-            var uploadResults = await _productServices.DeleteProductImage(productId);
+            var uploadResults = await _productServices.DeleteProductImage(imageId);
             return Ok(uploadResults);
         }
     }

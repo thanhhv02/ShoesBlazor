@@ -400,7 +400,7 @@
     private Cart cart;
     private Product product;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         product = new Product();
         var result = await _productSvc.Get(id);

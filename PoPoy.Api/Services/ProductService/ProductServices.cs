@@ -169,7 +169,7 @@ namespace PoPoy.Api.Services.ProductService
         {
             using (_dataContext)
             {
-                return await _dataContext.Products.Where(x => ids.Contains(x.Id)).ToListAsync();
+                return await _dataContext.Products.Where(x => ids.Contains(x.Id)).Include(x=>x.ProductImages).ToListAsync();
             }
         }
 
@@ -202,7 +202,7 @@ namespace PoPoy.Api.Services.ProductService
             foreach (var file in files)
             {
                 var uploadResult = new UploadResult();
-                string trustedFileNameForFileStorage;
+                //string trustedFileNameForFileStorage;
                 var untrustedFileName = file.FileName;
                 uploadResult.FileName = untrustedFileName;
                 //var trustedFileNameForDisplay = WebUtility.HtmlEncode(untrustedFileName);
@@ -232,17 +232,16 @@ namespace PoPoy.Api.Services.ProductService
             return new ServiceSuccessResponse<List<UploadResult>>(uploadResults);
         }
 
-        public async Task<int> DeleteProductImage(int productId)
+        public async Task<bool> DeleteProductImage(int productId)
         {
-            var images = _dataContext.ProductImages.Where(i => i.ProductId == productId);
-            if(images != null)
-            {
-                foreach (var image in images)
-                {
-                    _dataContext.ProductImages.Remove(image);
-                }
-            }
-            return await _dataContext.SaveChangesAsync();
+            var images = _dataContext.ProductImages.Where(i => i.Id == productId).FirstOrDefault();
+            if (images == null)
+                 return false;
+            _dataContext.Remove(images);
+            await _dataContext.SaveChangesAsync();
+            var GET_FILE_NAME_FROM_PATH = images.ImagePath.Replace(_configuration["ApiUrl"]+"/","");
+            var filename = "wwwroot/images/uploads/" + GET_FILE_NAME_FROM_PATH;
+            return true;
         }
     }
 }

@@ -15,6 +15,6 @@ namespace PoPoy.Admin.Services.ProductService
         Task<ProductVM> GetProductById(int productId);
         Task CreateProduct(ProductCreateRequest request);
         Task UpdateProduct(ProductVM product);
-        Task DeleteFile(int productId);
+        Task DeleteFile(int imageId);
     }
 }
