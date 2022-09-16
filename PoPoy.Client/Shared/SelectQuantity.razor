@@ -5,14 +5,14 @@
 <div class="d-flex flex-row align-items-center mt-3">
     <span>Số lượng&nbsp; </span>
     <EditForm Model="@Model">
-        <InputSelect class="form-control w-100"  Value="@Model.Quantity" ValueExpression="@(() => Model.Quantity)" 
+        <InputNumber class="form-control w-100"  Value="@Model.Quantity" ValueExpression="@(() => Model.Quantity)" 
                      ValueChanged="@((int value) => OnQuantityChanged(value, Model))"
                      style="width: 50px;">
-            @foreach (int num in Enumerable.Range(1, 9))
+            @*@foreach (int num in Enumerable.Range(1, 9))
             {
                 <option value="@num" >@num</option>
-            }
-        </InputSelect>
+            }*@
+        </InputNumber>
     </EditForm>
 </div>
 

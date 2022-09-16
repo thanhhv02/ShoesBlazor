@@ -68,7 +68,7 @@
                     <p class="product-description">
                         @product.Description
                     </p>
-                    <div class="product-info-price">$2345</div>
+                    <div class="product-info-price">@product.Price.ToString("n0")</div>
 
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
                     <div>
@@ -411,6 +411,6 @@
     private async void AddToCart()
     {
         await _cartSvc.AddAsync(cart.ToCartStorage());
-        _toastSvc.ShowSuccess("Thêm thành công");
+        _toastSvc.ShowSuccess($"Thêm thành công {cart.Product.Title} x{cart.Quantity}");
     }
 }
