@@ -214,13 +214,13 @@
       "mscorlib.dll": "sha256-zMI\/dXK7DoZZ9Qm9U9\/jRN4iQ9Ss3w8\/rwQQxC6SW9Y=",
       "netstandard.dll": "sha256-W3q3PN+lpRB+tRJEIhtMgYOGFv0pauEeeCS9iIRkKAM=",
       "System.Private.CoreLib.dll": "sha256-9rUJv1mXEQdGt\/kWiJ1ITPPzp3cAi3lSmqHVTisp7w0=",
-      "PoPoy.Shared.dll": "sha256-6wS4CkactLCgt7ddEZPmU1zm6HWbkEh8FtPuAXs3Lno=",
-      "PoPoy.Client.dll": "sha256-RHw\/Exz9piXqjMgpn23cs+BvX2GfWk5EjYFk9J5YkEs="
+      "PoPoy.Shared.dll": "sha256-ENON1gI42CMi3\/LjxU42iQ1nkqVlprCDtvSIE378dUs=",
+      "PoPoy.Client.dll": "sha256-vn3vyA0+sVY0fy1cENT0LVHevWmqVM57mcLQkFSG4qM="
     },
     "lazyAssembly": null,
     "pdb": {
-      "PoPoy.Shared.pdb": "sha256-iWObL6EDgfOTylaMfQZrX7wfzIk6s\/t9lekLe+Kf6Qg=",
-      "PoPoy.Client.pdb": "sha256-b2WVfKkmsM8om54cIlrswZAwIM9ShDRMhYnvaD\/srk8="
+      "PoPoy.Shared.pdb": "sha256-dhLjD1OAE0sSLPR52OkNYQ\/0cJTzUkVav2\/9tEhrbTk=",
+      "PoPoy.Client.pdb": "sha256-gVGKOVhRw3Pro8zktb\/82j\/85SXf46ssnbw5jhNqe3Q="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-8oJip361m8OrfLRJOuIeswWKaoxtT27\/wINCxhn+s4c=",

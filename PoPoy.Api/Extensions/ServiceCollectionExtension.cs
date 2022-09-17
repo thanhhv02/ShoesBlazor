@@ -8,6 +8,7 @@ using PoPoy.Api.Data;
 using PoPoy.Api.SendMailService;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Api.Services.CategoryService;
+using PoPoy.Api.Services.FileStorageService;
 using PoPoy.Api.Services.ProductService;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,7 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IProductServices, ProductServices>();
+            services.AddTransient<IStorageService, StorageService>();
             return services;
         }
 
@@ -102,7 +104,7 @@ namespace PoPoy.Api.Extensions
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("HVT"));
             });
             return services;
         }

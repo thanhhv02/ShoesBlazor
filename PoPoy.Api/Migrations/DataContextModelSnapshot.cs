@@ -209,10 +209,26 @@ namespace PoPoy.Api.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Giày",
+                            Name = "Giày Adidas",
                             SortOrder = 1,
                             Status = 1,
-                            Url = "giay"
+                            Url = "adidas-shoes"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Giày Jordan",
+                            SortOrder = 1,
+                            Status = 1,
+                            Url = "jordan-shoes"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Giày Nike",
+                            SortOrder = 1,
+                            Status = 1,
+                            Url = "nike-shoes"
                         });
                 });
 
@@ -314,39 +330,234 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Adidas",
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 101, DateTimeKind.Local).AddTicks(8882),
+                            Description = "ADIDAS ALPHABOOST “CORE BLACK”",
                             OriginalPrice = 0m,
-                            Price = 100000000m,
+                            Price = 2150000m,
                             Quantity = 1000,
                             Stock = 0,
-                            Title = "Adidas",
+                            Title = "ADIDAS ALPHABOOST “CORE BLACK”",
                             Views = 0
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Jordan",
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9657),
+                            Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                             OriginalPrice = 0m,
-                            Price = 100000000m,
+                            Price = 1650000m,
                             Quantity = 1000,
                             Stock = 0,
-                            Title = "Jordan",
+                            Title = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                             Views = 0
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 1,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Nike",
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9679),
+                            Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                             OriginalPrice = 0m,
-                            Price = 100000000m,
+                            Price = 3250000m,
                             Quantity = 1000,
                             Stock = 0,
-                            Title = "Nike",
+                            Title = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9778),
+                            Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
+                            OriginalPrice = 0m,
+                            Price = 1650000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9781),
+                            Description = "ADIDAS NMD R1 TOKYO DRAGON",
+                            OriginalPrice = 0m,
+                            Price = 1850000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "ADIDAS NMD R1 TOKYO DRAGON",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9783),
+                            Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
+                            OriginalPrice = 0m,
+                            Price = 2550000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9785),
+                            Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
+                            OriginalPrice = 0m,
+                            Price = 6100000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9787),
+                            Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
+                            OriginalPrice = 0m,
+                            Price = 6450000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9789),
+                            Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
+                            OriginalPrice = 0m,
+                            Price = 4850000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9792),
+                            Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
+                            OriginalPrice = 0m,
+                            Price = 5550000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9794),
+                            Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
+                            OriginalPrice = 0m,
+                            Price = 3850000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9797),
+                            Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
+                            OriginalPrice = 0m,
+                            Price = 4350000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9799),
+                            Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
+                            OriginalPrice = 0m,
+                            Price = 4300000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9801),
+                            Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
+                            OriginalPrice = 0m,
+                            Price = 4850000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9803),
+                            Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
+                            OriginalPrice = 0m,
+                            Price = 3950000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9805),
+                            Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
+                            OriginalPrice = 0m,
+                            Price = 2950000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9807),
+                            Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
+                            OriginalPrice = 0m,
+                            Price = 2850000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9809),
+                            Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
+                            OriginalPrice = 0m,
+                            Price = 3200000m,
+                            Quantity = 1000,
+                            Stock = 0,
+                            Title = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                             Views = 0
                         });
                 });
@@ -420,6 +631,76 @@ namespace PoPoy.Api.Migrations
                         {
                             CategoryId = 1,
                             ProductId = 3
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 4
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 5
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 6
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 7
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 8
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 9
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 10
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 11
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 12
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 13
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 14
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 15
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 16
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 17
                         });
                 });
 
@@ -515,6 +796,28 @@ namespace PoPoy.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("bba8299b-6a49-4d45-98bb-763d0043361d"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a45c1c4d-4c0e-44b8-8f34-0d68e8fe1449",
+                            Dob = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "hovanthanh12102002@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Van Thanh",
+                            LastName = "Ho",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "hovanthanh12102002@gmail.com",
+                            NormalizedUserName = "thanhhv",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==",
+                            PhoneNumber = "032132131",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "36de83b0-c0dd-4b2c-8ac5-33050fcc8f92",
+                            TwoFactorEnabled = false,
+                            UserName = "thanhhv"
+                        });
                 });
 
             modelBuilder.Entity("PoPoy.Shared.Dto.Cart", b =>

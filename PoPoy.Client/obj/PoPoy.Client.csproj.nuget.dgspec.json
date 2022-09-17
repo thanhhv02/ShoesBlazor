@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Client\\PoPoy.Client.csproj": {}
+    "D:\\Myproject\\CSharp\\DATN\\PoPoy.Client\\PoPoy.Client.csproj": {}
   },
   "projects": {
-    "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Client\\PoPoy.Client.csproj": {
+    "D:\\Myproject\\CSharp\\DATN\\PoPoy.Client\\PoPoy.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Client\\PoPoy.Client.csproj",
+        "projectUniqueName": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Client\\PoPoy.Client.csproj",
         "projectName": "PoPoy.Client",
-        "projectPath": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Client\\PoPoy.Client.csproj",
+        "projectPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Client\\PoPoy.Client.csproj",
         "packagesPath": "C:\\Users\\Thanh\\.nuget\\packages\\",
-        "outputPath": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Client\\obj\\",
+        "outputPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Thanh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Shared\\PoPoy.Shared.csproj": {
-                "projectPath": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Shared\\PoPoy.Shared.csproj"
+              "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj": {
+                "projectPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj"
               }
             }
           }
@@ -108,14 +108,14 @@
         }
       }
     },
-    "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Shared\\PoPoy.Shared.csproj": {
+    "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Shared\\PoPoy.Shared.csproj",
+        "projectUniqueName": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj",
         "projectName": "PoPoy.Shared",
-        "projectPath": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Shared\\PoPoy.Shared.csproj",
+        "projectPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj",
         "packagesPath": "C:\\Users\\Thanh\\.nuget\\packages\\",
-        "outputPath": "D:\\Myproject\\CSharp\\DATN2\\PoPoy.Shared\\obj\\",
+        "outputPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Thanh\\AppData\\Roaming\\NuGet\\NuGet.Config",
