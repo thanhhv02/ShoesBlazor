@@ -15,7 +15,9 @@ namespace PoPoy.Client.Services.ProductService
 {
     public interface IProductService
     {
-        Task<PagingResponse<Product>> GetAll(ProductParameters productParameters);
+        event Action ProductsChanged;
+        List<Product> Products { get; set; }
+        Task<PagingResponse<Product>> GetAll(ProductParameters productParameters, string categoryUrl = null);
         Task<ServiceResponse<Product>> Get(int id);
         ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids);
     }
@@ -28,6 +30,10 @@ namespace PoPoy.Client.Services.ProductService
             _httpClient = httpClient;
             this._configuration = configuration;
         }
+
+        public List<Product> Products { get; set; }
+
+        public event Action ProductsChanged;
 
         public async ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids)
         {
@@ -48,13 +54,15 @@ namespace PoPoy.Client.Services.ProductService
             return result;
         }
 
-        public async Task<PagingResponse<Product>> GetAll(ProductParameters productParameters)
+        public async Task<PagingResponse<Product>> GetAll(ProductParameters productParameters, string? categoryUrl)
         {
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString()
             };
-            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product", queryStringParam));
+            var response = categoryUrl == null ?
+                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product", queryStringParam)):
+                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product/category/{categoryUrl}", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {

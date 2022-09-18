@@ -126,5 +126,12 @@ namespace PoPoy.Api.Controllers
             var uploadResults = await _productServices.DeleteProductImage(productId);
             return Ok(uploadResults);
         }
+        [HttpGet("category/{categoryUrl}")]
+        public async Task<ActionResult<List<Product>>> GetProductsByCategory([FromQuery] ProductParameters productParameters, string categoryUrl)
+        {
+            var result = await _productServices.GetProductsByCategory(productParameters, categoryUrl);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+            return Ok(result);
+        }
     }
 }

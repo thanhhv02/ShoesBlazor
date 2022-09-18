@@ -307,7 +307,7 @@ namespace PoPoy.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "AvatarPath", "ConcurrencyStamp", "Dob", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("bba8299b-6a49-4d45-98bb-763d0043361d"), 0, null, "a45c1c4d-4c0e-44b8-8f34-0d68e8fe1449", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hovanthanh12102002@gmail.com", true, "Van Thanh", "Ho", false, null, "hovanthanh12102002@gmail.com", "thanhhv", "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==", "032132131", false, "36de83b0-c0dd-4b2c-8ac5-33050fcc8f92", false, "thanhhv" });
+                values: new object[] { new Guid("e2c2b2b8-7503-4680-958a-cd2a09d9213e"), 0, null, "bb838837-0227-4c3f-87c8-462f136f7d32", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hovanthanh12102002@gmail.com", true, "Van Thanh", "Ho", false, null, "hovanthanh12102002@gmail.com", "thanhhv", "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==", "032132131", false, "32e94cbf-1241-4269-91fd-cdef752fa9ad", false, "thanhhv" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -324,24 +324,24 @@ namespace PoPoy.Api.Migrations
                 columns: new[] { "Id", "CategoryId", "DateCreated", "Description", "OriginalPrice", "Price", "Quantity", "Stock", "Title", "Views" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2022, 9, 17, 17, 21, 27, 101, DateTimeKind.Local).AddTicks(8882), "ADIDAS ALPHABOOST “CORE BLACK”", 0m, 2150000m, 1000, 0, "ADIDAS ALPHABOOST “CORE BLACK”", 0 },
-                    { 17, 3, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9807), "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0m, 2850000m, 1000, 0, "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0 },
-                    { 16, 3, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9805), "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0m, 2950000m, 1000, 0, "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0 },
-                    { 15, 3, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9803), "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0m, 3950000m, 1000, 0, "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0 },
-                    { 14, 3, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9801), "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0m, 4850000m, 1000, 0, "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0 },
-                    { 13, 3, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9799), "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0m, 4300000m, 1000, 0, "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0 },
-                    { 12, 2, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9797), "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0m, 4350000m, 1000, 0, "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0 },
-                    { 11, 2, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9794), "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0m, 3850000m, 1000, 0, "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0 },
-                    { 10, 2, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9792), "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0m, 5550000m, 1000, 0, "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0 },
-                    { 18, 3, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9809), "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0m, 3200000m, 1000, 0, "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0 },
-                    { 7, 2, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9785), "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0m, 6100000m, 1000, 0, "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0 },
-                    { 6, 1, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9783), "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0m, 2550000m, 1000, 0, "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0 },
-                    { 5, 1, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9781), "ADIDAS NMD R1 TOKYO DRAGON", 0m, 1850000m, 1000, 0, "ADIDAS NMD R1 TOKYO DRAGON", 0 },
-                    { 4, 1, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9778), "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0m, 1650000m, 1000, 0, "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0 },
-                    { 3, 1, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9679), "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0m, 3250000m, 1000, 0, "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0 },
-                    { 2, 1, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9657), "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0m, 1650000m, 1000, 0, "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0 },
-                    { 9, 2, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9789), "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0m, 4850000m, 1000, 0, "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0 },
-                    { 8, 2, new DateTime(2022, 9, 17, 17, 21, 27, 102, DateTimeKind.Local).AddTicks(9787), "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0m, 6450000m, 1000, 0, "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0 }
+                    { 1, 1, new DateTime(2022, 9, 18, 19, 14, 50, 870, DateTimeKind.Local).AddTicks(818), "ADIDAS ALPHABOOST “CORE BLACK”", 2150000m, 2150000m, 1000, 0, "ADIDAS ALPHABOOST “CORE BLACK”", 0 },
+                    { 17, 3, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5177), "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 2850000m, 2850000m, 1000, 0, "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0 },
+                    { 16, 3, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5174), "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 2950000m, 2950000m, 1000, 0, "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0 },
+                    { 15, 3, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5171), "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 3950000m, 3950000m, 1000, 0, "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0 },
+                    { 14, 3, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5168), "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 4850000m, 4850000m, 1000, 0, "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0 },
+                    { 13, 3, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5164), "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 4300000m, 4300000m, 1000, 0, "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0 },
+                    { 12, 2, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5160), "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 4350000m, 4350000m, 1000, 0, "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0 },
+                    { 11, 2, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5156), "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 3850000m, 3850000m, 1000, 0, "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0 },
+                    { 10, 2, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5154), "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 5550000m, 5550000m, 1000, 0, "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0 },
+                    { 18, 3, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5180), "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 3200000m, 3200000m, 1000, 0, "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0 },
+                    { 7, 2, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5145), "AIR JORDAN 1 HIGH ‘BORDEAUX’", 6100000m, 6100000m, 1000, 0, "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0 },
+                    { 6, 1, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5140), "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 2550000m, 2550000m, 1000, 0, "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0 },
+                    { 5, 1, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5039), "ADIDAS NMD R1 TOKYO DRAGON", 1850000m, 1850000m, 1000, 0, "ADIDAS NMD R1 TOKYO DRAGON", 0 },
+                    { 4, 1, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5036), "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 1650000m, 1650000m, 1000, 0, "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0 },
+                    { 3, 1, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5032), "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 3250000m, 3250000m, 1000, 0, "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0 },
+                    { 2, 1, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(4995), "ADIDAS NMD R1 SERIAL PACK METAL GREY", 1650000m, 1650000m, 1000, 0, "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0 },
+                    { 9, 2, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5151), "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 4850000m, 4850000m, 1000, 0, "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0 },
+                    { 8, 2, new DateTime(2022, 9, 18, 19, 14, 50, 871, DateTimeKind.Local).AddTicks(5148), "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 6450000m, 6450000m, 1000, 0, "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0 }
                 });
 
             migrationBuilder.InsertData(

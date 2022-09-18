@@ -23,5 +23,6 @@ namespace PoPoy.Api.Services.ProductService
         Task<bool> DeleteProductImage(int imageId);
         Task<ServiceResponse<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
         ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids);
+        Task<PagedList<Product>> GetProductsByCategory(ProductParameters productParameters, string categoryUrl);
     }
 }

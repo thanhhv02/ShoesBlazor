@@ -1,4 +1,10 @@
-﻿
+﻿@inject IProductService _productSvc;
+@inject IToastService _toastSvc;
+@inject ICartService _cartSvc;
+@inject IConfiguration _config;
+@inject ICartState CartState;
+@inject NavigationManager _navigation;
+
 <div class="bg-main">
     <div class="mid-header container">
         <a href="/" class="logo">Popoy</a>
@@ -10,10 +16,10 @@
             <AuthorizeView>
                 <NotAuthorized>
                     <li class="dropdown">
-                        <a href="/login"><i class='bx bx-user-circle'></i></a>
+                        <a href="/login?returnUrl=@_navigation.ToBaseRelativePath(_navigation.Uri)"><i class='bx bx-user-circle'></i></a>
                         <ul class="dropdown-content" style="width:115px">
                             <li><a href="/register">Đăng ký</a></li>
-                            <li><a href="/login">Đăng nhập</a></li>
+                            <li><a href="/login?returnUrl=@_navigation.ToBaseRelativePath(_navigation.Uri)">Đăng nhập</a></li>
                         </ul>
                     </li>
                 </NotAuthorized>
@@ -32,19 +38,104 @@
 
             <li class="has_dropdown">
                 <a href="/cart"><i class='bx bx-cart'></i></a>
-                (0)
+                <span class="position-absolute top-0 start-100 translate-middle">
+                    @(cartCount)
+                    <span class="visually-hidden">@*unread messages*@</span>
+                </span>
 
-                <div class="dropdowns messaging--dropdown">
-                    <div class="dropdown_module_header" style="background: white;">
+                <div class="dropdowns messaging--dropdown" style="background: white;">
+                    <div class="dropdown_module_header">
                         <h4>Giỏ hàng</h4>
                         <a href="/cart">Xem tất cả</a>
                     </div>
+                    @if (carts is null)
+                    {
 
+                        <LoadingScreen></LoadingScreen> }
+                    else if (carts.Count == 0)
+                    {
+                        <h2>Hiện tại không có sản phẩm nào trong giỏ hàng của bạn.</h2> }
+                    else
+                    {
+
+                        @foreach (var cart in carts)
+                        {
+                            <div class="messages">
+                                <a href="/product-detail/@cart.Product.Id" class="message recent">
+                                    <div class="message__actions_avatar">
+                                        <div class="avatar">
+                                            @try
+                                            {
+                                                @if (cart.Product.ProductImages.Any())
+                                                {
+                                                    <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" alt="">
+                                                }
+                                                else
+                                                {
+                                                    <img src="@_config["BackendApiUrl"]/uploads/no-photo-available.png" alt="">
+                                                }
+
+
+
+                                            }
+                                            catch { }
+                                        </div>
+                                    </div>
+                                    <div class="message_data">
+                                        <div class="name_time">
+                                            <div class="name">
+                                                <p class="text-break text-wrap">@cart.Product.Title</p>
+                                            </div>
+                                            <span class="time">
+                                                @*<eShopClient.Shared.Label.FoodCategoryLabel PhanLoai="@item.product.phanLoai">
+                                                    </eShopClient.Shared.Label.FoodCategoryLabel>*@
+                                                @*@if (item.product.CategoryID != null)
+                                                    {
+                                                        @item.product.Category.Title
+                                                    }*@
+                                            </span>
+                                            <p>Số lượng: @cart.Quantity</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        }
+
+                    }
                 </div>
             </li>
         </ul>
     </div>
 </div>
 @code {
+    private int cartCount;
+    private List<Cart> carts;
+    protected override async Task OnInitializedAsync()
+    {
+        cartCount = await GetCartCount();
+        CartState.OnQuantityChanged += OnCountChanged;
+        GetCart();
+    }
 
+    private async ValueTask<int> GetCartCount()
+    {
+        var carts = await _cartSvc.GetAllAsync();
+        return carts.Sum(x => x.Quantity);
+    }
+
+    private void OnCountChanged(int count)
+    {
+        GetCart();
+        cartCount = count;
+        StateHasChanged();
+    }
+
+    private async void GetCart()
+    {
+        carts = await _cartSvc.GetAllAsync();
+        await CartState.UpdateAsync();
+    }
+    public void Dispose()
+        => CartState.OnQuantityChanged -= OnCountChanged;
 }

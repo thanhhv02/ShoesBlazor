@@ -277,5 +277,20 @@ namespace PoPoy.Api.Services.ProductService
             await _dataContext.SaveChangesAsync();
             return new ServiceSuccessResponse<bool>();
         }
+
+        public async Task<PagedList<Product>> GetProductsByCategory(ProductParameters productParameters, string categoryUrl)
+        {
+            var list_product = await (from p in _dataContext.Products
+                                      join pic in _dataContext.ProductInCategories on p.Id equals pic.ProductId into ppic
+                                      from pic in ppic.DefaultIfEmpty()
+                                      join c in _dataContext.Categories on pic.CategoryId equals c.Id into picc
+                                      from c in picc.DefaultIfEmpty()
+                                      where c.Url == categoryUrl
+                                      join pi in _dataContext.ProductImages on p.Id equals pi.ProductId into ppi
+                                      from pi in ppi.DefaultIfEmpty()
+                                      select p).ToListAsync();
+            return PagedList<Product>
+                            .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
+        }
     }
 }
