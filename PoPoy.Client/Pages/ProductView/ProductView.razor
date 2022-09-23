@@ -1,0 +1,55 @@
+﻿@page "/products"
+@page "/category/{categoryUrl}"
+@inject IProductService _productSvc;
+@inject IConfiguration _config;
+<PageInfos Title="Sản phẩm"></PageInfos>
+<div class="bg-main">
+    <div class="container">
+        <div class="box">
+            <div class="breadcumb">
+                <a href="./index.html">home</a>
+                <span><i class='bx bxs-chevrons-right'></i></span>
+                <a href="./products.html">all products</a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="row">
+                <div class="col-3" id="filter-col">
+                    <div class="box filter-toggle-box">
+                        <button class="btn-flat btn-hover" id="filter-close">close</button>
+                    </div>
+                    <CategoryFilter></CategoryFilter>
+                </div>
+                <div class="col-9">
+                    <div class="box filter-toggle-box">
+                        <button class="btn-flat btn-hover" id="filter-toggle">filter</button>
+                    </div>
+                    <ProductList></ProductList>
+                    <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string? CategoryUrl { get; set; } = null;
+    public List<Product> ProductList { get; set; } = new List<Product>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    private ProductParameters _productParameters = new ProductParameters();
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetProducts();
+    }
+    private async Task SelectedPage(int page)
+    {
+        _productParameters.PageNumber = page;
+        await GetProducts();
+    }
+    private async Task GetProducts()
+    {
+        await _productSvc.GetAll(_productParameters, CategoryUrl);
+        ProductList = _productSvc.Products.Items;
+        MetaData = _productSvc.Products.MetaData;
+    }
+}

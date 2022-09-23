@@ -1,0 +1,19 @@
+﻿@inject ICategoryService CategoryService
+<div class="box">
+    <span class="filter-header">
+        Categories
+    </span>
+    <ul class="filter-list">
+        @foreach (var category in CategoryService.Categories)
+        {
+            <li><a href="/category/@category.Url">@category.Name</a></li>
+        }
+    </ul>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await CategoryService.GetCategories();
+    }
+}

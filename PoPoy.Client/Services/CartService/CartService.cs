@@ -81,6 +81,7 @@ namespace PoPoy.Client.Services.CartService
         public async ValueTask RemoveAllAsync()
         {
             await storageService.RemoveItemAsync(CART);
+            await storageService.SetItemAsync(CART, new List<CartStorage>());
             await cartState.UpdateAsync();
         }
 
@@ -88,7 +89,11 @@ namespace PoPoy.Client.Services.CartService
         {
             var storages = await storageService.GetItemAsync<List<CartStorage>>(CART);
             if (storages is null)
+            {
+                await storageService.SetItemAsync(CART, new List<CartStorage>());
                 return new List<Cart>();
+            }
+                
 
             var products = await publicProductService.FilterAllByIdsAsync(storages.Select(x => x.ProductId).ToArray());
 
