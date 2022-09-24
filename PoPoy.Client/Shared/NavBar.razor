@@ -4,6 +4,8 @@
 @inject IConfiguration _config;
 @inject ICartState CartState;
 @inject NavigationManager _navigation;
+@inject IAuthService AuthService;
+@inject ILocalStorageService LocalStorage;
 
 <div class="bg-main">
     <div class="mid-header container">
@@ -24,14 +26,46 @@
                     </li>
                 </NotAuthorized>
                 <Authorized>
-                    <li class="dropdown">
-                        <a href="/user/profile/@context.User.GetUserId()" class="h6">Hello, @context.User.Identity.Name </a>
-                        <ul class="dropdown-content" style="width:115px">
-                            <li><a href="/user/profile/@context.User.GetUserId()">Thông tin tài khoản</a></li>
-                            <li><a href="/logout">Đăng xuất</a></li>
-                        </ul>
-                    </li>
+                    @{
 
+                    }
+                    @*<li class="dropdown">
+                    <a href="/user/profile/@context.User.GetUserId()" class="h6">Hello, @context.User.Identity.Name </a>
+                    <ul class="dropdown-content" style="width:115px">
+                    <li><a href="/user/profile/@context.User.GetUserId()">Thông tin tài khoản</a></li>
+                    <li><a href="/logout">Đăng xuất</a></li>
+                    </ul>
+                    </li>*@
+                    <div class="author-author__info inline has_dropdown">
+                        <div class="author__avatar">
+                            @if (AvatarPath != null)
+                            {
+                                <img src="@AvatarPath" alt="avatar" style="width: 35px; height: 35px; border-radius:50%">
+                            }
+                            else
+                            {
+                                <img src="/images/avatar.jpg" alt="hovanthanh avatar" style="width: 35px; height: 35px; border-radius:50%">
+                            }
+                        </div>
+                        <div class="autor__info">
+                            <p class="name">@context.User.GetFullName()</p>
+                            @*<p class="ammount">8,000 LND</p>*@
+                        </div>
+                        <div class="dropdowns dropdown--author" style="background: white;">
+                            <ul>
+                                <li>
+                                    <a href="/user/profile/@context.User.GetUserId()">
+                                        <span class="fas fa-user"></span>Hồ sơ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/logout">
+                                        <span class="fas fa-sign-out-alt"></span>Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </Authorized>
             </AuthorizeView>
             <li><a href="#"><i class='bx bx-bell'></i></a></li>
@@ -51,10 +85,12 @@
                     @if (carts is null)
                     {
 
-                        <LoadingScreen></LoadingScreen> }
+                        <LoadingScreen></LoadingScreen>
+                    }
                     else if (carts.Count == 0)
                     {
-                        <h2>Hiện tại không có sản phẩm nào trong giỏ hàng của bạn.</h2> }
+                        <h2>Hiện tại không có sản phẩm nào trong giỏ hàng của bạn.</h2>
+                    }
                     else
                     {
 
@@ -87,7 +123,7 @@
                                                 <p class="text-break text-wrap">@cart.Product.Title</p>
                                             </div>
                                             <span class="time">
-                                                
+
                                             </span>
                                             <p>Số lượng: @cart.Quantity</p>
                                         </div>
@@ -105,31 +141,41 @@
 </div>
 @code {
     private int cartCount;
-    private List<Cart> carts;
+    private List<Cart> carts { get; set; } = new List<Cart>();
+    public User user = new User();
+    public string AvatarPath { get; set; }
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
     protected override async Task OnInitializedAsync()
     {
         cartCount = await GetCartCount();
         CartState.OnQuantityChanged += OnCountChanged;
-        GetCart();
+        carts = await _cartSvc.GetAllAsync();
+
+        await CheckUserAvatarPath();
     }
 
+    public async Task CheckUserAvatarPath()
+    {
+        var _user = (await AuthStat).User;
+
+        if (_user.Identity?.IsAuthenticated == true)
+        {
+            var temp = await AuthService.GetUserFromId(_user.GetUserId());
+            AvatarPath = temp.Data.AvatarPath;
+        }
+    }
     private async ValueTask<int> GetCartCount()
     {
         var carts = await _cartSvc.GetAllAsync();
         return carts.Sum(x => x.Quantity);
     }
 
-    private void OnCountChanged(int count)
+    private async void OnCountChanged(int count)
     {
-        GetCart();
         cartCount = count;
-        StateHasChanged();
-    }
-
-    private async void GetCart()
-    {
         carts = await _cartSvc.GetAllAsync();
-        await CartState.UpdateAsync();
+        await CheckUserAvatarPath();
+        StateHasChanged();
     }
     public void Dispose()
         => CartState.OnQuantityChanged -= OnCountChanged;

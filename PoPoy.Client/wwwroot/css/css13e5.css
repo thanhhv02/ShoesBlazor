@@ -45382,3 +45382,7 @@ em {
     position: absolute;
     left: 13px;
 }
+.astext {
+    background:none;
+    border:none;
+}

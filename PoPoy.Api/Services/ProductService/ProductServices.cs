@@ -47,6 +47,8 @@ namespace PoPoy.Api.Services.ProductService
                 var product = await _dataContext.Products.Include(x => x.ProductImages)
                     .Include(x => x.ProductInCategories)
                     .ThenInclude(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+                product.Views++;
+                await _dataContext.SaveChangesAsync();
                 var response = new ServiceResponse<Product>
                 {
                     Data = product
@@ -148,18 +150,12 @@ namespace PoPoy.Api.Services.ProductService
 
         public async Task<int> DeleteProduct(int productId)
         {
-            var product = await _dataContext.Products.FindAsync(productId);
-            if (product == null) throw new Exception($"Cannot find a product: {productId}");
+            var product = await _dataContext.ProductImages.FirstOrDefaultAsync(x=>x.Id == productId);
+            if (product == null) throw new Exception($"Cannot find image: {productId}");
 
-            _dataContext.Products.Remove(product);
-            var images = _dataContext.ProductImages.Where(i => i.ProductId == productId);
-            if (images != null)
-            {
-                foreach (var image in images)
-                {
-                    _dataContext.ProductImages.Remove(image);
-                }
-            }
+
+            _dataContext.ProductImages.Remove(product);
+
             return await _dataContext.SaveChangesAsync();
         }
 
@@ -284,10 +280,8 @@ namespace PoPoy.Api.Services.ProductService
                                       from pic in ppic.DefaultIfEmpty()
                                       join c in _dataContext.Categories on pic.CategoryId equals c.Id into picc
                                       from c in picc.DefaultIfEmpty()
-                                      where c.Url == categoryUrl
-                                      join pi in _dataContext.ProductImages on p.Id equals pi.ProductId into ppi
-                                      from pi in ppi.DefaultIfEmpty()
-                                      select p).ToListAsync();
+                                      where c.Url == categoryUrl                                     
+                                      select p).Include(x=>x.ProductImages).ToListAsync();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
         }

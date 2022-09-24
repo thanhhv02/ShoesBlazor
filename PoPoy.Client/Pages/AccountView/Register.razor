@@ -21,11 +21,10 @@
                             </p>
 
                         </div>
-                        <span id="emailerrortxt" class="text-danger" style="color: red; float: right; margin-bottom: 20px;">
-                            <ValidationMessage For="()=>user.UserName"></ValidationMessage>
-                        </span>
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+                        <div id="divCheckbox" style="display: none;">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                        </div>
                         <div class="login--form">
                             <div class="row">
                                 <div class="form-group col-6">

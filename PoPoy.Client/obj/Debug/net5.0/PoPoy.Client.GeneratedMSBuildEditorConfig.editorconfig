@@ -10,4 +10,4 @@ build_property.EnableSingleFileAnalyzer =
 build_property.EnableTrimAnalyzer = true
 build_property.IncludeAllContentForSelfExtract = 
 build_property.RootNamespace = PoPoy.Client
-build_property.ProjectDir = D:\Myproject\CSharp\DATN3\PoPoy.Client\
+build_property.ProjectDir = D:\Myproject\CSharp\DATN\PoPoy.Client\

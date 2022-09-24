@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -29,21 +31,24 @@ namespace PoPoy.Api.Services.AuthService
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly DataContext _context;
+        private readonly IWebHostEnvironment _env;
         public AuthService(IConfiguration configuration,
                                UserManager<User> userManager,
                                SignInManager<User> signInManager,
                                IEmailService emailService,
                                RoleManager<Role> roleManager,
                                DataContext context,
-                               IHttpContextAccessor httpContext)
+                               IHttpContextAccessor httpContext,
+                               IWebHostEnvironment env)
         {
             this._emailService = emailService;
             _configuration = configuration;
             _signInManager = signInManager;        
             _userManager = userManager;
             _roleManager = roleManager;
-            _context = context;
+            _env = env;
             _httpContext = httpContext;
+            _context = context;
         }
         public HttpContext Context => _httpContext.HttpContext;
 
@@ -173,7 +178,7 @@ namespace PoPoy.Api.Services.AuthService
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, login.UserName),
-                new Claim(ClaimTypes.GivenName,user.FirstName),
+                new Claim(ClaimTypes.GivenName,user.LastName+" "+ user.FirstName),
                 new Claim(ClaimTypes.Email,user.Email ),
                 new Claim(ClaimTypes.Role,string.Join(";",roles)),
             };
@@ -433,17 +438,15 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<bool> CheckOut(List<Cart> cartItem)
         {
             string OrderId = GenerateOrderId();
-            //var prods = _context.Products.ToList();
 
             try
             {
                 var detail = cartItem.FirstOrDefault();
-                var address = _context.Addresses.Where(x => x.UserId == detail.UserId).Select(x =>x.Id).FirstOrDefault();
+                var address = _context.Addresses.Where(x => x.UserId == detail.UserId).Select(x => x.Id).FirstOrDefault();
                 Order order = new Order();
-                order.UserId = detail.UserId;
-                order.ProductId = detail.ProductId;
                 order.Id = OrderId;
-                order.TotalPrice = detail.Price * detail.Quantity;
+                order.UserId = detail.UserId;        
+                order.TotalPrice = detail.TotalPrice;
                 order.OrderDate = DateTime.Now;
                 order.PaymentMode = detail.PaymentMode;
                 order.AddressId = address;
@@ -453,16 +456,14 @@ namespace PoPoy.Api.Services.AuthService
                 {
                     OrderDetails _orderDetail = new OrderDetails();
                     _orderDetail.OrderId = OrderId;
-                    _orderDetail.ProductId = items.ProductId;
-                    _orderDetail.Quantity = items.Quantity;
+                    _orderDetail.ProductId = items.Product.Id;
                     _orderDetail.Price = items.Price;
+                    _orderDetail.Quantity = items.Quantity;
                     _orderDetail.TotalPrice = (double)(items.Price * items.Quantity);
                     _context.OrderDetails.Add(_orderDetail);
                 }
-                //var selected_product = prods.Where(x => x.Id == detail.ProductId).FirstOrDefault();
-                //selected_product.Stock = selected_product.Stock - detail.Quantity;
-                //_context.Products.Update(selected_product);
-                var result = await _context.SaveChangesAsync();
+
+                var result =  _context.SaveChanges();
                 if(result != 1)
                 {
                     return true;
@@ -479,11 +480,11 @@ namespace PoPoy.Api.Services.AuthService
         {
             string OrderId = string.Empty;
             Random generator = null;
-            for(int i = 0;i < 1000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 generator = new Random();
                 OrderId = "p" + generator.Next(1, 10000000).ToString("D8");
-                if(!_context.Orders.Where(x => x.Id == OrderId).Any())
+                if (!_context.Orders.Where(x => x.Id == OrderId).Any())
                 {
                     break;
                 }
@@ -554,6 +555,37 @@ namespace PoPoy.Api.Services.AuthService
 
             await _context.SaveChangesAsync();
             return response;
+        }
+
+        public async Task<ServiceResponse<List<UploadResult>>> UploadUserImage(List<IFormFile> files, string userId)
+        {
+            List<UploadResult> uploadResults = new List<UploadResult>();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            foreach (var file in files)
+            {
+                var uploadResult = new UploadResult();
+                //string trustedFileNameForFileStorage;
+                var untrustedFileName = file.FileName;
+                uploadResult.FileName = untrustedFileName;
+                //var trustedFileNameForDisplay = WebUtility.HtmlEncode(untrustedFileName);
+
+                //trustedFileNameForFileStorage = Path.GetRandomFileName();
+                var path = Path.Combine(_env.ContentRootPath, "wwwroot/uploads", untrustedFileName);
+
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.CopyToAsync(fs);
+
+                uploadResult.StoredFileName = untrustedFileName;
+                uploadResult.ContentType = file.ContentType;
+                uploadResults.Add(uploadResult);
+
+                
+                user.AvatarPath = _configuration["ApiUrl"] + "/uploads/" + untrustedFileName;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new ServiceSuccessResponse<List<UploadResult>>(uploadResults);
         }
     }
 }

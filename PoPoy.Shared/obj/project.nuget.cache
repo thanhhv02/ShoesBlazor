@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qO9z5aCojq0kQrVo02sctgo74vrzxAkajtFsvmh7s0s1bfXOK7XcCbSIzmpbM5NHqpbfPmqv1hdWAKQL56ZQHA==",
+  "dgSpecHash": "mp07PMYzT4Dt485qlVEen+m1L5lqQFhmWU04FzX7uA31bRctxsEAQ2WhyCCJ58rWF7cuS4nccAMN7tGMyUNJkw==",
   "success": true,
-  "projectFilePath": "D:\\Myproject\\CSharp\\DATN3\\PoPoy.Shared\\PoPoy.Shared.csproj",
+  "projectFilePath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Thanh\\.nuget\\packages\\blazored.localstorage\\4.3.0-preview.1\\blazored.localstorage.4.3.0-preview.1.nupkg.sha512",
     "C:\\Users\\Thanh\\.nuget\\packages\\microsoft.aspnetcore.authorization\\5.0.10\\microsoft.aspnetcore.authorization.5.0.10.nupkg.sha512",

@@ -36,7 +36,6 @@ else
                     {
                         <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">
                     }
-                    <div class="hidden">@cart.Product.Id</div>
                     <div class="col-sm-8">
                         <h4>@cart.Product.Title</h4>
                         <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" QuantityChanged="() => StateHasChanged()" />
@@ -44,9 +43,6 @@ else
                             <i class="oi oi-trash"></i>
                             <a href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</a>
                         </div>
-                    </div>
-                    <div class="hidden">
-                        @cart.Product.Id
                     </div>
                     <div class="col-sm-2">
                         <h4>@cart.Product.Price.ToString("n0")</h4>
@@ -88,7 +84,8 @@ else
     </div>
 }
 
-@code { private List<Cart> carts;
+@code {
+    private List<Cart> carts = new List<Cart>();
     private bool buttonDisabled;
     private bool showButton = false;
     public bool IsUserLoggedIn = false;
@@ -122,13 +119,7 @@ else
         carts = await CartService.GetAllAsync();
         StateHasChanged();
     }
-    //private async Task PayPalPayment()
-    //{
-    //    var total = CalcTotalAmount() * CalcTotalQuantity();
-    //    var url = await AuthService.MakePayPalPayment((double)total);
-    //    await CheckOut();
-    //    NavigationManager.NavigateTo(url);
-    //}
+
     private async Task CheckOut()
     {
         try
@@ -137,30 +128,30 @@ else
             var address = await AuthService.GetAddress(userId);
             if (address != null)
             {
-                var finalTotal = CalcTotalAmount() * CalcTotalQuantity();
+                var finalTotal = CalcTotalAmount();
                 if (paymentModel.Name == "PayPal")
                 {
                     carts.FirstOrDefault().AddressId = address.Id;
                     carts.FirstOrDefault().PayPalPayment = (double)finalTotal;
                     carts.FirstOrDefault().PaymentMode = paymentModel.Name;
-                    var total = CalcTotalAmount() * CalcTotalQuantity();
+                    var total = CalcTotalAmount();
                     var url = await AuthService.MakePayPalPayment((double)total);
                     NavigationManager.NavigateTo(url);
                 }
-                var productId = await LocalStorage.GetItemAsync<int>("getProductId");
                 buttonDisabled = true;
                 if (carts != null && carts.Count > 0)
                 {
-                    carts.FirstOrDefault().Price = CalcTotalAmount();
-                    carts.FirstOrDefault().Quantity = CalcTotalQuantity();
+                    foreach (var item in carts)
+                    {
+                        addressModel.UserId = userId;
+                        carts.FirstOrDefault().ProductId = item.ProductId;
+                        carts.FirstOrDefault().UserId = userId;
+                        carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault().Price = item.Product.Price;
+                        carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault().Quantity = item.Quantity;
+                    }
+                    carts.FirstOrDefault().TotalPrice = CalcTotalAmount();
                     carts.FirstOrDefault().PaymentMode = paymentModel.Name;
                     carts.FirstOrDefault().AddressId = address.Id;
-                    carts.FirstOrDefault().ProductId = productId;
-                }
-                if (userId != null)
-                {
-                    carts.FirstOrDefault().UserId = userId;
-                    addressModel.UserId = userId;
                 }
 
                 IsUserLoggedIn = await AuthService.IsUserAuthenticated();
@@ -181,14 +172,14 @@ else
                 }
                 else
                 {
-                    await LocalStorage.SetItemAsync("checkoutAlert", "Cannot checkout probably!");
                     NavigationManager.NavigateTo("login");
+                    _toastSvc.ShowError("Bạn phải đăng nhập trước khi checkout");
                 }
             }
             else
             {
                 NavigationManager.NavigateTo($"/user/profile/{userId}");
-                _toastSvc.ShowError("Mời nhập địa chỉ");
+                _toastSvc.ShowError("Bạn phải nhập địa chỉ");
             }
         }
         catch (Exception ex)

@@ -1,0 +1,73 @@
+﻿@inject IJSRuntime JSRuntime
+@inject IProductService _productSvc;
+
+<div class="hero">
+    <div class="slider">
+        <div class="container">
+            Cặc mẹ mày nha
+            @*@if (ProductList.Count() == 0)
+        {
+            <LoadingScreen></LoadingScreen>
+        }
+        else
+        {
+            <p>Cặc</p>
+            foreach (var item in ProductList)
+                {
+                    <div class="slide">
+                        <div class="info">
+                            <div class="info-content">
+                                <h3 class="top-down">
+                                    @item.Title
+                                </h3>
+                                <h2 class="top-down trans-delay-0-2">
+                                    @item.Title
+                                </h2>
+                                <p class="top-down trans-delay-0-4">
+                                    @item.Description
+                                </p>
+                                <div class="top-down trans-delay-0-6">
+                                    <a class="btn-flat btn-hover" href="/product-detail/@item.Id">
+                                        <span>shop now</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="img top-down">
+                            <img src="./images/JBL-Endurance-Sprint_Alt_Red-1605x1605px.webp" alt="">
+                        </div>
+                    </div>
+                }
+        }*@
+
+        </div>
+        <!-- slider controller -->
+        <button class="slide-controll slide-next" @onclick="NextSlide">
+            <i class='bx bxs-chevron-right'></i>
+        </button>
+        <button class="slide-controll slide-prev" @onclick="PreviousSlide">
+            <i class='bx bxs-chevron-left'></i>
+        </button>
+        <!-- end slider controller -->
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/index.js");
+        }
+    }
+
+    private async Task NextSlide()
+    {
+        await JSRuntime.InvokeVoidAsync("nextSlide", null);
+    }
+    private async Task PreviousSlide()
+    {
+        await JSRuntime.InvokeVoidAsync("prevSlide", null);
+    }
+}

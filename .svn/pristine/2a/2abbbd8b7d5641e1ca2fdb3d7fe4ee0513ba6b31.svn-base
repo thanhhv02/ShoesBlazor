@@ -1,0 +1,92 @@
+﻿@inject IJSRuntime JSRuntime
+@inject IProductService _productSvc;
+@using System.Threading;
+@inject NavigationManager uriHelper;
+@inject IConfiguration _config;
+
+<div class="hero">
+    <div class="slider">
+        <div class="container">
+        @if (_productSvc.SlideProducts is null || _productSvc.SlideProducts.Count() == 0)
+        {
+            <LoadingScreen></LoadingScreen>
+        }
+        else
+        {
+            foreach (var item in _productSvc.SlideProducts)
+                {
+                    <div class="slide">
+                        <div class="info">
+                            <div class="info-content">
+                                <h3 class="top-down font-weight-bold">
+                                    @item.Title
+                                </h3>
+                                <p class="top-down trans-delay-0-4">
+                                    @item.Description
+                                </p>
+                                <div class="top-down trans-delay-0-6">
+                                    <a class="btn-flat btn-hover" href="/product-detail/@item.Id">
+                                        <span>shop now</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="img top-down">
+                            @try
+                            {
+                                @if (item.ProductImages.Any())
+                                {
+                                    <img src="@item.ProductImages.FirstOrDefault().ImagePath" alt="">
+                                }
+                                else
+                                {
+                                    <img src="@_config["BackendApiUrl"]/uploads/no-photo-available.png" alt="">
+                                }
+
+
+
+                            }
+                            catch { }
+                        </div>
+                    </div>
+                }
+        }
+
+        </div>
+        <!-- slider controller -->
+        <button class="slide-controll slide-next" @onclick="NextSlide">
+            <i class='bx bxs-chevron-right'></i>
+        </button>
+        <button class="slide-controll slide-prev" @onclick="PreviousSlide">
+            <i class='bx bxs-chevron-left'></i>
+        </button>
+        <!-- end slider controller -->
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProduct();
+    }
+    public async Task GetProduct()
+    {
+        await _productSvc.GetProductForSlide();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/index.js");
+        }
+    }
+
+    private async Task NextSlide()
+    {
+        await JSRuntime.InvokeVoidAsync("nextSlide", null);
+    }
+    private async Task PreviousSlide()
+    {
+        await JSRuntime.InvokeVoidAsync("prevSlide", null);
+    }
+}

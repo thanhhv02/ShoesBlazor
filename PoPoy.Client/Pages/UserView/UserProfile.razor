@@ -1,14 +1,14 @@
 ﻿@page "/user/profile/{id}"
-
-
 @inject Microsoft.Extensions.Configuration.IConfiguration config;
 @inject IAuthService AuthService;
 @inject NavigationManager NavigationManager
 @inject IToastService _toastSvc;
 @attribute [Authorize]
 <UserNav></UserNav>
+<PageInfos Title="Thông tin người dùng"></PageInfos>
 <AuthorizeView>
     <Authorized>
+        <PageInfos Title="@KhachName"></PageInfos>
         <section class="author-profile-area">
             <div class="container">
                 <div class="row">
@@ -21,7 +21,7 @@
                                         {
                                             @if (user.AvatarPath != null || !string.IsNullOrEmpty(user.AvatarPath))
                                             {
-                                                <img src="user.AvatarPath" alt="Ảnh đại diện" style="width:160px; height:160px">
+                                                <img src="@user.AvatarPath" alt="Ảnh đại diện" style="width:160px; height:160px">
                                             }
                                             else
                                             {
@@ -57,10 +57,12 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
+
             </div>
-            <AddressForm></AddressForm>
+            
         </section>
     </Authorized>
     <NotAuthorized>

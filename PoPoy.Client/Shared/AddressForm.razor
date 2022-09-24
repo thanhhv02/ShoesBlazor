@@ -1,64 +1,80 @@
 ﻿@inject IAuthService AuthService
 @inject ILocalStorageService LocalStorage
 
-@if(address == null)
-{
-    <span>Quý khách chưa chỉ định địa chỉ giao hàng!
-        <button class="btn" @onclick="InitAddress">Thêm địa chỉ mới?</button>
-    </span>
-}
-else if (!editAddress)
-{
-    <p>
-        <span>@address.Street</span><br />
-        <span>@address.City, @address.State</span><br />
-        <span>@address.Country</span><br />
-    </p>
-    <button class="btn btn-primary" @onclick="EditAddress">Sửa</button>
-}
-else
-{
-    <EditForm Model="address" OnSubmit="SubmitAddress">
-        <div class="mb-3">
-            <label for="street">Đường</label>
-            <InputText id="street" @bind-Value="address.Street" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label for="city">Thành phố</label>
-            <InputText id="city" @bind-Value="address.City" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label for="state">Bang</label>
-            <InputText id="state" @bind-Value="address.State" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label for="country">Đất nước</label>
-            <InputText id="country" @bind-Value="address.Country" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary">Lưu</button>
-    </EditForm>
-}
+    <div class="information_module">
+        <button class="toggle_title astext" data-toggle="collapse" @onclick="InitAddress">
+
+                <h4>
+                    Nhập địa chỉ
+                    <span class="fa-solid fa-chevron-down"></span>
+                </h4>
+
+
+        </button>
+        @if (editAddress)
+        {
+            <EditForm Model="address" OnValidSubmit="SubmitAddress">
+                <div class="information__set toggle_module collapse show" id="changepass-collapse">
+                    <div class="information_wrapper form--fields">
+                        <div class="form-group">
+                            <label>Thành phố/ Tỉnh <sup>*</sup></label>
+                            <InputText id="street" @bind-Value="address.City" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Đường/ Thôn <sup>*</sup></label>
+                            <InputText id="street" @bind-Value="address.Street" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Phường/ Xã <sup>*</sup></label>
+                            <InputText id="street" @bind-Value="address.State" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Quận/ Huyện <sup>*</sup></label>
+                            <InputText id="street" @bind-Value="address.Country" class="form-control" />
+                        </div>
+                        <div class="form-group" style="margin-bottom:0; text-align:right">
+                            <button class="btn btn--xs" type="submit">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        }
+        else if(address is not null)
+        {
+            <div class="author_module about_author">
+                <p><span class="indam">Thành phố/ Tỉnh:</span> @address.City</p>
+                <p><span class="indam">Đường/ Thôn:</span> @address.Street</p>
+                <p><span class="indam">Phường/ Xã:</span> @address.State</p>
+                <p><span class="indam">Quận/ Huyện:</span> @address.Country</p>
+            </div>
+        }
+    </div>
 @code {
-    Address address = null;
+    private Address address{ get; set; } = new Address();
     bool editAddress = false;
 
     protected override async Task OnInitializedAsync()
     {
         var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
-        address = await AuthService.GetAddress(userId);
+        var temp = await AuthService.GetAddress(userId);
+        if(temp is not null)
+        {
+            address = new Address();
+            address = temp;
+        }
     }
 
     private async Task SubmitAddress()
     {
         var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
-        editAddress = false;
         address = await AuthService.AddOrUpdateAddress(address, userId);
+        InitAddress();
     }
 
     private void InitAddress()
     {
-        address = new Address();
-        editAddress = true;
+        //address = new Address();
+        editAddress = editAddress == true ? false : true;
     }
 
     private void EditAddress()

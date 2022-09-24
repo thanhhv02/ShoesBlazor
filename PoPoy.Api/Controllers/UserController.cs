@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
@@ -213,7 +214,7 @@ namespace PoPoy.Api.Controllers
                 if (record.PaymentMode == "CashOnDelivery")
                 {
                     var result = _authService.CheckOut(cartItems);
-                    if (!result.IsCompleted)
+                    if (result.IsCompleted)
                     {
                         return Ok(true);
                     }
@@ -226,7 +227,7 @@ namespace PoPoy.Api.Controllers
                         var ref_number = data.Result.Split("&")[1];
                         cartItems.FirstOrDefault().orderReference = ref_number.Split("=")[1];
                         var result = _authService.CheckOut(cartItems);
-                        if (!result.IsCompleted)
+                        if (result.IsCompleted)
                         {
                             return Ok(true);
                         }                
@@ -259,6 +260,13 @@ namespace PoPoy.Api.Controllers
         public async Task<ActionResult<ServiceResponse<Address>>> AddOrUpdateAddress(Address address, Guid userId)
         {
             return await _authService.AddOrUpdateAddress(address, userId);
+        }
+        [HttpPost("upload-image")]
+        public async Task<ActionResult<List<UploadResult>>> UploadFile(List<IFormFile> files, string id)
+        {
+            var uploadResults = await _authService.UploadUserImage(files, id);
+
+            return Ok(uploadResults.Data);
         }
     }
 }

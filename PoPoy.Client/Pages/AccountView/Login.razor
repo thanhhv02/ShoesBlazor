@@ -20,30 +20,37 @@
                             <h3>Xin chào</h3>
                             <p>Đăng nhập vào tài khoản của bạn</p>
                         </div>
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+                        <div id="divCheckbox" style="display: none;">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                        </div>
+
                         <div class="login--form">
                             <div class="form-group">
                                 <label for="user_name">Tên đăng nhập:</label>
                                 <InputText id="username" name="username" type="text" class="text_field" placeholder="Nhập user name bạn đã đăng ký"
                                            autocomplete="off" required autofocus @bind-Value="LoginModel.UserName"></InputText>
-                                <ValidationMessage For="()=>LoginModel.UserName"></ValidationMessage>
+                                <span id="usererrortxt" class="text-danger" style="color: red; float: right; margin-bottom: 20px;">
+                                    <ValidationMessage For="()=>LoginModel.UserName"></ValidationMessage>
+                                </span>
                             </div>
                             <div class="form-group">
                                 <label for="pass">Mật khẩu:</label>
                                 <InputText @bind-Value="LoginModel.Password" id="pass" name="pass" type="password" class="text_field"
                                            placeholder="Nhập mật khẩu" required></InputText>
-                                <ValidationMessage For="()=>LoginModel.Password"></ValidationMessage>
+                                <span id="passworderrortxt" class="text-danger" style="color: red; float: right; margin-bottom: 20px;">
+                                    <ValidationMessage For="()=>LoginModel.Password"></ValidationMessage>
+                                </span>
                             </div>
                             @*<div class="form-group">
-                                <div class="custom_checkbox">
-                                <input type="checkbox" id="ch2" name="rememberme" checked>
-                                <label for="ch2">
-                                <span class="shadow_checkbox"></span>
-                                <span class="label_text">Ghi nhớ đăng nhập</span>
-                                </label>
-                                </div>
-                                </div>*@
+                            <div class="custom_checkbox">
+                            <input type="checkbox" id="ch2" name="rememberme" checked>
+                            <label for="ch2">
+                            <span class="shadow_checkbox"></span>
+                            <span class="label_text">Ghi nhớ đăng nhập</span>
+                            </label>
+                            </div>
+                            </div>*@
                             <button class="btn btn--xs" type="submit" disabled=@isLoading>
                                 @if (isLoading)
                                 {
@@ -97,8 +104,9 @@
     }
     private async Task HandleLogin()
     {
+        StateHasChanged();
         var user = (await AuthStat).User;
-        var userId = await AuthService.GetUserId(LoginModel);
+
         if (user.Identity.IsAuthenticated || await AuthService.IsUserAuthenticated())
         {
             NavigationManager.NavigateTo("/", true);
@@ -109,7 +117,9 @@
 
         if (result.Success)
         {
+            var userId = await AuthService.GetUserId(LoginModel);
             await LocalStorage.SetItemAsync<Guid>("getUserId", userId);
+            
             _toastSvc.ShowSuccess("Đăng nhập thành công");
             await Task.Delay(2000);
             NavigationManager.NavigateTo(returnUrl, true);

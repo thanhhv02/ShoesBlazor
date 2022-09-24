@@ -1,5 +1,0 @@
-﻿<StaticWebAssets Version="1.0">
-  <ContentRoot BasePath="/" Path="D:\Myproject\CSharp\DATN3\PoPoy.Admin\bin\Debug\net5.0\wwwroot\" />
-  <ContentRoot BasePath="/" Path="D:\Myproject\CSharp\DATN3\PoPoy.Admin\obj\Debug\net5.0\scopedcss\bundle\" />
-  <ContentRoot BasePath="_content/Blazored.Typeahead" Path="C:\Users\Thanh\.nuget\packages\blazored.typeahead\4.6.0\build\..\staticwebassets\" />
-</StaticWebAssets>
