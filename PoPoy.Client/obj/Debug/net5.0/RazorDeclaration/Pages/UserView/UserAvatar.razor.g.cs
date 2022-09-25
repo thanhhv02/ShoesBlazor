@@ -209,8 +209,29 @@ using Microsoft.AspNetCore.Authorization;
 #line hidden
 #nullable disable
 #nullable restore
-#line 29 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+#line 30 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Services.UserAvatarService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 31 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Pages.ProductView;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 32 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
 using PoPoy.Client.Services.CategoryService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 33 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using Syncfusion.Blazor.Navigations;
 
 #line default
 #line hidden
@@ -230,7 +251,7 @@ using System.Net.Http.Headers;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 41 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\UserView\UserAvatar.razor"
+#line 42 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\UserView\UserAvatar.razor"
        
     private int maxAllowedFiles = int.MaxValue;
     private long maxFileSize = long.MaxValue;
@@ -273,14 +294,14 @@ using System.Net.Http.Headers;
                 name: "\"files\"",
                 fileName: file.Name);
         }
-        var response = await httpClient.PostAsync($"/api/user/upload-image?id={id}", content);
-        var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
+
+        var newUploadResults = await _svc.UploadAvatar(content, id);
 
         if (newUploadResults is not null)
         {
             uploadResults = uploadResults.Concat(newUploadResults).ToList();
         }
-        await _state.UpdateAsync();
+
         await GetUser();
         StateHasChanged();
     }
@@ -288,6 +309,7 @@ using System.Net.Http.Headers;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IUserAvatarService _svc { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private ICartState _state { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient httpClient { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IAuthService AuthService { get; set; }

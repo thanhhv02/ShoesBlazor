@@ -165,7 +165,7 @@ else
                         if (paymentModel.Name != "PayPal")
                         {
                             StateHasChanged();
-                            NavigationManager.NavigateTo("/");
+                            NavigationManager.NavigateTo("payment-thanks");
                             _toastSvc.ShowSuccess("Thanh toán thành công");
                         }
                     }
@@ -178,7 +178,7 @@ else
             }
             else
             {
-                NavigationManager.NavigateTo($"/user/profile/{userId}");
+                NavigationManager.NavigateTo($"/user/setting/{userId}");
                 _toastSvc.ShowError("Bạn phải nhập địa chỉ");
             }
         }

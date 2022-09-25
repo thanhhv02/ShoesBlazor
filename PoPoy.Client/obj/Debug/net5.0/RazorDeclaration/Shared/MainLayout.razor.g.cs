@@ -202,8 +202,29 @@ using Microsoft.AspNetCore.Authorization;
 #line hidden
 #nullable disable
 #nullable restore
-#line 29 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+#line 30 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Services.UserAvatarService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 31 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Pages.ProductView;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 32 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
 using PoPoy.Client.Services.CategoryService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 33 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using Syncfusion.Blazor.Navigations;
 
 #line default
 #line hidden

@@ -7,6 +7,7 @@ using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.CartService;
 using PoPoy.Client.Services.CategoryService;
 using PoPoy.Client.Services.ProductService;
+using PoPoy.Client.Services.UserAvatarService;
 using PoPoy.Client.State;
 using PoPoy.Shared.Common;
 using System;
@@ -28,6 +29,7 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICartState, CartState>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserAvatarService, UserAvatarService>();
             return services;
         }
 

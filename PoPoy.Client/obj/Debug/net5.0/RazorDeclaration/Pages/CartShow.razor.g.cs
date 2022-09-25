@@ -181,8 +181,29 @@ using Microsoft.AspNetCore.Authorization;
 #line hidden
 #nullable disable
 #nullable restore
-#line 29 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+#line 30 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Services.UserAvatarService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 31 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Pages.ProductView;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 32 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
 using PoPoy.Client.Services.CategoryService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 33 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using Syncfusion.Blazor.Navigations;
 
 #line default
 #line hidden
@@ -306,7 +327,7 @@ using PoPoy.Shared.Dto;
                         if (paymentModel.Name != "PayPal")
                         {
                             StateHasChanged();
-                            NavigationManager.NavigateTo("/");
+                            NavigationManager.NavigateTo("payment-thanks");
                             _toastSvc.ShowSuccess("Thanh toán thành công");
                         }
                     }
@@ -319,7 +340,7 @@ using PoPoy.Shared.Dto;
             }
             else
             {
-                NavigationManager.NavigateTo($"/user/profile/{userId}");
+                NavigationManager.NavigateTo($"/user/setting/{userId}");
                 _toastSvc.ShowError("Bạn phải nhập địa chỉ");
             }
         }

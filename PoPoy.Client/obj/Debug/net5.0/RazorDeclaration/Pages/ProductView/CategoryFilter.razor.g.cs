@@ -209,8 +209,29 @@ using Microsoft.AspNetCore.Authorization;
 #line hidden
 #nullable disable
 #nullable restore
-#line 29 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+#line 30 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Services.UserAvatarService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 31 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Pages.ProductView;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 32 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
 using PoPoy.Client.Services.CategoryService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 33 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using Syncfusion.Blazor.Navigations;
 
 #line default
 #line hidden
@@ -223,11 +244,16 @@ using PoPoy.Client.Services.CategoryService;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 14 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\ProductView\CategoryFilter.razor"
+#line 19 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\ProductView\CategoryFilter.razor"
        
+    public string name{ get; set; }
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.GetCategories();
+    }
+    public void OnClicked(string name)
+    {
+        this.name = name;
     }
 
 #line default

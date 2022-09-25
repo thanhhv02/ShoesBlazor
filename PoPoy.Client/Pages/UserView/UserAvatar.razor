@@ -2,6 +2,7 @@
 @inject IAuthService AuthService;
 @inject HttpClient httpClient;
 @inject ICartState _state;
+@inject IUserAvatarService _svc;
 
 <div class="information_module">
     <a class="toggle_title" href="#changeavatar-collapse" data-toggle="collapse">
@@ -80,14 +81,14 @@
                 name: "\"files\"",
                 fileName: file.Name);
         }
-        var response = await httpClient.PostAsync($"/api/user/upload-image?id={id}", content);
-        var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
+
+        var newUploadResults = await _svc.UploadAvatar(content, id);
 
         if (newUploadResults is not null)
         {
             uploadResults = uploadResults.Concat(newUploadResults).ToList();
         }
-        await _state.UpdateAsync();
+
         await GetUser();
         StateHasChanged();
     }

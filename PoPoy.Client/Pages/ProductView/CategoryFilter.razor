@@ -1,19 +1,29 @@
 ﻿@inject ICategoryService CategoryService
+
+@if(name != null)
+{
+    <PageInfos Title="@name"></PageInfos>
+}
 <div class="box">
-    <span class="filter-header">
+    <h3 class="filter-header">
         Categories
-    </span>
+    </h3>
     <ul class="filter-list">
         @foreach (var category in CategoryService.Categories)
         {
-            <li><a href="/category/@category.Url">@category.Name</a></li>
+            <li><a href="/category/@category.Url" @onclick="()=>OnClicked(category.Name)">@category.Name</a></li>
         }
     </ul>
 </div>
 
 @code {
+    public string name{ get; set; }
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.GetCategories();
+    }
+    public void OnClicked(string name)
+    {
+        this.name = name;
     }
 }

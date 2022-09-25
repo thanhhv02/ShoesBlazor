@@ -209,14 +209,35 @@ using Microsoft.AspNetCore.Authorization;
 #line hidden
 #nullable disable
 #nullable restore
-#line 29 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+#line 30 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Services.UserAvatarService;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 31 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using PoPoy.Client.Pages.ProductView;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 32 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
 using PoPoy.Client.Services.CategoryService;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\Ultilities\Carosel.razor"
+#line 33 "D:\Myproject\CSharp\DATN\PoPoy.Client\_Imports.razor"
+using Syncfusion.Blazor.Navigations;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 5 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\Ultilities\Carosel.razor"
 using System.Threading;
 
 #line default
@@ -230,31 +251,26 @@ using System.Threading;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 67 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\Ultilities\Carosel.razor"
+#line 60 "D:\Myproject\CSharp\DATN\PoPoy.Client\Pages\Ultilities\Carosel.razor"
        
+    private IJSObjectReference MyJsModule { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await GetProduct();
+        var timer = new System.Threading.Timer((_) =>
+        {
+            InvokeAsync(async () =>
+            {
+                // Add your update logic here
+                await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/index2.js");
+                // Update the UI
+                StateHasChanged();
+            });
+        }, null, 0, 1000);
     }
     public async Task GetProduct()
     {
         await _productSvc.GetProductForSlide();
-    }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/index.js");
-        }
-    }
-
-    private async Task NextSlide()
-    {
-        await JSRuntime.InvokeVoidAsync("nextSlide", null);
-    }
-    private async Task PreviousSlide()
-    {
-        await JSRuntime.InvokeVoidAsync("prevSlide", null);
     }
 
 #line default
