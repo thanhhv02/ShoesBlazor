@@ -9,6 +9,7 @@
 @using PoPoy.Client.Services.CartService;
 @using PoPoy.Client.State;
 @using PoPoy.Shared.Dto
+@inject IProductService _prodSvc;
 <PageInfos Title="Giỏ hàng"></PageInfos>
 
 <BackToTop></BackToTop>
@@ -39,6 +40,8 @@ else
                     <div class="col-sm-8">
                         <h4>@cart.Product.Title</h4>
                         <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" QuantityChanged="() => StateHasChanged()" />
+                        Size: @cart.Size
+                        @*<SelectSize Model="@cart" CartUpdateType="CartUpdateType.Update" Product_Id="@cart.ProductId" QuantityChanged="() => StateHasChanged()"></SelectSize>*@
                         <div class="d-flex flex-row align-items-center mt-3">
                             <i class="oi oi-trash"></i>
                             <a href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</a>
@@ -89,7 +92,7 @@ else
     private bool buttonDisabled;
     private bool showButton = false;
     public bool IsUserLoggedIn = false;
-
+    private List<ProductSize> List_Size = new List<ProductSize>();
     Address addressModel = new Address();
     PaymentModeModel paymentModel = new PaymentModeModel()
         {
@@ -102,6 +105,7 @@ else
     {
         var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
         carts = await CartService.GetAllAsync();
+
         await CartState.UpdateAsync();
         addressModel.UserId = userId;
     }
@@ -115,7 +119,7 @@ else
 
     private async Task RemoveCart(Cart cart)
     {
-        await CartService.RemoveAsync(cart.Product.Id);
+        await CartService.RemoveAsync(cart.ToCartStorage());
         carts = await CartService.GetAllAsync();
         StateHasChanged();
     }

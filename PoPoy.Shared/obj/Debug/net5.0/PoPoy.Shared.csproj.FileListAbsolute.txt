@@ -1,0 +1,12 @@
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\bin\Debug\net5.0\PoPoy.Shared.deps.json
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\bin\Debug\net5.0\PoPoy.Shared.dll
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\bin\Debug\net5.0\PoPoy.Shared.pdb
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.csproj.AssemblyReference.cache
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.AssemblyInfoInputs.cache
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.AssemblyInfo.cs
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.csproj.CoreCompileInputs.cache
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.dll
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\refint\PoPoy.Shared.dll
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\PoPoy.Shared.pdb
+D:\Myproject\CSharp\DATN2\ShoesWebSiteBlazor\PoPoy.Shared\obj\Debug\net5.0\ref\PoPoy.Shared.dll

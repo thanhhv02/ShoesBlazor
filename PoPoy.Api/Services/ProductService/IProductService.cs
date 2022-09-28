@@ -22,7 +22,8 @@ namespace PoPoy.Api.Services.ProductService
         Task<ServiceResponse<List<UploadResult>>> UploadProductImage(List<IFormFile> files, int productId);
         Task<bool> DeleteProductImage(int imageId);
         Task<ServiceResponse<bool>> CategoryAssign(int productId, CategoryAssignRequest request);     
-        ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids);
+        ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes);
         Task<PagedList<Product>> GetProductsByCategory(ProductParameters productParameters, string categoryUrl);
+        Task<List<ProductSize>> GetSizeProduct(int productId);
     }
 }

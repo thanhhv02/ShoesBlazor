@@ -342,7 +342,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 869, DateTimeKind.Local).AddTicks(9011),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 161, DateTimeKind.Local).AddTicks(6222),
                             Description = "ADIDAS ALPHABOOST “CORE BLACK”",
                             OriginalPrice = 2150000m,
                             Price = 2150000m,
@@ -355,7 +355,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8454),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2035),
                             Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                             OriginalPrice = 1650000m,
                             Price = 1650000m,
@@ -368,7 +368,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 3,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8515),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2081),
                             Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                             OriginalPrice = 3250000m,
                             Price = 3250000m,
@@ -381,7 +381,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 4,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8521),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2085),
                             Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                             OriginalPrice = 1650000m,
                             Price = 1650000m,
@@ -394,7 +394,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 5,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8524),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2089),
                             Description = "ADIDAS NMD R1 TOKYO DRAGON",
                             OriginalPrice = 1850000m,
                             Price = 1850000m,
@@ -407,7 +407,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 6,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8527),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2091),
                             Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                             OriginalPrice = 2550000m,
                             Price = 2550000m,
@@ -420,7 +420,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 7,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8530),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2095),
                             Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                             OriginalPrice = 6100000m,
                             Price = 6100000m,
@@ -433,7 +433,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 8,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8533),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2098),
                             Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                             OriginalPrice = 6450000m,
                             Price = 6450000m,
@@ -446,7 +446,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 9,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8536),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2101),
                             Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                             OriginalPrice = 4850000m,
                             Price = 4850000m,
@@ -459,7 +459,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 10,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8541),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2104),
                             Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                             OriginalPrice = 5550000m,
                             Price = 5550000m,
@@ -472,7 +472,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 11,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8544),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2107),
                             Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                             OriginalPrice = 3850000m,
                             Price = 3850000m,
@@ -485,7 +485,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 12,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8547),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2111),
                             Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                             OriginalPrice = 4350000m,
                             Price = 4350000m,
@@ -498,7 +498,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 13,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8550),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2115),
                             Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                             OriginalPrice = 4300000m,
                             Price = 4300000m,
@@ -511,7 +511,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 14,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8553),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2119),
                             Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                             OriginalPrice = 4850000m,
                             Price = 4850000m,
@@ -524,7 +524,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 15,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8558),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2124),
                             Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                             OriginalPrice = 3950000m,
                             Price = 3950000m,
@@ -537,7 +537,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 16,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8709),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2127),
                             Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                             OriginalPrice = 2950000m,
                             Price = 2950000m,
@@ -550,7 +550,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 17,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8718),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2132),
                             Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                             OriginalPrice = 2850000m,
                             Price = 2850000m,
@@ -563,7 +563,7 @@ namespace PoPoy.Api.Migrations
                         {
                             Id = 18,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2022, 9, 23, 14, 12, 15, 872, DateTimeKind.Local).AddTicks(8721),
+                            DateCreated = new DateTime(2022, 9, 27, 20, 51, 8, 163, DateTimeKind.Local).AddTicks(2135),
                             Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                             OriginalPrice = 3200000m,
                             Price = 3200000m,
@@ -571,6 +571,39 @@ namespace PoPoy.Api.Migrations
                             Stock = 0,
                             Title = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                             Views = 0
+                        });
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.ProductColor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductColors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Color = "Yellow"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Color = "Red"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Color = "Green"
                         });
                 });
 
@@ -716,6 +749,90 @@ namespace PoPoy.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PoPoy.Shared.Dto.ProductQuantity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductQuantities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ColorId = 1,
+                            ProductId = 1,
+                            SizeId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ColorId = 2,
+                            ProductId = 1,
+                            SizeId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ColorId = 3,
+                            ProductId = 1,
+                            SizeId = 3
+                        });
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.ProductSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductSizes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Size = 38
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Size = 39
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Size = 40
+                        });
+                });
+
             modelBuilder.Entity("PoPoy.Shared.Dto.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -812,9 +929,9 @@ namespace PoPoy.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("697f3e05-d6d8-43f8-833d-afd6a33109f5"),
+                            Id = new Guid("fb1bf09c-fc44-4cff-9fbe-836e025ca9d9"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "70a85656-6870-4840-aed2-78cc1b1404bd",
+                            ConcurrencyStamp = "1f9b2795-72bb-4623-af50-057b6984a518",
                             Dob = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hovanthanh12102002@gmail.com",
                             EmailConfirmed = true,
@@ -826,7 +943,7 @@ namespace PoPoy.Api.Migrations
                             PasswordHash = "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==",
                             PhoneNumber = "032132131",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7cffcb42-97d6-487e-b480-1e9280023870",
+                            SecurityStamp = "d8aafb3a-3b3e-49ea-b9eb-1ee231a4ef99",
                             TwoFactorEnabled = false,
                             UserName = "thanhhv"
                         });
@@ -927,6 +1044,33 @@ namespace PoPoy.Api.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("PoPoy.Shared.Dto.ProductQuantity", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.ProductColor", "Color")
+                        .WithMany("ProductQuantities")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PoPoy.Shared.Dto.Product", "Product")
+                        .WithMany("ProductQuantities")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PoPoy.Shared.Dto.ProductSize", "Size")
+                        .WithMany("ProductQuantities")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+                });
+
             modelBuilder.Entity("PoPoy.Shared.Dto.Category", b =>
                 {
                     b.Navigation("ProductInCategories");
@@ -946,6 +1090,18 @@ namespace PoPoy.Api.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductInCategories");
+
+                    b.Navigation("ProductQuantities");
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.ProductColor", b =>
+                {
+                    b.Navigation("ProductQuantities");
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.ProductSize", b =>
+                {
+                    b.Navigation("ProductQuantities");
                 });
 
             modelBuilder.Entity("PoPoy.Shared.Dto.User", b =>

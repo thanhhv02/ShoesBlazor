@@ -21,7 +21,8 @@ namespace PoPoy.Client.Services.ProductService
         Task GetAll(ProductParameters productParameters, string categoryUrl = null);
         Task GetProductForSlide();
         Task<ServiceResponse<Product>> Get(int id);
-        ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids);
+        Task<List<ProductSize>> GetSizeProduct(int id);
+        ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes);
     }
     public class ProductService : IProductService
     {
@@ -39,21 +40,25 @@ namespace PoPoy.Client.Services.ProductService
 
         public event Action ProductsChanged;
 
-        public async ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids)
+        public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
         {
             var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            var query2 = System.Web.HttpUtility.ParseQueryString(string.Empty);
             foreach (var id in ids)
             {
                 query.Add("ids", id.ToString());
             }
-
-            var response = await _httpClient.GetAsync($"api/product/filter/ids?{query}");
+            foreach (var size in sizes)
+            {
+                query.Add("sizes", size.ToString());
+            }
+            var response = await _httpClient.GetAsync($"api/product/filter?{query}&{query2}");
             //await response.HandleError();
 
-            return await response.Content.ReadFromJsonAsync<List<Product>>();
+            return await response.Content.ReadFromJsonAsync<List<ProductQuantity>>();
         }
         public async Task<ServiceResponse<Product>> Get(int id)
-        {
+        { 
             var result = await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>($"/api/product/" + id);
             return result;
         }
@@ -100,5 +105,10 @@ namespace PoPoy.Client.Services.ProductService
             SlideProducts = result.OrderByDescending(x => x.Views).Take(4).ToList();
         }
 
+        public async Task<List<ProductSize>> GetSizeProduct(int id)
+        {
+            var getSizeProduct = await _httpClient.GetFromJsonAsync<List<ProductSize>>($"/api/product/get-size-product/" + id);
+            return getSizeProduct;
+        }
     }
 }

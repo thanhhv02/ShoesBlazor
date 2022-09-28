@@ -80,6 +80,7 @@
                     <div class="product-info-price">@product.Price.ToString("n0")</div>
 
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
+                    <SelectSize Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id"></SelectSize>
                     <div>
                         <button class="btn-flat btn-hover" @onclick="AddToCart">add to cart</button>
                     </div>
@@ -404,6 +405,7 @@
     public int id { get; set; }
     private Cart cart;
     private Product product;
+    private List<ProductSize> List_Size{ get; set; }=new List<ProductSize>();
 
     protected override async Task OnParametersSetAsync()
     {
@@ -413,7 +415,6 @@
         {
             product = result.Data;
         }
-
         cart = new Cart() { Quantity = 1, Product = product};
     }
 

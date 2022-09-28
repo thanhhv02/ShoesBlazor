@@ -107,11 +107,11 @@ namespace PoPoy.Api.Controllers
                 return BadRequest();
             return Ok(affectedResult);
         }
-        [HttpGet("filter/ids")]
+        [HttpGet("filter")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async ValueTask<ActionResult<List<Product>>> FilterAllByIds([FromQuery] int[] ids)
-        => Ok(await _productServices.FilterAllByIdsAsync(ids));
+        public async ValueTask<ActionResult<List<Product>>> FilterAllByIds([FromQuery] int[] ids, [FromQuery] int[] sizes)
+        => Ok(await _productServices.FilterAllByIdsAsync(ids, sizes));
 
         [HttpPost("upload-image")]
         public async Task<ActionResult<List<UploadResult>>> UploadFile(List<IFormFile> files, int id)
@@ -131,6 +131,12 @@ namespace PoPoy.Api.Controllers
         {
             var result = await _productServices.GetProductsByCategory(productParameters, categoryUrl);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+            return Ok(result);
+        }
+        [HttpGet("get-size-product/{id}")]
+        public async Task<ActionResult<List<ProductSize>>> GetSizeProduct(int id)
+        {
+            var result = await _productServices.GetSizeProduct(id);
             return Ok(result);
         }
     }

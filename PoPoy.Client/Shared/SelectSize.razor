@@ -1,0 +1,44 @@
+﻿@inject ICartService CartService
+@inject IProductService _prodSvc;
+@using PoPoy.Client.Services.CartService
+@using PoPoy.Shared.Dto
+<div class="d-flex flex-row align-items-center mt-3">
+    <span>Size&nbsp; </span>
+    <EditForm Model="@Model">
+        <InputSelect class="form-control" Value="@Model.SizeId" ValueExpression="@(() => Model.SizeId)"
+                     ValueChanged="@((int value) => OnSizeChanged(value, Model))"
+                     style="width: 100px;">
+            @foreach (var num in List_Size)
+            {
+                <option value="@num.Id">@num.Size</option>
+            }
+        </InputSelect>
+    </EditForm>
+</div>
+@code {
+    [Parameter]
+    public Cart Model { get; set; } = new Cart();
+   
+    public List<ProductSize> List_Size { get; set; } = new List<ProductSize>();
+    [Parameter]
+    public EventCallback QuantityChanged { get; set; }
+    [Parameter]
+    public CartUpdateType CartUpdateType { get; set; }
+    [Parameter]
+    public int Product_Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+       List_Size =  await _prodSvc.GetSizeProduct(Product_Id);
+    }
+    private async void OnSizeChanged(int sizeid, Cart cart)
+    {
+        Model.SizeId = sizeid;
+        if (CartUpdateType is CartUpdateType.Update)
+        {
+            await CartService.UpdateAsync(cart.ToCartStorage());
+        }
+
+        await QuantityChanged.InvokeAsync();
+    }
+}

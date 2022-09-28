@@ -8,16 +8,14 @@
         <InputNumber class="form-control w-100" Value="@Model.Quantity" ValueExpression="@(() => Model.Quantity)"
                      ValueChanged="@((int value) => OnQuantityChanged(value, Model))"
                      style="width: 50px;">
-            @*@foreach (int num in Enumerable.Range(1, 9))
-                {
-                    <option value="@num" >@num</option>
-                }*@
         </InputNumber>
     </EditForm>
 </div>
 
-@code{ [Parameter]
+@code{
+    [Parameter]
     public Cart Model { get; set; }
+    
 
     [Parameter]
     public CartUpdateType CartUpdateType { get; set; }
@@ -34,4 +32,15 @@
         }
 
         await QuantityChanged.InvokeAsync();
-    } }
+    }
+    private async void OnSizeChanged(int sizeid, Cart cart)
+    {
+        Model.Size = sizeid;
+        if (CartUpdateType is CartUpdateType.Update)
+        {
+            await CartService.UpdateAsync(cart.ToCartStorage());
+        }
+
+        await QuantityChanged.InvokeAsync();
+    }
+}

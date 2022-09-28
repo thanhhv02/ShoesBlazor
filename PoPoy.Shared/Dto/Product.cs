@@ -27,5 +27,6 @@ namespace PoPoy.Shared.Dto
         public List<Cart> Carts { get; set; }
         public List<ProductImage> ProductImages { get; set; }
         public List<ProductInCategory> ProductInCategories { get; set; }
+        public List<ProductQuantity> ProductQuantities { get; set; }
     }
 }

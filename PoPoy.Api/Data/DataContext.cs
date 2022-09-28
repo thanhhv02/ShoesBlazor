@@ -34,6 +34,9 @@ namespace PoPoy.Api.Data
             modelBuilder.ApplyConfiguration(new AdressConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSizeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductColorConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductQuantityConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x => x.UserId);
@@ -46,6 +49,9 @@ namespace PoPoy.Api.Data
 
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
+        public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<ProductQuantity> ProductQuantities { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductInCategory> ProductInCategories { get; set; }
         public DbSet<Category> Categories { get; set; }

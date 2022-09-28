@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Data;
+using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
@@ -46,7 +47,12 @@ namespace PoPoy.Api.Services.ProductService
             {
                 var product = await _dataContext.Products.Include(x => x.ProductImages)
                     .Include(x => x.ProductInCategories)
-                    .ThenInclude(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+                    .ThenInclude(x => x.Category)
+                    .Include(x => x.ProductQuantities)
+                    .ThenInclude(x => x.Size)
+                    .Include(x => x.ProductQuantities)
+                    .ThenInclude(x => x.Color)
+                    .FirstOrDefaultAsync(x => x.Id == id);
                 product.Views++;
                 await _dataContext.SaveChangesAsync();
                 var response = new ServiceResponse<Product>
@@ -150,7 +156,7 @@ namespace PoPoy.Api.Services.ProductService
 
         public async Task<int> DeleteProduct(int productId)
         {
-            var product = await _dataContext.ProductImages.FirstOrDefaultAsync(x=>x.Id == productId);
+            var product = await _dataContext.ProductImages.FirstOrDefaultAsync(x => x.Id == productId);
             if (product == null) throw new Exception($"Cannot find image: {productId}");
 
 
@@ -158,15 +164,44 @@ namespace PoPoy.Api.Services.ProductService
 
             return await _dataContext.SaveChangesAsync();
         }
-
-        public async ValueTask<List<Product>> FilterAllByIdsAsync(int[] ids)
+        
+        public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
         {
             using (_dataContext)
             {
-                return await _dataContext.Products.Where(x => ids.Contains(x.Id)).Include(x => x.ProductImages).ToListAsync();
+                List<ProductQuantity> productQuantities = new List<ProductQuantity>();
+                var sortedList = new List<IdAndSize>();
+
+                for (int index = 0; index < ids.Length; index++)
+                {
+                    sortedList.Add(new IdAndSize()
+                    {
+                        Id = ids[index],
+                        Size = sizes[index]
+                    });
+                }
+                if (ids != null && sizes != null)
+                {
+                    foreach (var p in sortedList)
+                    {
+                        productQuantities.Add(await _dataContext.ProductQuantities
+                    .Where(x => x.ProductId == p.Id)
+                    .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductImages)
+                    .Where(x => x.SizeId == p.Size)
+                    .Include(x => x.Size)
+                    .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductQuantities)
+                    .FirstOrDefaultAsync());
+                    }
+                    return productQuantities;
+                }
+                else
+                {
+                    return new List<ProductQuantity>();
+                }
             }
         }
-
         public async Task<List<ProductVM>> SearchProduct(string searchText)
         {
             var query = from p in _dataContext.Products
@@ -280,10 +315,23 @@ namespace PoPoy.Api.Services.ProductService
                                       from pic in ppic.DefaultIfEmpty()
                                       join c in _dataContext.Categories on pic.CategoryId equals c.Id into picc
                                       from c in picc.DefaultIfEmpty()
-                                      where c.Url == categoryUrl                                     
-                                      select p).Include(x=>x.ProductImages).ToListAsync();
+                                      where c.Url == categoryUrl
+                                      select p).Include(x => x.ProductImages).ToListAsync();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
+        }
+        public async Task<List<ProductSize>> GetSizeProduct(int productId)
+        {
+            var result = new List<string>();
+            var temp = new List<int>();
+            var list_quantity = await _dataContext.ProductQuantities.Where(x => x.ProductId == productId)
+                .ToListAsync();
+            list_quantity.Select(x => x.Size).ToList();
+            foreach (var item in list_quantity)
+            {
+                temp.Add(item.SizeId);
+            }
+            return await _dataContext.ProductSizes.Where(x => temp.Contains(x.Id)).ToListAsync();
         }
     }
 }

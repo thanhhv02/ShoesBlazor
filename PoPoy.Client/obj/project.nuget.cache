@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i1nzFLsynfU2lQlgLxpERX1elswb7tKdoWkhOgYmKTYxDEfl02h8zLO83Fmg8YFgZXs7oUQci+IWu6bBEHwPRg==",
+  "dgSpecHash": "yw5Cf7k6RIYAux6VidUmq91/PYHddmMh/wlQUj4w8Cf1h1c830mGpYvONLKj976s/dPh9gplVwdYQn6EOHtUbw==",
   "success": true,
-  "projectFilePath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Client\\PoPoy.Client.csproj",
+  "projectFilePath": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Client\\PoPoy.Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Thanh\\.nuget\\packages\\blazored.localstorage\\4.3.0-preview.1\\blazored.localstorage.4.3.0-preview.1.nupkg.sha512",
     "C:\\Users\\Thanh\\.nuget\\packages\\blazored.toast\\3.2.2\\blazored.toast.3.2.2.nupkg.sha512",

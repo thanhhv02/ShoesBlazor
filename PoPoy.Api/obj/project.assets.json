@@ -8281,11 +8281,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Api\\PoPoy.Api.csproj",
+      "projectUniqueName": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Api\\PoPoy.Api.csproj",
       "projectName": "PoPoy.Api",
-      "projectPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Api\\PoPoy.Api.csproj",
+      "projectPath": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Api\\PoPoy.Api.csproj",
       "packagesPath": "C:\\Users\\Thanh\\.nuget\\packages\\",
-      "outputPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Api\\obj\\",
+      "outputPath": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Thanh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8302,8 +8302,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj": {
-              "projectPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj"
+            "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\PoPoy.Shared.csproj": {
+              "projectPath": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\PoPoy.Shared.csproj"
             }
           }
         }

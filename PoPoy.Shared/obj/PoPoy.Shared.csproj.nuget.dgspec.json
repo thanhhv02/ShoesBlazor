@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj": {}
+    "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\PoPoy.Shared.csproj": {}
   },
   "projects": {
-    "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj": {
+    "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\PoPoy.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj",
+        "projectUniqueName": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\PoPoy.Shared.csproj",
         "projectName": "PoPoy.Shared",
-        "projectPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\PoPoy.Shared.csproj",
+        "projectPath": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\PoPoy.Shared.csproj",
         "packagesPath": "C:\\Users\\Thanh\\.nuget\\packages\\",
-        "outputPath": "D:\\Myproject\\CSharp\\DATN\\PoPoy.Shared\\obj\\",
+        "outputPath": "D:\\Myproject\\CSharp\\DATN2\\ShoesWebSiteBlazor\\PoPoy.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Thanh\\AppData\\Roaming\\NuGet\\NuGet.Config",

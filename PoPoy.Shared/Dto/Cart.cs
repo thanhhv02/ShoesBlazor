@@ -12,6 +12,8 @@ namespace PoPoy.Shared.Dto
         public int Id { set; get; }
         public int ProductId { set; get; }
         public int Quantity { set; get; }
+        public int Size { get; set; }
+        public int SizeId { get; set; }
 
         [Column(TypeName = "decimal(18,0)")]
         public decimal Price { set; get; }
@@ -36,7 +38,8 @@ namespace PoPoy.Shared.Dto
             return new CartStorage
             {
                 ProductId = Product.Id,
-                Quantity = Quantity
+                Quantity = Quantity,
+                SizeId = SizeId
             };
         }
     }

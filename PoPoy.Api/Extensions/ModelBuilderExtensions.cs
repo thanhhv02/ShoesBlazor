@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,63 @@ namespace PoPoy.Api.Extensions
 
         public static void Seed(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ProductColor>().HasData(
+                new ProductColor()
+                {
+                    Id = 1,
+                    Color = ColorProduct.Yellow
+                },
+                new ProductColor()
+                {
+                    Id = 2,
+                    Color = ColorProduct.Red
+                },
+                new ProductColor()
+                {
+                    Id = 3,
+                    Color = ColorProduct.Green
+                }
+                );
+            modelBuilder.Entity<ProductSize>().HasData(
+                new ProductSize()
+                {
+                    Id = 1,
+                    Size = 38
+                },
+                new ProductSize()
+                {
+                    Id = 2,
+                    Size = 39
+                },
+                new ProductSize()
+                {
+                    Id = 3,
+                    Size = 40
+                }
+                );
+            modelBuilder.Entity<ProductQuantity>().HasData(
+                new ProductQuantity()
+                {
+                    Id = 1,
+                    ProductId = 1,
+                    SizeId = 1,
+                    ColorId = 1,
+                },
+                new ProductQuantity()
+                {
+                    Id = 2,
+                    ProductId = 1,
+                    SizeId = 2,
+                    ColorId = 2,
+                },
+                new ProductQuantity()
+                {
+                    Id = 3,
+                    ProductId = 1,
+                    SizeId = 3,
+                    ColorId = 3,
+                }
+                );
             modelBuilder.Entity<Category>().HasData(
                 new Category()
                 {

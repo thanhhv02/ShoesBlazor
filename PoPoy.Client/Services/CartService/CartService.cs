@@ -5,6 +5,7 @@ using PoPoy.Shared.Dto;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace PoPoy.Client.Services.CartService
 {
@@ -12,7 +13,7 @@ namespace PoPoy.Client.Services.CartService
     {
         ValueTask UpdateAsync(CartStorage cartStorage);
         ValueTask AddAsync(CartStorage cartStorage);
-        ValueTask RemoveAsync(int productId);
+        ValueTask RemoveAsync(CartStorage cartStorage);
         ValueTask RemoveAllAsync();
         ValueTask<List<Cart>> GetAllAsync();
     }
@@ -38,7 +39,7 @@ namespace PoPoy.Client.Services.CartService
             var storages = await storageService.GetItemAsync<List<CartStorage>>(CART)
                            ?? new List<CartStorage>();
 
-            var storage = storages.Find(x => x.ProductId == cart.ProductId);
+            var storage = storages.Find(x => x.ProductId == cart.ProductId && x.SizeId == cart.SizeId);
             if (storage is null)
             {
                 if (type is not CartStorageType.Remove)
@@ -54,6 +55,7 @@ namespace PoPoy.Client.Services.CartService
             {
                 case CartStorageType.Add:
                     storage.Quantity += cart.Quantity;
+                    storage.SizeId = cart.SizeId;
                     break;
                 case CartStorageType.Update:
                     storage.Quantity = cart.Quantity;
@@ -75,8 +77,8 @@ namespace PoPoy.Client.Services.CartService
         public async ValueTask UpdateAsync(CartStorage cart)
             => await UpdateCartStorage(cart, CartStorageType.Update);
 
-        public async ValueTask RemoveAsync(int productId)
-            => await UpdateCartStorage(new CartStorage { ProductId = productId }, CartStorageType.Remove);
+        public async ValueTask RemoveAsync(CartStorage cart)
+            => await UpdateCartStorage(cart, CartStorageType.Remove);
 
         public async ValueTask RemoveAllAsync()
         {
@@ -93,15 +95,33 @@ namespace PoPoy.Client.Services.CartService
                 await storageService.SetItemAsync(CART, new List<CartStorage>());
                 return new List<Cart>();
             }
-                
 
-            var products = await publicProductService.FilterAllByIdsAsync(storages.Select(x => x.ProductId).ToArray());
 
-            return products.Select(p => new Cart
+            var products = await publicProductService.FilterAllByIdsAsync(storages.Select(x => x.ProductId).ToArray(),
+                storages.Select(x => x.SizeId).ToArray());
+
+            List<Cart> result = new List<Cart>();
+
+            foreach (var p in products)
             {
-                Quantity = storages.FirstOrDefault(s => s.ProductId == p.Id).Quantity,
-                Product = p
-            }).ToList();
+                result.Add(new Cart
+                {
+                    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId).Quantity,
+                    Product = p.Product,
+                    ProductId = p.ProductId,
+                    SizeId = p.Size.Id,
+                    Size = p.Size.Size
+                });
+            }
+
+            return result;
+            //return products.Select(p => new Cart
+            //{
+            //    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId).Quantity,
+            //    Product = p.Product,
+            //    ProductId = p.ProductId,
+            //    Size = storages.FirstOrDefault(s => s.ProductId == p.ProductId).Size
+            //}).ToList();
         }
     }
 }
