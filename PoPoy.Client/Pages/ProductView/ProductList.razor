@@ -1,11 +1,16 @@
 ﻿@inject IProductService _productSvc;
 @inject IConfiguration _config;
+@inject IToastService _toastSvc;
 @implements IDisposable;
 <div class="box">
     <div class="row" id="products">
         @if (_productSvc.Products.Items == null || _productSvc.Products.Items.Count == 0)
         {
             <LoadingScreen></LoadingScreen>
+            @if(Message != null){
+                _toastSvc.ShowInfo(Message);
+            }
+            
         }
         else
         {
@@ -71,8 +76,10 @@
 
 
 @code {
+    public string Message{ get; set; }
     protected override void OnInitialized()
     {
+        Message = _productSvc.Message;
         _productSvc.ProductsChanged += StateHasChanged;
     }
 

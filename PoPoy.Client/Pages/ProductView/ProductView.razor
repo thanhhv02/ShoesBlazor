@@ -1,5 +1,6 @@
 ﻿@page "/products"
 @page "/category/{categoryUrl}"
+@page "/search/{searchText}"
 @inject IProductService _productSvc;
 @inject IConfiguration _config;
 <PageInfos Title="Sản phẩm"></PageInfos>
@@ -34,21 +35,44 @@
 @code {
     [Parameter]
     public string? CategoryUrl { get; set; } = null;
+    [Parameter]
+    public string? SearchText { get; set; } = null;
+
     public List<Product> ProductList { get; set; } = new List<Product>();
     public MetaData MetaData { get; set; } = new MetaData();
     private ProductParameters _productParameters = new ProductParameters();
     protected override async Task OnParametersSetAsync()
     {
-        await GetProducts();
+        if (SearchText != null)
+        {
+            await GetProductsSearch();
+        }
+        else
+        {
+            await GetProducts();
+        }
     }
     private async Task SelectedPage(int page)
     {
         _productParameters.PageNumber = page;
-        await GetProducts();
+        if (SearchText != null)
+        {
+            await GetProductsSearch();
+        }
+        else
+        {
+            await GetProducts();
+        }
     }
     private async Task GetProducts()
     {
         await _productSvc.GetAll(_productParameters, CategoryUrl);
+        ProductList = _productSvc.Products.Items;
+        MetaData = _productSvc.Products.MetaData;
+    }
+    private async Task GetProductsSearch()
+    {
+        await _productSvc.SearchProducts(_productParameters, SearchText);
         ProductList = _productSvc.Products.Items;
         MetaData = _productSvc.Products.MetaData;
     }

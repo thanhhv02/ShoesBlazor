@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Polly;
 using PoPoy.Api.Data;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
@@ -180,7 +182,7 @@ namespace PoPoy.Api.Services.ProductService
 
             return await _dataContext.SaveChangesAsync();
         }
-        
+
         public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
         {
             using (_dataContext)
@@ -378,7 +380,7 @@ namespace PoPoy.Api.Services.ProductService
                         _dataContext.ProductQuantities.Remove(productQuantity);
                     }
                     else if (productQuantity == null && size.Selected)
-                    {             
+                    {
                         await _dataContext.ProductQuantities.AddAsync(new ProductQuantity()
                         {
                             SizeId = int.Parse(size.Id),
@@ -390,10 +392,65 @@ namespace PoPoy.Api.Services.ProductService
                 await _dataContext.SaveChangesAsync();
                 return new ServiceSuccessResponse<bool>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public async Task<PagedList<Product>> SearchProducts(ProductParameters productParameters, string searchText)
+        {
+            using (_dataContext)
+            {
+                var list_product = await _dataContext.Products
+                                .Where(p => p.Title.ToLower().Contains(searchText.ToLower()) ||
+                                    p.Description.ToLower().Contains(searchText.ToLower()))
+                                .Include(p => p.ProductImages)
+                                .ToListAsync();
+                return PagedList<Product>
+                            .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
+            }
+        }
+
+        public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText)
+        {
+            var products = await FindProductsBySearchText(searchText);
+
+            List<string> result = new List<string>();
+
+            foreach (var product in products)
+            {
+                if (product.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Add(product.Title);
+                }
+
+                if (product.Description != null)
+                {
+                    var punctuation = product.Description.Where(char.IsPunctuation)
+                        .Distinct().ToArray();
+                    var words = product.Description.Split()
+                        .Select(s => s.Trim(punctuation));
+
+                    foreach (var word in words)
+                    {
+                        if (word.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+                            && !result.Contains(word))
+                        {
+                            result.Add(word);
+                        }
+                    }
+                }
+            }
+
+            return new ServiceResponse<List<string>> { Data = result };
+        }
+        private async Task<List<Product>> FindProductsBySearchText(string searchText)
+        {
+            return await _dataContext.Products
+                                .Where(p => p.Title.ToLower().Contains(searchText.ToLower()) ||
+                                    p.Description.ToLower().Contains(searchText.ToLower()))
+                                .ToListAsync();
         }
     }
 }

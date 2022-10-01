@@ -4,12 +4,14 @@ using Newtonsoft.Json;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
+using Syncfusion.Blazor.Kanban.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace PoPoy.Client.Services.ProductService
 {
@@ -18,11 +20,14 @@ namespace PoPoy.Client.Services.ProductService
         event Action ProductsChanged;
         List<Product> SlideProducts { get; set; }
         PagingResponse<Product> Products { get; set; }
+        string Message { get; set; }
         Task GetAll(ProductParameters productParameters, string categoryUrl = null);
         Task GetProductForSlide();
         Task<ServiceResponse<Product>> Get(int id);
         Task<List<ProductSize>> GetSizeProduct(int id);
         ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes);
+        Task SearchProducts(ProductParameters productParameters, string searchText);
+        Task<List<string>> GetProductSearchSuggestions(string searchText);
     }
     public class ProductService : IProductService
     {
@@ -37,6 +42,7 @@ namespace PoPoy.Client.Services.ProductService
         public PagingResponse<Product> Products { get; set; } = new PagingResponse<Product>();
 
         public List<Product> SlideProducts { get; set; }
+        public string Message { get; set; } = "Loading products...";
 
         public event Action ProductsChanged;
 
@@ -77,15 +83,9 @@ namespace PoPoy.Client.Services.ProductService
             {
                 throw new ApplicationException(content);
             }
-            //Products = new PagingResponse<Product>
-            //{
-            //    Items = JsonConvert.DeserializeObject<List<Product>>(content),
-            //    MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First())
-            //};
             Products.Items = JsonConvert.DeserializeObject<List<Product>>(content);
             Products.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
             ProductsChanged.Invoke();
-            //return pagingResponse;
         }
 
         public async Task GetProductForSlide()
@@ -105,10 +105,41 @@ namespace PoPoy.Client.Services.ProductService
             SlideProducts = result.OrderByDescending(x => x.Views).Take(4).ToList();
         }
 
+        public async Task<List<string>> GetProductSearchSuggestions(string searchText)
+        {
+            var result = await _httpClient
+                .GetFromJsonAsync<ServiceResponse<List<string>>>($"api/product/searchsuggestions/{searchText}");
+            return result.Data;
+        }
+
         public async Task<List<ProductSize>> GetSizeProduct(int id)
         {
             var getSizeProduct = await _httpClient.GetFromJsonAsync<List<ProductSize>>($"/api/product/get-size-product/" + id);
             return getSizeProduct;
+        }
+
+        public async Task SearchProducts(ProductParameters productParameters, string searchText)
+        {
+            var queryStringParam = new Dictionary<string, string>
+            {
+                ["pageNumber"] = productParameters.PageNumber.ToString()
+            };
+            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString($"api/product/search/{searchText}", queryStringParam));
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+
+            if (content != null)
+            {
+                Products.Items = JsonConvert.DeserializeObject<List<Product>>(content);
+                Products.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
+            }
+            if (Products.Items.Count == 0) Message = "No products found.";
+            ProductsChanged?.Invoke();
         }
     }
 }
