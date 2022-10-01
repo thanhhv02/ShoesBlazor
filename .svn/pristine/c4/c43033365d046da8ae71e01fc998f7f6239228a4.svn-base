@@ -1,0 +1,95 @@
+﻿@using System.Net.Http.Headers
+@inject IAuthService AuthService;
+@inject HttpClient httpClient;
+@inject ICartState _state;
+@inject IUserAvatarService _svc;
+
+<div class="information_module">
+    <a class="toggle_title" href="#changeavatar-collapse" data-toggle="collapse">
+        <h4>
+            Tải lên ảnh đại diện
+            <span class="fal fa-chevron-down"></span>
+        </h4>
+    </a>
+    <div class="information__set profile_images toggle_module collapse show" id="changeavatar-collapse">
+        <div class="information_wrapper">
+            <div class="profile_image_area row">
+                <div class="col-md-6">
+                    <label for="avatar-input">
+                        @if (user.AvatarPath != null)
+                        {
+                            <img id="avatar-img" src="@user.AvatarPath" alt="Hình đại diện thành viên @KhachName" style="width:200px; height:200px">
+                        }
+                        else
+                        {
+                            <img id="avatar-img" src="/images/avatar.jpg" alt="Hình đại diện thành viên @KhachName" style="width:200px; height:200px">
+                        }
+                        <InputFile OnChange="OnInputFileChange" type="file" id="avatar-input" style="display:none" 
+                            accept="image/png, image/jpeg, image/gif, image/jpg">
+                        </InputFile>
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <div class="img_info" style="margin-top:20px">
+                        <p class="bold">Hình đại diện chấp nhận các định dạng</p>
+                        <p class="subtitle">JPG, GIF or PNG</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    private int maxAllowedFiles = int.MaxValue;
+    private long maxFileSize = long.MaxValue;
+    private List<string> fileNames = new();
+    private List<UploadResult> uploadResults = new();
+    public string KhachName;
+    public string UserName;
+    public string Email;
+    //public string NgayThamGia;
+    //protected void OnInitialized()
+    [Parameter] public string id { get; set; }
+    public User user = new User();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUser();
+    }
+    public async Task GetUser()
+    {
+        var _user = await AuthService.GetUserFromId(id);
+        user.LastName = _user.Data.LastName;
+        user.FirstName = _user.Data.FirstName;
+        KhachName = _user.Data.LastName + " " + _user.Data.FirstName;
+        user.UserName = _user.Data.UserName;
+        user.Email = _user.Data.Email;
+        user.AvatarPath = _user.Data.AvatarPath;
+    }
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        using var content = new MultipartFormDataContent();
+
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+
+            fileNames.Add(file.Name);
+
+            content.Add(
+                content: fileContent,
+                name: "\"files\"",
+                fileName: file.Name);
+        }
+
+        var newUploadResults = await _svc.UploadAvatar(content, id);
+
+        if (newUploadResults is not null)
+        {
+            uploadResults = uploadResults.Concat(newUploadResults).ToList();
+        }
+
+        await GetUser();
+        StateHasChanged();
+    }
+}

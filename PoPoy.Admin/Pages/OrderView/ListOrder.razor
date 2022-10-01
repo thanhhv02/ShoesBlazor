@@ -1,0 +1,102 @@
+﻿@page "/listOrder"
+
+@inject IOrderService OrderService
+
+<h2 class="mt-4 ml-3 mb-3" style="color:darkblue">Danh sách đơn hàng</h2>
+@*<div class="input-group" style="left: 950px;">
+        <div class="form-outline">
+            <input @bind-value="searchText"
+                   type="search"
+                   list="users"
+                   class="form-control"
+                   placeholder="Search..." />
+        </div>
+        <button type="button" class="btn btn-primary" @onclick="SearchProducts">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>*@
+<div class="row mt-4 ml-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã đơn hàng
+                </th>
+                <th>
+                    Mã người dùng
+                </th>
+                <th>
+                    Mã địa chỉ
+                </th>
+                <th>
+                    Ngày đặt
+                </th>
+                <th>
+                    Tổng đơn hàng
+                </th>
+                <th>
+                    Phương thức thanh toán
+                </th>
+                <th>
+                    Tình trạng đơn hàng
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var items in Orders)
+            {
+                <tr>
+                    <td>@items.Id</td>
+                    <td>@items.UserId</td>
+                    <td>@items.AddressId</td>
+                    <td>@items.OrderDate.ToString("MM/dd/yyyy")</td>
+                    <td>@items.TotalPrice</td>
+                    <td>@items.PaymentMode</td>
+                    <td>@items.OrderStatus</td>
+                    <td>
+                        <a href="/listOrderDetails/@items.Id" class="btn btn-primary"><i class="oi oi-inbox"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@*<Confirmation ConfirmationMessage="Bạn chắc chắn xóa sản phẩm này?"
+                  ConfirmationTitle="Xóa sản phẩm"
+                  @ref="DeleteConfirmation"
+                  ConfirmationChanged="OnConfirmDeleteTask">
+
+    </Confirmation>*@
+
+@code {
+    private string searchText = string.Empty;
+    private List<Order> Orders { get; set; } = new List<Order>();
+    private int ProductId { set; get; }
+    private Confirmation DeleteConfirmation { set; get; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrders();
+    }
+
+    private async Task GetOrders()
+    {
+        var pagingResponse = await OrderService.GetAllOrders();
+        Orders = pagingResponse;
+    }
+
+    //public async Task SearchProducts()
+    //{
+    //    var pagingResponse = await ProductService.GetAllProducts();
+    //    if (!String.IsNullOrEmpty(searchText))
+    //    {
+    //        Products = await ProductService.SearchProduct(searchText);
+    //    }
+    //    else
+    //    {
+    //        Products = pagingResponse;
+    //    }
+    //}
+}
