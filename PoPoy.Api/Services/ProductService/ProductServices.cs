@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Polly;
 using PoPoy.Api.Data;
+using PoPoy.Api.Extensions;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
@@ -39,6 +40,7 @@ namespace PoPoy.Api.Services.ProductService
             using (_dataContext)
             {
                 var list_product = await _dataContext.Products.Include(x => x.ProductImages).ToListAsync();
+                list_product.Shuffle();
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
             }
@@ -335,6 +337,7 @@ namespace PoPoy.Api.Services.ProductService
                                       from c in picc.DefaultIfEmpty()
                                       where c.Url == categoryUrl
                                       select p).Include(x => x.ProductImages).ToListAsync();
+            list_product.Shuffle();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
         }

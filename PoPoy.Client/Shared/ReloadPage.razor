@@ -1,15 +1,17 @@
 ﻿@inject NavigationManager uriHelper
 
-<a href="/" class="@Class" @onclick="HandleClick">@Title</a>
+<a href="@Uri" class="@Class" @onclick="HandleClick">@Title</a>
 
 @code {
     [Parameter]
     public string Title { get; set; }
     [Parameter]
     public string Class { get; set; }
+    [Parameter]
+    public string Uri{ get; set; }
 
     private void HandleClick()
     {
-        uriHelper.NavigateTo("/", true);
+        uriHelper.NavigateTo(Uri, true);
     }
 }
