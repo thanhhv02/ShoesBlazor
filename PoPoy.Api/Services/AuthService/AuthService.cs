@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PoPoy.Api.Data;
 using PoPoy.Api.SendMailService;
+using PoPoy.Api.VNPay;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.ApiModels;
 using PoPoy.Shared.Enum;
@@ -44,7 +45,7 @@ namespace PoPoy.Api.Services.AuthService
         {
             this._emailService = emailService;
             _configuration = configuration;
-            _signInManager = signInManager;        
+            _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _env = env;
@@ -52,7 +53,7 @@ namespace PoPoy.Api.Services.AuthService
             _context = context;
         }
         public HttpContext Context => _httpContext.HttpContext;
-
+        public string UserId() => _httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
         public async Task<Guid> GetUserId(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
@@ -72,7 +73,7 @@ namespace PoPoy.Api.Services.AuthService
             if (!changePasswordResult.Succeeded)
             {
                 var error = new string[changePasswordResult.Errors.Count()];
-                var listError =  new List<string>();
+                var listError = new List<string>();
                 foreach (var item in changePasswordResult.Errors)
                 {
                     listError.Add(item.Description);
@@ -148,19 +149,18 @@ namespace PoPoy.Api.Services.AuthService
             return new ServiceSuccessResponse<User>(user);
         }
 
-
         public async Task<List<User>> GetUserPaging()
         {
             var query = _userManager.Users;
             var data = await query.Select(x => new User()
-                {
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    UserName = x.UserName,
-                    FirstName = x.FirstName,
-                    Id = x.Id,
-                    LastName = x.LastName
-                }).ToListAsync();  
+            {
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                UserName = x.UserName,
+                FirstName = x.FirstName,
+                Id = x.Id,
+                LastName = x.LastName
+            }).ToListAsync();
             return data;
         }
 
@@ -173,7 +173,7 @@ namespace PoPoy.Api.Services.AuthService
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
 
             if (!result.Succeeded) return new ServiceErrorResponse<string>("Tài khoản hoặc mật khẩu không đúng");
-            if(result.IsNotAllowed) return new ServiceErrorResponse<string>("Tài khoản không được cấp quyền vào trang này");
+            if (result.IsNotAllowed) return new ServiceErrorResponse<string>("Tài khoản không được cấp quyền vào trang này");
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
@@ -186,7 +186,7 @@ namespace PoPoy.Api.Services.AuthService
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);       
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 _configuration["JwtIssuer"],
@@ -239,13 +239,13 @@ namespace PoPoy.Api.Services.AuthService
             var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
             var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
 
-            string url = $"{ _configuration["ApiUrl"]}/api/user/confirmemail?userid={user.Id}&token={validEmailToken}";
+            string url = $"{_configuration["ApiUrl"]}/api/user/confirmemail?userid={user.Id}&token={validEmailToken}";
 
             EmailDto emailDto = new EmailDto
             {
                 Subject = "Xác thực email người dùng",
-                Body = $"<h1>Xin chào, {user.LastName +" "+ user.FirstName}</h1><br/>"
-                + $"<h3>Tài khoản: {user.UserName}</h3></br>" 
+                Body = $"<h1>Xin chào, {user.LastName + " " + user.FirstName}</h1><br/>"
+                + $"<h3>Tài khoản: {user.UserName}</h3></br>"
                 + $"<h3>Mật khẩu: {request.Password}</h3></br>"
                 + $"<p>Hãy xác nhận email của bạn <a href='{url}'>Bấm vào đây</a></p>",
                 To = user.Email
@@ -258,7 +258,7 @@ namespace PoPoy.Api.Services.AuthService
             {
                 return new ServiceErrorResponse<bool>("Không thể gửi mail");
             }
-            
+
             return new ServiceSuccessResponse<bool>();
         }
 
@@ -290,9 +290,9 @@ namespace PoPoy.Api.Services.AuthService
             {
                 return new ServiceErrorResponse<string>("Something went wrong !");
             }
-            
 
-            
+
+
         }
 
         public async Task<ServiceResponse<bool>> RoleAssign(Guid id, RoleAssignRequest request)
@@ -439,6 +439,7 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<bool> CheckOut(List<Cart> cartItem)
         {
             string OrderId = GenerateOrderId();
+            var prods = _context.Products.ToList();
 
             try
             {
@@ -446,7 +447,7 @@ namespace PoPoy.Api.Services.AuthService
                 var address = _context.Addresses.Where(x => x.UserId == detail.UserId).Select(x => x.Id).FirstOrDefault();
                 Order order = new Order();
                 order.Id = OrderId;
-                order.UserId = detail.UserId;        
+                order.UserId = detail.UserId;
                 order.TotalPrice = detail.TotalPrice;
                 order.OrderDate = DateTime.Now;
                 order.PaymentMode = detail.PaymentMode;
@@ -466,16 +467,21 @@ namespace PoPoy.Api.Services.AuthService
                     _orderDetail.Quantity = items.Quantity;
                     _orderDetail.TotalPrice = (double)(items.Price * items.Quantity);
                     _context.OrderDetails.Add(_orderDetail);
+
+                    var selected_product = prods.Where(x => x.Id == items.ProductId).FirstOrDefault();
+                    selected_product.Stock = selected_product.Stock - items.Quantity;
+                    selected_product.CheckoutCount += items.CheckoutCount;
+                    _context.Products.Update(selected_product);
                 }
 
-                var result =  _context.SaveChanges();
-                if(result != 1)
+                var result = _context.SaveChanges();
+                if (result != 1)
                 {
                     return true;
                 }
                 return false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -604,7 +610,7 @@ namespace PoPoy.Api.Services.AuthService
                 uploadResult.ContentType = file.ContentType;
                 uploadResults.Add(uploadResult);
 
-                
+
                 user.AvatarPath = _configuration["ApiUrl"] + "/uploads/" + untrustedFileName;
             }
 
@@ -613,6 +619,35 @@ namespace PoPoy.Api.Services.AuthService
             return new ServiceSuccessResponse<List<UploadResult>>(uploadResults);
         }
 
+        public string MakePaymentVNPay(double total)
+        {
+            string url = _configuration["VnPay:Url"];
+            string returnUrl = _configuration["VnPay:ReturnUrl"];
+            string tmnCode = _configuration["VnPay:TmnCode"];
+            string hashSecret = _configuration["VnPay:HashSecret"];
 
+            PayLib pay = new PayLib();
+            Util util = new Util(_httpContext);
+
+            pay.AddRequestData("vnp_Version", "2.1.0"); //Phiên bản api mà merchant kết nối. Phiên bản hiện tại là 2.1.0
+            pay.AddRequestData("vnp_Command", "pay"); //Mã API sử dụng, mã cho giao dịch thanh toán là 'pay'
+            pay.AddRequestData("vnp_TmnCode", tmnCode); //Mã website của merchant trên hệ thống của VNPAY (khi đăng ký tài khoản sẽ có trong mail VNPAY gửi về)
+            pay.AddRequestData("vnp_Amount", total.ToString()); //số tiền cần thanh toán, công thức: số tiền * 100 - ví dụ 10.000 (mười nghìn đồng) --> 1000000
+            pay.AddRequestData("vnp_BankCode", ""); //Mã Ngân hàng thanh toán (tham khảo: https://sandbox.vnpayment.vn/apis/danh-sach-ngan-hang/), có thể để trống, người dùng có thể chọn trên cổng thanh toán VNPAY
+            pay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss")); //ngày thanh toán theo định dạng yyyyMMddHHmmss
+            pay.AddRequestData("vnp_CurrCode", "VND"); //Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
+            pay.AddRequestData("vnp_IpAddr", util.GetIpAddress()); //Địa chỉ IP của khách hàng thực hiện giao dịch
+            pay.AddRequestData("vnp_Locale", "vn"); //Ngôn ngữ giao diện hiển thị - Tiếng Việt (vn), Tiếng Anh (en)
+            pay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang"); //Thông tin mô tả nội dung thanh toán
+            pay.AddRequestData("vnp_OrderType", "other"); //topup: Nạp tiền điện thoại - billpayment: Thanh toán hóa đơn - fashion: Thời trang - other: Thanh toán trực tuyến
+            pay.AddRequestData("vnp_ReturnUrl", returnUrl); //URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán
+            pay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); //mã hóa đơn
+
+            string paymentUrl = pay.CreateRequestUrl(url, hashSecret);
+
+            return paymentUrl;
+        }
+
+        
     }
 }

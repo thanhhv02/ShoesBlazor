@@ -126,6 +126,10 @@ ul.devided > li:last-child {
     z-index: 2;
 }
 
+.rz-rating-icon {
+    color: #FFDE00 !important;
+}
+
 .dropdown-content > li > a {
     padding: 10px;
 }

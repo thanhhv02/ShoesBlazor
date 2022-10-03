@@ -13,7 +13,7 @@
 
 <PageInfos Title="Giỏ hàng"></PageInfos>
 
-<ReloadPage Title="Trang chủ" Class="mt-3 mb-3"></ReloadPage>
+
 
 @if (carts is null)
 {
@@ -80,9 +80,15 @@ else
                     {
                         <div class="d-grid gap-2 mx-auto">
                             <button class="btn btn-warning" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Đặt hàng</button>
+                        </div>                 
+                    }
+                    @if (@paymentModel.Name == "VNPay")
+                    {
+                        <div class="d-grid gap-2 mx-auto">
+                            <button class="btn btn-warning" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Thanh toán VNPay</button>
                         </div>
                     }
-                    else
+                    @if (@paymentModel.Name == "PayPal")
                     {
                         <div class="d-grid gap-2 mx-auto">
                             <button class="btn btn-warning" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Thanh toán Paypal</button>
@@ -99,6 +105,9 @@ else
     private bool buttonDisabled;
     private bool showButton = false;
     public bool IsUserLoggedIn = false;
+    public bool ContinueCheckout = true;
+    public int productStock { get; set; }
+    public int productQuantity { get; set; }
     private List<ProductSize> List_Size = new List<ProductSize>();
     Address addressModel = new Address();
     PaymentModeModel paymentModel = new PaymentModeModel()
@@ -106,7 +115,7 @@ else
         Name = "CashOnDelivery" // default value
     };
 
-    List<string> rdOptions = new List<string> { "CashOnDelivery", "PayPal" };
+    List<string> rdOptions = new List<string> { "CashOnDelivery", "PayPal", "VNPay" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -138,8 +147,39 @@ else
             var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
             var address = await AuthService.GetAddress(userId);
             var finalTotal = CalcTotalAmount();
-            if (address != null)
+            foreach (var item in carts)
             {
+                productStock = item.Product.Stock;
+                productQuantity = item.Quantity;
+                if (productStock < productQuantity)
+                {
+                    _toastSvc.ShowError("Số lượng sản phẩm không đủ!");
+                    ContinueCheckout = false;
+                    break;
+                }
+                else
+                {
+                    ContinueCheckout = true;
+                    break;
+                }
+            }
+            if (address == null)
+            {
+                NavigationManager.NavigateTo($"/user/setting/{userId}");
+                _toastSvc.ShowError("Bạn phải nhập địa chỉ");
+            }
+            if (address != null && ContinueCheckout)
+            {
+                if (paymentModel.Name == "VNPay")
+                {
+                    carts.FirstOrDefault().AddressId = address.Id;
+                    carts.FirstOrDefault().PayPalPayment = (double)finalTotal;
+                    carts.FirstOrDefault().PaymentMode = paymentModel.Name;
+                    var total = CalcTotalAmount();
+                    total *= 100;
+                    var url = await AuthService.MakeVNPayPayment((double)total);
+                    NavigationManager.NavigateTo(url);
+                }
                 if (paymentModel.Name == "PayPal")
                 {
                     carts.FirstOrDefault().AddressId = address.Id;
@@ -163,6 +203,7 @@ else
                         carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault(x => x.SizeId == item.SizeId).Quantity = item.Quantity;
                     }
                     carts.FirstOrDefault().TotalPrice = CalcTotalAmount();
+                    carts.FirstOrDefault().CheckoutCount = 1;
                     carts.FirstOrDefault().PaymentMode = paymentModel.Name;
                     carts.FirstOrDefault().AddressId = address.Id;
                 }
@@ -188,11 +229,6 @@ else
                     NavigationManager.NavigateTo("login");
                     _toastSvc.ShowError("Bạn phải đăng nhập trước khi checkout");
                 }
-            }
-            if (address == null)
-            {
-                NavigationManager.NavigateTo($"/user/setting/{userId}");
-                _toastSvc.ShowError("Bạn phải nhập địa chỉ");
             }
             else
             {

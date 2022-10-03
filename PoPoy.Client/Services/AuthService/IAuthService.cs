@@ -18,10 +18,11 @@ namespace PoPoy.Client.Services.AuthService
         Task<bool> Checkout(List<Cart> cartItems);
         Task<bool> CreateAddress(Address address);
         Task<Address> GetAddress(Guid userId);
-        Task<Address> AddOrUpdateAddress(Address address,Guid userId);
+        Task<Address> AddOrUpdateAddress(Address address, Guid userId);
         Task<bool> IsUserAuthenticated();
         Task<Guid> GetUserId(LoginRequest request);
         Task<string> MakePayPalPayment(double total);
+        Task<string> MakeVNPayPayment(double total);
         Task Logout();
     }
 }

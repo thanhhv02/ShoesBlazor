@@ -1,0 +1,71 @@
+﻿@inject IOrderService _svc;
+@inject IToastService _toastSvc;
+<div class="cardify messaging_sidebar">
+    @try
+    {
+        if (_svc.ListOrderResponse.Items != null || _svc.ListOrderResponse.Items.Count > 0)
+        {
+            <div class="messaging__header">
+                <div class="messaging_menu ">
+                    <a href="#" id="drop2" class="dropdown-toggle dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="fal fa-inbox"></span>Lịch sử
+                        <span class="msg">@_svc.ListOrderResponse.Items.Count()</span>
+
+                    </a>
+                </div>
+            </div>
+            <div class="messaging__contents">
+                <div class="messages">
+
+                    @foreach (var item in _svc.ListOrderResponse.Items)
+                    {
+                        <div class="message">
+                            <div class="message__actions_avatar">
+                                <div class="avatar">
+                                    <img src="@item.ProductImageUrl" alt="">
+                                </div>
+                            </div>
+                            <div class="message_data" @onclick="()=>Clicked(item.Id)">
+                                <div class="name_time">
+                                    <div class="name">
+                                        <p>@item.TotalPrice</p>
+                                    </div>
+                                    <span class="time">@item.OrderDate</span>
+                                    <p>@item.Product</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <Pagination MetaData="@_svc.ListOrderResponse.MetaData" Spread="2" SelectedPage="SelectedPage" />
+
+                </div>
+            </div>
+        }
+    }
+    catch { }
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private ProductParameters _productParameters = new ProductParameters();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrders();
+    }
+    private async Task SelectedPage(int page)
+    {
+        _productParameters.PageNumber = page;
+
+        await GetOrders();
+    }
+    public async Task GetOrders()
+    {
+        await _svc.GetOrders(_productParameters, id);
+        await _svc.GetOrderDetails(_svc.ListOrderResponse.Items.FirstOrDefault().Id.ToString());
+    }
+    public async void Clicked(string id)
+    {
+        await _svc.GetOrderDetails(id);
+    }
+}

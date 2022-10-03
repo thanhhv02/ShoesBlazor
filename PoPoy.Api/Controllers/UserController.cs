@@ -202,7 +202,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost("get-user-from-id")]
-        public async Task<ServiceResponse<User>> GetUserFromId (string id)
+        public async Task<ServiceResponse<User>> GetUserFromId(string id)
         {
             if (id == null)
                 return new ServiceResponse<User>();
@@ -237,7 +237,19 @@ namespace PoPoy.Api.Controllers
                         if (result.IsCompleted)
                         {
                             return Ok(true);
-                        }                
+                        }
+                    }
+                }
+                if (record.PaymentMode == "VNPay")
+                {
+                    var data = _authService.MakePaymentVNPay(record.PayPalPayment);
+                    if (data != null)
+                    {
+                        var result = _authService.CheckOut(cartItems);
+                        if (result.IsCompleted)
+                        {
+                            return Ok(true);
+                        }
                     }
                 }
             }
@@ -248,6 +260,13 @@ namespace PoPoy.Api.Controllers
         public async Task<IActionResult> CheckoutPayPal(double total)
         {
             var url = await _authService.MakePaymentPaypal(total);
+            return Ok(url);
+        }
+
+        [HttpGet("checkoutVNPay")]
+        public IActionResult CheckoutVNPay(double total)
+        {
+            var url = _authService.MakePaymentVNPay(total);
             return Ok(url);
         }
 
@@ -274,6 +293,12 @@ namespace PoPoy.Api.Controllers
             var uploadResults = await _authService.UploadUserImage(files, id);
 
             return Ok(uploadResults.Data);
+        }
+        [HttpGet("user-id")]
+        public IActionResult GETIDOFUSER()
+        {
+            var url = _authService.UserId();
+            return Ok(url.ToString());
         }
     }
 }

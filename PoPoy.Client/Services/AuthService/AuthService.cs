@@ -94,7 +94,7 @@ namespace PoPoy.Client.Services.AuthService
         }
         public async Task<Guid> GetUserId(LoginRequest request)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/user/getUserId",request);
+            var result = await _httpClient.PostAsJsonAsync("api/user/getUserId", request);
             return await result.Content.ReadFromJsonAsync<Guid>();
         }
 
@@ -116,12 +116,6 @@ namespace PoPoy.Client.Services.AuthService
             return false;
         }
 
-        public async Task<string> MakePayPalPayment(double total)
-        {
-            var url = await _httpClient.GetStringAsync("api/user/checkoutPayPal/?total=" + total);
-            return url;
-        }
-
         public async Task<Address> GetAddress(Guid userId)
         {
             var response = await _httpClient.GetFromJsonAsync<ServiceResponse<Address>>($"api/user/getAddress/?userId=" + userId);
@@ -132,6 +126,18 @@ namespace PoPoy.Client.Services.AuthService
         {
             var response = await _httpClient.PostAsJsonAsync($"api/user/addOrUpdateAddress/?userId=" + userId, address);
             return response.Content.ReadFromJsonAsync<ServiceResponse<Address>>().Result.Data;
+        }
+
+        public async Task<string> MakePayPalPayment(double total)
+        {
+            var url = await _httpClient.GetStringAsync("api/user/checkoutPayPal/?total=" + total);
+            return url;
+        }
+
+        public async Task<string> MakeVNPayPayment(double total)
+        {
+            var url = await _httpClient.GetStringAsync("api/user/checkoutVNPay/?total=" + total);
+            return url;
         }
     }
 }

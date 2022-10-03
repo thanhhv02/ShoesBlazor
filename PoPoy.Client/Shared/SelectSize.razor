@@ -3,12 +3,11 @@
 @using PoPoy.Client.Services.CartService
 @using PoPoy.Shared.Dto
 <div class="d-flex flex-row align-items-center mt-3">
-    <span>Size&nbsp; </span>
+    <span>Size&emsp;&emsp;&ensp;</span>
     <EditForm Model="@Model">
         <InputSelect class="form-control" Value="@Model.SizeId" ValueExpression="@(() => Model.SizeId)"
                      ValueChanged="@((int value) => OnSizeChanged(value, Model))"
                      style="width: 130px;">
-            <option value="0">Chọn size...</option>
             @foreach (var num in List_Size)
             {
                 <option value="@num.Id">@num.Size</option>

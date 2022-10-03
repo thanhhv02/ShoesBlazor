@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.CartService;
 using PoPoy.Client.Services.CategoryService;
+using PoPoy.Client.Services.OrderService;
 using PoPoy.Client.Services.ProductService;
 using PoPoy.Client.Services.UserAvatarService;
 using PoPoy.Client.State;
@@ -30,6 +31,7 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<ICartState, CartState>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserAvatarService, UserAvatarService>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
 

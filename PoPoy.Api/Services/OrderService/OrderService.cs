@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Server.IIS.Core;
+using Microsoft.EntityFrameworkCore;
 using PoPoy.Api.Data;
+using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
+using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +15,8 @@ namespace PoPoy.Api.Services.OrderService
     public class OrderService : IOrderService
     {
         private readonly DataContext _context;
-        public OrderService(DataContext context)
+        private readonly IAuthService _authService;
+        public OrderService(DataContext context, IAuthService authService)
         {
             _context = context;
         }
@@ -23,7 +28,7 @@ namespace PoPoy.Api.Services.OrderService
             var orderDetails = await _context.OrderDetails.Join(_context.Orders,
                                                           od => od.OrderIdFromOrder,
                                                           o => o.Id,
-                                                          (od, o) => od ).ToListAsync();
+                                                          (od, o) => od).ToListAsync();
 
             return await query.Select(x => new Order()
             {
@@ -40,10 +45,10 @@ namespace PoPoy.Api.Services.OrderService
 
         public async Task<List<OrderDetails>> GetOrderDetails(string orderId)
         {
-            var orderDetails = await(from od in _context.OrderDetails
-                                     join o in _context.Orders on od.OrderIdFromOrder equals o.Id
-                                     where od.OrderIdFromOrder == orderId
-                                     select od).ToListAsync();
+            var orderDetails = await (from od in _context.OrderDetails
+                                      join o in _context.Orders on od.OrderIdFromOrder equals o.Id
+                                      where od.OrderIdFromOrder == orderId
+                                      select od).ToListAsync();
 
             return orderDetails;
         }
@@ -81,6 +86,76 @@ namespace PoPoy.Api.Services.OrderService
             _context.Orders.Remove(order);
 
             return await _context.SaveChangesAsync();
+        }
+
+        public async Task<PagedList<OrderOverviewResponse>> GetOrders(ProductParameters productParameters, string userId)
+        {
+            var orders = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(oi => oi.Product)
+                .ThenInclude(pi => pi.ProductImages)
+                .Where(o => o.UserId == Guid.Parse(userId))
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            var orderResponse = new List<OrderOverviewResponse>();
+            orders.ForEach(o => orderResponse.Add(new OrderOverviewResponse
+            {
+                Id = o.Id,
+                OrderDate = o.OrderDate,
+                TotalPrice = o.TotalPrice,
+                Product = o.OrderDetails.Count > 1 ?
+                    $"{o.OrderDetails.First().Product.Title} and" +
+                    $" {o.OrderDetails.Count - 1} more..." :
+                    o.OrderDetails.First().Product.Title,
+                ProductImageUrl = o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath
+            }));
+
+            return PagedList<OrderOverviewResponse>.ToPagedList(orderResponse, productParameters.PageNumber, productParameters.PageSize);
+
+        }
+
+        public async Task<ServiceResponse<OrderDetailsResponse>> GetOrderDetailsForClient(string orderId)
+        {
+            var response = new ServiceResponse<OrderDetailsResponse>();
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(oi => oi.Product)
+                .ThenInclude(oi => oi.ProductImages)
+                .Include(o => o.OrderDetails)
+                .Where(o => o.Id == orderId)
+                .OrderByDescending(o => o.OrderDate)
+                .FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                response.Success = false;
+                response.Message = "Order not found.";
+                return response;
+            }
+
+            var orderDetailsResponse = new OrderDetailsResponse
+            {
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                Products = new List<OrderDetailsProductResponse>()
+            };
+
+            order.OrderDetails.ForEach(item =>
+            orderDetailsResponse.Products.Add(new OrderDetailsProductResponse
+            {
+                ProductId = item.ProductId,
+                ProductSize = item.Size,
+                ProductImages = _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList().Count > 0 ?
+                _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList() : null,
+                Quantity = item.Quantity,
+                Title = item.Product.Title,
+                TotalPrice = (decimal)item.TotalPrice
+            }));
+
+            response.Data = orderDetailsResponse;
+
+            return response;
         }
     }
 }

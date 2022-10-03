@@ -57,21 +57,42 @@
                     </div>
                     <div class="product-info-detail">
                         <span class="product-info-detail-title">Danh mục: </span>
-                        @try{
+                        @try
+                        {
                             if (product.ProductInCategories.Any())
                             {
                                 @product.ProductInCategories.FirstOrDefault().Category.Name
                             }
-                        }catch{}
+                        }
+                        catch { }
                     </div>
                     <div class="product-info-detail">
-                        <span class="product-info-detail-title">Rated:</span>
-                        <span class="rating">
-                            <i class="bx bxs-star"></i>
-                            <i class="bx bxs-star"></i>
-                            <i class="bx bxs-star"></i>
-                            <i class="bx bxs-star"></i>
-                            <i class="bx bxs-star"></i>
+                        <span class="product-info-detail-title">
+                            Rated:
+                            @if (@product.CheckoutCount + @product.Views >= 1 && @product.CheckoutCount + @product.Views < 20)
+                            {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="1" />
+                            }
+                            @if (@product.CheckoutCount + @product.Views >= 20 && @product.CheckoutCount + @product.Views < 30)
+                            {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="2" />
+                            }
+                            @if (@product.CheckoutCount + @product.Views >= 30 && @product.CheckoutCount + @product.Views < 40)
+                            {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="3" />
+                            }
+                            @if (@product.CheckoutCount + @product.Views >= 40 && @product.CheckoutCount + @product.Views < 50)
+                            {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="4" />
+                            }
+                            @if (@product.CheckoutCount + @product.Views >= 50)
+                            {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="5" />
+                            }
+                            @if (@product.CheckoutCount + @product.Views == 0)
+                            {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="0" />
+                            }
                         </span>
                     </div>
                     <p class="product-description">
@@ -81,13 +102,15 @@
 
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
                     <SelectSize Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id"></SelectSize>
+                    <br />
+                    <span style="font-size:15px">Số lượng còn lại: </span><span style="color:red;font-size:15px">@product.Stock</span>
                     <div>
-                        <button class="btn-flat btn-hover" @onclick="AddToCart">thêm vào giỏ hàng</button>
+                        <button class="btn-flat btn-hover" @onclick="AddToCart">add to cart</button>
                     </div>
                 </div>
             </div>
         </div>
-        @*<div class="box">
+        <div class="box">
             <div class="box-header">
                 description
             </div>
@@ -96,10 +119,22 @@
                     view all
                 </button>
                 <div class="product-detail-description-content">
-                    @product.Description
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit laudantium obcaecati odit dolorem, doloremque accusamus esse neque ipsa dignissimos saepe quisquam tempore perferendis deserunt sapiente! Recusandae illum totam earum ratione.
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam incidunt maxime rerum reprehenderit voluptas asperiores ipsam quas consequuntur maiores, at odit obcaecati vero sunt! Reiciendis aperiam perferendis consequuntur odio quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut quaerat eum veniam doloremque nihil repudiandae odio ratione culpa libero tempora. Expedita, quo molestias. Minus illo quis dignissimos aliquid sapiente error!
+                    </p>
+                    <img src="./images/JBL_Quantum_400_Product Image_Hero 02.png" alt="">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis accusantium officia, quae fuga in exercitationem aliquam labore ex doloribus repellendus beatae facilis ipsam. Veritatis vero obcaecati iste atque aspernatur ducimus.
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat quam praesentium id sit amet magnam ad, dolorum, cumque iste optio itaque expedita eius similique, ab adipisci dicta. Quod, quibusdam quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, in corrupti ipsam sint error possimus commodi incidunt suscipit sit voluptatum quibusdam enim eligendi animi deserunt recusandae earum natus voluptas blanditiis?
+                    </p>
+                    <img src="./images/kisspng-beats-electronics-headphones-apple-beats-studio-red-headphones.png" alt="">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi ullam quam fugit veniam ipsum recusandae incidunt, ex ratione, magnam labore ad tenetur officia! In, totam. Molestias sapiente deserunt animi porro?
+                    </p>
                 </div>
             </div>
-        </div>*@
+        </div>
         <div class="box">
             <div class="box-header">
                 review
@@ -228,14 +263,8 @@
     private Cart cart;
     private Product product;
     private List<ProductSize> List_Size{ get; set; }=new List<ProductSize>();
-
     public MetaData MetaData { get; set; } = new MetaData();
     private ProductParameters _productParameters = new ProductParameters();
-    private async Task SelectedPage(int page)
-    {
-        _productParameters.PageNumber = page;
-        await GetProducts();
-    }
     protected override async Task OnParametersSetAsync()
     {
         product = new Product();
@@ -245,6 +274,11 @@
             product = result.Data;
         }
         cart = new Cart() { Quantity = 1, Product = product};
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        _productParameters.PageNumber = page;
         await GetProducts();
     }
     private async Task GetProducts()
@@ -254,12 +288,22 @@
     }
     private async void AddToCart()
     {
-        if (cart.SizeId == 0)
+        if (cart.SizeId <= 0)
         {
             _toastSvc.ShowError("Mời chọn size!");
             StateHasChanged();
         }
-        else
+        if (cart.Quantity > product.Stock)
+        {
+            _toastSvc.ShowError("Số lượng không đủ. Mời đặt lại!");
+            StateHasChanged();
+        }
+        if (product.Stock <= 0)
+        {
+            _toastSvc.ShowError("Mặt hàng này đã hết. Mời quý khách vui lòng chọn món hàng khác!");
+            StateHasChanged();
+        }
+        if(cart.SizeId > 0 && cart.Quantity <= product.Stock && product.Stock > 0)
         {
             await _cartSvc.AddAsync(cart.ToCartStorage());
             _toastSvc.ShowSuccess($"Thêm thành công {cart.Product.Title} x{cart.Quantity}");

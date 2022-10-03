@@ -10,7 +10,6 @@
             @if(Message != null){
                 _toastSvc.ShowInfo(Message);
             }
-            
         }
         else
         {
@@ -26,7 +25,7 @@
                                 @if (item.ProductImages.Any())
                                 {
                                     <img src="@item.ProductImages.FirstOrDefault().ImagePath" alt="">
-                                    if(item.ProductImages.Skip(1).FirstOrDefault().ImagePath != null)
+                                    if (item.ProductImages.Skip(1).FirstOrDefault().ImagePath != null)
                                     {
                                         <img src="@item.ProductImages.Skip(1).FirstOrDefault().ImagePath" alt="">
                                     }
@@ -40,9 +39,6 @@
                                 {
                                     <img src="@_config["BackendApiUrl"]/uploads/no-photo-available.png" alt="">
                                 }
-
-
-
                             }
                             catch { }
 
@@ -51,8 +47,8 @@
                             <div class="product-btn">
                                 <a href="/product-detail/@item.Id" class="btn-flat btn-hover btn-shop-now">mua ngay</a>
                                 @*<button class="btn-flat btn-hover btn-cart-add">
-                        <i class="bx bxs-cart-add"></i>
-                        </button>*@
+                                    <i class="bx bxs-cart-add"></i>
+                                    </button>*@
                                 <button class="btn-flat btn-hover btn-cart-add">
                                     <i class="bx bxs-heart"></i>
                                 </button>
@@ -60,10 +56,37 @@
                             <div class="product-card-name">
                                 @item.Title | Lượt xem: @item.Views
                             </div>
+                            <div class="product-card-info">
+                                @if (@item.CheckoutCount + @item.Views >= 1 && @item.CheckoutCount + @item.Views < 20)
+                                {
+                                    <RadzenRating ReadOnly="true" Stars="5" Value="1" />
+                                }
+                                @if (@item.CheckoutCount + @item.Views >= 20 && @item.CheckoutCount + @item.Views < 30)
+                                {
+                                    <RadzenRating ReadOnly="true" Stars="5" Value="2" />
+                                }
+                                @if (@item.CheckoutCount + @item.Views >= 30 && @item.CheckoutCount + @item.Views < 40)
+                                {
+                                    <RadzenRating ReadOnly="true" Stars="5" Value="3" />
+                                }
+                                @if (@item.CheckoutCount + @item.Views >= 40 && @item.CheckoutCount + @item.Views < 50)
+                                {
+                                    <RadzenRating ReadOnly="true" Stars="5" Value="4" />
+                                }
+                                @if (@item.CheckoutCount + @item.Views >= 50)
+                                {
+                                    <RadzenRating ReadOnly="true" Stars="5" Value="5" />
+                                }
+                                @if(@item.CheckoutCount + @item.Views == 0)
+                                {
+                                <RadzenRating ReadOnly="true" Stars="5" Value="0" />
+                                }
+                            </div>
                             <div class="product-card-price">
                                 <span><del>@item.OriginalPrice</del></span>
                                 <span class="curr-price">@item.Price</span>
                             </div>
+                            <span style="font-size:15px">Số lượng còn lại: </span><span style="color:red;font-size:15px">@item.Stock</span>
                         </div>
                     </div>
                 </div>
@@ -76,7 +99,7 @@
 
 
 @code {
-    public string Message{ get; set; }
+    public string Message { get; set; }
     protected override void OnInitialized()
     {
         Message = _productSvc.Message;

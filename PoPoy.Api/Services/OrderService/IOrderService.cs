@@ -1,5 +1,7 @@
 ﻿using PoPoy.Api.Data;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
+using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +15,7 @@ namespace PoPoy.Api.Services.OrderService
         Task<List<OrderDetails>> GetOrderDetails(string OrderId);
         Task<List<Order>> SearchOrder(string searchText);
         Task<int> DeleteOrder(string orderId);
+        Task<PagedList<OrderOverviewResponse>> GetOrders(ProductParameters productParameters, string userId);
+        Task<ServiceResponse<OrderDetailsResponse>> GetOrderDetailsForClient(string orderId);
     }
 }

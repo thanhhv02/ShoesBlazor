@@ -1,0 +1,24 @@
+﻿@page "/user/list-order/{id}"
+@inject IOrderService _svc;
+
+<UserNav></UserNav>
+<AuthorizeView>
+    <Authorized>
+        <section class="message_area">
+            <div class="container" style="margin-bottom:30px">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <ListOrder id="@id"></ListOrder>
+                    </div>
+                    <div class="col-lg-7">
+                        <ListOrderDetails></ListOrderDetails>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </Authorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string id { get; set; }
+}

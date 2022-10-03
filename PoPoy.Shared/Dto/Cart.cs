@@ -13,7 +13,7 @@ namespace PoPoy.Shared.Dto
         public int ProductId { set; get; }
         public int Quantity { set; get; }
         public int Size { get; set; }
-        public int SizeId { get; set; }
+        public int SizeId { get; set; } = 0;
 
         [Column(TypeName = "decimal(18,0)")]
         public decimal Price { set; get; }
@@ -24,6 +24,7 @@ namespace PoPoy.Shared.Dto
         public decimal TotalPrice { get; set; }
         public double PayPalPayment { get; set; }
         public string orderReference { get; set; }
+        public int CheckoutCount { get; set; }
         public int AddressId { get; set; }
         public Address Address { get; set; }
         public Product Product { get; set; }

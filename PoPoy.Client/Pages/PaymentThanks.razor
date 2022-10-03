@@ -5,9 +5,15 @@
     <p class="lead"><strong>Hãy kiểm tra email</strong> của bạn.</p>
     <hr>
     <p>
-        Gặp sự cố? <a href="/">Liên hệ ngay</a>
+        Gặp sự cố? <ReloadPage Uri="/" Title="Liên hệ ngay"></ReloadPage>
     </p>
     <p class="lead">
-        <a class="btn btn-primary btn-sm" href="/" role="button">Quay lại trang chủ</a>
+        <ReloadPage Title="Quay lại trang chủ" Uri="/"></ReloadPage>
+        <br />
+        <AuthorizeView>
+            <Authorized>
+                <a href="/user/list-order/@context.User.GetUserId()">Xem lịch sử mua hàng</a>
+            </Authorized>
+        </AuthorizeView>
     </p>
 </div>

@@ -160,6 +160,7 @@ namespace PoPoy.Api.Controllers
             }
             return Ok(result);
         }
+
         [HttpGet("search/{searchText}")]
         public async Task<ActionResult<List<Product>>> SearchProducts([FromQuery] ProductParameters productParameters, string searchText)
         {

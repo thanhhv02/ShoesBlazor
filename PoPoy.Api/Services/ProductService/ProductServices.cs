@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Polly;
 using PoPoy.Api.Data;
-using PoPoy.Api.Extensions;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
@@ -40,7 +37,6 @@ namespace PoPoy.Api.Services.ProductService
             using (_dataContext)
             {
                 var list_product = await _dataContext.Products.Include(x => x.ProductImages).ToListAsync();
-                list_product.Shuffle();
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
             }
@@ -142,7 +138,6 @@ namespace PoPoy.Api.Services.ProductService
                 Description = request.Description,
                 Stock = request.Stock,
                 Views = 0,
-                Quantity = request.Quantity,
                 DateCreated = DateTime.Now
             };
 
@@ -161,7 +156,6 @@ namespace PoPoy.Api.Services.ProductService
             product.Title = request.Title;
             product.Description = request.Description;
             product.Stock = request.Stock;
-            product.Quantity = request.Quantity;
             product.Price = request.Price;
             product.OriginalPrice = request.OriginalPrice;
 
@@ -184,7 +178,7 @@ namespace PoPoy.Api.Services.ProductService
 
             return await _dataContext.SaveChangesAsync();
         }
-
+        
         public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
         {
             using (_dataContext)
@@ -337,7 +331,6 @@ namespace PoPoy.Api.Services.ProductService
                                       from c in picc.DefaultIfEmpty()
                                       where c.Url == categoryUrl
                                       select p).Include(x => x.ProductImages).ToListAsync();
-            list_product.Shuffle();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
         }
@@ -383,7 +376,7 @@ namespace PoPoy.Api.Services.ProductService
                         _dataContext.ProductQuantities.Remove(productQuantity);
                     }
                     else if (productQuantity == null && size.Selected)
-                    {
+                    {             
                         await _dataContext.ProductQuantities.AddAsync(new ProductQuantity()
                         {
                             SizeId = int.Parse(size.Id),
@@ -395,12 +388,11 @@ namespace PoPoy.Api.Services.ProductService
                 await _dataContext.SaveChangesAsync();
                 return new ServiceSuccessResponse<bool>();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 throw ex;
             }
         }
-
         public async Task<PagedList<Product>> SearchProducts(ProductParameters productParameters, string searchText)
         {
             using (_dataContext)

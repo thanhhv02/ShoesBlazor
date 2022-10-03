@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager;
 @inject IAuthService AuthService;
 @inject ILocalStorageService LocalStorage;
+@inject AuthenticationStateProvider auth
 
 
 <PageInfos Title="Đăng nhập"></PageInfos>
@@ -94,31 +95,34 @@
     [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
     private string returnUrl = string.Empty;
 
-    protected override void OnInitialized()
+    protected async override void OnInitialized()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var url))
         {
             returnUrl = url;
         }
-    }
-    private async Task HandleLogin()
-    {
-        StateHasChanged();
         var user = (await AuthStat).User;
 
         if (user.Identity.IsAuthenticated || await AuthService.IsUserAuthenticated())
         {
             NavigationManager.NavigateTo("/", true);
+            _toastSvc.ShowInfo("Bạn đã đăng nhập !");
         }
+    }
+    private async Task HandleLogin()
+    {
+        StateHasChanged();
+        
         ShowErrors = false;
         isLoading = true;
         var result = await AuthService.Login(LoginModel);
-
+        await auth.GetAuthenticationStateAsync();
         if (result.Success)
         {
-            var userId = await AuthService.GetUserId(LoginModel);
-            await LocalStorage.SetItemAsync<Guid>("getUserId", userId);
+            var user = (await AuthStat).User;
+            var userId = user.GetUserId();
+            await LocalStorage.SetItemAsync<string>("getUserId", userId);
             
             _toastSvc.ShowSuccess("Đăng nhập thành công");
             await Task.Delay(2000);

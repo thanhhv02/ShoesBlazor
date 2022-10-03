@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
+using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +54,19 @@ namespace PoPoy.Api.Controllers
             if (affectedResult == 0)
                 return BadRequest();
             return Ok(affectedResult);
+        }
+        [HttpGet("get-all-order-user/{userId}")]
+        public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters, string userId)
+        {
+            var result = await _orderService.GetOrders(productParameters, userId);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+            return Ok(result);
+        }
+        [HttpGet("get-order-detail-user/{orderId}")]
+        public async Task<ActionResult<ServiceResponse<OrderDetailsResponse>>> GetOrderDetailsForClient(string orderId)
+        {
+            var result = await _orderService.GetOrderDetailsForClient(orderId);
+            return Ok(result);
         }
     }
 }

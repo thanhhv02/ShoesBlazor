@@ -28,10 +28,12 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<bool>> UpdateUser(Guid id, UserUpdateRequest request);
         Task<ServiceResponse<User>> GetUserFromId(string idUser);
         Task<string> MakePaymentPaypal(double total);
+        string MakePaymentVNPay(double total);
         Task<bool> CheckOut(List<Cart> cartItem);
         Task<bool> CreateAddress(Address address);
         Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId);
         Task<ServiceResponse<Address>> GetAddress(Guid userId);
         Task<ServiceResponse<List<UploadResult>>> UploadUserImage(List<IFormFile> files, string userId);
+        string UserId();
     }
 }

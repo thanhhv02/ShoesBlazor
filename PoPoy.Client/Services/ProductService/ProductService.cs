@@ -64,7 +64,7 @@ namespace PoPoy.Client.Services.ProductService
             return await response.Content.ReadFromJsonAsync<List<ProductQuantity>>();
         }
         public async Task<ServiceResponse<Product>> Get(int id)
-        { 
+        {
             var result = await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>($"/api/product/" + id);
             return result;
         }

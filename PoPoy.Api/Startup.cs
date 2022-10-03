@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
 using PoPoy.Shared.Dto;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 namespace PoPoy.Api
@@ -26,6 +28,11 @@ namespace PoPoy.Api
         {
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
             services.AddRazorPages();
             services.AddControllers()
                 .AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -59,6 +66,7 @@ namespace PoPoy.Api
                 //options.Password.RequireNonLetterOrDigit = true;
                 options.Password.RequireUppercase = false;
                 options.SignIn.RequireConfirmedEmail = true;
+                options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
             });
 
         }

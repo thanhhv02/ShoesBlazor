@@ -124,7 +124,6 @@ namespace PoPoy.Api.Extensions
                     Title = "ADIDAS ALPHABOOST “CORE BLACK”",
                     Description = "ADIDAS ALPHABOOST “CORE BLACK”",
                     Price = 2150000,
-                    Quantity = 1000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2150000
@@ -135,7 +134,6 @@ namespace PoPoy.Api.Extensions
                     Title = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                     Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                     Price = 1650000,
-                    Quantity = 1000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 1650000
@@ -146,7 +144,6 @@ namespace PoPoy.Api.Extensions
                     Title = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                     Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                     Price = 3250000,
-                    Quantity = 1000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3250000
@@ -157,7 +154,6 @@ namespace PoPoy.Api.Extensions
                     Title = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                     Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                     Price = 1650000,
-                    Quantity = 1000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 1650000
@@ -168,7 +164,6 @@ namespace PoPoy.Api.Extensions
                     Title = "ADIDAS NMD R1 TOKYO DRAGON",
                     Description = "ADIDAS NMD R1 TOKYO DRAGON",
                     Price = 1850000,
-                    Quantity = 1000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 1850000
@@ -179,7 +174,6 @@ namespace PoPoy.Api.Extensions
                     Title = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                     Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                     Price = 2550000,
-                    Quantity = 1000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2550000
@@ -190,7 +184,6 @@ namespace PoPoy.Api.Extensions
                     Title = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                     Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                     Price = 6100000,
-                    Quantity = 1000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 6100000
@@ -201,7 +194,6 @@ namespace PoPoy.Api.Extensions
                     Title = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                     Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                     Price = 6450000,
-                    Quantity = 1000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 6450000
@@ -212,7 +204,6 @@ namespace PoPoy.Api.Extensions
                     Title = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                     Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                     Price = 4850000,
-                    Quantity = 1000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4850000
@@ -223,7 +214,6 @@ namespace PoPoy.Api.Extensions
                     Title = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                     Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                     Price = 5550000,
-                    Quantity = 1000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 5550000
@@ -234,7 +224,6 @@ namespace PoPoy.Api.Extensions
                     Title = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                     Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                     Price = 3850000,
-                    Quantity = 1000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3850000
@@ -245,7 +234,6 @@ namespace PoPoy.Api.Extensions
                     Title = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                     Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                     Price = 4350000,
-                    Quantity = 1000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4350000
@@ -256,7 +244,6 @@ namespace PoPoy.Api.Extensions
                     Title = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                     Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                     Price = 4300000,
-                    Quantity = 1000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4300000
@@ -267,7 +254,6 @@ namespace PoPoy.Api.Extensions
                     Title = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                     Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                     Price = 4850000,
-                    Quantity = 1000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4850000
@@ -278,7 +264,6 @@ namespace PoPoy.Api.Extensions
                     Title = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                     Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                     Price = 3950000,
-                    Quantity = 1000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3950000
@@ -289,7 +274,6 @@ namespace PoPoy.Api.Extensions
                     Title = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                     Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                     Price = 2950000,
-                    Quantity = 1000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2950000
@@ -300,7 +284,6 @@ namespace PoPoy.Api.Extensions
                     Title = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                     Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                     Price = 2850000,
-                    Quantity = 1000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2850000
@@ -311,7 +294,6 @@ namespace PoPoy.Api.Extensions
                     Title = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                     Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                     Price = 3200000,
-                    Quantity = 1000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3200000
