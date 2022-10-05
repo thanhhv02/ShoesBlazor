@@ -98,7 +98,7 @@
                     <p class="product-description">
                         @product.Description
                     </p>
-                    <div class="product-info-price">@product.Price.ToString("n0")</div>
+                    <div class="product-info-price">@product.Price.ToString("n0")<sup>VND</sup></div>
 
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
                     <SelectSize Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id"></SelectSize>

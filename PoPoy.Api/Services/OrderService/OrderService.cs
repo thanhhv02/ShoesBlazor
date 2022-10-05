@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Data;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
@@ -15,10 +16,12 @@ namespace PoPoy.Api.Services.OrderService
     public class OrderService : IOrderService
     {
         private readonly DataContext _context;
+        private readonly IConfiguration configuration;
         private readonly IAuthService _authService;
-        public OrderService(DataContext context, IAuthService authService)
+        public OrderService(DataContext context, IAuthService authService, IConfiguration configuration)
         {
             _context = context;
+            this.configuration = configuration;
         }
         public async Task<List<Order>> GetAllOrders()
         {
@@ -108,7 +111,9 @@ namespace PoPoy.Api.Services.OrderService
                     $"{o.OrderDetails.First().Product.Title} and" +
                     $" {o.OrderDetails.Count - 1} more..." :
                     o.OrderDetails.First().Product.Title,
-                ProductImageUrl = o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath
+                ProductImageUrl = o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath,
+                OrderStatus = o.OrderStatus,
+                PaymentMode = o.PaymentMode
             }));
 
             return PagedList<OrderOverviewResponse>.ToPagedList(orderResponse, productParameters.PageNumber, productParameters.PageSize);
@@ -138,7 +143,9 @@ namespace PoPoy.Api.Services.OrderService
             {
                 OrderDate = order.OrderDate,
                 TotalPrice = order.TotalPrice,
-                Products = new List<OrderDetailsProductResponse>()
+                Products = new List<OrderDetailsProductResponse>(),
+                PaymentMode = order.PaymentMode,
+                OrderStatus = order.OrderStatus
             };
 
             order.OrderDetails.ForEach(item =>
@@ -147,7 +154,8 @@ namespace PoPoy.Api.Services.OrderService
                 ProductId = item.ProductId,
                 ProductSize = item.Size,
                 ProductImages = _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList().Count > 0 ?
-                _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList() : null,
+                                _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList() : 
+                                new List<ProductImage>() { new ProductImage() { ImagePath = configuration["ApiUrl"]+ "/uploads/no-photo-available.png" } },
                 Quantity = item.Quantity,
                 Title = item.Product.Title,
                 TotalPrice = (decimal)item.TotalPrice

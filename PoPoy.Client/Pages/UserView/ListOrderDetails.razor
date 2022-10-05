@@ -18,10 +18,20 @@
                     </div>
                     <div class="name_time">
                         <div>
-                            <h4>@_svc.ListOrderDetailsResponse.TotalPrice</h4>
-                            <p>@_svc.ListOrderDetailsResponse.OrderDate</p>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4>@_svc.ListOrderDetailsResponse.TotalPrice</h4>
+                                </div>
+                                <div class="col-6">
+                                    <p>@_svc.ListOrderDetailsResponse.OrderDate</p>
+                                </div>
+                            </div>
+
+
                         </div>
-                        @*<span class="email">sirltwyn@gmail.com</span>*@
+                        <span class="paymentmode">Phương thức thanh toán: @_svc.ListOrderDetailsResponse.PaymentMode</span>
+                        <br/>
+                        <span class="orderstatus">Trạng thái đơn hàng: @_svc.ListOrderDetailsResponse.OrderStatus</span>
                     </div>
                 </div>
                 <div class="body" style="word-break: break-word;">
@@ -39,15 +49,19 @@
                                     <p>Size: @item.ProductSize</p>
                                 </div>
                                 <div class="col-6">
-                                    @if (item.ProductImages != null || item.ProductImages.Count > 0)
+                                    @try
                                     {
-                                        @foreach (var item2 in item.ProductImages)
+                                        @if (item.ProductImages != null || item.ProductImages.Count > 0)
                                         {
-                                        <div class="col-4">
-                                            <p><img src="@item2.ImagePath" alt="Fix: Windows 11 Cannot Open Windows Security - Technipages" class="fr-dii fr-draggable" title="Fix: Windows 11 Cannot Open Windows Security - Technipages"><br></p>
-                                        </div>
+                                            @foreach (var item2 in item.ProductImages)
+                                            {
+                                                <div class="col-4">
+                                                    <p><img src="@item2.ImagePath" alt="" class="fr-dii fr-draggable" title=""><br></p>
+                                                </div>
+                                            }
                                         }
                                     }
+                                    catch { }
                                 </div>
 
 

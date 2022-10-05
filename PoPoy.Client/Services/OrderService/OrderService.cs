@@ -13,6 +13,8 @@ using PoPoy.Shared.Dto;
 using System.Linq;
 using Syncfusion.Blazor.Kanban.Internal;
 using System.Transactions;
+using System.Net.Http.Headers;
+using Blazored.LocalStorage;
 
 namespace PoPoy.Client.Services.OrderService
 {
@@ -20,13 +22,15 @@ namespace PoPoy.Client.Services.OrderService
     {
         private readonly HttpClient _http;
         private readonly NavigationManager _navigationManager;
+        private readonly ILocalStorageService _localStorage;
 
         public OrderService(HttpClient http,
             AuthenticationStateProvider authStateProvider,
-            NavigationManager navigationManager)
+            NavigationManager navigationManager, ILocalStorageService localStorage)
         {
             _http = http;
             _navigationManager = navigationManager;
+            this._localStorage = localStorage;
         }
 
         public PagingResponse<OrderOverviewResponse> ListOrderResponse { get; set; } = new PagingResponse<OrderOverviewResponse>();
@@ -44,7 +48,6 @@ namespace PoPoy.Client.Services.OrderService
                     throw new ApplicationException();
                 }
                 ListOrderDetailsResponse = result.Data;
-                Console.WriteLine("is null:" + ListOrderDetailsResponse == null ? true : false);
             }
             OrderDetailsChanged.Invoke();
         }
@@ -55,6 +58,9 @@ namespace PoPoy.Client.Services.OrderService
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString()
             };
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+            var authheader = new AuthenticationHeaderValue("Bearer", savedToken.Replace("\"",""));
+            _http.DefaultRequestHeaders.Authorization = authheader;
             var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user/{userId}", queryStringParam));
 
             var content = await response.Content.ReadAsStringAsync();
@@ -64,6 +70,7 @@ namespace PoPoy.Client.Services.OrderService
                 throw new ApplicationException(content);
             }
             ListOrderResponse.Items = JsonConvert.DeserializeObject<List<OrderOverviewResponse>>(content);
+            Console.WriteLine("Count: " + ListOrderResponse.Items.Count);
             ListOrderResponse.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
         }
 

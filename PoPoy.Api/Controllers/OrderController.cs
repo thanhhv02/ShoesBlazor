@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PoPoy.Api.Services.OrderService;
@@ -8,6 +9,7 @@ using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PoPoy.Api.Controllers
@@ -17,9 +19,11 @@ namespace PoPoy.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        private readonly IHttpContextAccessor _httpContext;
+        public OrderController(IOrderService orderService, IHttpContextAccessor httpContext)
         {
             _orderService = orderService;
+            _httpContext = httpContext;
         }
 
         [HttpGet]
@@ -56,6 +60,7 @@ namespace PoPoy.Api.Controllers
             return Ok(affectedResult);
         }
         [HttpGet("get-all-order-user/{userId}")]
+        [Authorize]
         public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters, string userId)
         {
             var result = await _orderService.GetOrders(productParameters, userId);
@@ -68,5 +73,7 @@ namespace PoPoy.Api.Controllers
             var result = await _orderService.GetOrderDetailsForClient(orderId);
             return Ok(result);
         }
+        private string GetUserId()
+        => _httpContext.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
     }
 }
