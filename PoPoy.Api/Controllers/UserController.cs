@@ -87,6 +87,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpGet("getUserById/{id}")]
+
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _authService.GetUserById(id);
@@ -213,18 +214,15 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost("checkout")]
-        public IActionResult Checkout(List<Cart> cartItems)
+        public async Task<IActionResult> CheckoutAsync(List<Cart> cartItems)
         {
             var record = cartItems.FirstOrDefault();
             if (record != null)
             {
                 if (record.PaymentMode == "CashOnDelivery")
                 {
-                    var result = _authService.CheckOut(cartItems);
-                    if (result.IsCompleted)
-                    {
-                        return Ok(true);
-                    }
+                        var result = await _authService.CheckOut(cartItems);
+                        return Ok(result);
                 }
                 if (record.PaymentMode == "PayPal")
                 {
@@ -233,11 +231,9 @@ namespace PoPoy.Api.Controllers
                     {
                         var ref_number = data.Result.Split("&")[1];
                         cartItems.FirstOrDefault().orderReference = ref_number.Split("=")[1];
-                        var result = _authService.CheckOut(cartItems);
-                        if (result.IsCompleted)
-                        {
-                            return Ok(true);
-                        }
+                        var result = await _authService.CheckOut(cartItems);
+                     
+                            return Ok(result);
                     }
                 }
                 if (record.PaymentMode == "VNPay")
@@ -245,11 +241,8 @@ namespace PoPoy.Api.Controllers
                     var data = _authService.MakePaymentVNPay(record.PayPalPayment);
                     if (data != null)
                     {
-                        var result = _authService.CheckOut(cartItems);
-                        if (result.IsCompleted)
-                        {
-                            return Ok(true);
-                        }
+                        var result = await _authService.CheckOut(cartItems);
+                        return Ok(result);
                     }
                 }
             }

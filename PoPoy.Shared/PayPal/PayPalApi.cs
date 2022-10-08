@@ -25,7 +25,7 @@ namespace PoPoy.Shared.PayPal
         {
             try
             {
-                return Task.Run(async () =>
+                return await Task.Run(async () =>
                 {
                     HttpClient http = GetPaypalHttpClient();
 
@@ -37,7 +37,7 @@ namespace PoPoy.Shared.PayPal
                     var approval_url = createdPayment.links.First(x => x.rel == "approval_url").href;
 
                     return approval_url;
-                }).Result;
+                });
             }
             catch (Exception ex)
             {

@@ -98,14 +98,14 @@ namespace PoPoy.Client.Services.AuthService
             return await result.Content.ReadFromJsonAsync<Guid>();
         }
 
-        public async Task<bool> Checkout(List<Cart> cartItems)
+        public async Task<string> Checkout(List<Cart> cartItems)
         {
             var result = await _httpClient.PostAsJsonAsync("/api/user/checkout", cartItems);
             if (result.IsSuccessStatusCode)
             {
-                return true;
+                return await result.Content.ReadAsStringAsync();
             }
-            return false;
+            return null;
         }
 
         public async Task<bool> CreateAddress(Address address)

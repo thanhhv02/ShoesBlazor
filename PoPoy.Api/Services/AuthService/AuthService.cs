@@ -436,7 +436,7 @@ namespace PoPoy.Api.Services.AuthService
 
         }
 
-        public async Task<bool> CheckOut(List<Cart> cartItem)
+        public async Task<string> CheckOut(List<Cart> cartItem)
         {
             string OrderId = GenerateOrderId();
             var prods = _context.Products.ToList();
@@ -444,7 +444,7 @@ namespace PoPoy.Api.Services.AuthService
             try
             {
                 var detail = cartItem.FirstOrDefault();
-                var address = _context.Addresses.Where(x => x.UserId == detail.UserId).Select(x => x.Id).FirstOrDefault();
+                var address = await _context.Addresses.Where(x => x.UserId == detail.UserId).Select(x => x.Id).FirstOrDefaultAsync();
                 Order order = new Order();
                 order.Id = OrderId;
                 order.UserId = detail.UserId;
@@ -477,9 +477,9 @@ namespace PoPoy.Api.Services.AuthService
                 var result = _context.SaveChanges();
                 if (result != 1)
                 {
-                    return true;
+                    return OrderId;
                 }
-                return false;
+                return null;
             }
             catch (Exception ex)
             {

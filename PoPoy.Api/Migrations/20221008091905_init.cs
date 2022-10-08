@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PoPoy.Api.Migrations
 {
-    public partial class InitialDB : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,89 +25,33 @@ namespace PoPoy.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppRoleClaims", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppRoles",
+                name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppRoles", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUserClaims", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppUserLogins",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUserLogins", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUserRoles", x => new { x.UserId, x.RoleId });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppUsers",
+                name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AvatarPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -121,21 +65,7 @@ namespace PoPoy.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUserTokens", x => x.UserId);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,8 +107,8 @@ namespace PoPoy.Api.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     OriginalPrice = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
+                    CheckoutCount = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Views = table.Column<int>(type: "int", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -202,6 +132,158 @@ namespace PoPoy.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    nvarchar1000 = table.Column<string>(name: "nvarchar(1000)", type: "nvarchar(max)", nullable: true),
+                    IsRead = table.Column<bool>(type: "bit", nullable: true),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Chats_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    DataUrl = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
+                    Data = table.Column<string>(type: "nvarchar(1000)", nullable: true),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notification_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -210,7 +292,8 @@ namespace PoPoy.Api.Migrations
                     AddressId = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
-                    PaymentMode = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PaymentMode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,9 +305,9 @@ namespace PoPoy.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Orders_AppUsers_UserId",
+                        name: "FK_Orders_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AppUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -246,6 +329,7 @@ namespace PoPoy.Api.Migrations
                     TotalPrice = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     PayPalPayment = table.Column<double>(type: "float", nullable: false),
                     orderReference = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CheckoutCount = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -258,9 +342,9 @@ namespace PoPoy.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Carts_AppUsers_UserId",
+                        name: "FK_Carts_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AppUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -359,6 +443,7 @@ namespace PoPoy.Api.Migrations
                 {
                     OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
+                    OrderIdFromOrder = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Size = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
@@ -368,8 +453,8 @@ namespace PoPoy.Api.Migrations
                 {
                     table.PrimaryKey("PK_OrderDetails", x => new { x.OrderId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Orders_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_OrderDetails_Orders_OrderIdFromOrder",
+                        column: x => x.OrderIdFromOrder,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -382,9 +467,9 @@ namespace PoPoy.Api.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AppUsers",
+                table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "AvatarPath", "ConcurrencyStamp", "Dob", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("dd984ddb-ed66-4f1d-883c-5a14d6f6e44b"), 0, null, "74058e94-2fd0-4263-9013-0079ff73f292", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hovanthanh12102002@gmail.com", true, "Van Thanh", "Ho", false, null, "hovanthanh12102002@gmail.com", "thanhhv", "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==", "032132131", false, "90fad917-f276-4de0-8565-4f48860c34ee", false, "thanhhv" });
+                values: new object[] { new Guid("845c405f-57c3-4bd5-9242-f0d105d8c174"), 0, null, "137f8141-9ce6-4176-b518-1d289f7e5b28", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hovanthanh12102002@gmail.com", true, "Van Thanh", "Ho", false, null, "hovanthanh12102002@gmail.com", "thanhhv", "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==", "032132131", false, "672b34d5-ad60-429a-9353-991654d0d8f0", false, "thanhhv" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -418,27 +503,27 @@ namespace PoPoy.Api.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "CategoryId", "DateCreated", "Description", "OriginalPrice", "Price", "Quantity", "Stock", "Title", "Views" },
+                columns: new[] { "Id", "CategoryId", "CheckoutCount", "DateCreated", "Description", "OriginalPrice", "Price", "Stock", "Title", "Views" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2022, 9, 28, 18, 4, 29, 666, DateTimeKind.Local).AddTicks(3696), "ADIDAS ALPHABOOST “CORE BLACK”", 2150000m, 2150000m, 1000, 0, "ADIDAS ALPHABOOST “CORE BLACK”", 0 },
-                    { 18, 3, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3929), "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 3200000m, 3200000m, 1000, 0, "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0 },
-                    { 17, 3, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3925), "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 2850000m, 2850000m, 1000, 0, "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0 },
-                    { 16, 3, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3921), "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 2950000m, 2950000m, 1000, 0, "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0 },
-                    { 15, 3, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3917), "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 3950000m, 3950000m, 1000, 0, "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0 },
-                    { 14, 3, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3913), "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 4850000m, 4850000m, 1000, 0, "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0 },
-                    { 13, 3, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3907), "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 4300000m, 4300000m, 1000, 0, "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0 },
-                    { 10, 2, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3771), "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 5550000m, 5550000m, 1000, 0, "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0 },
-                    { 9, 2, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3767), "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 4850000m, 4850000m, 1000, 0, "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0 },
-                    { 8, 2, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3761), "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 6450000m, 6450000m, 1000, 0, "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0 },
-                    { 7, 2, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3757), "AIR JORDAN 1 HIGH ‘BORDEAUX’", 6100000m, 6100000m, 1000, 0, "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0 },
-                    { 6, 1, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3753), "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 2550000m, 2550000m, 1000, 0, "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0 },
-                    { 5, 1, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3748), "ADIDAS NMD R1 TOKYO DRAGON", 1850000m, 1850000m, 1000, 0, "ADIDAS NMD R1 TOKYO DRAGON", 0 },
-                    { 4, 1, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3742), "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 1650000m, 1650000m, 1000, 0, "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0 },
-                    { 3, 1, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3738), "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 3250000m, 3250000m, 1000, 0, "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0 },
-                    { 2, 1, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3694), "ADIDAS NMD R1 SERIAL PACK METAL GREY", 1650000m, 1650000m, 1000, 0, "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0 },
-                    { 12, 2, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3778), "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 4350000m, 4350000m, 1000, 0, "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0 },
-                    { 11, 2, new DateTime(2022, 9, 28, 18, 4, 29, 668, DateTimeKind.Local).AddTicks(3775), "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 3850000m, 3850000m, 1000, 0, "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0 }
+                    { 1, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 368, DateTimeKind.Local).AddTicks(8438), "ADIDAS ALPHABOOST “CORE BLACK”", 2150000m, 2150000m, 1000, "ADIDAS ALPHABOOST “CORE BLACK”", 0 },
+                    { 18, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4873), "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 3200000m, 3200000m, 1000, "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0 },
+                    { 17, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4869), "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 2850000m, 2850000m, 1000, "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0 },
+                    { 16, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4865), "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 2950000m, 2950000m, 1000, "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0 },
+                    { 15, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4861), "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 3950000m, 3950000m, 1000, "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0 },
+                    { 14, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4858), "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 4850000m, 4850000m, 1000, "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0 },
+                    { 13, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4854), "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 4300000m, 4300000m, 1000, "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0 },
+                    { 10, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4842), "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 5550000m, 5550000m, 1000, "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0 },
+                    { 9, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4839), "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 4850000m, 4850000m, 1000, "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0 },
+                    { 8, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4835), "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 6450000m, 6450000m, 1000, "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0 },
+                    { 7, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4831), "AIR JORDAN 1 HIGH ‘BORDEAUX’", 6100000m, 6100000m, 1000, "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0 },
+                    { 6, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4827), "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 2550000m, 2550000m, 1000, "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0 },
+                    { 5, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4823), "ADIDAS NMD R1 TOKYO DRAGON", 1850000m, 1850000m, 1000, "ADIDAS NMD R1 TOKYO DRAGON", 0 },
+                    { 4, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4818), "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 1650000m, 1650000m, 1000, "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0 },
+                    { 3, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4814), "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 3250000m, 3250000m, 1000, "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0 },
+                    { 2, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4769), "ADIDAS NMD R1 SERIAL PACK METAL GREY", 1650000m, 1650000m, 1000, "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0 },
+                    { 12, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4850), "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 4350000m, 4350000m, 1000, "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0 },
+                    { 11, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4846), "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 3850000m, 3850000m, 1000, "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -476,6 +561,45 @@ namespace PoPoy.Api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Carts_AddressId",
                 table: "Carts",
                 column: "AddressId");
@@ -489,6 +613,21 @@ namespace PoPoy.Api.Migrations
                 name: "IX_Carts_UserId",
                 table: "Carts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_UserId",
+                table: "Chats",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_UserId",
+                table: "Notification",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_OrderIdFromOrder",
+                table: "OrderDetails",
+                column: "OrderIdFromOrder");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ProductId",
@@ -534,25 +673,28 @@ namespace PoPoy.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AppRoleClaims");
+                name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AppRoles");
+                name: "AspNetUserClaims");
 
             migrationBuilder.DropTable(
-                name: "AppUserClaims");
+                name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AppUserLogins");
+                name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(
-                name: "AppUserRoles");
-
-            migrationBuilder.DropTable(
-                name: "AppUserTokens");
+                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
                 name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "Chats");
+
+            migrationBuilder.DropTable(
+                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
@@ -565,6 +707,9 @@ namespace PoPoy.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductQuantities");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -585,7 +730,7 @@ namespace PoPoy.Api.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "AppUsers");
+                name: "AspNetUsers");
         }
     }
 }

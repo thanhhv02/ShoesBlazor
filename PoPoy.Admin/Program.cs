@@ -10,6 +10,7 @@ using PoPoy.Admin.Services.AuthService;
 using PoPoy.Admin.Services.ProductService;
 using PoPoy.Admin.Services.CategoryService;
 using PoPoy.Admin.Services.OrderService;
+using PoPoy.Admin.Services.BroadCastService;
 
 namespace PoPoy.Admin
 {
@@ -26,6 +27,8 @@ namespace PoPoy.Admin
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IBroadCastService, BroadCastService>();
+
             builder.Services.AddScoped(sp => new HttpClient
             {
                 BaseAddress = new Uri(builder.Configuration["BackendApiUrl"])

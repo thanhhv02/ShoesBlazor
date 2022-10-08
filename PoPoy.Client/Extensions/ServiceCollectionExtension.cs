@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoPoy.Client.Services.AuthService;
+using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Client.Services.CartService;
 using PoPoy.Client.Services.CategoryService;
 using PoPoy.Client.Services.OrderService;
@@ -32,6 +33,8 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserAvatarService, UserAvatarService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IBroadCastService, BroadCastService>();
+
             return services;
         }
 

@@ -15,7 +15,7 @@ namespace PoPoy.Client.Services.AuthService
         Task<ServiceResponse<User>> GetUserFromId(string id);
         Task<ServiceResponse<string>> ChangePassword(ChangePasswordRequest changePasswordRequest);
         Task<ServiceResponse<string>> ResetPassword(ResetPasswordRequest resetPasswordRequest);
-        Task<bool> Checkout(List<Cart> cartItems);
+        Task<string> Checkout(List<Cart> cartItems);
         Task<bool> CreateAddress(Address address);
         Task<Address> GetAddress(Guid userId);
         Task<Address> AddOrUpdateAddress(Address address, Guid userId);

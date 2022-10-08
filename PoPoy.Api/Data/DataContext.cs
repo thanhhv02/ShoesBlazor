@@ -24,6 +24,8 @@ namespace PoPoy.Api.Data
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            base.OnModelCreating(modelBuilder);
+
             // Cấu hình Fluent Api 
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
@@ -32,18 +34,9 @@ namespace PoPoy.Api.Data
             modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
             modelBuilder.ApplyConfiguration(new ProductInCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new AdressConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductSizeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductColorConfiguration());
             modelBuilder.ApplyConfiguration(new ProductQuantityConfiguration());
-
-            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
-            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x => x.UserId);
-            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
-
-            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
-            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
 
             modelBuilder.Seed();
 
@@ -59,6 +52,11 @@ namespace PoPoy.Api.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        
+
+        public DbSet<Chat> Chats { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+
+
     }
 }

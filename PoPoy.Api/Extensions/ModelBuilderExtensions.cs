@@ -318,23 +318,6 @@ namespace PoPoy.Api.Extensions
                 }
             );
 
-            modelBuilder.Entity<User>().HasData(
-                new User()
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Van Thanh",
-                    LastName = "Ho",
-                    Email = "hovanthanh12102002@gmail.com",
-                    NormalizedEmail = "hovanthanh12102002@gmail.com",
-                    PhoneNumber = "032132131",
-                    UserName = "thanhhv",
-                    NormalizedUserName = "thanhhv",
-                    EmailConfirmed = true,
-                    SecurityStamp = Guid.NewGuid().ToString(),
-                    PasswordHash = "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==",
-                }
-               );
-
         }
     }
 }

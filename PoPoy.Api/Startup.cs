@@ -7,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using PoPoy.Api.Configurations;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
+using PoPoy.Api.Hubs;
 using PoPoy.Shared.Dto;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -50,6 +52,10 @@ namespace PoPoy.Api
             
             services.AddControllersWithViews();
 
+
+            // Auto Mapper Configurations
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
             services.AddCors(policy =>
             {
                 policy.AddPolicy("CorsPolicy", opt => opt
@@ -58,6 +64,9 @@ namespace PoPoy.Api
                 .AllowAnyMethod()
                 .WithExposedHeaders("X-Pagination"));
             });
+
+            services.AddSignalR();
+
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -92,6 +101,8 @@ namespace PoPoy.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<SignalHub>("/signalhub");
+                endpoints.MapHub<NotificationHub>("/notificationhub");
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

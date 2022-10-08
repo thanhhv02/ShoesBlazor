@@ -13,5 +13,7 @@ namespace PoPoy.Shared.Dto
         [MaxLength(250)]
         [Required]
         public string Description { get; set; }
+
+        public Role(string name) : base(name) { Description = name; }
     }
 }

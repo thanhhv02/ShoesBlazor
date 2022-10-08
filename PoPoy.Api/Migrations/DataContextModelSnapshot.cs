@@ -37,7 +37,9 @@ namespace PoPoy.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppRoleClaims");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -58,27 +60,30 @@ namespace PoPoy.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppUserClaims");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId");
+                    b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.ToTable("AppUserLogins");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -91,27 +96,28 @@ namespace PoPoy.Api.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.ToTable("AppUserRoles");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AppUserTokens");
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("PoPoy.Shared.Dto.Address", b =>
@@ -252,6 +258,74 @@ namespace PoPoy.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PoPoy.Shared.Dto.Chat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("nvarchar(1000)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("DataUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notification");
+                });
+
             modelBuilder.Entity("PoPoy.Shared.Dto.Order", b =>
                 {
                     b.Property<string>("Id")
@@ -363,7 +437,7 @@ namespace PoPoy.Api.Migrations
                             Id = 1,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 534, DateTimeKind.Local).AddTicks(3095),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 368, DateTimeKind.Local).AddTicks(8438),
                             Description = "ADIDAS ALPHABOOST “CORE BLACK”",
                             OriginalPrice = 2150000m,
                             Price = 2150000m,
@@ -376,7 +450,7 @@ namespace PoPoy.Api.Migrations
                             Id = 2,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3573),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4769),
                             Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                             OriginalPrice = 1650000m,
                             Price = 1650000m,
@@ -389,7 +463,7 @@ namespace PoPoy.Api.Migrations
                             Id = 3,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3606),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4814),
                             Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                             OriginalPrice = 3250000m,
                             Price = 3250000m,
@@ -402,7 +476,7 @@ namespace PoPoy.Api.Migrations
                             Id = 4,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3609),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4818),
                             Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                             OriginalPrice = 1650000m,
                             Price = 1650000m,
@@ -415,7 +489,7 @@ namespace PoPoy.Api.Migrations
                             Id = 5,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3611),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4823),
                             Description = "ADIDAS NMD R1 TOKYO DRAGON",
                             OriginalPrice = 1850000m,
                             Price = 1850000m,
@@ -428,7 +502,7 @@ namespace PoPoy.Api.Migrations
                             Id = 6,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3614),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4827),
                             Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                             OriginalPrice = 2550000m,
                             Price = 2550000m,
@@ -441,7 +515,7 @@ namespace PoPoy.Api.Migrations
                             Id = 7,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3616),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4831),
                             Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                             OriginalPrice = 6100000m,
                             Price = 6100000m,
@@ -454,7 +528,7 @@ namespace PoPoy.Api.Migrations
                             Id = 8,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3619),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4835),
                             Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                             OriginalPrice = 6450000m,
                             Price = 6450000m,
@@ -467,7 +541,7 @@ namespace PoPoy.Api.Migrations
                             Id = 9,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3621),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4839),
                             Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                             OriginalPrice = 4850000m,
                             Price = 4850000m,
@@ -480,7 +554,7 @@ namespace PoPoy.Api.Migrations
                             Id = 10,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3624),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4842),
                             Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                             OriginalPrice = 5550000m,
                             Price = 5550000m,
@@ -493,7 +567,7 @@ namespace PoPoy.Api.Migrations
                             Id = 11,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3626),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4846),
                             Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                             OriginalPrice = 3850000m,
                             Price = 3850000m,
@@ -506,7 +580,7 @@ namespace PoPoy.Api.Migrations
                             Id = 12,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3629),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4850),
                             Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                             OriginalPrice = 4350000m,
                             Price = 4350000m,
@@ -519,7 +593,7 @@ namespace PoPoy.Api.Migrations
                             Id = 13,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3631),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4854),
                             Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                             OriginalPrice = 4300000m,
                             Price = 4300000m,
@@ -532,7 +606,7 @@ namespace PoPoy.Api.Migrations
                             Id = 14,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3634),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4858),
                             Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                             OriginalPrice = 4850000m,
                             Price = 4850000m,
@@ -545,7 +619,7 @@ namespace PoPoy.Api.Migrations
                             Id = 15,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3636),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4861),
                             Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                             OriginalPrice = 3950000m,
                             Price = 3950000m,
@@ -558,7 +632,7 @@ namespace PoPoy.Api.Migrations
                             Id = 16,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3638),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4865),
                             Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                             OriginalPrice = 2950000m,
                             Price = 2950000m,
@@ -571,7 +645,7 @@ namespace PoPoy.Api.Migrations
                             Id = 17,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3641),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4869),
                             Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                             OriginalPrice = 2850000m,
                             Price = 2850000m,
@@ -584,7 +658,7 @@ namespace PoPoy.Api.Migrations
                             Id = 18,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 5, 10, 45, 37, 535, DateTimeKind.Local).AddTicks(3643),
+                            DateCreated = new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4873),
                             Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                             OriginalPrice = 3200000m,
                             Price = 3200000m,
@@ -860,22 +934,30 @@ namespace PoPoy.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppRoles");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("PoPoy.Shared.Dto.User", b =>
@@ -891,26 +973,28 @@ namespace PoPoy.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Dob")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -919,10 +1003,12 @@ namespace PoPoy.Api.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -940,18 +1026,27 @@ namespace PoPoy.Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppUsers");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0dfd2f4b-8db8-4bf9-9797-c74c8bee3670"),
+                            Id = new Guid("845c405f-57c3-4bd5-9242-f0d105d8c174"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fc5c0343-df14-41c0-bab8-f3964737cdf2",
+                            ConcurrencyStamp = "137f8141-9ce6-4176-b518-1d289f7e5b28",
                             Dob = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hovanthanh12102002@gmail.com",
                             EmailConfirmed = true,
@@ -963,10 +1058,61 @@ namespace PoPoy.Api.Migrations
                             PasswordHash = "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==",
                             PhoneNumber = "032132131",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9ddd5ea9-a50e-46d2-bd41-8ab423b0eff9",
+                            SecurityStamp = "672b34d5-ad60-429a-9353-991654d0d8f0",
                             TwoFactorEnabled = false,
                             UserName = "thanhhv"
                         });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PoPoy.Shared.Dto.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PoPoy.Shared.Dto.Cart", b =>
@@ -992,6 +1138,26 @@ namespace PoPoy.Api.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.Chat", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PoPoy.Shared.Dto.Notification", b =>
+                {
+                    b.HasOne("PoPoy.Shared.Dto.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("User");
                 });

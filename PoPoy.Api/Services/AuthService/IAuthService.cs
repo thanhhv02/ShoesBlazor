@@ -29,7 +29,7 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<User>> GetUserFromId(string idUser);
         Task<string> MakePaymentPaypal(double total);
         string MakePaymentVNPay(double total);
-        Task<bool> CheckOut(List<Cart> cartItem);
+        Task<string> CheckOut(List<Cart> cartItem);
         Task<bool> CreateAddress(Address address);
         Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId);
         Task<ServiceResponse<Address>> GetAddress(Guid userId);

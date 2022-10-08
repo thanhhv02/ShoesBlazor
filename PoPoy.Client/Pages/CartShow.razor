@@ -80,7 +80,7 @@ else
                     {
                         <div class="d-grid gap-2 mx-auto">
                             <button class="btn btn-warning" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Đặt hàng</button>
-                        </div>                 
+                        </div>
                     }
                     @if (@paymentModel.Name == "VNPay")
                     {
@@ -108,6 +108,9 @@ else
     public bool ContinueCheckout = true;
     public int productStock { get; set; }
     public int productQuantity { get; set; }
+    [Inject] private IBroadCastService broadCastService { get; set; }
+    [Inject] private IConfiguration configuration { get; set; }
+
     private List<ProductSize> List_Size = new List<ProductSize>();
     Address addressModel = new Address();
     PaymentModeModel paymentModel = new PaymentModeModel()
@@ -211,8 +214,8 @@ else
                 IsUserLoggedIn = await AuthService.IsUserAuthenticated();
                 if (IsUserLoggedIn)
                 {
-                    var response = await AuthService.Checkout(carts);
-                    if (response)
+                    var orderId = await AuthService.Checkout(carts);
+                    if (orderId != null)
                     {
                         carts.Clear();
                         await CartService.RemoveAllAsync();
@@ -221,6 +224,20 @@ else
                         {
                             NavigationManager.NavigateTo("payment-thanks");
                             _toastSvc.ShowSuccess("Thanh toán thành công");
+
+
+                            //send thông báo cho admin
+
+                            var hostAdmin = configuration["AdminUrl"];
+                            NotiSendConfig config = new NotiSendConfig(title: "Có đơn hàng mới",
+                            message: $"Có một đơn hàng mới được đặt", dataUrl: $"{hostAdmin}/listOrderDetails/{orderId}");
+                            await broadCastService.SendNotiAllAdmin(config);
+
+                            //send thông báo cho người đặt hàng
+
+                            NotiSendConfig config2 = new NotiSendConfig(title: "Đặt hàng thành công",
+                            message: $"Sản phẩm ... đặt thành công", dataUrl: $"user/list-order/{userId}");
+                            await broadCastService.SendNotiCurrentUser(config2);
                         }
                     }
                 }

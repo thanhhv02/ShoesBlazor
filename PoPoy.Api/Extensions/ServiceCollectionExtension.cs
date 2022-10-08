@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,8 +9,10 @@ using Microsoft.OpenApi.Models;
 using PoPoy.Api.Data;
 using PoPoy.Api.SendMailService;
 using PoPoy.Api.Services.AuthService;
+using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Api.Services.CategoryService;
 using PoPoy.Api.Services.FileStorageService;
+using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Api.Services.ProductService;
 using System;
@@ -29,34 +32,25 @@ namespace PoPoy.Api.Extensions
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PoPoy.Api", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                c.AddSecurityDefinition("Bearer", //Name the security scheme
+                 new OpenApiSecurityScheme
+                 {
+                     Description = "JWT Authorization header using the Bearer scheme.",
+                     Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
+                    Scheme = "bearer" //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                  {
-                    {
-                      new OpenApiSecurityScheme
-                      {
-                        Reference = new OpenApiReference
-                          {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                          },
-                          Scheme = "oauth2",
-                          Name = "Bearer",
-                          In = ParameterLocation.Header,
-                        },
-                        new List<string>()
-                      }
-                    });
+                            c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                {
+                    new OpenApiSecurityScheme{
+                        Reference = new OpenApiReference{
+                            Id = "Bearer", //The name of the previously defined security scheme.
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    },new List<string>()
+                }
+            });
+
             });
 
             return services;
@@ -64,6 +58,14 @@ namespace PoPoy.Api.Extensions
 
         public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAuthorization(options =>
+            {
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+                defaultAuthorizationPolicyBuilder =
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+            });
+
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -87,6 +89,24 @@ namespace PoPoy.Api.Extensions
                         ValidAudience = configuration["JwtAudience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]))
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            // If the request is for our hub...
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/notificationHub")))
+                            {
+                                // Read the token out of the query string
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             return services;
@@ -100,6 +120,10 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IProductServices, ProductServices>();
             services.AddTransient<IStorageService, StorageService>();
+            services.AddTransient<IBroadCastService, BroadCastService>();
+            services.AddTransient<INotificationService, NotificationService>();
+
+
             return services;
         }
 
@@ -107,7 +131,7 @@ namespace PoPoy.Api.Extensions
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("HVT"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
             return services;
         }
