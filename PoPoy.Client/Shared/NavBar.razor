@@ -27,12 +27,12 @@
 
                     }
                     @*<li class="dropdown">
-                <a href="/user/profile/@context.User.GetUserId()" class="h6">Hello, @context.User.Identity.Name </a>
-                <ul class="dropdown-content" style="width:115px">
-                <li><a href="/user/profile/@context.User.GetUserId()">Thông tin tài khoản</a></li>
-                <li><a href="/logout">Đăng xuất</a></li>
-                </ul>
-                </li>*@
+                    <a href="/user/profile/@context.User.GetUserId()" class="h6">Hello, @context.User.Identity.Name </a>
+                    <ul class="dropdown-content" style="width:115px">
+                    <li><a href="/user/profile/@context.User.GetUserId()">Thông tin tài khoản</a></li>
+                    <li><a href="/logout">Đăng xuất</a></li>
+                    </ul>
+                    </li>*@
                     <div class="author-author__info inline has_dropdown">
                         <UserAreaNavBar></UserAreaNavBar>
                         <div class="dropdowns dropdown--author" style="background: white;">
@@ -52,9 +52,7 @@
                     </div>
                 </Authorized>
             </AuthorizeView>
-            <li>
-                <PoPoy.Client.Shared.Notify.Notify></PoPoy.Client.Shared.Notify.Notify>
-            </li>
+            <Notify></Notify>
             <li class="has_dropdown">
                 <a href="/cart"><i class='bx bx-cart'></i></a>
                 <span class="position-absolute top-0 start-100 translate-middle">
@@ -105,7 +103,8 @@
                                     <div class="message_data">
                                         <div class="name_time">
                                             <div class="name">
-                                                <p class="text-break text-wrap">@cart.Product.Title</p>
+                                                <p class="text-break text-wrap">@cart.Product.Title </p>
+                                                <p class="text-break text-wrap">Size: @cart.Size</p>
                                             </div>
                                             <span class="time">
 

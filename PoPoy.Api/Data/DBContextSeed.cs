@@ -78,7 +78,25 @@ namespace PoPoy.Api.Data
                 await userManager.AddToRoleAsync(user, RoleName.Customer);
             }
 
+            var user2 = await userManager.FindByEmailAsync("hovanthanh12102002@gmail.com");
+            if (user2 == null)
+            {
+                user2 = new User()
+                {
+                    Id = Guid.NewGuid(),
 
+                    FirstName = "Văn Thành",
+                    LastName = "Hồ",
+                    Email = "hovanthanh12102002@gmail.com",
+                    NormalizedEmail = "hovanthanh12102002@gmail.com",
+                    PhoneNumber = "032232131",
+                    UserName = "thanhhv",
+                    NormalizedUserName = "THANHHV",
+                    EmailConfirmed = true // không cần xác thực email nữa , 
+                };
+                await userManager.CreateAsync(user2, "123321");
+                await userManager.AddToRoleAsync(user2, RoleName.Customer);
+            }
         }
 
     }

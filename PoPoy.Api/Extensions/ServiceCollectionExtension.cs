@@ -15,6 +15,7 @@ using PoPoy.Api.Services.FileStorageService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Api.Services.ProductService;
+using PoPoy.Api.Services.ReviewService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,8 +123,7 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<IStorageService, StorageService>();
             services.AddTransient<IBroadCastService, BroadCastService>();
             services.AddTransient<INotificationService, NotificationService>();
-
-
+            services.AddTransient<IReviewService, ReviewService>();
             return services;
         }
 
@@ -131,7 +131,7 @@ namespace PoPoy.Api.Extensions
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("HVT"));
             });
             return services;
         }

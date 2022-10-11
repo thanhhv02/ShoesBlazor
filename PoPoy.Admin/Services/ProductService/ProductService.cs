@@ -103,6 +103,7 @@ namespace PoPoy.Admin.Services.ProductService
         {
             var prodObj = await _httpClient.GetFromJsonAsync<ProductVM>($"/api/product/getProductById/{productId}");
             var sizeObj = await _httpClient.GetFromJsonAsync<List<ProductSize>>("api/product/getSizes");
+  
             var sizeAssignRequest = new SizeAssignRequest();
             foreach (var size in sizeObj)
             {
@@ -110,10 +111,17 @@ namespace PoPoy.Admin.Services.ProductService
                 {
                     Id = size.Id.ToString(),
                     Name = size.Size.ToString(),
-                    Selected = prodObj.Sizes.Contains(size.Id.ToString())
+                    Selected = prodObj.Sizes.Contains(size.Id.ToString()),
+                    Qty = await GetQuantity(size.Id,prodObj.Id)
                 });
             }
             return sizeAssignRequest;
+        }
+        public async Task<int> GetQuantity(int sizeid, int prodid)
+        {
+            var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
+            var result = await res.Content.ReadAsStringAsync();
+            return Convert.ToInt32(result.ToString());
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PoPoy.Shared.Dto
+﻿using System;
+
+namespace PoPoy.Shared.Dto
 {
     public class CartStorage
     {

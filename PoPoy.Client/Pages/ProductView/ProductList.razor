@@ -3,11 +3,18 @@
 @inject IToastService _toastSvc;
 @implements IDisposable;
 <div class="box">
+    @if (Box_Header != null)
+    {
+        <div class="box-header">
+            @Box_Header
+        </div>
+    }
     <div class="row" id="products">
         @if (_productSvc.Products.Items == null || _productSvc.Products.Items.Count == 0)
         {
             <LoadingScreen></LoadingScreen>
-            @if(Message != null){
+            @if (Message != null)
+            {
                 _toastSvc.ShowInfo(Message);
             }
         }
@@ -15,8 +22,10 @@
         {
             foreach (var item in _productSvc.Products.Items)
             {
-
-                <div class="col-4 col-md-6 col-sm-12">
+                <div hidden>
+                    <ProductReview ProductId="@item.Id" OnReviewAverageCalculated="@OnReviewAverageCalculated"></ProductReview>
+                </div>
+                <div class="col-4 col-md-4 col-sm-12">
                     <div class="product-card">
                         <div class="product-card-img">
 
@@ -46,47 +55,22 @@
                         <div class="product-card-info">
                             <div class="product-btn">
                                 <a href="/product-detail/@item.Id" class="btn-flat btn-hover btn-shop-now">mua ngay</a>
-                                @*<button class="btn-flat btn-hover btn-cart-add">
-                                    <i class="bx bxs-cart-add"></i>
-                                    </button>*@
-                                <button class="btn-flat btn-hover btn-cart-add">
-                                    <i class="bx bxs-heart"></i>
-                                </button>
                             </div>
-                            <div class="product-card-name">
+                            <div class="product-card-name" style="font-size: 14px">
                                 @item.Title | Lượt xem: @item.Views
                             </div>
                             <div class="product-card-info">
-                                @if (@item.CheckoutCount + @item.Views >= 1 && @item.CheckoutCount + @item.Views < 20)
-                                {
-                                    <RadzenRating ReadOnly="true" Stars="5" Value="1" />
-                                }
-                                @if (@item.CheckoutCount + @item.Views >= 20 && @item.CheckoutCount + @item.Views < 30)
-                                {
-                                    <RadzenRating ReadOnly="true" Stars="5" Value="2" />
-                                }
-                                @if (@item.CheckoutCount + @item.Views >= 30 && @item.CheckoutCount + @item.Views < 40)
-                                {
-                                    <RadzenRating ReadOnly="true" Stars="5" Value="3" />
-                                }
-                                @if (@item.CheckoutCount + @item.Views >= 40 && @item.CheckoutCount + @item.Views < 50)
-                                {
-                                    <RadzenRating ReadOnly="true" Stars="5" Value="4" />
-                                }
-                                @if (@item.CheckoutCount + @item.Views >= 50)
-                                {
-                                    <RadzenRating ReadOnly="true" Stars="5" Value="5" />
-                                }
-                                @if(@item.CheckoutCount + @item.Views == 0)
-                                {
-                                <RadzenRating ReadOnly="true" Stars="5" Value="0" />
-                                }
+                                @reviewCount<i class="fa fa-star rating"></i> | Đã bán: @item.CheckoutCount
                             </div>
-                            <div class="product-card-price">
-                                <span><del>@item.OriginalPrice<sup>VND</sup></del></span>
+                            <div class="product-card-price" style="font-size: 18px">
                                 <span class="curr-price">@item.Price<sup>VND</sup></span>
+                                @if (item.Price < item.OriginalPrice)
+                                {
+                                    var change = ((item.OriginalPrice - item.Price) / Math.Abs(item.Price)) * 100;
+                                    <span class="curr-price" style="font-size: 14px">-@change.ToString("0")%</span>
+                                }
                             </div>
-                            <span style="font-size:15px">Số lượng còn lại: </span><span style="color:red;font-size:15px">@item.Stock</span>
+                            @*<span style="font-size:15px">Số lượng còn lại: </span><span style="color:red;font-size:15px">@item.Stock</span>*@
                         </div>
                     </div>
                 </div>
@@ -94,21 +78,34 @@
             }
 
         }
+
     </div>
 </div>
 
 
 @code {
+    [Parameter]
+    public string Box_Header { get; set; }
     public string Message { get; set; }
+    private decimal reviewAverage;
+    private int reviewCount;
+    public EventCallback<ReviewAverageCalculatedEventArgs> OnReviewAverage { get; set; }
     protected override void OnInitialized()
     {
         Message = _productSvc.Message;
         _productSvc.ProductsChanged += StateHasChanged;
     }
-
+    protected override void OnParametersSet()
+    {
+        _productSvc.ProductsChanged += StateHasChanged;
+    }
     public void Dispose()
     {
         _productSvc.ProductsChanged -= StateHasChanged;
     }
-
+    private void OnReviewAverageCalculated(ReviewAverageCalculatedEventArgs args)
+    {
+        reviewCount = args.ReviewCount;
+        reviewAverage = args.ReviewAverage;
+    }
 }

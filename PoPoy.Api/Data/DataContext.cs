@@ -52,9 +52,8 @@ namespace PoPoy.Api.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Address> Addresses { get; set; }
-
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Chat> Chats { get; set; }
-
         public DbSet<Notification> Notifications { get; set; }
 
 

@@ -14,8 +14,8 @@
 
 @code{
     [Parameter]
-    public Cart Model { get; set; }
-    
+    public Cart Model { get; set; } 
+
     [Parameter]
     public CartUpdateType CartUpdateType { get; set; }
 
@@ -32,14 +32,5 @@
 
         await QuantityChanged.InvokeAsync();
     }
-    private async void OnSizeChanged(int sizeid, Cart cart)
-    {
-        Model.Size = sizeid;
-        if (CartUpdateType is CartUpdateType.Update)
-        {
-            await CartService.UpdateAsync(cart.ToCartStorage());
-        }
 
-        await QuantityChanged.InvokeAsync();
-    }
 }

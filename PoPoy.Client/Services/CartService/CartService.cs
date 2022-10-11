@@ -106,7 +106,7 @@ namespace PoPoy.Client.Services.CartService
             {
                 result.Add(new Cart
                 {
-                    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId).Quantity,
+                    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId && s.SizeId == p.SizeId).Quantity,
                     Product = p.Product,
                     ProductId = p.ProductId,
                     SizeId = p.Size.Id,

@@ -439,7 +439,7 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<string> CheckOut(List<Cart> cartItem)
         {
             string OrderId = GenerateOrderId();
-            var prods = _context.Products.ToList();
+            var prods = _context.ProductQuantities.ToList();
 
             try
             {
@@ -468,10 +468,12 @@ namespace PoPoy.Api.Services.AuthService
                     _orderDetail.TotalPrice = (double)(items.Price * items.Quantity);
                     _context.OrderDetails.Add(_orderDetail);
 
-                    var selected_product = prods.Where(x => x.Id == items.ProductId).FirstOrDefault();
-                    selected_product.Stock = selected_product.Stock - items.Quantity;
-                    selected_product.CheckoutCount += items.CheckoutCount;
-                    _context.Products.Update(selected_product);
+                    var selected_product = prods.Where(x => x.ProductId == items.ProductId && x.SizeId == items.SizeId).FirstOrDefault();
+                    selected_product.Quantity = selected_product.Quantity - items.Quantity;
+                    var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == items.ProductId);
+                    product.CheckoutCount++;
+                    _context.ProductQuantities.Update(selected_product);
+                    await _context.SaveChangesAsync();
                 }
 
                 var result = _context.SaveChanges();

@@ -111,7 +111,8 @@ namespace PoPoy.Api.Services.OrderService
                     $"{o.OrderDetails.First().Product.Title} and" +
                     $" {o.OrderDetails.Count - 1} more..." :
                     o.OrderDetails.First().Product.Title,
-                ProductImageUrl = o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath,
+                ProductImageUrl = o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath != null
+                ? o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath : configuration["ApiUrl"] + "/uploads/no-photo-available.png",
                 OrderStatus = o.OrderStatus,
                 PaymentMode = o.PaymentMode
             }));

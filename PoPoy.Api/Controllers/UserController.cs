@@ -287,11 +287,5 @@ namespace PoPoy.Api.Controllers
 
             return Ok(uploadResults.Data);
         }
-        [HttpGet("user-id")]
-        public IActionResult GETIDOFUSER()
-        {
-            var url = _authService.UserId();
-            return Ok(url.ToString());
-        }
     }
 }

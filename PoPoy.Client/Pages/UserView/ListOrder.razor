@@ -28,7 +28,7 @@
                             <div class="message_data" @onclick="()=>Clicked(item.Id)">
                                 <div class="name_time">
                                     <div class="name">
-                                        <p>@item.TotalPrice</p>
+                                        <p>@item.TotalPrice<sup>VND</sup></p>
                                     </div>
                                     <span class="time">@item.OrderDate</span>
                                     <p>@item.Product</p>
@@ -61,7 +61,7 @@
     }
     public async Task GetOrders()
     {
-        await _svc.GetOrders(_productParameters, id);
+        await _svc.GetOrders(_productParameters);
         await _svc.GetOrderDetails(_svc.ListOrderResponse.Items.FirstOrDefault().Id.ToString());
     }
     public async void Clicked(string id)

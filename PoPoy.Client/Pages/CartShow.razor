@@ -45,9 +45,8 @@ else
                             <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">
                         }
                         <div class="col-sm-8">
-                            <h4>@cart.Product.Title</h4>
+                            <h4>@cart.Product.Title - @cart.Size</h4>
                             <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" QuantityChanged="() => StateHasChanged()" />
-                            Size: @cart.Size
                             <div class="d-flex flex-row align-items-center mt-3">
                                 <i class="oi oi-trash"></i>
                                 <a href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</a>
@@ -236,7 +235,7 @@ else
                             //send thông báo cho người đặt hàng
 
                             NotiSendConfig config2 = new NotiSendConfig(title: "Đặt hàng thành công",
-                            message: $"Sản phẩm ... đặt thành công", dataUrl: $"user/list-order/{userId}");
+                            message: $"Sản phẩm ... đặt thành công", dataUrl: $"user/list-order");
                             await broadCastService.SendNotiCurrentUser(config2);
                         }
                     }

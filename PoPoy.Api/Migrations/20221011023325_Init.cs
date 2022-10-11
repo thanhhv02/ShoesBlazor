@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PoPoy.Api.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -129,6 +129,25 @@ namespace PoPoy.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductSizes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ReviewText = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -412,7 +431,8 @@ namespace PoPoy.Api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
-                    ColorId = table.Column<int>(type: "int", nullable: false)
+                    ColorId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -467,18 +487,13 @@ namespace PoPoy.Api.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "AvatarPath", "ConcurrencyStamp", "Dob", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("845c405f-57c3-4bd5-9242-f0d105d8c174"), 0, null, "137f8141-9ce6-4176-b518-1d289f7e5b28", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hovanthanh12102002@gmail.com", true, "Van Thanh", "Ho", false, null, "hovanthanh12102002@gmail.com", "thanhhv", "AQAAAAEAACcQAAAAEIfPJ+WSaz/rS/+jGf4yumb5pDavBMvWq+flnEp4ZpmXy9Z+i2rxhsEIeiOGSlItsQ==", "032132131", false, "672b34d5-ad60-429a-9353-991654d0d8f0", false, "thanhhv" });
-
-            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name", "SortOrder", "Status", "Url" },
                 values: new object[,]
                 {
-                    { 3, "Giày Nike", 1, 1, "nike-shoes" },
                     { 1, "Giày Adidas", 1, 1, "adidas-shoes" },
-                    { 2, "Giày Jordan", 1, 1, "jordan-shoes" }
+                    { 2, "Giày Jordan", 1, 1, "jordan-shoes" },
+                    { 3, "Giày Nike", 1, 1, "nike-shoes" }
                 });
 
             migrationBuilder.InsertData(
@@ -496,8 +511,8 @@ namespace PoPoy.Api.Migrations
                 columns: new[] { "Id", "Size" },
                 values: new object[,]
                 {
-                    { 2, 39 },
                     { 1, 38 },
+                    { 2, 39 },
                     { 3, 40 }
                 });
 
@@ -506,24 +521,24 @@ namespace PoPoy.Api.Migrations
                 columns: new[] { "Id", "CategoryId", "CheckoutCount", "DateCreated", "Description", "OriginalPrice", "Price", "Stock", "Title", "Views" },
                 values: new object[,]
                 {
-                    { 1, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 368, DateTimeKind.Local).AddTicks(8438), "ADIDAS ALPHABOOST “CORE BLACK”", 2150000m, 2150000m, 1000, "ADIDAS ALPHABOOST “CORE BLACK”", 0 },
-                    { 18, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4873), "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 3200000m, 3200000m, 1000, "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0 },
-                    { 17, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4869), "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 2850000m, 2850000m, 1000, "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0 },
-                    { 16, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4865), "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 2950000m, 2950000m, 1000, "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0 },
-                    { 15, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4861), "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 3950000m, 3950000m, 1000, "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0 },
-                    { 14, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4858), "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 4850000m, 4850000m, 1000, "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0 },
-                    { 13, 3, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4854), "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 4300000m, 4300000m, 1000, "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0 },
-                    { 10, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4842), "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 5550000m, 5550000m, 1000, "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0 },
-                    { 9, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4839), "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 4850000m, 4850000m, 1000, "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0 },
-                    { 8, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4835), "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 6450000m, 6450000m, 1000, "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0 },
-                    { 7, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4831), "AIR JORDAN 1 HIGH ‘BORDEAUX’", 6100000m, 6100000m, 1000, "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0 },
-                    { 6, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4827), "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 2550000m, 2550000m, 1000, "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0 },
-                    { 5, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4823), "ADIDAS NMD R1 TOKYO DRAGON", 1850000m, 1850000m, 1000, "ADIDAS NMD R1 TOKYO DRAGON", 0 },
-                    { 4, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4818), "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 1650000m, 1650000m, 1000, "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0 },
-                    { 3, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4814), "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 3250000m, 3250000m, 1000, "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0 },
-                    { 2, 1, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4769), "ADIDAS NMD R1 SERIAL PACK METAL GREY", 1650000m, 1650000m, 1000, "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0 },
-                    { 12, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4850), "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 4350000m, 4350000m, 1000, "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0 },
-                    { 11, 2, 0, new DateTime(2022, 10, 8, 16, 19, 4, 371, DateTimeKind.Local).AddTicks(4846), "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 3850000m, 3850000m, 1000, "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0 }
+                    { 7, 2, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4025), "AIR JORDAN 1 HIGH ‘BORDEAUX’", 6100000m, 6100000m, 1000, "AIR JORDAN 1 HIGH ‘BORDEAUX’", 0 },
+                    { 1, 1, 0, new DateTime(2022, 10, 11, 9, 33, 24, 520, DateTimeKind.Local).AddTicks(3605), "ADIDAS ALPHABOOST “CORE BLACK”", 2150000m, 2150000m, 1000, "ADIDAS ALPHABOOST “CORE BLACK”", 0 },
+                    { 2, 1, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(3982), "ADIDAS NMD R1 SERIAL PACK METAL GREY", 1650000m, 1650000m, 1000, "ADIDAS NMD R1 SERIAL PACK METAL GREY", 0 },
+                    { 3, 1, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4014), "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 3250000m, 3250000m, 1000, "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’", 0 },
+                    { 4, 1, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4017), "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 1650000m, 1650000m, 1000, "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’", 0 },
+                    { 18, 3, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4049), "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 3200000m, 3200000m, 1000, "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ", 0 },
+                    { 17, 3, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4047), "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 2850000m, 2850000m, 1000, "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ", 0 },
+                    { 16, 3, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4045), "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 2950000m, 2950000m, 1000, "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ", 0 },
+                    { 15, 3, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4043), "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 3950000m, 3950000m, 1000, "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ", 0 },
+                    { 14, 3, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4041), "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 4850000m, 4850000m, 1000, "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ", 0 },
+                    { 13, 3, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4038), "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 4300000m, 4300000m, 1000, "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ", 0 },
+                    { 12, 2, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4036), "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 4350000m, 4350000m, 1000, "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ", 0 },
+                    { 5, 1, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4020), "ADIDAS NMD R1 TOKYO DRAGON", 1850000m, 1850000m, 1000, "ADIDAS NMD R1 TOKYO DRAGON", 0 },
+                    { 10, 2, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4031), "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 5550000m, 5550000m, 1000, "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ", 0 },
+                    { 9, 2, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4029), "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 4850000m, 4850000m, 1000, "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ", 0 },
+                    { 8, 2, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4027), "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 6450000m, 6450000m, 1000, "AIR JORDAN 1 HIGH OG “BUBBLE GUM”", 0 },
+                    { 6, 1, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4023), "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 2550000m, 2550000m, 1000, "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ", 0 },
+                    { 11, 2, 0, new DateTime(2022, 10, 11, 9, 33, 24, 521, DateTimeKind.Local).AddTicks(4034), "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 3850000m, 3850000m, 1000, "AIR JORDAN 1 LOW GS TRIPLE WHITE ", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -532,32 +547,22 @@ namespace PoPoy.Api.Migrations
                 values: new object[,]
                 {
                     { 1, 1 },
-                    { 3, 17 },
-                    { 3, 16 },
                     { 3, 15 },
                     { 3, 14 },
                     { 3, 13 },
                     { 2, 12 },
                     { 2, 11 },
                     { 2, 10 },
-                    { 2, 8 },
+                    { 3, 16 },
+                    { 2, 9 },
                     { 2, 7 },
                     { 1, 6 },
                     { 1, 5 },
                     { 1, 4 },
                     { 1, 3 },
                     { 1, 2 },
-                    { 2, 9 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ProductQuantities",
-                columns: new[] { "Id", "ColorId", "ProductId", "SizeId" },
-                values: new object[,]
-                {
-                    { 2, 2, 1, 2 },
-                    { 1, 1, 1, 1 },
-                    { 3, 3, 1, 3 }
+                    { 2, 8 },
+                    { 3, 17 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -668,6 +673,11 @@ namespace PoPoy.Api.Migrations
                 name: "IX_ProductQuantities_SizeId",
                 table: "ProductQuantities",
                 column: "SizeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -707,6 +717,9 @@ namespace PoPoy.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductQuantities");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

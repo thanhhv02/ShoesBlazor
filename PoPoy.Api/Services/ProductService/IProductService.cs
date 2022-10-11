@@ -29,5 +29,7 @@ namespace PoPoy.Api.Services.ProductService
         Task<ServiceResponse<bool>> SizeAssign(int productId, SizeAssignRequest request);
         Task<PagedList<Product>> SearchProducts(ProductParameters productParameters, string searchText);
         Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText);
+        Task<bool> SeedProduct();
+        int GetQuantityOfProduct(int sizeId, int prodId);
     }
 }

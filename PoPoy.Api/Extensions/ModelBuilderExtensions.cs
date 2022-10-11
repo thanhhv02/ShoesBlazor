@@ -48,29 +48,29 @@ namespace PoPoy.Api.Extensions
                     Size = 40
                 }
                 );
-            modelBuilder.Entity<ProductQuantity>().HasData(
-                new ProductQuantity()
-                {
-                    Id = 1,
-                    ProductId = 1,
-                    SizeId = 1,
-                    ColorId = 1,
-                },
-                new ProductQuantity()
-                {
-                    Id = 2,
-                    ProductId = 1,
-                    SizeId = 2,
-                    ColorId = 2,
-                },
-                new ProductQuantity()
-                {
-                    Id = 3,
-                    ProductId = 1,
-                    SizeId = 3,
-                    ColorId = 3,
-                }
-                );
+            //modelBuilder.Entity<ProductQuantity>().HasData(
+            //    new ProductQuantity()
+            //    {
+            //        Id = 1,
+            //        ProductId = 1,
+            //        SizeId = 1,
+            //        ColorId = 1,
+            //    },
+            //    new ProductQuantity()
+            //    {
+            //        Id = 2,
+            //        ProductId = 1,
+            //        SizeId = 2,
+            //        ColorId = 2,
+            //    },
+            //    new ProductQuantity()
+            //    {
+            //        Id = 3,
+            //        ProductId = 1,
+            //        SizeId = 3,
+            //        ColorId = 3,
+            //    }
+            //    );
             modelBuilder.Entity<Category>().HasData(
                 new Category()
                 {

@@ -1,0 +1,14 @@
+﻿@page "/products/{productId:int}/review/new"
+@attribute [Authorize]
+
+<PageInfos Title="Đánh giá sản phẩm này"></PageInfos>
+
+<p><a href="/user/list-order" class="mt-3 mb-3">Lịch sử đặt hàng</a></p>
+<h2 class="mb-2">Đánh giá sản phẩm này</h2>
+
+<ReviewEditor Mode="FormEditMode.New" ProductId="@ProductId"></ReviewEditor>
+
+@code{
+    [Parameter]
+    public int ProductId { get; set; }
+}

@@ -1,5 +1,6 @@
 ﻿@inject ICartService CartService
 @inject IProductService _prodSvc;
+@inject HttpClient _httpClient
 @using PoPoy.Client.Services.CartService
 @using PoPoy.Shared.Dto
 <div class="d-flex flex-row align-items-center mt-3">
@@ -18,7 +19,7 @@
 @code {
     [Parameter]
     public Cart Model { get; set; } = new Cart();
-   
+
     public List<ProductSize> List_Size { get; set; } = new List<ProductSize>();
     [Parameter]
     public EventCallback QuantityChanged { get; set; }
@@ -29,7 +30,15 @@
 
     protected override async Task OnParametersSetAsync()
     {
-       List_Size =  await _prodSvc.GetSizeProduct(Product_Id);
+        List_Size = await _prodSvc.GetSizeProduct(Product_Id);
+        if (Model.SizeId == 0)
+        {
+            Model.SizeId = (List_Size.Count > 0 || List_Size is not null) ? List_Size.FirstOrDefault().Id : 0;
+        }
+        if (List_Size.Count > 0 || List_Size is not null)
+        {
+            Model.QuantityOfSize = await GetQuantity(Model.SizeId, Product_Id);
+        }
     }
     private async void OnSizeChanged(int sizeid, Cart cart)
     {
@@ -40,6 +49,12 @@
         }
 
         await QuantityChanged.InvokeAsync();
+    }
+    public async Task<int> GetQuantity(int sizeid, int prodid)
+    {
+        var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
+        var result = await res.Content.ReadAsStringAsync();
+        return Convert.ToInt32(result.ToString());
     }
 }
 

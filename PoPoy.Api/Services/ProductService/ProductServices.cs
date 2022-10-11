@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Polly;
 using PoPoy.Api.Data;
+using PoPoy.Api.Extensions;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
@@ -37,6 +39,7 @@ namespace PoPoy.Api.Services.ProductService
             using (_dataContext)
             {
                 var list_product = await _dataContext.Products.Include(x => x.ProductImages).ToListAsync();
+                list_product.Shuffle();
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
             }
@@ -74,9 +77,9 @@ namespace PoPoy.Api.Services.ProductService
                         from pi in ppi.DefaultIfEmpty()
                         select new { p, pic, pi };
 
-            var productQuantities = await (from pq in _dataContext.ProductQuantities
-                                           join p in _dataContext.Products on pq.ProductId equals p.Id
-                                           select pq).ToListAsync();
+            //var productQuantities = await (from pq in _dataContext.ProductQuantities
+            //                               join p in _dataContext.Products on pq.ProductId equals p.Id
+            //                               select pq).ToListAsync();
 
             var productSizes = await (from ps in _dataContext.ProductSizes
                                       join pq in _dataContext.ProductQuantities on ps.Id equals pq.SizeId
@@ -92,7 +95,7 @@ namespace PoPoy.Api.Services.ProductService
                 Price = x.p.Price,
                 Stock = x.p.Stock,
                 Views = x.p.Views,
-                ProductQuantities = productQuantities,
+                //ProductQuantities = productQuantities,
                 ProductSizes = productSizes,
                 ThumbnailImage = x.pi.ImagePath
             }).ToListAsync();
@@ -124,7 +127,7 @@ namespace PoPoy.Api.Services.ProductService
                 Views = product.Views,
                 Categories = categories,
                 Sizes = productQuantities,
-                ProductImages = product.ProductImages
+                ProductImages = product.ProductImages,
             };
             return productViewModel;
         }
@@ -178,7 +181,7 @@ namespace PoPoy.Api.Services.ProductService
 
             return await _dataContext.SaveChangesAsync();
         }
-        
+
         public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
         {
             using (_dataContext)
@@ -199,14 +202,14 @@ namespace PoPoy.Api.Services.ProductService
                     foreach (var p in sortedList)
                     {
                         productQuantities.Add(await _dataContext.ProductQuantities
-                    .Where(x => x.ProductId == p.Id)
-                    .Include(x => x.Product)
-                    .ThenInclude(x => x.ProductImages)
-                    .Where(x => x.SizeId == p.Size)
-                    .Include(x => x.Size)
-                    .Include(x => x.Product)
-                    .ThenInclude(x => x.ProductQuantities)
-                    .FirstOrDefaultAsync());
+                            .Where(x => x.ProductId == p.Id)
+                                .Include(x => x.Product)
+                                .ThenInclude(x => x.ProductImages)
+                            .Where(x => x.SizeId == p.Size)
+                                .Include(x => x.Size)
+                                .Include(x => x.Product)
+                                    .ThenInclude(x => x.ProductQuantities)
+                            .FirstOrDefaultAsync());
                     }
                     return productQuantities;
                 }
@@ -350,7 +353,7 @@ namespace PoPoy.Api.Services.ProductService
 
         public async Task<List<ProductSize>> GetAllSizesProduct()
         {
-            var query = from p in _dataContext.ProductSizes
+            var query = from p in _dataContext.ProductSizes.Include(x => x.ProductQuantities)
                         select new { p };
             return await query.Select(x => new ProductSize()
             {
@@ -364,31 +367,37 @@ namespace PoPoy.Api.Services.ProductService
         {
             try
             {
-                var product = await _dataContext.ProductQuantities.FindAsync(id);
-                foreach (var size in request.Sizes)
+                var product = await _dataContext.ProductQuantities.FirstOrDefaultAsync(x => x.ProductId == id);
+                foreach (var item in request.Sizes)
                 {
                     var productQuantity = await _dataContext.ProductQuantities
-                        .FirstOrDefaultAsync(x => x.Id == int.Parse(size.Id)
+                        .FirstOrDefaultAsync(x => x.SizeId == int.Parse(item.Id)
                         && x.ProductId == id);
 
-                    if (productQuantity != null && size.Selected == false)
+                    if (productQuantity != null && item.Selected == false)
                     {
                         _dataContext.ProductQuantities.Remove(productQuantity);
                     }
-                    else if (productQuantity == null && size.Selected)
-                    {             
+                    else if (productQuantity == null && item.Selected)
+                    {
                         await _dataContext.ProductQuantities.AddAsync(new ProductQuantity()
                         {
-                            SizeId = int.Parse(size.Id),
+                            SizeId = int.Parse(item.Id),
                             ColorId = 1,
-                            ProductId = id
+                            ProductId = id,
+                            Quantity = item.Qty
                         });
+                    }
+                    else if(productQuantity != null && item.Selected == true && productQuantity.Quantity != item.Qty)
+                    {
+                        productQuantity.Quantity = item.Qty;
+                        _dataContext.Update(productQuantity);
                     }
                 }
                 await _dataContext.SaveChangesAsync();
                 return new ServiceSuccessResponse<bool>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -446,6 +455,48 @@ namespace PoPoy.Api.Services.ProductService
                                 .Where(p => p.Title.ToLower().Contains(searchText.ToLower()) ||
                                     p.Description.ToLower().Contains(searchText.ToLower()))
                                 .ToListAsync();
+        }
+
+        public async Task<bool> SeedProduct()
+        {
+            try
+            {
+                var pmax = _dataContext.Products.Max(x => x.Id);
+                var pmin = _dataContext.Products.Min(x => x.Id);
+                var smax = _dataContext.ProductSizes.Max(x => x.Id);
+                var smin = _dataContext.ProductSizes.Min(x => x.Id);
+                for (int i = pmin; i <= pmax; i++)
+                {
+                    for (int j = smin; j <= smax; j++)
+                    {
+                        var product = new ProductQuantity()
+                        {
+                            ProductId = i,
+                            SizeId = j,
+                            ColorId = 1,
+                            Quantity = 1000
+                        };
+                        _dataContext.ProductQuantities.Add(product);
+                    }
+                }
+                await _dataContext.SaveChangesAsync();
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public int GetQuantityOfProduct(int sizeId, int prodId)
+        {
+
+            var query = _dataContext.ProductQuantities.FirstOrDefault(x => x.ProductId == prodId && x.SizeId == sizeId);
+            if (query != null)
+            {
+                var quantity = query.Quantity;
+                return quantity;
+            }
+            return 0;
+
         }
     }
 }

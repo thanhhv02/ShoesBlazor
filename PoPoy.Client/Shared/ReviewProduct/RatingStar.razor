@@ -1,0 +1,26 @@
+﻿<div class="rating">
+    <div class="rating-upper" style="width: @CalcRatingPercentage()%">
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+    </div>
+    <div class="rating-lower">
+        <i class="fa-regular fa-star"></i>
+        <i class="fa-regular fa-star"></i>
+        <i class="fa-regular fa-star"></i>
+        <i class="fa-regular fa-star"></i>
+        <i class="fa-regular fa-star"></i>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public decimal Rating { get; set; }
+
+    private string CalcRatingPercentage()
+        => ((int)((Rating / 5m) * 100)).ToString();
+
+
+}

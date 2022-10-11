@@ -11,7 +11,7 @@ namespace PoPoy.Client.Services.OrderService
         event Action OrderDetailsChanged;
         PagingResponse<OrderOverviewResponse> ListOrderResponse { get; set; }
         OrderDetailsResponse ListOrderDetailsResponse { get; set; }
-        Task GetOrders(ProductParameters productParameters, string userId);
+        Task GetOrders(ProductParameters productParameters);
         Task GetOrderDetails(string orderId);
     }
 }

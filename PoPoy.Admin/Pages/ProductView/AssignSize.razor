@@ -6,16 +6,35 @@
 <h2 class="mb-3" style="color:darkblue">Thêm kích cỡ</h2>
 <div class="card-body">
     <EditForm Model="Model" OnValidSubmit="AssignSizes">
+        <div class="form-group">
+            <div class="row">
+                <div class="col 6">
+                    <h3>Chọn size</h3>
+                </div>
+                <div class="col 6">
+                    <h3>Số lượng</h3>
+                </div>
+            </div>
+        </div>
         @foreach (var model in Model.Sizes)
         {
             <div class="form-group">
-                <input type="hidden" @bind-value="Model.Id" />
-                <input type="hidden" @bind-value="@model.Id" />
-                <input type="hidden" @bind-value="@model.Name" />
-                <input type="checkbox"
-                       checked="@model.Selected"
-                       @bind-value="@model.Selected" />
-                @model.Name
+                <div class="row">
+                    <div class="col 6">
+                        
+                        <input type="hidden" @bind-value="Model.Id" />
+                        <input type="hidden" @bind-value="@model.Id" />
+                        <input type="hidden" @bind-value="@model.Name" />
+                        <input type="checkbox"
+                           checked="@model.Selected"
+                           @bind-value="@model.Selected" />
+                        @model.Name
+                    </div>
+                    <div class="col 6">
+                       
+                        <input type="" @bind-value="@model.Qty" />
+                    </div>
+                </div>            
             </div>
         }
 

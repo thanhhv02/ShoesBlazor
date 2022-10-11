@@ -1,5 +1,6 @@
 ﻿@inject IOrderService _svc;
 @implements IDisposable;
+@inject NavigationManager NavigationManager;
 <div class="chat_area cardify">
     <div class="chat_area--title">
         <h3>Lịch sử mua hàng <span class="name">chi tiết</span></h3>
@@ -20,7 +21,7 @@
                         <div>
                             <div class="row">
                                 <div class="col-6">
-                                    <h4>@_svc.ListOrderDetailsResponse.TotalPrice</h4>
+                                    <h4>@_svc.ListOrderDetailsResponse.TotalPrice<sup>VND</sup></h4>
                                 </div>
                                 <div class="col-6">
                                     <p>@_svc.ListOrderDetailsResponse.OrderDate</p>
@@ -30,7 +31,7 @@
 
                         </div>
                         <span class="paymentmode">Phương thức thanh toán: @_svc.ListOrderDetailsResponse.PaymentMode</span>
-                        <br/>
+                        <br />
                         <span class="orderstatus">Trạng thái đơn hàng: @_svc.ListOrderDetailsResponse.OrderStatus</span>
                     </div>
                 </div>
@@ -47,6 +48,11 @@
                                 <div class="col-6">
                                     <p><a href="/product-detail/@item.ProductId">@item.Title</a></p>
                                     <p>Size: @item.ProductSize</p>
+                                    <p>Số lượng: @item.Quantity</p>
+                                    <button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
+                                @onclick="@(() => WriteReview(item))">
+                                        Đánh giá sản phẩm này
+                                    </button>
                                 </div>
                                 <div class="col-6">
                                     @try
@@ -62,8 +68,8 @@
                                         }
                                     }
                                     catch { }
-                                </div>
 
+                                </div>
 
                             }
 
@@ -87,4 +93,7 @@
     {
         _svc.OrderDetailsChanged -= StateHasChanged;
     }
+
+    private void WriteReview(OrderDetailsProductResponse particular)
+        => NavigationManager.NavigateTo($"/products/{particular.ProductId}/review/new");
 }

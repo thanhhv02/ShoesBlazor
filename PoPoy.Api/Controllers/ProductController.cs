@@ -175,5 +175,19 @@ namespace PoPoy.Api.Controllers
             var result = await _productServices.GetProductSearchSuggestions(searchText);
             return Ok(result);
         }
+        [HttpGet("seed-size-product")]
+        public async Task<ActionResult<bool>> SeedProduct()
+        {
+            var result = await _productServices.SeedProduct();
+            if (result)
+                return Ok("Da seed");
+            else
+                return BadRequest("Seed loi");
+        }
+        [HttpGet("get-quantity-of-product")]
+        public async Task<ActionResult<int>> GetQuantityOfProduct(int sizeId, int Prodid)
+        {
+            return Ok(_productServices.GetQuantityOfProduct(sizeId, Prodid));
+        }
     }
 }

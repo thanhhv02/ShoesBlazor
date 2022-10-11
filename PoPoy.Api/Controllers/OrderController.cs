@@ -59,11 +59,11 @@ namespace PoPoy.Api.Controllers
                 return BadRequest();
             return Ok(affectedResult);
         }
-        [HttpGet("get-all-order-user/{userId}")]
+        [HttpGet("get-all-order-user")]
         [Authorize]
-        public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters, string userId)
+        public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters)
         {
-            var result = await _orderService.GetOrders(productParameters, userId);
+            var result = await _orderService.GetOrders(productParameters, GetUserId());
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
             return Ok(result);
         }

@@ -1,8 +1,10 @@
-﻿using Blazored.LocalStorage;
+﻿
+using Blazored.LocalStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PoPoy.Client.Services;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Client.Services.CartService;
@@ -34,6 +36,8 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<IUserAvatarService, UserAvatarService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IBroadCastService, BroadCastService>();
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IPublicReviewService, PublicReviewService>();
 
             return services;
         }

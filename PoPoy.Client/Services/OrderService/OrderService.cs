@@ -52,16 +52,13 @@ namespace PoPoy.Client.Services.OrderService
             OrderDetailsChanged.Invoke();
         }
 
-        public async Task GetOrders(ProductParameters productParameters, string userId)
+        public async Task GetOrders(ProductParameters productParameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString()
             };
-            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
-            var authheader = new AuthenticationHeaderValue("Bearer", savedToken.Replace("\"",""));
-            _http.DefaultRequestHeaders.Authorization = authheader;
-            var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user/{userId}", queryStringParam));
+            var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user", queryStringParam));
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -70,7 +67,7 @@ namespace PoPoy.Client.Services.OrderService
                 throw new ApplicationException(content);
             }
             ListOrderResponse.Items = JsonConvert.DeserializeObject<List<OrderOverviewResponse>>(content);
-            Console.WriteLine("Count: " + ListOrderResponse.Items.Count);
+     
             ListOrderResponse.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
         }
 
