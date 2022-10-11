@@ -6,10 +6,7 @@
 @inject IToastService _toastSvc
 @inject ICartState CartState
 @inject IProductService _prodSvc
-@using PoPoy.Client.Services.ProductService
-@using PoPoy.Client.Services.CartService;
-@using PoPoy.Client.State;
-@using PoPoy.Shared.Dto
+@inject HttpClient _httpClient
 
 <PageInfos Title="Giỏ hàng"></PageInfos>
 
@@ -69,9 +66,9 @@ else
                         <EditForm Model="paymentModel">
                             <InputRadioGroup @bind-Value="paymentModel.Name">
                                 @foreach (var option in rdOptions)
-                                    {
+                                {
                                     <InputRadio Value="option" /> @option <br />
-                                    }
+                                }
                             </InputRadioGroup>
                         </EditForm>
                     </div>
@@ -113,9 +110,9 @@ else
     private List<ProductSize> List_Size = new List<ProductSize>();
     Address addressModel = new Address();
     PaymentModeModel paymentModel = new PaymentModeModel()
-    {
-        Name = "CashOnDelivery" // default value
-    };
+        {
+            Name = "CashOnDelivery" // default value
+        };
 
     List<string> rdOptions = new List<string> { "CashOnDelivery", "PayPal", "VNPay" };
 
@@ -151,7 +148,7 @@ else
             var finalTotal = CalcTotalAmount();
             foreach (var item in carts)
             {
-                productStock = item.Product.Stock;
+                productStock = await GetQuantity(item.SizeId, item.ProductId);
                 productQuantity = item.Quantity;
                 if (productStock < productQuantity)
                 {
@@ -261,4 +258,10 @@ else
             buttonDisabled = false;
         }
     }
+    public async Task<int> GetQuantity(int sizeid, int prodid)
+        {
+            var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
+            var result = await res.Content.ReadAsStringAsync();
+            return Convert.ToInt32(result.ToString());
+        }
 }

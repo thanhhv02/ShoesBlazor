@@ -14,7 +14,6 @@ namespace PoPoy.Shared.Dto
         public int Quantity { set; get; }
         public int Size { get; set; }
         public int SizeId { get; set; } = 0;
-        public int QuantityOfSize { get; set; } = 0;
 
         [Column(TypeName = "decimal(18,0)")]
         public decimal Price { set; get; }

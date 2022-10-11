@@ -83,10 +83,7 @@
                             @(reviewCount)
                         </span>
                     </div>
-                    
-                    <p class="product-description">
-                        @product.Description
-                    </p>
+
                     <div class="product-info-price">@product.Price.ToString("n0")<sup>VND</sup></div>
 
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
@@ -102,15 +99,20 @@
                 description
             </div>
             <div class="product-detail-description">
-                @*<button class="btn-flat btn-hover btn-view-description" id="view-all-description">
-                    view all
-                </button>*@
-                @*<div class="product-detail-description-content">
+                <button class="btn-flat btn-hover btn-view-description" id="view-all-description" @onclick="ButtonViewAllClick">
+                    @{
+                        var ViewAllOrViewLess = IsViewAll ? "view less" : "view all";
+                    }
+                    @ViewAllOrViewLess
+                </button>
+                @{
+                    var isActive = IsViewAll ? "" : "active";
+                }
+                <div class="product-detail-description-content @isActive">
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit laudantium obcaecati odit dolorem, doloremque accusamus esse neque ipsa dignissimos saepe quisquam tempore perferendis deserunt sapiente! Recusandae illum totam earum ratione.
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam incidunt maxime rerum reprehenderit voluptas asperiores ipsam quas consequuntur maiores, at odit obcaecati vero sunt! Reiciendis aperiam perferendis consequuntur odio quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut quaerat eum veniam doloremque nihil repudiandae odio ratione culpa libero tempora. Expedita, quo molestias. Minus illo quis dignissimos aliquid sapiente error!
+                        @product.Description
                     </p>
-                </div>*@
+                </div>
             </div>
         </div>
         <ProductReview ProductId="@id" OnReviewAverageCalculated="@OnReviewAverageCalculated"></ProductReview>
@@ -128,8 +130,9 @@
     private ProductParameters _productParameters = new ProductParameters();
     private decimal reviewAverage;
     private int reviewCount;
+    private bool IsViewAll { get; set; } = false;
     public EventCallback<ReviewAverageCalculatedEventArgs> OnReviewAverage { get; set; }
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         product = new Product();
         var result = await _productSvc.Get(id);
@@ -137,7 +140,7 @@
         {
             product = result.Data;
         }
-        cart = new Cart() { Quantity = 1, Product = product};
+        cart = new Cart() { Quantity = 1, Product = product };
         await GetProducts();
         await OnReviewAverage.InvokeAsync();
     }
@@ -188,5 +191,10 @@
     {
         reviewCount = args.ReviewCount;
         reviewAverage = args.ReviewAverage;
+    }
+    private void ButtonViewAllClick()
+    {
+        IsViewAll = !IsViewAll;
+        StateHasChanged();
     }
 }

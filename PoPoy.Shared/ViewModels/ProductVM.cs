@@ -13,7 +13,6 @@ namespace PoPoy.Shared.ViewModels
         public decimal Price { set; get; }
         public decimal OriginalPrice { set; get; }
         public int Quantity { get; set; }
-        public int Stock { set; get; }
         public int Views { set; get; }
         public DateTime DateCreated { set; get; }
         public string Title { set; get; }

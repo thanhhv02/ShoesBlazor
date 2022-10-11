@@ -93,7 +93,6 @@ namespace PoPoy.Api.Services.ProductService
                 Description = x.p.Description,
                 OriginalPrice = x.p.OriginalPrice,
                 Price = x.p.Price,
-                Stock = x.p.Stock,
                 Views = x.p.Views,
                 //ProductQuantities = productQuantities,
                 ProductSizes = productSizes,
@@ -123,7 +122,7 @@ namespace PoPoy.Api.Services.ProductService
                 Description = product.Description,
                 OriginalPrice = product.OriginalPrice,
                 Price = product.Price,
-                Stock = product.Stock,
+      
                 Views = product.Views,
                 Categories = categories,
                 Sizes = productQuantities,
@@ -139,7 +138,6 @@ namespace PoPoy.Api.Services.ProductService
                 Title = request.Title,
                 OriginalPrice = request.OriginalPrice,
                 Description = request.Description,
-                Stock = request.Stock,
                 Views = 0,
                 DateCreated = DateTime.Now
             };
@@ -158,7 +156,6 @@ namespace PoPoy.Api.Services.ProductService
 
             product.Title = request.Title;
             product.Description = request.Description;
-            product.Stock = request.Stock;
             product.Price = request.Price;
             product.OriginalPrice = request.OriginalPrice;
 
@@ -232,7 +229,6 @@ namespace PoPoy.Api.Services.ProductService
             return await query.Select(x => new ProductVM()
             {
                 Id = x.p.Id,
-                Stock = x.p.Stock,
                 Title = x.p.Title,
                 Description = x.p.Description,
                 Price = x.p.Price,

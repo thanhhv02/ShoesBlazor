@@ -27,11 +27,6 @@
             <InputNumber id="originalPrice" class="form-control" @bind-Value="Product.OriginalPrice"></InputNumber>
             <ValidationMessage For="()=> Product.OriginalPrice"></ValidationMessage>
         </div>
-        <div class="form-group">
-            <label for="stock">Stock</label>
-            <InputNumber id="stock" class="form-control" @bind-Value="Product.Stock"></InputNumber>
-            <ValidationMessage For="()=> Product.Stock"></ValidationMessage>
-        </div>
         <button type="submit" class="btn btn-primary mt-3">Lưu lại</button>
     </EditForm>
 </div>

@@ -127,7 +127,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2150000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -138,7 +138,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 1650000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -149,7 +149,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3250000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -160,7 +160,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 1650000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -171,7 +171,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 1850000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -182,7 +182,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2550000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -193,7 +193,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 6100000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -204,7 +204,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 6450000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -215,7 +215,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4850000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -226,7 +226,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 5550000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -237,7 +237,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3850000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -248,7 +248,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4350000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -259,7 +259,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4300000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -270,7 +270,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 4850000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -281,7 +281,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3950000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -292,7 +292,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2950000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -303,7 +303,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 2850000,
-                    Stock = 1000
+                     
                 },
                 new Product()
                 {
@@ -314,7 +314,7 @@ namespace PoPoy.Api.Extensions
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
                     OriginalPrice = 3200000,
-                    Stock = 1000
+                     
                 }
             );
 

@@ -12,7 +12,6 @@ namespace PoPoy.Shared.ViewModels
     {
         public decimal Price { set; get; }
         public decimal OriginalPrice { set; get; }
-        public int Stock { set; get; }
         [MaxLength(50)]
         public string Title { set; get; }
         public int Quantity { get; set; }

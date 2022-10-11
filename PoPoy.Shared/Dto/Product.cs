@@ -18,7 +18,6 @@ namespace PoPoy.Shared.Dto
         public decimal Price { get; set; }
         [Column(TypeName = "decimal(18,0)")]
         public decimal OriginalPrice { get; set; }
-        public int Stock { get; set; }
         public int CheckoutCount { get; set; } 
         public int CategoryId { get; set; }
         public int Views { get; set; }

@@ -35,10 +35,6 @@
         {
             Model.SizeId = (List_Size.Count > 0 || List_Size is not null) ? List_Size.FirstOrDefault().Id : 0;
         }
-        if (List_Size.Count > 0 || List_Size is not null)
-        {
-            Model.QuantityOfSize = await GetQuantity(Model.SizeId, Product_Id);
-        }
     }
     private async void OnSizeChanged(int sizeid, Cart cart)
     {
