@@ -89,19 +89,19 @@
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
                     <SelectSize Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="StateHasChanged"></SelectSize>
                     <div>
-                        <button class="btn-flat btn-hover" @onclick="AddToCart">add to cart</button>
+                        <button class="btn-flat btn-hover" @onclick="AddToCart">Thêm vào giỏ hàng</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="box">
             <div class="box-header">
-                description
+                mô tả
             </div>
             <div class="product-detail-description">
                 <button class="btn-flat btn-hover btn-view-description" id="view-all-description" @onclick="ButtonViewAllClick">
                     @{
-                        var ViewAllOrViewLess = IsViewAll ? "view less" : "view all";
+                        var ViewAllOrViewLess = IsViewAll ? "thu gọn nội dung" : "xem thêm nội dung";
                     }
                     @ViewAllOrViewLess
                 </button>
@@ -123,7 +123,7 @@
 @code {
     [Parameter]
     public int id { get; set; }
-    private Cart cart;
+    private Cart cart = new Cart();
     private Product product;
 
     public MetaData MetaData { get; set; } = new MetaData();
@@ -131,7 +131,7 @@
     private decimal reviewAverage;
     private int reviewCount;
     private bool IsViewAll { get; set; } = false;
-    public EventCallback<ReviewAverageCalculatedEventArgs> OnReviewAverage { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         product = new Product();
@@ -141,8 +141,7 @@
             product = result.Data;
         }
         cart = new Cart() { Quantity = 1, Product = product };
-        await GetProducts();
-        await OnReviewAverage.InvokeAsync();
+        //await GetProducts();
     }
 
     private async Task SelectedPage(int page)
@@ -191,6 +190,7 @@
     {
         reviewCount = args.ReviewCount;
         reviewAverage = args.ReviewAverage;
+        Console.WriteLine("reviewAverage" + reviewAverage);
     }
     private void ButtonViewAllClick()
     {

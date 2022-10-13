@@ -2,6 +2,7 @@
 @inject IConfiguration _config;
 @inject IToastService _toastSvc;
 @implements IDisposable;
+@inject IPublicReviewService PublicReviewService
 <div class="box">
     @if (Box_Header != null)
     {
@@ -22,9 +23,6 @@
         {
             foreach (var item in _productSvc.Products.Items)
             {
-                <div hidden>
-                    <ProductReview ProductId="@item.Id" OnReviewAverageCalculated="@OnReviewAverageCalculated"></ProductReview>
-                </div>
                 <div class="col-4 col-md-4 col-sm-12">
                     <div class="product-card">
                         <div class="product-card-img">
@@ -34,7 +32,7 @@
                                 @if (item.ProductImages.Any())
                                 {
                                     <img src="@item.ProductImages.FirstOrDefault().ImagePath" alt="">
-                                    if (item.ProductImages.Skip(1).FirstOrDefault().ImagePath != null)
+                                    if (item.ProductImages.Skip(1).FirstOrDefault() != null)
                                     {
                                         <img src="@item.ProductImages.Skip(1).FirstOrDefault().ImagePath" alt="">
                                     }
@@ -46,6 +44,7 @@
                                 }
                                 else
                                 {
+                                    <img src="@_config["BackendApiUrl"]/uploads/no-photo-available.png" alt="">
                                     <img src="@_config["BackendApiUrl"]/uploads/no-photo-available.png" alt="">
                                 }
                             }
@@ -60,7 +59,7 @@
                                 @item.Title | Lượt xem: @item.Views
                             </div>
                             <div class="product-card-info">
-                                @reviewAverage<i class="fa fa-star rating"></i> | Đã bán: @item.CheckoutCount
+                                @item.ReviewAverage<i class="fa fa-star"></i> | Đã bán: @item.CheckoutCount
                             </div>
                             <div class="product-card-price" style="font-size: 18px">
                                 <span class="curr-price">@item.Price<sup>VND</sup></span>
@@ -87,9 +86,9 @@
     [Parameter]
     public string Box_Header { get; set; }
     public string Message { get; set; }
-    private decimal reviewAverage;
+    private decimal reviewAverage{ get; set; }
     private int reviewCount;
-    public EventCallback<ReviewAverageCalculatedEventArgs> OnReviewAverage { get; set; }
+    private List<Review> reviews = new();
     protected override void OnInitialized()
     {
         Message = _productSvc.Message;
@@ -102,10 +101,5 @@
     public void Dispose()
     {
         _productSvc.ProductsChanged -= StateHasChanged;
-    }
-    private void OnReviewAverageCalculated(ReviewAverageCalculatedEventArgs args)
-    {
-        reviewCount = args.ReviewCount;
-        reviewAverage = args.ReviewAverage;
     }
 }

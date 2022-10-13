@@ -67,7 +67,7 @@
             InvokeAsync(async () =>
             {
                 // Add your update logic here
-                await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/index2.js");
+                await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/index.js");
                 // Update the UI
                 StateHasChanged();
             });

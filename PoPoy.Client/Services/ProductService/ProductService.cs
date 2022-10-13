@@ -5,6 +5,7 @@ using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using Syncfusion.Blazor.Kanban.Internal;
+using Syncfusion.Blazor.PdfViewer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,10 +34,13 @@ namespace PoPoy.Client.Services.ProductService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        public ProductService(HttpClient httpClient, IConfiguration configuration)
+        private readonly IPublicReviewService publicReviewService;
+
+        public ProductService(HttpClient httpClient, IConfiguration configuration, IPublicReviewService PublicReviewService)
         {
             _httpClient = httpClient;
             this._configuration = configuration;
+            publicReviewService = PublicReviewService;
         }
 
         public PagingResponse<Product> Products { get; set; } = new PagingResponse<Product>();
@@ -84,6 +88,14 @@ namespace PoPoy.Client.Services.ProductService
                 throw new ApplicationException(content);
             }
             Products.Items = JsonConvert.DeserializeObject<List<Product>>(content);
+            for (int i = 0; i < Products.Items.Count; i++)
+            {
+                var reviews = await publicReviewService.FilterByProductIdAsync(Products.Items[i].Id);
+                if (reviews != null || reviews.Count > 0)
+                {
+                    Products.Items[i].ReviewAverage = reviews.Count == 0 ? 0 : (decimal)reviews.Average(x => x.Rating);
+                }
+            }
             Products.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
             ProductsChanged.Invoke();
         }
