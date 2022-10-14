@@ -47,6 +47,7 @@ namespace PoPoy.Api.Services.ReviewService
 
                 await context.Reviews.AddAsync(review);
                 await context.SaveChangesAsync();
+                await UpdateRatingAvergare(review);
                 return review.Id;
             }
         }
@@ -67,7 +68,7 @@ namespace PoPoy.Api.Services.ReviewService
                 dbReview.ReviewText = review.ReviewText;
                 dbReview.UpdateDate = DateTime.Now;
                 await context.SaveChangesAsync();
-
+                await UpdateRatingAvergare(review);
                 return StatusCodes.Status204NoContent;
             }
         }
@@ -88,6 +89,30 @@ namespace PoPoy.Api.Services.ReviewService
 
                 return StatusCodes.Status204NoContent;
             }
+        }
+        public async Task UpdateRatingAvergare(Review review)
+        {
+            try
+            {
+                using (context)
+                {
+                    var getAllReview = await context.Reviews
+                    .Where(x => x.ProductId == review.ProductId)
+                    .ToListAsync();
+                    var product = await context.Products.FirstOrDefaultAsync(x => x.Id == review.ProductId);
+                    if (product != null)
+                    {
+                        product.ReviewAverage = getAllReview.Count == 0 ? 0 : (decimal)getAllReview.Average(x => x.Rating);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                
+            }
+            catch
+            {
+
+            }
+
         }
     }
 }
