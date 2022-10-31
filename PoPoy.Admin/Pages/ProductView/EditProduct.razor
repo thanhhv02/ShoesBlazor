@@ -1,9 +1,12 @@
 ﻿@page "/updateProduct/{Id}"
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
+@using PoPoy.Client.Extensions
+@using PoPoy.Shared.Common
 @using PoPoy.Shared.Dto;
 @using System.Net.Http.Headers
 @inject HttpClient httpClient;
+@inject Radzen.DialogService dialogService;
 
 @if (ShowErrors)
 {
@@ -11,61 +14,99 @@
 }
 else
 {
-    <h1 class="mt-4 ml-3 mb-3">Cập nhật người dùng</h1>
-    <div class="card-body ml-3">
-        <EditForm Model="Product" OnValidSubmit="UpdateProduct">
-            <DataAnnotationsValidator></DataAnnotationsValidator>
-            <div class="form-group">
-                <label for="title">Tên sản phẩm</label>
-                <InputText id="title" class="form-control" @bind-Value="Product.Title"></InputText>
-                <ValidationMessage For="()=> Product.Title"></ValidationMessage>
-            </div>
-            <div class="form-group">
-                <label for="description">Mô tả</label>
-                <InputText id="description" class="form-control" @bind-Value="Product.Description"></InputText>
-                <ValidationMessage For="()=> Product.Description"></ValidationMessage>
-            </div>
-            <div class="form-group">
-                <label for="price">Giá</label>
-                <InputNumber id="price" class="form-control" @bind-Value="Product.Price"></InputNumber>
-                <ValidationMessage For="()=> Product.Price"></ValidationMessage>
-            </div>
-            <div class="form-group">
-                <label for="originalPrice">Giá gốc</label>
-                <InputNumber id="originalPrice" class="form-control" @bind-Value="Product.OriginalPrice"></InputNumber>
-                <ValidationMessage For="()=> Product.OriginalPrice"></ValidationMessage>
-            </div>
-            @try
-            {
+    <div class="card-body ml-3 col-12">
+        <RadzenTabs>
+            <Tabs>
+                <RadzenTabsItem Text="Thông tin chung">
+                    <EditForm Model="Product" OnValidSubmit="UpdateProduct">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="title">Tên sản phẩm</label>
+                            <InputText id="title" @bind-Value="Product.Title"></InputText>
+                            <ValidationMessage For="()=> Product.Title"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="description">Mô tả</label>
+                            @*<InputText id="description" @bind-Value="Product.Description"></InputText>*@
+                            <RadzenHtmlEditor @bind-Value=@Product.Description style="height: 300px; margin-bottom: 1rem; border: 1px solid darkblue" UploadUrl="upload/image">
+                                <RadzenHtmlEditorUndo />
+                                <RadzenHtmlEditorRedo />
+                                <RadzenHtmlEditorSeparator />
+                                <RadzenHtmlEditorBold />
+                                <RadzenHtmlEditorItalic />
+                                <RadzenHtmlEditorUnderline />
+                                <RadzenHtmlEditorStrikeThrough />
+                                <RadzenHtmlEditorSeparator />
+                                <RadzenHtmlEditorColor />
+                                <RadzenHtmlEditorBackground />
+                                <RadzenHtmlEditorRemoveFormat />
+                            </RadzenHtmlEditor>
+                            <ValidationMessage For="()=> Product.Description"></ValidationMessage>
 
-                @if (Product.ProductImages.Any() && Product.ProductImages != null)
-                {
-                    <div class="d-flex flex-wrap photo-upload">
-                        @foreach (var item in Product.ProductImages)
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="price">Giá</label>
+                            <InputNumber id="price" @bind-Value="Product.Price"></InputNumber>
+                            <ValidationMessage For="()=> Product.Price"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="originalPrice">Giá gốc</label>
+                            <InputNumber id="originalPrice" @bind-Value="Product.OriginalPrice"></InputNumber>
+                            <ValidationMessage For="()=> Product.OriginalPrice"></ValidationMessage>
+                        </div>
+                        @try
                         {
-                            <div class="photodetail w-25 p-1">
-                                <img class="w-100" src="@item.ImagePath" />
-                                <span class="btn btn-danger" @onclick="() => DeleteImage(item.Id)">Delete</span>
-                            </div>
+
+                            @if (Product.ProductImages.Any() && Product.ProductImages != null)
+                            {
+                                <div class="d-flex flex-wrap photo-upload">
+                                    @foreach (var item in Product.ProductImages)
+                                    {
+                                        <div class="photodetail w-25 p-1">
+                                            <img class="w-100" src="@item.ImagePath" />
+                                            <RadzenButton class="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Large" 
+                                            Variant="Variant.Filled" Icon="delete_forever" Click="() => DeleteImage(item.Id)"></RadzenButton>
+                                        </div>
+                                    }
+                                </div>
+
+
+                            }
                         }
-                    </div>
+                        catch
+                        {
 
+                        }
+                        <div class="form-group">
+                            <label class="custom-file-upload">
+                                <InputFile class="form-control" OnChange="OnInputFileChange" id="file-upload" accept=".gif,.jpg,.jpeg,.png"></InputFile>
+                                <i class="fa fa-cloud-upload"></i> Chọn ảnh
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-end">
+                                <RadzenButton Icon="close" Click="@((args) => dialogService.Close(false))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Cancel" Style="width: 120px" Class="me-1" />
+                                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="add_circle" Text="Lưu lại" Style="width: 120px" />
+                            </div>
+                        </div>
+                    </EditForm>
+                </RadzenTabsItem>
 
-                }
-            }
-            catch
-            {
+                <RadzenTabsItem Text="Danh mục">
+                    <RadzenCard>
+                       <AssignCategory Id="@Id"></AssignCategory>
+                    </RadzenCard>
+                </RadzenTabsItem>
 
-            }
-            <div class="form-group">
-                <label class="custom-file-upload">
-                    <InputFile class="form-control" OnChange="OnInputFileChange" id="file-upload" accept=".gif,.jpg,.jpeg,.png"></InputFile>
-                    <i class="fa fa-cloud-upload"></i> Chọn ảnh
-                </label>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Lưu lại</button>
-        </EditForm>
+                <RadzenTabsItem Text="Size">
+                   <AssignSize Id="@Id"></AssignSize>
+                  
+                </RadzenTabsItem>
+
+            </Tabs>
+        </RadzenTabs>
     </div>
+    
 }
 
 
@@ -79,10 +120,21 @@ else
     public ProductVM Product = new ProductVM();
     public bool ShowErrors = false;
     public string Message;
+    string value = "ALFKI";
+
+
+    int IdMain = 0;
+
 
     protected async override Task OnInitializedAsync()
     {
-        Product = await ProductService.GetProductById(int.Parse(Id));
+        IdMain = int.Parse(Id);
+        Product = await ProductService.GetProductById(IdMain);
+       
+      
+        StateHasChanged();
+  
+   
     }
 
     private async Task UpdateProduct()
@@ -124,4 +176,10 @@ else
         Product = await ProductService.GetProductById(int.Parse(Id));
         StateHasChanged();
     }
+
+   
+
+
+
+    
 }

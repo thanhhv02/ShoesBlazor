@@ -125,7 +125,7 @@
     public int id { get; set; }
     private Cart cart = new Cart();
     private Product product;
-
+    [Inject] private IBroadCastService broadCastService { get; set; }
     public MetaData MetaData { get; set; } = new MetaData();
     private ProductParameters _productParameters = new ProductParameters();
     private decimal reviewAverage;
@@ -184,6 +184,7 @@
         {
             await _cartSvc.AddAsync(cart.ToCartStorage());
             _toastSvc.ShowSuccess($"Thêm thành công {cart.Product.Title} x{cart.Quantity}");
+      
         }
     }
     private void OnReviewAverageCalculated(ReviewAverageCalculatedEventArgs args)

@@ -101,7 +101,7 @@ namespace PoPoy.Admin.Services.BroadCastService
         {
             await hubConnection.StartAsync().ContinueWith(t => {
                 if (t.IsFaulted)
-                    Console.WriteLine(t.Exception.GetBaseException());
+                    Console.WriteLine("hub error: " + t.Exception.GetBaseException());
                 else
                     Console.WriteLine("Connected to Hub ^^");
             });

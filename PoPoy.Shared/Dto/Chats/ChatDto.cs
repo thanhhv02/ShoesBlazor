@@ -18,8 +18,8 @@ namespace PoPoy.Shared.Dto
         public bool? IsRead { get; set; } = false;
         public string Data { get; set; }
 
-        public Guid? Sender { get; set; }
-        public Guid? Receiver { get; set; }
+        public Guid? SenderId { get; set; }
+        public Guid? ReceiverId { get; set; }
 
 
     }

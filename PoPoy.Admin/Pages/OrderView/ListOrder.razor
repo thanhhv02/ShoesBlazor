@@ -3,66 +3,52 @@
 @inject IOrderService OrderService
 @inject IAuthService AuthService
 
-<h2 class="mt-4 ml-3 mb-3" style="color:darkblue">Danh sách đơn hàng</h2>
-<div class="input-group" style="left: 950px;">
-    <div class="form-outline">
-        <input @bind-value="searchText"
-               type="search"
-               list="users"
-               class="form-control"
-               placeholder="Search..." />
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách đơn hàng</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid  Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Orders" TItem="Order" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single"  >
+                <Columns>
+                    <RadzenDataGridColumn Frozen="true" Width="221px" Title="Thao tác" TItem="Order" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                        <Template>
+                            <RadzenButton Text="Xem" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Dark" Class="m-1" Click="args => OpenDetail(product.Id.ToString())">
+                            </RadzenButton>
+                            <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask(product.Id)">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="161px" Frozen="true" TItem="Order" Property="Id" Title="Mã đơn hàng" CssClass="MyInputClass" />
+                 
+                    <RadzenDataGridColumn TItem="Order" Filterable="false" Property="TotalPrice" Title="Tổng đơn hàng" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Property="PaymentMode" Title="Phương thức thanh toán" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Property="OrderStatus" Title="Tình trạng đơn hàng" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Tên người dùng">
+                        <Template>
+                            @Users.FirstOrDefault(x => x.Id == order.UserId).FirstName @Users.FirstOrDefault(x => x.Id == order.UserId).LastName
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Địa chỉ">
+                        <Template>
+                            @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Country , @Addresses.FirstOrDefault(x => x.UserId == order.UserId).City @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Street @Addresses.FirstOrDefault(x => x.UserId == order.UserId).State
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Ngày đặt">
+                        <Template>
+                            @order.OrderDate.ToString("MM/dd/yyyy")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+
+              
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
     </div>
-    <button type="button" class="btn btn-primary" @onclick="SearchOrders">
-        <i class="fas fa-search"></i>
-    </button>
-</div>
-<div class="row mt-4 ml-3">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Mã đơn hàng
-                </th>
-                <th>
-                    Tên người dùng
-                </th>
-                <th>
-                    Địa chỉ
-                </th>
-                <th>
-                    Ngày đặt
-                </th>
-                <th>
-                    Tổng đơn hàng
-                </th>
-                <th>
-                    Phương thức thanh toán
-                </th>
-                <th>
-                    Tình trạng đơn hàng
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var items in Orders)
-            {
-                <tr>
-                    <td>@items.Id</td>
-                    <td>@Users.FirstOrDefault(x => x.Id == items.UserId).FirstName @Users.FirstOrDefault(x => x.Id == items.UserId).LastName</td>
-                    <td>@Addresses.FirstOrDefault(x => x.UserId == items.UserId).Country , @Addresses.FirstOrDefault(x => x.UserId == items.UserId).City @Addresses.FirstOrDefault(x => x.UserId == items.UserId).Street @Addresses.FirstOrDefault(x => x.UserId == items.UserId).State</td>
-                    <td>@items.OrderDate.ToString("MM/dd/yyyy")</td>
-                    <td>@items.TotalPrice</td>
-                    <td>@items.PaymentMode</td>
-                    <td>@items.OrderStatus</td>
-                    <td>
-                        <a href="/listOrderDetails/@items.Id" class="btn btn-primary"><i class="oi oi-inbox"></i></a>
-                        <button @onclick="()=> OnDeleteTask(items.Id)" class="btn btn-danger"><i class="oi oi-trash"></i></button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </div>
 
 <Confirmation ConfirmationMessage="Bạn chắc chắn xóa đơn hàng này?"
@@ -79,7 +65,7 @@
     private List<Address> Addresses { get; set; } = new List<Address>();
     private string OrderId { set; get; }
     private Confirmation DeleteConfirmation { set; get; }
-
+    [Inject] private DialogService DialogService { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await GetOrders();
@@ -136,4 +122,21 @@
             Orders = pagingResponse;
         }
     }
-}
+
+
+    public async Task OpenDetail(string id)
+    {
+        await DialogService.OpenAsync<ListOrderDetails>($"Chi tiết đơn hàng",
+               new Dictionary<string, object>() { { "OrderID", id } },
+               new DialogOptions() { Width = "1400px", Height = "712px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+
+    //public async Task OpenCreate()
+    //{
+    //    await DialogService.OpenAsync<CreateCategory>($"Tạo mới loại hàng"
+    //           , options:
+    //           new DialogOptions() { Width = "400px", Height = "512px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    //}
+}   

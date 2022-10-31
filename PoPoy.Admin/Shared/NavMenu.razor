@@ -1,29 +1,71 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">PoPoy.Admin</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿<ul class="sidebar-nav" id="sidebar-nav">
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+    <li class="nav-item">
+        <NavLink class="nav-link collapsed " href="/Dashboard">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink class="nav-link collapsed" href="/listUser">
+            <i class="fas fa-user"></i>
+            <span>Người dùng</span>
+        </NavLink>
+    </li>
+
+
+    <li class="nav-item">
+        <NavLink class="nav-link collapsed" href="/listProduct">
+            <i class="fas fa-box"></i>
+            <span>Sản phẩm</span>
+        </NavLink>
+    </li>
+        
+    <li class="nav-item">
+        <NavLink class="nav-link collapsed" href="/listCategory">
+            <i class="fas fa-cubes"></i>
+            <span>Loại hàng</span>
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink class="nav-link collapsed" href="/listOrder">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Đơn hàng</span>
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink class="nav-link collapsed" href="/chat">
+            <i class="fas fa-comment-alt"></i>
+            <span>Chat</span>
+        </NavLink>
+    </li>
+
+    @*vi du co menu con *@
+   @* <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="charts-chartjs.html">
+                    <i class="bi bi-circle"></i><span>Chart.js</span>
+                </a>
+            </li>
+            <li>
+                <a href="charts-apexcharts.html">
+                    <i class="bi bi-circle"></i><span>ApexCharts</span>
+                </a>
+            </li>
+            <li>
+                <a href="charts-echarts.html">
+                    <i class="bi bi-circle"></i><span>ECharts</span>
+                </a>
+            </li>
+        </ul>
+    </li><!-- End Charts Nav -->*@
+</ul>
 
 @code {
     private bool collapseNavMenu = true;

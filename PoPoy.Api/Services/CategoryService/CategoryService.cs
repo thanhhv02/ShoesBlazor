@@ -36,7 +36,7 @@ namespace PoPoy.Api.Services.CategoryService
         public async Task<CateVM> GetCateById(int id)
         {
             var query = from c in _context.Categories
-                        where c.Status.Equals(Status.Active)
+                        where c.Status.Equals(Status.Active) && c.Id == id
                         select new { c };
             return await query.Select(x => new CateVM()
             {

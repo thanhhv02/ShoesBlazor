@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Enum;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace PoPoy.Client.Services.BroadCastService
         Task SendNotiCurrentUser(NotiSendConfig config); // send cho chính mình 
 
 
-        Task<HubConnection> BuidHubWithToken();
+        Task<HubConnection> BuidHubWithToken(string broadCastType = BroadCastType.Notify);
         Task StartAsync(HubConnection hubConnection);
     }
 }

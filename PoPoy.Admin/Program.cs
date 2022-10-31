@@ -11,6 +11,9 @@ using PoPoy.Admin.Services.ProductService;
 using PoPoy.Admin.Services.CategoryService;
 using PoPoy.Admin.Services.OrderService;
 using PoPoy.Admin.Services.BroadCastService;
+using Blazored.Toast;
+using Smart.Blazor;
+using Radzen;
 
 namespace PoPoy.Admin
 {
@@ -28,6 +31,14 @@ namespace PoPoy.Admin
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IBroadCastService, BroadCastService>();
+            builder.Services.AddBlazoredToast();
+            builder.Services.AddSmart();
+
+
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<TooltipService>();
+            builder.Services.AddScoped<ContextMenuService>();
 
             builder.Services.AddScoped(sp => new HttpClient
             {

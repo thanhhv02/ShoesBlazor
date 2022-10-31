@@ -6,6 +6,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Dto.Chats;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -37,8 +38,8 @@ namespace PoPoy.Api.Controllers
         [Authorize]
         public async Task<IActionResult> SendNotiAllAdmin(CreateOrUpdateNotiDto notiDto)
         {
-      
-            var notification =  mapper.Map<NotificationDto>(notiDto);
+
+            var notification = mapper.Map<NotificationDto>(notiDto);
             await broadCastService.SendNotifyAllAdmin(notification);
             return Ok(notification);
         }
@@ -80,17 +81,27 @@ namespace PoPoy.Api.Controllers
             {
                 return NotFound("Thiếu trường ID");
             }
-           
+
             var notifications = await notificationService.GetAllNotificationsByUserId(id);
 
             var result = new ServiceResponse<List<NotificationDto>>();
-            
-           result.Message = "Lấy danh sách thông báo cho User thành công";
-           result.Success = true;
-           result.Data = notifications;
-         
-          
+
+            result.Message = "Lấy danh sách thông báo cho User thành công";
+            result.Success = true;
+            result.Data = notifications;
+
+
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SendMessage(CreateOrUpdateChatDto chatDto)
+        {
+            var chat = mapper.Map<ChatDto>(chatDto);
+            chat.SenderId = Guid.Parse(userManager.GetUserId(User));
+            await broadCastService.SendMessage(chat);
+            return Ok(chatDto);
         }
     }
 }

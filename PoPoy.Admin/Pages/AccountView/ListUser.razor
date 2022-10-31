@@ -11,7 +11,7 @@
 }
 else
 {
-    <h2 class="mt-4 ml-3 mb-3" style="color:darkblue">Danh sách người dùng</h2>
+ @*   <h2 class="mt-4 ml-3 mb-3" style="color:darkblue">Danh sách người dùng</h2>
     <div class="input-group" style="left: 950px;">
         <div class="form-outline">
             <input @bind-value="searchText"
@@ -66,7 +66,42 @@ else
             </tbody>
         </table>
     </div>
+*@
 }
+<RadzenButton Icon="add_circle_outline" Text="Tạo người dùng mới" class="col-lg-4" ButtonStyle="ButtonStyle.Success"/>
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách người dùng</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Users" TItem="User" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single">
+                <Columns>
+                       <RadzenDataGridColumn TItem="User" Context="user" Filterable="false" Title="Họ Tên" Sortable="false" TextAlign="TextAlign.Left">
+                        <Template>
+                           @(user.FirstName + " " + user.LastName);
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="User" Property="UserName" Title="Username" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="User" Property="PhoneNumber" Title="Số điện thoại" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="User" Property="Email" Title="Email" CssClass="MyInputClass" />
+
+                    <RadzenDataGridColumn TItem="User" Context="user" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                        <Template>
+                            <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(user.Id.ToString())">
+                            </RadzenButton>
+                            <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask(user.Id)">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
+    </div>
+</div>
 
 <Confirmation ConfirmationMessage="Bạn chắc chắn xóa người dùng này?"
               ConfirmationTitle="Xóa người dùng"
@@ -82,7 +117,7 @@ else
     private string Error = "";
     private Guid DeleteId { set; get; }
     private Confirmation DeleteConfirmation { set; get; }
-
+    [Inject] private DialogService DialogService { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await GetUsers();
@@ -129,4 +164,20 @@ else
             Users = pagingResponse;
         }
     }
+
+    
+    public async Task OpenEdit(string id)
+    {
+        await DialogService.OpenAsync<EditUser>($"Chỉnh sửa người dùng",
+               new Dictionary<string, object>() { { "Id", id } },
+               new DialogOptions() { Width = "1400px", Height = "612px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+
+    //public async Task OpenCreate()
+    //{
+    //    await DialogService.OpenAsync<CreateCategory>($"Order",
+    //           new Dictionary<string, object>() { { "OrderID", null } },
+    //           new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+    //}
 }

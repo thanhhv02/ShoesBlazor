@@ -39,12 +39,12 @@ namespace PoPoy.Admin.Services.CategoryService
 
         public async Task UpdateCategory(CateVM category)
         {
-            await _httpClient.PutAsJsonAsync($"api/product/{category.Id}", category);
+            await _httpClient.PutAsJsonAsync($"api/category/{category.Id}", category);
         }
 
         public async Task DeleteCategory(int categoryId)
         {
-            await _httpClient.DeleteAsync($"/api/product/{categoryId}");
+            await _httpClient.DeleteAsync($"/api/category/{categoryId}");
         }
 
 

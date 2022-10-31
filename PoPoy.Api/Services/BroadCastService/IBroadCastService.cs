@@ -9,14 +9,12 @@ namespace PoPoy.Api.Services.BroadCastService
     public interface IBroadCastService
     {
 
-        Task BroadCastNotifyUser(ChatDto broadCast);
-
         Task SendNotifyAll(NotificationDto notification);
         Task SendNotifyAllAdmin(NotificationDto notification);
         Task SendNotifyUserId(NotificationDto notification);
-        Task BroadCastMessageUser(string userId);
-
         Task ReadNoti(Guid id);
         Task ReadAllNoti(Guid userId);
+
+        Task SendMessage(ChatDto chatDto);
     }
 }

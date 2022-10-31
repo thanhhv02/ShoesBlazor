@@ -11,6 +11,7 @@ using PoPoy.Api.SendMailService;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Api.Services.CategoryService;
+using PoPoy.Api.Services.ChatService;
 using PoPoy.Api.Services.FileStorageService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
@@ -100,7 +101,8 @@ namespace PoPoy.Api.Extensions
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/notificationHub")))
+                                ((path.StartsWithSegments("/notificationHub") ||
+                                (path.StartsWithSegments("/chatHub")))))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;
@@ -123,6 +125,8 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<IStorageService, StorageService>();
             services.AddTransient<IBroadCastService, BroadCastService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IChatService, ChatService>();
+
             services.AddTransient<IReviewService, ReviewService>();
             return services;
         }
@@ -131,7 +135,7 @@ namespace PoPoy.Api.Extensions
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("HVT"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
             return services;
         }

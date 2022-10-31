@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using PoPoy.Api.Services.NotificationService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Enum;
+using System;
 using System.Threading.Tasks;
 
 namespace PoPoy.Api.Hubs
@@ -15,6 +18,10 @@ namespace PoPoy.Api.Hubs
             // gui thong bao cho tat ca cac nguoi admin
 
 
+            await Clients.Users(notification.UserIds).SendAsync(BroadCastType.Notify, notification);
+        }
+        public async Task SendNotifyAll(NotificationDto notification)
+        {
             await Clients.All.SendAsync(BroadCastType.Notify, notification);
         }
 

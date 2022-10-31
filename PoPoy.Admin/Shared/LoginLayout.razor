@@ -1,6 +1,13 @@
-﻿@inherits LayoutComponentBase
-<div class="main bg-primary">
-    <div class="content px-4 ">
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
+<div class="main ">
         @Body
-    </div>
 </div>
+
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.TopRight"
+                Timeout="4"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                WarningIcon="far fa-bell" />

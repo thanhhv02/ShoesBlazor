@@ -9,34 +9,46 @@
         text-align: center;
     }
 </style>
-<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 
-    <li class="nav-item dropdown position-relative">
-        <span style=" top: 6px; left: 61%;" class="position-absolute  translate-middle badge rounded-pill bg-danger">
-            @notifications.Count(p => !p.IsRead)
-            <span class="visually-hidden">unread messages</span>
-        </span>
-        <a class="nav-link dropdown-toggle " id="notiDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-bell fa-fw"></i>
+<li class="nav-item dropdown">
 
+    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+        <i class="bi bi-bell"></i>
+        <span class="badge bg-primary badge-number">@notifications.Count(p => !p.IsRead)</span>
+    </a><!-- End Notification Icon -->
 
-        </a>
-        <div class="notifications dropdown-menu dropdown-menu-end" aria-labelledby="notiDropdown">
-            <h2>Notifications - <span>@notifications.Count()</span></h2>
-            @foreach (var item in notifications)
-            {
-                var isread = item.IsRead ? "read" : "unread";
-                <a style="text-decoration:none" href="@item.DataUrl" class="notifications-item @isread">
-                    <div class="text">
-                        <h4>@item.Title <span style="color:grey; font-size:12px;    "> - @item.Created.ToString("dd/MM/yyyy HH:mm")</span></h4>
+    <ul style="max-height:60vh; overflow:hidden; overflow-y:auto;" class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+        <li class="dropdown-header">
+            Có @notifications.Count(p => !p.IsRead) thông báo mới
+            <a @onclick="ReadAllNoti" href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Đánh dấu tất cả là đã đọc đã đọc</span></a>
+        </li>
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+
+      
+
+        @foreach (var item in notifications)
+        {
+            var isread = item.IsRead ? "bi bi-check-circle text-success" : "bi bi-info-circle text-primary";
+            <li style="cursor:pointer;" @onclick="() => ReadNoti(item)" class="notification-item">
+                    <i class="@isread"></i>
+                    <div>
+                        <h4>@item.Title</h4>
                         <p>@item.Message</p>
+                        <p>@item.Created.ToString("dd/MM/yyyy hh:mm")</p>
                     </div>
-                </a>
-            }
-        </div>
+            </li>
 
-    </li>
-</ul>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+        }
+
+    </ul><!-- End Notification Dropdown Items -->
+
+</li><!-- End Notification Nav -->
+
 
 
 

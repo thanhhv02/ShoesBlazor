@@ -170,11 +170,11 @@ namespace PoPoy.Api.Services.ProductService
 
         public async Task<int> DeleteProduct(int productId)
         {
-            var product = await _dataContext.ProductImages.FirstOrDefaultAsync(x => x.Id == productId);
+            var product = await _dataContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
             if (product == null) throw new Exception($"Cannot find image: {productId}");
 
 
-            _dataContext.ProductImages.Remove(product);
+            _dataContext.Products.Remove(product);
 
             return await _dataContext.SaveChangesAsync();
         }

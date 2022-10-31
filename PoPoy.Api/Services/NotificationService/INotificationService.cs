@@ -11,7 +11,7 @@ namespace PoPoy.Api.Services.NotificationService
         Task<List<NotificationDto>> GetAllNotifications();
         Task<NotificationDto> GetNotificationById(Guid id);
         Task<bool> CreateNotification(NotificationDto notiDto);
-        Task<bool> CreateNotificationAllAdmin(NotificationDto notiDto);
+        Task<IReadOnlyList<string>> CreateNotificationAllAdmin(NotificationDto notiDto);
         Task<bool> CreateNotificationUserId(NotificationDto notiDto);
         Task<bool> UpdateNotification(NotificationDto notiDto);
         Task<List<NotificationDto>> GetAllNotificationsByUserId(Guid id);

@@ -10,6 +10,7 @@ namespace PoPoy.Shared.Dto
 {
     public class Product
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Title { get; set; } = String.Empty;

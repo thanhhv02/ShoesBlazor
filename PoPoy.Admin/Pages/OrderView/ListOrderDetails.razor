@@ -3,7 +3,7 @@
 @inject IOrderService OrderService
 @inject IProductService ProductService
 
-<div class="row">
+@*<div class="row">
     <h2 class="ml-2 mt-4 mb-3 col-11" style="color:darkblue">Chi tiết đơn hàng</h2>
     <a href="/listOrder" class="btn btn-danger col-1 mt-4" style="height:40px;width:40px"><i class="oi oi-arrow-left"></i></a>
 </div>
@@ -48,8 +48,32 @@
             }
         </tbody>
     </table>
-</div>
+</div>*@
+<RadzenText Text="Tạm thời để đây nếu có thời gian sẽ tích hợp api giao hàng nhanh"></RadzenText>
+<RadzenSteps>
+   
+    <Steps>
+        <RadzenStepsItem Text="Xác nhận thông tin">
+            hiện các thông tin 
+        </RadzenStepsItem>
 
+        <RadzenStepsItem Text="Chuyển qua đơn vị giao hàng nhanh">
+            hiện các thông tin
+        </RadzenStepsItem>
+
+        <RadzenStepsItem Text="GHN đã tiếp nhận">
+            hiện các thông tin
+        </RadzenStepsItem>
+
+        <RadzenStepsItem Text="Đang trong quá trình vận chuyển">
+            hiện các thông tin
+        </RadzenStepsItem>
+
+        <RadzenStepsItem Text="Hoàn tất đơn hàng">
+            hiện các thông tin
+        </RadzenStepsItem>
+    </Steps>
+</RadzenSteps>
 @code {
     [Parameter]
     public string orderId { get; set; }

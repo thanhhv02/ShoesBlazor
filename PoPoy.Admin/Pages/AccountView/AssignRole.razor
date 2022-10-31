@@ -1,9 +1,10 @@
 ﻿@page "/roles/{Id}"
+@using PoPoy.Client.Extensions
 
 @inject IAuthService AuthService
 <h2 class="mb-3" style="color:darkblue">Thêm quyền người dùng</h2>
 <div class="card-body">
-    <EditForm Model="Model" OnValidSubmit="AssignRoles">
+   @* <EditForm Model="Model" OnValidSubmit="AssignRoles">
         @foreach (var model in Model.Roles)
         {
             <div class="form-group">
@@ -20,6 +21,18 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Lưu lại</button>
         </div>
+    </EditForm>*@
+
+    <EditForm Model="Model" OnValidSubmit="AssignRoles">
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn vai trò</RadzenText>
+        <RadzenListBox Multiple AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" @bind-Value=@listRole
+                       Data=@Model.Roles TextProperty="Name" ValueProperty="Id" Change=@(args => OnChange(args)) Style="height:200px" Class="w-100" />
+
+        <div class="row mt-3">
+            <div class="col-md-12 text-end">
+                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="add_circle" Text="Lưu lại" Style="width: 120px" />
+            </div>
+        </div>
     </EditForm>
 </div>
 
@@ -27,16 +40,48 @@
     [Parameter]
     public string Id { get; set; }
     public RoleAssignRequest Model = new RoleAssignRequest();
-
+    List<string> listRole = new List<string>();
+    [Inject] private IToastService toastService { get; set; }
     protected override async Task OnInitializedAsync()
     {
         Model = await AuthService.GetRoleAssignRequest(Guid.Parse(Id));
         Model.Id = Guid.Parse(Id);
+             Model.Roles.ForEach(p =>
+       {
+           if (p.Selected) listRole.Add(p.Id);
+       });
+        StateHasChanged();
     }
 
     private async Task AssignRoles()
     {
         await AuthService.AssignRole(Model);
+        toastService.ShowSuccess("Cập nhật vai trò thành công !");
+   
+    }
+
+    
+    async Task OnLoadData(LoadDataArgs args)
+    {
+        Model = await AuthService.GetRoleAssignRequest(Guid.Parse(Id));
+
+        var list = Model.Roles;
+        if (!string.IsNullOrEmpty(args.Filter))
+        {
+            list = Model.Roles.Where(c => c.Name.ConvertToUnSign().Contains(args.Filter.ConvertToUnSign())).ToList();
+        }
+        Model.Roles = list;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    void OnChange(object value)
+    {
+        if (listRole != null)
+        {
+
+            Model.Roles.ForEach(p => { if (listRole.Any(C => C == p.Id)) p.Selected = true; else p.Selected = false; });
+
+        }
     }
 }
 

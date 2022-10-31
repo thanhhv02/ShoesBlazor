@@ -1,46 +1,67 @@
 ﻿@page "/categories/{Id}"
+@using PoPoy.Client.Extensions
 
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
 
-<h2 class="mb-3" style="color:darkblue">Thêm loại sản phẩm</h2>
-<div class="card-body">
     <EditForm Model="Model" OnValidSubmit="AssignCates">
-        @foreach (var model in Model.Categories)
-        {
-            <div class="form-group">
-                @model.Name
-                <input type="hidden" @bind-value="Model.Id" />
-                <input type="hidden" @bind-value="@model.Id" />
-                <input type="hidden" @bind-value="@model.Name" />
-                <input type="checkbox"
-                       checked="@model.Selected"
-                       @bind-value="@model.Selected" />
-            </div>
-        }
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn danh mục</RadzenText>
+        <RadzenListBox Multiple LoadData="OnLoadDataCate" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" @bind-Value=@listCate
+                       Data=@Model.Categories TextProperty="Name" ValueProperty="Id" Change=@(args => OnChangeCate(args)) Style="height:200px" Class="w-100" />
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Lưu lại</button>
+    <div class="row mt-3">
+        <div class="col-md-12 text-end">
+            <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="add_circle" Text="Lưu lại" Style="width: 120px" />
         </div>
+    </div>
     </EditForm>
-</div>
 
 @code{
     [Parameter]
     public string Id { get; set; }
     public CategoryAssignRequest Model = new CategoryAssignRequest();
-
+    string value = "ALFKI";
+    List<string> listCate = new List<string>();
+    [Inject] private IToastService toastService { get; set; }
     protected override async Task OnInitializedAsync()
     {
         Model = await ProductService.GetCateAssignRequest(int.Parse(Id));
         Model.Id = int.Parse(Id);
+        Model.Categories.ForEach(p =>
+          {
+              if (p.Selected) listCate.Add(p.Id);
+          });
+        StateHasChanged();
     }
-
     private async Task AssignCates()
     {
         await ProductService.AssignCate(Model);
-        NavigationManager.NavigateTo("/listProduct");
+        toastService.ShowSuccess("Cập nhật danh mục thành công");
         StateHasChanged();
+    }
+
+
+
+    async Task OnLoadDataCate(LoadDataArgs args)
+    {
+        Model = await ProductService.GetCateAssignRequest(int.Parse(Id));
+        var list = Model.Categories;
+        if (!string.IsNullOrEmpty(args.Filter))
+        {
+            list = Model.Categories.Where(c => c.Name.ConvertToUnSign().Contains(args.Filter.ConvertToUnSign())).ToList();
+        }
+        Model.Categories = list;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    void OnChangeCate(object value)
+    {
+        if (listCate != null)
+        {
+
+            Model.Categories.ForEach(p => { if (listCate.Any(C => C == p.Id)) p.Selected = true; else p.Selected = false; });
+
+        }
     }
 }
 

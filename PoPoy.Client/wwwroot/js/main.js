@@ -15,3 +15,43 @@ $(function() {
   });
 
 });
+
+// chat
+
+$(document).ready(function () {
+
+    window.scrollToBottom = function (id) {
+        $(id).animate({ scrollTop: document.body.scrollHeight }, "slow");
+    }
+
+    window.sendChat = function (message, time, srcAvt) {
+        var html = `
+            <div class="d-flex flex-row justify-content-end animate__backInUp">
+              <div>
+                <p class="p-2 me-3 mb-1 text-white rounded-3 bg-primary">${message}
+                </p>
+                <p class="me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">${time}</p>
+              </div>
+                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
+                    alt="avatar 1" style="width: 45px; height: 100%;">
+            </div>`
+
+        $("#chat-user").append(html);
+        scrollToBottom("#chat-user");
+    }
+    window.receiveChat = function (message, time, srcAvt) {
+        var html = `<div class="d-flex flex-row justify-content-start mb-1">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                alt="avatar 1" style="width: 45px; height: 100%;">
+              <div>
+                <p class=" p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
+                <p class=" ms-3 mb-3 rounded-3 text-muted">${time}</p>
+              </div>
+            </div>`;
+        $("#chat-user").append(html);
+        scrollToBottom("#chat-user");
+    }
+
+})
+
+// navbar 

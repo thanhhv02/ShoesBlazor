@@ -24,19 +24,7 @@ namespace PoPoy.Admin.Shared.Notify
 
         private List<NotificationDto> notifications = new();
 
-        async Task test()
-        {
-            hubConnection = await broadCastService.BuidHubWithToken();
-            SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
-                noti =>
-                {
-                    notifications.Add(noti);
-                    notifications = notifications.OrderByDescending(p => p.Created).ToList();
-                    StateHasChanged();
-                });
-
-            await broadCastService.StartAsync(hubConnection);
-        }
+     
         async Task Reload()
         {
             var result = await broadCastService.GetNotificationsByUserJwt();
@@ -48,7 +36,16 @@ namespace PoPoy.Admin.Shared.Notify
         protected override async Task OnInitializedAsync()
         {
             await Reload();
-       
+            hubConnection = await broadCastService.BuidHubWithToken();
+            SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
+                noti =>
+                {
+                    notifications.Add(noti);
+                    notifications = notifications.OrderByDescending(p => p.Created).ToList();
+                    StateHasChanged();
+                });
+
+            await broadCastService.StartAsync(hubConnection);
         }
 
 

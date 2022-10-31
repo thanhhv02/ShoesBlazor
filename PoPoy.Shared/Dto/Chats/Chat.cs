@@ -14,18 +14,23 @@ namespace PoPoy.Shared.Dto
         [Key]
         public Guid Id { get; set; }
 
-        [Column("nvarchar(1000)")]
+        [Column(TypeName = "nvarchar(Max)")]
         public string Message { get; set; }
                                       
         public bool? IsRead { get; set; }
-        public string Data { get; set; }
+        public string data { get; set; }
 
         public DateTime Created { get; set; }  
 
-        public Guid? UserId { get; set; }
+        public Guid? SenderId { get; set; }
 
-        [ForeignKey("UserId")]
-        public User User { get; set; }
+        [ForeignKey("SenderId")]
+        public User Sender { get; set; }
+
+        public Guid? ReceiverId { get; set; }
+
+        [ForeignKey("ReceiverId")]
+        public User Receiver { get; set; }
     }
 
 }

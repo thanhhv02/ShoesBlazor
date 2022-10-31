@@ -1,10 +1,10 @@
 ﻿@page "/listCategory"
+@using PoPoy.Admin.Helper
 
 @inject IConfiguration Configuration
 @inject ICategoryService CategoryService
 
-<h2 class="mt-4 ml-3 mb-3" style="color:darkblue">Danh sách loại hàng</h2>
-<div class="input-group" style="left: 950px;">
+@*<div class="input-group" style="left: 950px;">
     <div class="form-outline">
         <input @bind-value="searchText"
                type="search"
@@ -15,43 +15,38 @@
     <button type="button" class="btn btn-primary" @onclick="SearchCategories">
         <i class="fas fa-search"></i>
     </button>
-</div>
-<td><a href="/createCategory" class="btn btn-primary ml-3"><i class="oi oi-plus"></i></a></td>
-<div class="row mt-4 ml-3">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Id
-                </th>
-                <th>
-                    Tên loại
-                </th>
-                <th>
-                    Thứ tự
-                </th>
-                <th>
-                    Url
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var items in Categories)
-            {
-                <tr>
-                    <td>@items.Id</td>
-                    <td>@items.Name</td>
-                    <td>@items.SortOrder</td>
-                    <td>@items.Url</td>
-                    <td>
-                        <a href="/updateCategory/@items.Id" class="btn btn-warning"><i class="oi oi-cloud-upload"></i></a>
-                        <button @onclick="()=> OnDeleteTask(items.Id)" class="btn btn-danger"><i class="oi oi-trash"></i></button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+</div>*@
+@*<td><a @onclick= class="btn btn-primary ml-3"><i class="oi oi-plus"></i></a></td>*@
+<RadzenButton Icon="add_circle_outline" Text="Tạo loại hàng mới" class="col-lg-4" ButtonStyle="ButtonStyle.Success" Click=@OpenCreate />
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách loại hàng</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Categories" TItem="CateVM" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single">
+                <Columns>
+                    <RadzenDataGridColumn Filterable="false" TItem="CateVM" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="CateVM" Property="Name" Title="Tên loại" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Sortable="true" Filterable="false" TItem="CateVM" Property="SortOrder" Title="Thứ tự" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="CateVM" Property="Url" Title="Url" CssClass="MyInputClass" />
+
+                 
+                    <RadzenDataGridColumn TItem="CateVM" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                        <Template>
+                            <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(product.Id.ToString())">
+                            </RadzenButton>
+                            <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask(product.Id)">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
+    </div>
 </div>
 
 <Confirmation ConfirmationMessage="Bạn chắc chắn xóa loại hàng này?"
@@ -60,16 +55,25 @@
               ConfirmationChanged="OnConfirmDeleteTask">
 
 </Confirmation>
-
+@inject DialogService DialogService
 @code {
     private string searchText = string.Empty;
-    private List<CateVM> Categories { get; set; } = new List<CateVM>();
+    private IEnumerable<CateVM> Categories { get; set; } = new List<CateVM>();
     private int CategoryId { get; set; }
     private Confirmation DeleteConfirmation { get; set; }
-
+    public event Action<dynamic> Close;
     protected override async Task OnInitializedAsync()
     {
+        Close += async (r) => { await GetCategories();  StateHasChanged(); };
+        DialogService.OnClose += Close;
         await GetCategories();
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        DialogService.OnClose -= Close;
     }
 
 
@@ -87,28 +91,50 @@
             await GetCategories();
             StateHasChanged();
         }
-
     }
+
 
     private async Task GetCategories()
     {
         var pagingResponse = await CategoryService.GetAllCategories();
         if (searchText != null)
         {
-            Categories = pagingResponse;
+            Categories = pagingResponse.AsQueryable();
         }
     }
 
-    public async Task SearchCategories()
+    //public async Task SearchCategories()
+    //{
+    //    var pagingResponse = await CategoryService.GetAllCategories();
+    //    if (!String.IsNullOrEmpty(searchText))
+    //    {
+    //        Categories = await CategoryService.SearchCategory(searchText);
+    //    }
+    //    else
+    //    {
+    //        Categories = pagingResponse;
+    //    }
+    //}
+
+    public async Task OpenEdit(string id)
     {
-        var pagingResponse = await CategoryService.GetAllCategories();
-        if (!String.IsNullOrEmpty(searchText))
-        {
-            Categories = await CategoryService.SearchCategory(searchText);
-        }
-        else
-        {
-            Categories = pagingResponse;
-        }
+        await DialogService.OpenAsync<EditCategory>($"Chỉnh sửa loại hàng",
+               new Dictionary<string, object>() { { "Id", id } },
+               new DialogOptions() { Width = "400px", Height = "512px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
     }
-}
+
+    public async Task OpenCreate()
+    {
+        await DialogService.OpenAsync<CreateCategory>($"Tạo mới loại hàng"
+               , options:
+               new DialogOptions() { Width = "400px", Height = "512px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+}@*   public async Task OpenCreate()
+    {
+        await DialogService.OpenAsync<CreateCategory>($"Order",
+               new Dictionary<string, object>() { { "OrderID" , null} },
+               new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+    }
+}*@

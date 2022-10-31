@@ -6,6 +6,7 @@ using PoPoy.Client.Extensions;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Enum;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace PoPoy.Client.Services.BroadCastService
 
         public async Task<ServiceResponse<List<NotificationDto>>> GetNotificationsByUserJwt()
         {
-          
+
             var cl = await _authenticationStateProvider.GetAuthenticationStateAsync();
             var id = cl.User.GetUserId();
             var result = await httpClient.GetFromJsonAsync<ServiceResponse<List<NotificationDto>>>($"/api/BroadCast/GetAllNotiByUserId?id={id}");
@@ -58,7 +59,7 @@ namespace PoPoy.Client.Services.BroadCastService
             var resp = await httpClient.PostAsync($"/api/BroadCast/SendNotiUserId", data.ToJsonBody());
         }
 
-        public async Task SendNotiUserId(NotiSendConfig config , Guid UserId)
+        public async Task SendNotiUserId(NotiSendConfig config, Guid UserId)
         {
             var data = SetConfig(config);
             if (UserId != Guid.Empty)
@@ -84,8 +85,8 @@ namespace PoPoy.Client.Services.BroadCastService
 
         public async Task ReadNoti(Guid notiId)
         {
-            
-            var resp = await httpClient.PostAsync($"/api/BroadCast/ReadNoti?notiId={notiId}",null);
+
+            var resp = await httpClient.PostAsync($"/api/BroadCast/ReadNoti?notiId={notiId}", null);
         }
 
         public async Task ReadAllNoti()
@@ -95,13 +96,14 @@ namespace PoPoy.Client.Services.BroadCastService
             var resp = await httpClient.PostAsync($"/api/BroadCast/ReadAllNoti?userId={id}", null);
         }
 
-        public async Task<HubConnection> BuidHubWithToken()
+        public async Task<HubConnection> BuidHubWithToken(string broadCastType = BroadCastType.Notify)
         {
+            var hubstring = broadCastType == BroadCastType.Notify ? "/notificationHub" : "/chathub";
             var token = await localStorageService.GetItemAsStringAsync("authToken");
             token = token.Remove(0, 1);
             token = token.Remove(token.Length - 1, 1);
             var hostApi = configuration["BackendApiUrl"];
-            return  new HubConnectionBuilder().WithUrl(hostApi + "/notificationHub", options =>
+            return new HubConnectionBuilder().WithUrl(hostApi + hubstring, options =>
             {
                 options.AccessTokenProvider = () => Task.FromResult(token);
             }).WithAutomaticReconnect().Build();

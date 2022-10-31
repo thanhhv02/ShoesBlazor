@@ -232,7 +232,7 @@ else
                             //send thông báo cho người đặt hàng
 
                             NotiSendConfig config2 = new NotiSendConfig(title: "Đặt hàng thành công",
-                            message: $"Sản phẩm ... đặt thành công", dataUrl: $"user/list-order");
+                            message: $"Đơn hàng {orderId} được đặt thành công", dataUrl: $"user/list-order");
                             await broadCastService.SendNotiCurrentUser(config2);
                         }
                     }

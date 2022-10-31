@@ -1,0 +1,45 @@
+﻿.rz-dialog-title {
+    color: darkblue;
+    font-size: 30px;
+}
+.rz-dialog-titlebar{
+    border-bottom: 1px solid gray;
+}
+
+.form-select {
+    border: 1px solid darkblue !important;
+}
+.rz-grid-table {
+    --bs-table-color: var(--bs-body-color);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--bs-border-color);
+    --bs-table-accent-bg: transparent;
+    --bs-table-striped-color: var(--bs-body-color);
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
+    --bs-table-active-color: var(--bs-body-color);
+    --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+    --bs-table-hover-color: var(--bs-body-color);
+    --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+    width: 100%;
+    margin-bottom: 1rem;
+    color: var(--bs-table-color);
+    vertical-align: top;
+    border-color: var(--bs-table-border-color);
+}
+.card-title{
+    font-size: 25px ;
+}
+.blazored-toast-container {
+    z-index:9999 !important;
+}
+
+.rz-column-title-content, .rz-column-title {
+    font-weight: 500;
+    font-size: 19px;
+}
+.header a, .header a:hover, .header a:focus {
+    color: black;
+}
+.nav-item .active {
+    color: #4154f1 !important;
+}
