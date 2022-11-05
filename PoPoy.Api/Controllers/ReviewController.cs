@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using PoPoy.Shared.Dto;
 using System.Collections.Generic;
 using System.Linq;
+using PoPoy.Shared.Paging;
+using Newtonsoft.Json;
 
 namespace PoPoy.Api.Controllers
 {
@@ -39,8 +41,12 @@ namespace PoPoy.Api.Controllers
         [HttpGet("filter/{productId}")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async ValueTask<ActionResult<List<Review>>> FilterByProductIdAsync(int productId)
-            => Ok(await reviewService.FilterByProductIdAsync(productId));
+        public async ValueTask<ActionResult<List<Review>>> FilterByProductIdAsync(int productId, [FromQuery] ProductParameters productParameters)
+        {
+            var reviews = await reviewService.FilterByProductIdAsync(productId ,productParameters);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(reviews.MetaData));
+            return Ok(reviews);
+        }
 
         [Authorize]
         [HttpPost]

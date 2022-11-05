@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PoPoy.Api.Data;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
 
 namespace PoPoy.Api.Services.ReviewService
 {
@@ -25,14 +26,16 @@ namespace PoPoy.Api.Services.ReviewService
             }
         }
 
-        public async ValueTask<List<Review>> FilterByProductIdAsync(int productId)
+        public async ValueTask<PagedList<Review>> FilterByProductIdAsync(int productId, ProductParameters productParameters)
         {
             using (context)
             {
-                return await context.Reviews
+                var list_review = await context.Reviews
                     .Where(x => x.ProductId == productId)
                     .OrderByDescending(x => x.CreateDate)
                     .ToListAsync();
+                return PagedList<Review>
+                            .ToPagedList(list_review, productParameters.PageNumber, productParameters.PageSize);
             }
         }
 

@@ -24,15 +24,16 @@
                 {
                     @if (product.ProductImages.Any())
                     {
+                        
                         <div class="product-img" id="product-img">
-                            <img src="@product.ProductImages.FirstOrDefault().ImagePath" alt="">
+                            <img src="@imagePath" alt="">
                         </div>
                         <div class="box">
                             <div class="product-img-list">
                                 @foreach (var item in product.ProductImages)
                                 {
                                     <div class="product-img-item">
-                                        <img src="@item.ImagePath" alt="">
+                                        <img src="@item.ImagePath" @onclick="()=>ClickToImage(item.ImagePath)" alt="">
                                     </div>
                                 }
                             </div>
@@ -131,6 +132,7 @@
     private decimal reviewAverage;
     private int reviewCount;
     private bool IsViewAll { get; set; } = false;
+    private string imagePath { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -139,9 +141,11 @@
         if (result.Success)
         {
             product = result.Data;
+            if(product.ProductImages.Any())
+                imagePath = product.ProductImages.FirstOrDefault().ImagePath;
         }
         cart = new Cart() { Quantity = 1, Product = product };
-        //await GetProducts();
+        await GetProducts();
     }
 
     private async Task SelectedPage(int page)
@@ -184,7 +188,7 @@
         {
             await _cartSvc.AddAsync(cart.ToCartStorage());
             _toastSvc.ShowSuccess($"Thêm thành công {cart.Product.Title} x{cart.Quantity}");
-      
+
         }
     }
     private void OnReviewAverageCalculated(ReviewAverageCalculatedEventArgs args)
@@ -196,6 +200,10 @@
     private void ButtonViewAllClick()
     {
         IsViewAll = !IsViewAll;
+        StateHasChanged();
+    }
+    private void ClickToImage(string imgPath){
+        this.imagePath = imgPath;
         StateHasChanged();
     }
 }

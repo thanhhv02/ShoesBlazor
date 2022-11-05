@@ -11,15 +11,30 @@
         }
     </ul>
 </nav>*@
+<style>
+    .disabled {
+        pointer-events: none;
+        opacity:0.6;
+    }
+</style>
 <div class="box">
     <ul class="pagination justify-content-center">
         @foreach (var link in _links)
         {
-            <li @onclick="@(()=> OnSelectedPage(link))"
-                style="cursor:pointer" class="page-item
-                @(link.Active?"active":null)
-                @(link.Enabled?null:"disabled") ">
-                <span class="page-link" href="#">@link.Text</span>
+            <li @onclick="@(()=> OnSelectedPage(link))" class="@(link.Enabled?null:"disabled")">
+                @if (link.Text.ToLower().Contains("previous"))
+                {
+                    <a href="javascrip:void(0)"><i class="bx bxs-chevron-left"></i></a>
+                }
+                else if (link.Text.ToLower().Contains("next"))
+                {
+                    <a href="javascrip:void(0)"><i class="bx bxs-chevron-right"></i></a>
+                }
+                else
+                {
+                    <a class="@(link.Active?"active":null)" href="javascrip:void(0)">@link.Text</a>
+                }
+
             </li>
         }
     </ul>

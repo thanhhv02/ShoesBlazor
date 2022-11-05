@@ -88,14 +88,7 @@ namespace PoPoy.Client.Services.ProductService
                 throw new ApplicationException(content);
             }
             Products.Items = JsonConvert.DeserializeObject<List<Product>>(content);
-            //for (int i = 0; i < Products.Items.Count; i++)
-            //{
-            //    var reviews = await publicReviewService.FilterByProductIdAsync(Products.Items[i].Id);
-            //    if (reviews != null || reviews.Count > 0)
-            //    {
-            //        Products.Items[i].ReviewAverage = reviews.Count == 0 ? 0 : (decimal)reviews.Average(x => x.Rating);
-            //    }
-            //}
+
             Products.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
             ProductsChanged.Invoke();
         }

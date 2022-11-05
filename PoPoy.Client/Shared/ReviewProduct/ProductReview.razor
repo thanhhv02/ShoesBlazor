@@ -50,7 +50,7 @@
                                 <a class="btn-flat btn-hover" href="javascript:void(0)" style="margin-right: 5px">Hữu ích</a>
                                 @if (userId == review.UserId)
                                 {
-                                    
+
                                     <a class="btn-flat btn-hover" href=@($"/products/{ProductId}/review/{review.Id}/update")>Sửa review</a>
                                     <a class="btn-flat btn-hover" href="javascript:void(0)"
                            @onclick="@(() => DeleteReview(review))">Xóa review</a>
@@ -65,17 +65,7 @@
                 </div>
             }
         }
-        <div class="box">
-            <ul class="pagination">
-                <li><a href="#"><i class="bx bxs-chevron-left"></i></a></li>
-                <li><a href="#" class="active">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#"><i class="bx bxs-chevron-right"></i></a></li>
-            </ul>
-        </div>
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
     </div>
 </div>
 <div class="container mx-auto">
@@ -93,10 +83,12 @@
 
     private Guid userId;
     private List<Review> reviews = new();
-
+    public MetaData MetaData { get; set; } = new MetaData();
+    private ProductParameters _productParameters = new ProductParameters();
     protected override async Task OnInitializedAsync()
     {
-        reviews = await PublicReviewService.FilterByProductIdAsync(ProductId);
+        await GetReview();
+        //reviews = await PublicReviewService.FilterByProductIdAsync(ProductId);
         await InvokeReviewAverageCalculatedEvent();
 
         var authState = await AuthProvider.GetAuthenticationStateAsync();
@@ -115,7 +107,8 @@
             _toastSvc.ClearAll();
             _toastSvc.ShowInfo("Đã xóa bài đánh giá.");
 
-            reviews = await PublicReviewService.FilterByProductIdAsync(ProductId);
+            //reviews = await PublicReviewService.FilterByProductIdAsync(ProductId);
+            await GetReview();
             await InvokeReviewAverageCalculatedEvent();
         }
     }
@@ -129,5 +122,16 @@
             };
 
         await OnReviewAverageCalculated.InvokeAsync(args);
+    }
+    private async Task GetReview()
+    {
+        var pagingResponse = await PublicReviewService.FilterByProductIdAsync(ProductId, _productParameters);
+        reviews = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
+    private async Task SelectedPage(int page)
+    {
+        _productParameters.PageNumber = page;
+        await GetReview();
     }
 }

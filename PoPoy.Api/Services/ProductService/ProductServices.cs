@@ -38,7 +38,7 @@ namespace PoPoy.Api.Services.ProductService
         {
             using (_dataContext)
             {
-                var list_product = await _dataContext.Products.Include(x => x.ProductImages).ToListAsync();
+                var list_product = await AllProductInTable();
                 list_product.Shuffle();
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
@@ -167,7 +167,10 @@ namespace PoPoy.Api.Services.ProductService
             }
             return false;
         }
-
+        public async Task<List<Product>> AllProductInTable()
+        {
+            return await _dataContext.Products.Include(x => x.ProductImages).ToListAsync();
+        }
         public async Task<int> DeleteProduct(int productId)
         {
             var product = await _dataContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
@@ -494,5 +497,6 @@ namespace PoPoy.Api.Services.ProductService
             return 0;
 
         }
+
     }
 }

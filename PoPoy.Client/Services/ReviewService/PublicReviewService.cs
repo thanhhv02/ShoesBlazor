@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using PoPoy.Client.Extensions;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
 
 namespace PoPoy.Client.Services
 {
     public interface IPublicReviewService
     {
         ValueTask<Review> GetAsync(int id);
-        ValueTask<List<Review>> FilterByProductIdAsync(int productId);
+        ValueTask<PagingResponse<Review>> FilterByProductIdAsync(int productId, ProductParameters productParameters);
     }
 
     public class PublicReviewService : IPublicReviewService
@@ -21,12 +25,26 @@ namespace PoPoy.Client.Services
         public PublicReviewService(HttpClient publicHttpClient)
             => this.httpClient = publicHttpClient;
 
-        public async ValueTask<List<Review>> FilterByProductIdAsync(int productId)
+        public async ValueTask<PagingResponse<Review>> FilterByProductIdAsync(int productId, ProductParameters productParameters)
         {
-            var response = await httpClient.GetAsync($"api/review/filter/{productId}");
+            var queryStringParam = new Dictionary<string, string>
+            {
+                ["pageNumber"] = productParameters.PageNumber.ToString()
+            };
+            
+            var response = await httpClient.GetAsync(QueryHelpers.AddQueryString($"api/review/filter/{productId}", queryStringParam));
             await response.HandleError();
-
-            return await response.Content.ReadFromJsonAsync<List<Review>>();
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+            var pagingResponse = new PagingResponse<Review>
+            {
+                Items = JsonConvert.DeserializeObject<List<Review>>(content),
+                MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First())
+            };
+            return pagingResponse;
         }
 
         public async ValueTask<Review> GetAsync(int id)

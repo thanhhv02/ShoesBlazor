@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using PoPoy.Client.Extensions;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.ViewModels;
@@ -73,6 +74,7 @@ namespace PoPoy.Client.Services.AuthService
         public async Task<ServiceResponse<User>> GetUserFromId(string id)
         {
             var result = await _httpClient.PostAsync($"/api/user/get-user-from-id?id={id}", null);
+            result.CheckAuthorized(this);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<User>>();
         }
 

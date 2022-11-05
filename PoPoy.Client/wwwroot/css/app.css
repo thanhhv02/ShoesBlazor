@@ -824,6 +824,10 @@ footer ul li {
     justify-content: center;
 }
 
+    .product-img:hover {
+        transform: scale(1.5);
+    }
+
 .product-img > img {
     max-width: 70%;
 }
@@ -1138,7 +1142,7 @@ footer ul li {
         width: 100%;
         background-color: var(--main-bg-color);
         z-index: 98;
-        left: 100%;
+        left: 200%;
         height: 80vh;
         overflow-y: scroll;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

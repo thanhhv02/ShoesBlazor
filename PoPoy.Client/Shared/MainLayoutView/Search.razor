@@ -7,7 +7,7 @@
            list="products"
            @onkeyup="HandleSearch"
            class="form-control"
-           placeholder="Search..."
+           placeholder="Tìm kiếm sản phẩm ít nhất 3 kí tự trở lên"
            @ref="searchInput" />
     <datalist id="products">
         @foreach (var suggestion in suggestions)
@@ -37,11 +37,11 @@
 
     public async Task HandleSearch(KeyboardEventArgs args)
     {
-        if (args.Key == null || args.Key.Equals("Enter"))
+        if ((args.Key == null || args.Key.Equals("Enter")) && searchText.Length >= 3)
         {
             SearchProducts();
         }
-        else if (searchText.Length > 1)
+        else if (searchText.Length >= 3)
         {
             suggestions = await ProductService.GetProductSearchSuggestions(searchText);
         }

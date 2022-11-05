@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Services.AuthService;
@@ -203,6 +204,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost("get-user-from-id")]
+        //[Authorize]
         public async Task<ServiceResponse<User>> GetUserFromId(string id)
         {
             if (id == null)

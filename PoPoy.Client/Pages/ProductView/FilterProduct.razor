@@ -1,0 +1,48 @@
+﻿@inject IProductService _productSvc;
+<div class="row">
+    <div class="col-md-12">
+        <div class="filter-bar">
+            <div class="pull-right" style="background:var(--filler)">
+                <div class="filter__option filter--dropdown filter--range">
+                    <a style="cursor:pointer" class="dropdown-trigger dropdown-toggle" @onclick="()=>Modal.Open()">
+                        Bộ lọc nâng cao
+                        <span class="fal fa-chevron-down"></span>
+                    </a>
+                </div>
+                <div class="filter__option filter--dropdown">
+                    <a href="#" id="drop2" class="dropdown-trigger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sắp xếp
+                        <span class="fal fa-chevron-down"></span>
+                    </a>
+                    <ul class="custom_dropdown dropdown-menu" aria-labelledby="drop2">
+                        <li class="">
+                            <a href="javascript:void(0)" >Mới nhất</a>
+                        </li>
+                        <li class="">
+                            <a href="javascript:void(0)" >Xem nhiều nhât</a>
+                        </li>
+                        <li class="">
+                            <a href="">Nhiều nhận xét</a>
+                        </li>
+                        <li class="">
+                            <a href="">Đánh giá cao nhất</a>
+                        </li>
+                        <li class="">
+                            <a href="">Yêu thích nhất</a>
+                        </li>
+                        <li class="">
+                            <a href="">Tên A-&gt;Z</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<Modal @ref="Modal"></Modal>
+@code {
+    public MetaData MetaData { get; set; } = new MetaData();
+    private ProductParameters _productParameters = new ProductParameters();
+    private PoPoy.Client.Shared.MainLayoutView.Modal Modal { get; set; }
+
+}

@@ -17,7 +17,7 @@ namespace PoPoy.Client.Shared.PopupChat
         [Inject] public IBroadCastService broadCastService { get; set; }
         private HubConnection hubConnection { get; set; }
 
-        private bool showChat = true;
+        private bool showChat = false;
         private string Message = string.Empty;
 
         protected override async Task OnInitializedAsync()

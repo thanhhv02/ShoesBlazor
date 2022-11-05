@@ -14,10 +14,6 @@
         @if (_productSvc.Products.Items == null || _productSvc.Products.Items.Count == 0)
         {
             <LoadingScreen></LoadingScreen>
-            @if (Message != null)
-            {
-                _toastSvc.ShowInfo(Message);
-            }
         }
         else
         {

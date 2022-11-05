@@ -8,14 +8,14 @@
         <!-- mobile menu -->
         <div class="mobile-menu bg-second">
             <a href="/" class="mb-logo">Popoy</a>
-            <span class="mb-menu-toggle" id="mb-menu-toggle">
+            <span class="mb-menu-toggle" id="mb-menu-toggle" @onclick="()=>Collapse()">
                 <i class='bx bx-menu'></i>
             </span>
         </div>
         <!-- end mobile menu -->
         <!-- main header -->
-        <div class="header-wrapper" id="header-wrapper">
-            <span class="mb-menu-toggle mb-menu-close" id="mb-menu-close">
+        <div class="header-wrapper @active" id="header-wrapper">
+            <span class="mb-menu-toggle mb-menu-close" id="mb-menu-close"@onclick="()=>Collapse()">
                 <i class='bx bx-x'></i>
             </span>
             <!-- top header -->
@@ -86,10 +86,9 @@
         <!-- end main header -->
     </header>
     <!-- end header -->
-    <div style="background-color: #FFFFFF;
-    color: #000000;">
+
         @Body
-    </div>
+
     <!-- footer -->
     <footer class="bg-second">
         <div class="container">
@@ -142,3 +141,10 @@
                 SuccessIcon="fa fa-thumbs-up"
                 ErrorIcon="fa fa-bug"
                 WarningIcon="far fa-bell" />
+@code{
+    public bool collapse { get; set; } = false;
+    public string active => collapse ? "active" : null;
+    public void Collapse(){
+        collapse = !collapse;
+    }
+}

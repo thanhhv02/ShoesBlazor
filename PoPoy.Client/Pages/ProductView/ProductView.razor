@@ -1,6 +1,7 @@
 ﻿@page "/products"
 @page "/category/{categoryUrl}"
 @page "/search/{searchText}"
+@page "/filter"
 @inject IProductService _productSvc;
 @inject IConfiguration _config;
 <PageInfos Title="Sản phẩm"></PageInfos>
@@ -13,17 +14,63 @@
                 <a href="./products.html">all products</a>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="filter-bar">
+                    <div class="pull-right" style="background:var(--filler)">
+                        <div class="filter__option filter--dropdown filter--range">
+                            <a style="cursor:pointer" href="javascript:void(0)" class="dropdown-trigger dropdown-toggle" @onclick="()=>Modal.Open()">
+                                Bộ lọc nâng cao
+                                <span class="fal fa-chevron-down"></span>
+                            </a>
+                        </div>
+                        <div class="filter__option filter--dropdown">
+                            <a href="#" id="drop2" class="dropdown-trigger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sắp xếp
+                                <span class="fal fa-chevron-down"></span>
+                            </a>
+                            <ul class="custom_dropdown dropdown-menu" aria-labelledby="drop2">
+                                <li class="">
+                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=newest">Mới nhất</a>
+                                </li>
+                                <li class="">
+                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=views">Xem nhiều nhât</a>
+                                </li>
+                                <li class="">
+                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=comment">Nhiều nhận xét</a>
+                                </li>
+                                <li class="">
+                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=rating">Đánh giá cao nhất</a>
+                                </li>
+                                <li class="">
+                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=like">Yêu thích nhất</a>
+                                </li>
+                                <li class="">
+                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=name">Tên A-&gt;Z</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <Modal></Modal>
+
         <div class="box">
             <div class="row">
-                <div class="col-2" id="filter-col">
+                @{
+                    var isActive = IsFilter ? "active" : "";
+                }
+                <div class="col-3 filter-col @isActive" id="filter-col">
                     <div class="box filter-toggle-box">
-                        <button class="btn-flat btn-hover" id="filter-close">close</button>
+                        <button class="btn-flat btn-hover" @onclick="()=>ButtonFilterClick(false)" id="filter-close">Đóng</button>
                     </div>
                     <CategoryFilter></CategoryFilter>
                 </div>
-                <div class="col-10">
+                <div class="col-9">
                     <div class="box filter-toggle-box">
-                        <button class="btn-flat btn-hover" id="filter-toggle">filter</button>
+                        <button class="btn-flat btn-hover" @onclick="()=>ButtonFilterClick(true)" id="filter-toggle">Lọc</button>
                     </div>
                     <ProductList></ProductList>
                     <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
@@ -37,6 +84,9 @@
     public string? CategoryUrl { get; set; } = null;
     [Parameter]
     public string? SearchText { get; set; } = null;
+
+    private PoPoy.Client.Shared.MainLayoutView.Modal Modal { get; set; }
+    private bool IsFilter = false;
 
     public List<Product> ProductList { get; set; } = new List<Product>();
     public MetaData MetaData { get; set; } = new MetaData();
@@ -75,5 +125,10 @@
         await _productSvc.SearchProducts(_productParameters, SearchText);
         ProductList = _productSvc.Products.Items;
         MetaData = _productSvc.Products.MetaData;
+    }
+
+    private void ButtonFilterClick(bool isfilter){
+        IsFilter = isfilter;
+        StateHasChanged();
     }
 }
