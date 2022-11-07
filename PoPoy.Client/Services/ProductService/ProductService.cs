@@ -27,7 +27,6 @@ namespace PoPoy.Client.Services.ProductService
         Task<ServiceResponse<Product>> Get(int id);
         Task<List<ProductSize>> GetSizeProduct(int id);
         ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes);
-        Task SearchProducts(ProductParameters productParameters, string searchText);
         Task<List<string>> GetProductSearchSuggestions(string searchText);
     }
     public class ProductService : IProductService
@@ -77,7 +76,9 @@ namespace PoPoy.Client.Services.ProductService
         {
             var queryStringParam = new Dictionary<string, string>
             {
-                ["pageNumber"] = productParameters.PageNumber.ToString()
+                ["pageNumber"] = productParameters.PageNumber.ToString(),
+                ["searchText"] = productParameters.searchText == null ? "" : productParameters.searchText,
+                ["orderBy"] = productParameters.OrderBy
             };
             var response = categoryUrl == null ?
                         await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product", queryStringParam)) :
@@ -121,30 +122,6 @@ namespace PoPoy.Client.Services.ProductService
         {
             var getSizeProduct = await _httpClient.GetFromJsonAsync<List<ProductSize>>($"/api/product/get-size-product/" + id);
             return getSizeProduct;
-        }
-
-        public async Task SearchProducts(ProductParameters productParameters, string searchText)
-        {
-            var queryStringParam = new Dictionary<string, string>
-            {
-                ["pageNumber"] = productParameters.PageNumber.ToString()
-            };
-            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString($"api/product/search/{searchText}", queryStringParam));
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApplicationException(content);
-            }
-
-            if (content != null)
-            {
-                Products.Items = JsonConvert.DeserializeObject<List<Product>>(content);
-                Products.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
-            }
-            if (Products.Items.Count == 0) Message = "No products found.";
-            ProductsChanged?.Invoke();
         }
     }
 }

@@ -1,0 +1,55 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="filter-bar">
+            <div class="pull-right" style="background:var(--filler)">
+                <div class="filter__option filter--dropdown filter--range">
+                    <a style="cursor:pointer" href="javascript:void(0)" class="dropdown-trigger dropdown-toggle" @onclick="()=>Modal.Open()">
+                        Bộ lọc nâng cao
+                        <span class="fal fa-chevron-down"></span>
+                    </a>
+                </div>
+           
+                    <div class="filter__option filter--dropdown">
+                        <a href="#" id="drop2" class="dropdown-trigger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sắp xếp
+                            <span class="fal fa-chevron-down"></span>
+                        </a>
+                        <ul class="custom_dropdown dropdown-menu" aria-labelledby="drop2">
+                            @foreach (var item in SortOptions)
+                            {
+                                <li class="">
+                                    <a href="javascript:void(0)" @onclick="()=>ApplySort(item.Key)">@item.Value</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<Modal @ref="Modal"></Modal>
+@code {
+    Dictionary<string, string> SortOptions = new Dictionary<string, string>() {
+            ["Price desc"] = "Giá Thấp - Cao",
+            ["Price"] = "Giá Cao - Thấp",
+            ["DateCreated desc"] = "Mới nhất",
+            ["Views desc"] = "Xem nhiều nhất",
+            ["ReviewAverage desc"] = "Đánh giá cao nhất",
+            ["Title"] = "Tên A-Z",
+            ["Title desc"] = "Tên Z-A",
+        };
+    //List<string> SortOptions = new List<string> { "Mới nhất", "Xem nhiều nhất", "Nhiều nhận xét", "Đánh giá cao nhất", "A-Z", "Z-A" };
+    private PoPoy.Client.Shared.MainLayoutView.Modal Modal { get; set; }
+    [Parameter]
+    public EventCallback<string> OnSortChanged { get; set; }
+
+    protected override void OnInitialized(){
+        //SortOptions["DateCreated desc"] = "Mới nhất";
+    }
+    private async void ApplySort(string sortValue)
+    {
+        //if (sortValue.ToString() == "-1")
+        //    return;
+        await OnSortChanged.InvokeAsync(sortValue.ToString());
+    }
+}

@@ -17,6 +17,8 @@ using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Api.Services.ProductService;
 using PoPoy.Api.Services.ReviewService;
+using PoPoy.Api.Services.SortService;
+using PoPoy.Shared.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,6 +128,7 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<IBroadCastService, BroadCastService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IChatService, ChatService>();
+            services.AddTransient<ISortHelper<Product>, SortHelper<Product>>();
 
             services.AddTransient<IReviewService, ReviewService>();
             return services;

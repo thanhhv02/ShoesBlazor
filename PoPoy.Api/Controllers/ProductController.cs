@@ -161,10 +161,10 @@ namespace PoPoy.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("search/{searchText}")]
-        public async Task<ActionResult<List<Product>>> SearchProducts([FromQuery] ProductParameters productParameters, string searchText)
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Product>>> SearchProducts([FromQuery] ProductParameters productParameters)
         {
-            var result = await _productServices.SearchProducts(productParameters, searchText);
+            var result = await _productServices.SearchProducts(productParameters);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
             return Ok(result);
         }

@@ -14,48 +14,7 @@
                 <a href="./products.html">all products</a>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="filter-bar">
-                    <div class="pull-right" style="background:var(--filler)">
-                        <div class="filter__option filter--dropdown filter--range">
-                            <a style="cursor:pointer" href="javascript:void(0)" class="dropdown-trigger dropdown-toggle" @onclick="()=>Modal.Open()">
-                                Bộ lọc nâng cao
-                                <span class="fal fa-chevron-down"></span>
-                            </a>
-                        </div>
-                        <div class="filter__option filter--dropdown">
-                            <a href="#" id="drop2" class="dropdown-trigger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Sắp xếp
-                                <span class="fal fa-chevron-down"></span>
-                            </a>
-                            <ul class="custom_dropdown dropdown-menu" aria-labelledby="drop2">
-                                <li class="">
-                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=newest">Mới nhất</a>
-                                </li>
-                                <li class="">
-                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=views">Xem nhiều nhât</a>
-                                </li>
-                                <li class="">
-                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=comment">Nhiều nhận xét</a>
-                                </li>
-                                <li class="">
-                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=rating">Đánh giá cao nhất</a>
-                                </li>
-                                <li class="">
-                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=like">Yêu thích nhất</a>
-                                </li>
-                                <li class="">
-                                    <a href="https://linkneverdie.net/all-games/?page=1&amp;sort=name">Tên A-&gt;Z</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <Modal></Modal>
+        <Sort OnSortChanged="SortChanged"></Sort>
 
         <div class="box">
             <div class="row">
@@ -91,28 +50,26 @@
     public List<Product> ProductList { get; set; } = new List<Product>();
     public MetaData MetaData { get; set; } = new MetaData();
     private ProductParameters _productParameters = new ProductParameters();
+
+    private string newest = "newest";
     protected override async Task OnParametersSetAsync()
     {
         if (SearchText != null)
         {
-            await GetProductsSearch();
+            _productParameters.PageNumber = 1;
+            _productParameters.searchText = SearchText;
         }
         else
         {
-            await GetProducts();
+            _productParameters = new ProductParameters();
+
         }
+        await GetProducts();
     }
     private async Task SelectedPage(int page)
     {
         _productParameters.PageNumber = page;
-        if (SearchText != null)
-        {
-            await GetProductsSearch();
-        }
-        else
-        {
-            await GetProducts();
-        }
+        await GetProducts();
     }
     private async Task GetProducts()
     {
@@ -120,15 +77,16 @@
         ProductList = _productSvc.Products.Items;
         MetaData = _productSvc.Products.MetaData;
     }
-    private async Task GetProductsSearch()
-    {
-        await _productSvc.SearchProducts(_productParameters, SearchText);
-        ProductList = _productSvc.Products.Items;
-        MetaData = _productSvc.Products.MetaData;
-    }
 
-    private void ButtonFilterClick(bool isfilter){
+    private void ButtonFilterClick(bool isfilter)
+    {
         IsFilter = isfilter;
         StateHasChanged();
+    }
+    private async Task SortChanged(string orderBy)
+    {
+        Console.WriteLine(orderBy);
+        _productParameters.OrderBy = orderBy;
+        await GetProducts();
     }
 }

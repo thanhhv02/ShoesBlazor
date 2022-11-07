@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Polly;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
+using PoPoy.Api.Services.SortService;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
@@ -24,22 +25,30 @@ namespace PoPoy.Api.Services.ProductService
         private readonly DataContext _dataContext;
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _configuration;
+        private readonly ISortHelper<Product> _sortHelper;
 
         public ProductServices(DataContext dataContext,
                                 IWebHostEnvironment env,
-                                IConfiguration configuration)
+                                IConfiguration configuration,
+                                ISortHelper<Product> sortHelper)
         {
             _dataContext = dataContext;
             _env = env;
             this._configuration = configuration;
+            this._sortHelper = sortHelper;
         }
 
         public async Task<PagedList<Product>> GetAll(ProductParameters productParameters)
         {
             using (_dataContext)
             {
-                var list_product = await AllProductInTable();
-                list_product.Shuffle();
+                var list_product = await _dataContext.Products
+                    .Search(productParameters.searchText)
+                    .Sort(productParameters.OrderBy)
+                    .Include(x => x.ProductImages)
+                    .ToListAsync();
+
+                //list_product.Shuffle();
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
             }
@@ -167,10 +176,7 @@ namespace PoPoy.Api.Services.ProductService
             }
             return false;
         }
-        public async Task<List<Product>> AllProductInTable()
-        {
-            return await _dataContext.Products.Include(x => x.ProductImages).ToListAsync();
-        }
+
         public async Task<int> DeleteProduct(int productId)
         {
             var product = await _dataContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
@@ -332,7 +338,7 @@ namespace PoPoy.Api.Services.ProductService
                                       join c in _dataContext.Categories on pic.CategoryId equals c.Id into picc
                                       from c in picc.DefaultIfEmpty()
                                       where c.Url == categoryUrl
-                                      select p).Include(x => x.ProductImages).ToListAsync();
+                                      select p).Sort(productParameters.OrderBy).Include(x => x.ProductImages).ToListAsync();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
         }
@@ -401,15 +407,16 @@ namespace PoPoy.Api.Services.ProductService
                 throw ex;
             }
         }
-        public async Task<PagedList<Product>> SearchProducts(ProductParameters productParameters, string searchText)
+        public async Task<PagedList<Product>> SearchProducts(ProductParameters productParameters)
         {
             using (_dataContext)
             {
                 var list_product = await _dataContext.Products
-                                .Where(p => p.Title.ToLower().Contains(searchText.ToLower()) ||
-                                    p.Description.ToLower().Contains(searchText.ToLower()))
+                                .Where(p => p.Title.ToLower().Contains(productParameters.searchText.ToLower()) ||
+                                    p.Description.ToLower().Contains(productParameters.searchText.ToLower()))
                                 .Include(p => p.ProductImages)
                                 .ToListAsync();
+
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
             }
@@ -497,6 +504,5 @@ namespace PoPoy.Api.Services.ProductService
             return 0;
 
         }
-
     }
 }
