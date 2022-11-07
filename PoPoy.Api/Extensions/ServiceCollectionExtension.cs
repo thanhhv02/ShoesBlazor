@@ -91,7 +91,8 @@ namespace PoPoy.Api.Extensions
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = configuration["JwtIssuer"],
                         ValidAudience = configuration["JwtAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"])),
+                        ClockSkew = TimeSpan.Zero
                     };
 
                     options.Events = new JwtBearerEvents

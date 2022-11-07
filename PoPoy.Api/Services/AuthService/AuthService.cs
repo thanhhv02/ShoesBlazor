@@ -185,7 +185,7 @@ namespace PoPoy.Api.Services.AuthService
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
-            var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+            var expiry = DateTime.Now.AddHours(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
