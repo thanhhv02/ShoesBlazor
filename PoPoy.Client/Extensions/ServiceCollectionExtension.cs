@@ -9,6 +9,7 @@ using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Client.Services.CartService;
 using PoPoy.Client.Services.CategoryService;
+using PoPoy.Client.Services.HttpRepository;
 using PoPoy.Client.Services.OrderService;
 using PoPoy.Client.Services.ProductService;
 using PoPoy.Client.Services.UserAvatarService;
@@ -38,7 +39,8 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<IBroadCastService, BroadCastService>();
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IPublicReviewService, PublicReviewService>();
-
+            services.AddScoped<RefreshTokenService>();
+            services.AddScoped<HttpInterceptorService>();
             return services;
         }
 

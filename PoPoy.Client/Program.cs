@@ -8,6 +8,7 @@ using Syncfusion.Blazor;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace PoPoy.Client
 {
@@ -26,7 +27,8 @@ namespace PoPoy.Client
             builder.Services.AddScoped(sp => new HttpClient
             {
                 BaseAddress = new Uri(builder.Configuration["BackendApiUrl"])
-            });
+            }.EnableIntercept(sp));
+            builder.Services.AddHttpClientInterceptor();
             builder.Services.PostConfigure<LoggerFilterOptions>(opt =>
     opt.Rules.Add(
         new LoggerFilterRule(null, "Microsoft.AspNetCore.Authorization.*", LogLevel.None, null)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,11 +30,11 @@ namespace PoPoy.Admin.Services.AuthService
             _localStorage = localStorage;
             _navigationManager = navigationManager;
         }
-        public async Task<ServiceResponse<string>> Login(LoginRequest loginRequest)
+        public async Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest loginRequest)
         {
             var result = await _httpClient.PostAsJsonAsync("/api/user/login", loginRequest);
             var content = await result.Content.ReadAsStringAsync();
-            var loginResponse = JsonSerializer.Deserialize<ServiceResponse<string>>(content,
+            var loginResponse = JsonSerializer.Deserialize<ServiceResponse<AuthResponseDto>>(content,
                 new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = true
@@ -42,9 +43,9 @@ namespace PoPoy.Admin.Services.AuthService
             {
                 return loginResponse;
             }
-            await _localStorage.SetItemAsync("authToken", loginResponse.Data);
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResponse.Data);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Data);
+            await _localStorage.SetItemAsync("authToken", loginResponse.Data.Token);
+            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResponse.Data.Token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Data.Token);
             return loginResponse;
         }
 

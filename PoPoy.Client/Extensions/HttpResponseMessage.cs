@@ -20,15 +20,13 @@ namespace PoPoy.Client.Extensions
             ex.Data.Add((int)response.StatusCode, message);
             throw ex;
         }
-        public static bool CheckAuthorized(this HttpResponseMessage response, IAuthService authService)
+        public async static Task CheckAuthorized(this HttpResponseMessage response, IAuthService authService)
         {
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                authService.Logout();
-                return false;
+                if(string.IsNullOrEmpty(await authService.RefreshToken()))
+                await authService.Logout();
             }
-
-            return true;
         }
     }
 }

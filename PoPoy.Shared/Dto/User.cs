@@ -21,5 +21,7 @@ namespace PoPoy.Shared.Dto
         public List<Order> Orders { get; set; }
         public List<Cart> Carts { get; set; }
         public string AvatarPath { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

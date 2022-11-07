@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PoPoy.Api.Data;
+using PoPoy.Api.Helpers.TokenHelpers;
 using PoPoy.Api.SendMailService;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Api.Services.BroadCastService;
@@ -130,7 +131,7 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IChatService, ChatService>();
             services.AddTransient<ISortHelper<Product>, SortHelper<Product>>();
-
+            services.AddScoped<ITokenService, TokenService>();
             services.AddTransient<IReviewService, ReviewService>();
             return services;
         }

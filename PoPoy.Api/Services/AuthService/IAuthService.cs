@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace PoPoy.Api.Services.AuthService
     public interface IAuthService
     {
         Task<ServiceResponse<bool>> Register(RegisterRequest request);
-        Task<ServiceResponse<string>> Login(LoginRequest login);
+        Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest login);
         Task<ServiceResponse<string>> ForgetPassword(string email);
         Task<ServiceResponse<string>> ConfirmEmail(string userId, string token);
         Task<ServiceResponse<string>> ResetPassword(ResetPasswordRequest model);
@@ -34,6 +35,5 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId);
         Task<ServiceResponse<Address>> GetAddress(Guid userId);
         Task<ServiceResponse<List<UploadResult>>> UploadUserImage(List<IFormFile> files, string userId);
-        string UserId();
     }
 }

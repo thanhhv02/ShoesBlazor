@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PoPoy.Api.Data;
+using PoPoy.Api.Helpers.TokenHelpers;
 using PoPoy.Api.SendMailService;
 using PoPoy.Api.VNPay;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.ApiModels;
+using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.Enum;
 using PoPoy.Shared.PayPal;
 using PoPoy.Shared.ViewModels;
@@ -34,6 +36,8 @@ namespace PoPoy.Api.Services.AuthService
         private readonly RoleManager<Role> _roleManager;
         private readonly DataContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly ITokenService _tokenService;
+
         public AuthService(IConfiguration configuration,
                                UserManager<User> userManager,
                                SignInManager<User> signInManager,
@@ -41,7 +45,8 @@ namespace PoPoy.Api.Services.AuthService
                                RoleManager<Role> roleManager,
                                DataContext context,
                                IHttpContextAccessor httpContext,
-                               IWebHostEnvironment env)
+                               IWebHostEnvironment env,
+                               ITokenService tokenService)
         {
             this._emailService = emailService;
             _configuration = configuration;
@@ -49,11 +54,11 @@ namespace PoPoy.Api.Services.AuthService
             _userManager = userManager;
             _roleManager = roleManager;
             _env = env;
+            this._tokenService = tokenService;
             _httpContext = httpContext;
             _context = context;
         }
         public HttpContext Context => _httpContext.HttpContext;
-        public string UserId() => _httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
         public async Task<Guid> GetUserId(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
@@ -164,39 +169,35 @@ namespace PoPoy.Api.Services.AuthService
             return data;
         }
 
-        public async Task<ServiceResponse<string>> Login(LoginRequest login)
+        public async Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest login)
         {
 
             var user = await _userManager.FindByNameAsync(login.UserName);
-            if (user == null) return new ServiceErrorResponse<string>("Tài khoản không tồn tại");
+            if (user == null) return new ServiceErrorResponse<AuthResponseDto>("Tài khoản không tồn tại");
 
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
 
-            if (!result.Succeeded) return new ServiceErrorResponse<string>("Tài khoản hoặc mật khẩu không đúng");
-            if (result.IsNotAllowed) return new ServiceErrorResponse<string>("Tài khoản không được cấp quyền vào trang này");
+            if (!result.Succeeded) return new ServiceErrorResponse<AuthResponseDto>("Tài khoản hoặc mật khẩu không đúng");
+            if (result.IsNotAllowed) return new ServiceErrorResponse<AuthResponseDto>("Tài khoản không được cấp quyền vào trang này");
             var roles = await _userManager.GetRolesAsync(user);
-            var claims = new[]
+
+
+            var signingCredentials = _tokenService.GetSigningCredentials();
+            var claims = await _tokenService.GetClaims(user);
+            var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            await _userManager.UpdateAsync(user);
+            var response = new AuthResponseDto()
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, login.UserName),
-                new Claim(ClaimTypes.GivenName,user.LastName+" "+ user.FirstName),
-                new Claim(ClaimTypes.Email,user.Email ),
-                new Claim(ClaimTypes.Role,string.Join(";",roles)),
+                Token = token,
+                RefreshToken = refreshToken
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
-            var expiry = DateTime.Now.AddHours(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtAudience"],
-                claims,
-                expires: expiry,
-                signingCredentials: creds
-            );
-
-            return new ServiceSuccessResponse<string>(new JwtSecurityTokenHandler().WriteToken(token));
+            return new ServiceSuccessResponse<AuthResponseDto>() { Success = true, Data = response };
         }
 
         public async Task<ServiceResponse<bool>> Register(RegisterRequest request)

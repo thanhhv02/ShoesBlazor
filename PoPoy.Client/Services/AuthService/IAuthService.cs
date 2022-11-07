@@ -1,4 +1,5 @@
 ﻿using PoPoy.Shared.Dto;
+using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace PoPoy.Client.Services.AuthService
 {
     public interface IAuthService
     {
-        Task<ServiceResponse<string>> Login(LoginRequest loginRequest);
+        Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest loginRequest);
         Task<ServiceResponse<string>> ForgotPassword(string email);
         Task<ServiceResponse<bool>> Register(RegisterRequest registerRequest);
         Task<ServiceResponse<User>> GetUserFromId(string id);
@@ -24,5 +25,6 @@ namespace PoPoy.Client.Services.AuthService
         Task<string> MakePayPalPayment(double total);
         Task<string> MakeVNPayPayment(double total);
         Task Logout();
+        Task<string> RefreshToken();
     }
 }

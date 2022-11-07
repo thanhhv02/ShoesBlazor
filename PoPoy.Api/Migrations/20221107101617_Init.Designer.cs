@@ -10,8 +10,8 @@ using PoPoy.Api.Data;
 namespace PoPoy.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221028122102_init")]
-    partial class init
+    [Migration("20221107101617_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -443,7 +443,7 @@ namespace PoPoy.Api.Migrations
                             Id = 1,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 946, DateTimeKind.Local).AddTicks(6505),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 720, DateTimeKind.Local).AddTicks(9071),
                             Description = "ADIDAS ALPHABOOST “CORE BLACK”",
                             OriginalPrice = 2150000m,
                             Price = 2150000m,
@@ -456,7 +456,7 @@ namespace PoPoy.Api.Migrations
                             Id = 2,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6604),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2071),
                             Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                             OriginalPrice = 1650000m,
                             Price = 1650000m,
@@ -469,7 +469,7 @@ namespace PoPoy.Api.Migrations
                             Id = 3,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6625),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2111),
                             Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                             OriginalPrice = 3250000m,
                             Price = 3250000m,
@@ -482,7 +482,7 @@ namespace PoPoy.Api.Migrations
                             Id = 4,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6627),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2115),
                             Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                             OriginalPrice = 1650000m,
                             Price = 1650000m,
@@ -495,7 +495,7 @@ namespace PoPoy.Api.Migrations
                             Id = 5,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6629),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2117),
                             Description = "ADIDAS NMD R1 TOKYO DRAGON",
                             OriginalPrice = 1850000m,
                             Price = 1850000m,
@@ -508,7 +508,7 @@ namespace PoPoy.Api.Migrations
                             Id = 6,
                             CategoryId = 1,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6631),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2120),
                             Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                             OriginalPrice = 2550000m,
                             Price = 2550000m,
@@ -521,7 +521,7 @@ namespace PoPoy.Api.Migrations
                             Id = 7,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6728),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2123),
                             Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                             OriginalPrice = 6100000m,
                             Price = 6100000m,
@@ -534,7 +534,7 @@ namespace PoPoy.Api.Migrations
                             Id = 8,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6733),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2125),
                             Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                             OriginalPrice = 6450000m,
                             Price = 6450000m,
@@ -547,7 +547,7 @@ namespace PoPoy.Api.Migrations
                             Id = 9,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6735),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2130),
                             Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                             OriginalPrice = 4850000m,
                             Price = 4850000m,
@@ -560,7 +560,7 @@ namespace PoPoy.Api.Migrations
                             Id = 10,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6736),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2133),
                             Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                             OriginalPrice = 5550000m,
                             Price = 5550000m,
@@ -573,7 +573,7 @@ namespace PoPoy.Api.Migrations
                             Id = 11,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6739),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2135),
                             Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                             OriginalPrice = 3850000m,
                             Price = 3850000m,
@@ -586,7 +586,7 @@ namespace PoPoy.Api.Migrations
                             Id = 12,
                             CategoryId = 2,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6740),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2138),
                             Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                             OriginalPrice = 4350000m,
                             Price = 4350000m,
@@ -599,7 +599,7 @@ namespace PoPoy.Api.Migrations
                             Id = 13,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6742),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2141),
                             Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                             OriginalPrice = 4300000m,
                             Price = 4300000m,
@@ -612,7 +612,7 @@ namespace PoPoy.Api.Migrations
                             Id = 14,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6745),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2144),
                             Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                             OriginalPrice = 4850000m,
                             Price = 4850000m,
@@ -625,7 +625,7 @@ namespace PoPoy.Api.Migrations
                             Id = 15,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6746),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2146),
                             Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                             OriginalPrice = 3950000m,
                             Price = 3950000m,
@@ -638,7 +638,7 @@ namespace PoPoy.Api.Migrations
                             Id = 16,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6749),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2149),
                             Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                             OriginalPrice = 2950000m,
                             Price = 2950000m,
@@ -651,7 +651,7 @@ namespace PoPoy.Api.Migrations
                             Id = 17,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6750),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2152),
                             Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                             OriginalPrice = 2850000m,
                             Price = 2850000m,
@@ -664,7 +664,7 @@ namespace PoPoy.Api.Migrations
                             Id = 18,
                             CategoryId = 3,
                             CheckoutCount = 0,
-                            DateCreated = new DateTime(2022, 10, 28, 19, 21, 1, 947, DateTimeKind.Local).AddTicks(6752),
+                            DateCreated = new DateTime(2022, 11, 7, 17, 16, 16, 722, DateTimeKind.Local).AddTicks(2155),
                             Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                             OriginalPrice = 3200000m,
                             Price = 3200000m,
@@ -1043,6 +1043,12 @@ namespace PoPoy.Api.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

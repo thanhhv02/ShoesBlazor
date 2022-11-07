@@ -17,30 +17,34 @@ using System.Net.Http.Headers;
 using Blazored.LocalStorage;
 using PoPoy.Client.Extensions;
 using PoPoy.Client.Services.AuthService;
+using PoPoy.Client.Services.HttpRepository;
 
 namespace PoPoy.Client.Services.OrderService
 {
-    public class OrderService : IOrderService
+    public class OrderService : IOrderService, IDisposable
     {
         private readonly HttpClient _http;
         private readonly NavigationManager _navigationManager;
         private readonly ILocalStorageService _localStorage;
-        private readonly IAuthService authService;
+        private readonly HttpInterceptorService httpInterceptorService;
 
         public OrderService(HttpClient http,
             AuthenticationStateProvider authStateProvider,
-            NavigationManager navigationManager, ILocalStorageService localStorage, IAuthService authService)
+            NavigationManager navigationManager, ILocalStorageService localStorage,
+            HttpInterceptorService httpInterceptorService)
         {
             _http = http;
             _navigationManager = navigationManager;
             this._localStorage = localStorage;
-            this.authService = authService;
+            this.httpInterceptorService = httpInterceptorService;
         }
 
         public PagingResponse<OrderOverviewResponse> ListOrderResponse { get; set; } = new PagingResponse<OrderOverviewResponse>();
         public OrderDetailsResponse ListOrderDetailsResponse { get; set; } = new OrderDetailsResponse();
 
         public event Action OrderDetailsChanged;
+
+        public void Dispose() => httpInterceptorService.DisposeEvent();
 
         public async Task GetOrderDetails(string? orderId)
         {
@@ -58,12 +62,13 @@ namespace PoPoy.Client.Services.OrderService
 
         public async Task GetOrders(ProductParameters productParameters)
         {
+            httpInterceptorService.RegisterEvent();
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString()
             };
             var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user", queryStringParam));
-            response.CheckAuthorized(authService);
+            
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)

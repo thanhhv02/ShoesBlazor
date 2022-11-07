@@ -467,22 +467,32 @@ namespace PoPoy.Api.Services.ProductService
         {
             try
             {
-                var pmax = _dataContext.Products.Max(x => x.Id);
-                var pmin = _dataContext.Products.Min(x => x.Id);
-                var smax = _dataContext.ProductSizes.Max(x => x.Id);
-                var smin = _dataContext.ProductSizes.Min(x => x.Id);
+                var productsTable = _dataContext.Products.ToList();
+                var productSizeTable = _dataContext.ProductSizes.ToList();
+                var pmax = productsTable.Max(x => x.Id);
+                var pmin = productsTable.Min(x => x.Id);
+                var smax = productSizeTable.Max(x => x.Id);
+                var smin = productSizeTable.Min(x => x.Id);
                 for (int i = pmin; i <= pmax; i++)
                 {
                     for (int j = smin; j <= smax; j++)
                     {
-                        var product = new ProductQuantity()
+                        if (productsTable.Where(x => x.Id == i) != null && productSizeTable.Where(x=>x.Id == j) != null)
                         {
-                            ProductId = i,
-                            SizeId = j,
-                            ColorId = 1,
-                            Quantity = 1000
-                        };
-                        _dataContext.ProductQuantities.Add(product);
+                            var product = new ProductQuantity()
+                            {
+                                ProductId = i,
+                                SizeId = j,
+                                ColorId = 1,
+                                Quantity = 1000
+                            };
+                            _dataContext.ProductQuantities.Add(product);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        
                     }
                 }
                 await _dataContext.SaveChangesAsync();
