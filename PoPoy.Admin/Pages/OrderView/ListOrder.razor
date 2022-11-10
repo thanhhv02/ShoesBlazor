@@ -33,7 +33,7 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Order" Context="order" Title="Địa chỉ">
                         <Template>
-                            @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Country , @Addresses.FirstOrDefault(x => x.UserId == order.UserId).City @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Street @Addresses.FirstOrDefault(x => x.UserId == order.UserId).State
+                            @Addresses.FirstOrDefault(x => x.UserId == order.UserId).District , @Addresses.FirstOrDefault(x => x.UserId == order.UserId).City @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Street @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Ward
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Order" Context="order" Title="Ngày đặt">

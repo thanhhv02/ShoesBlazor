@@ -54,7 +54,7 @@ namespace PoPoy.Api.Helpers.TokenHelpers
                 issuer: _jwtSettings["JwtIssuer"],
                 audience: _jwtSettings["JwtAudience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(Convert.ToDouble(_jwtSettings["JwtExpiryInDays"])),
+                expires: DateTime.Now.AddHours(Convert.ToDouble(_jwtSettings["JwtExpiryInHours"])),
                 signingCredentials: signingCredentials);
 
             return tokenOptions;

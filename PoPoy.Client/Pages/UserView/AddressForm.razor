@@ -26,11 +26,11 @@
                         </div>
                         <div class="form-group">
                             <label>Phường/ Xã <sup>*</sup></label>
-                            <InputText id="street" @bind-Value="address.State" class="form-control" />
+                            <InputText id="street" @bind-Value="address.Ward" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>Quận/ Huyện <sup>*</sup></label>
-                            <InputText id="street" @bind-Value="address.Country" class="form-control" />
+                            <InputText id="street" @bind-Value="address.District" class="form-control" />
                         </div>
                         <div class="form-group" style="margin-bottom:0; text-align:right">
                             <button class="btn btn--xs" type="submit">Lưu</button>
@@ -44,8 +44,8 @@
             <div class="author_module about_author">
                 <p><span class="indam">Thành phố/ Tỉnh:</span> @address.City</p>
                 <p><span class="indam">Đường/ Thôn:</span> @address.Street</p>
-                <p><span class="indam">Phường/ Xã:</span> @address.State</p>
-                <p><span class="indam">Quận/ Huyện:</span> @address.Country</p>
+                <p><span class="indam">Phường/ Xã:</span> @address.Ward</p>
+                <p><span class="indam">Quận/ Huyện:</span> @address.District</p>
             </div>
         }
     </div>

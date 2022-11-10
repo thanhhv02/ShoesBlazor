@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
+using Org.BouncyCastle.Asn1.Ocsp;
 using PoPoy.Api.Data;
 using PoPoy.Api.Helpers.TokenHelpers;
 using PoPoy.Api.SendMailService;
@@ -21,8 +23,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PoPoy.Api.Services.AuthService
 {
@@ -452,10 +456,10 @@ namespace PoPoy.Api.Services.AuthService
                 order.TotalPrice = detail.TotalPrice;
                 order.OrderDate = DateTime.Now;
                 order.PaymentMode = detail.PaymentMode;
-                order.OrderStatus = OrderStatus.Ordered;
+                order.OrderStatus = OrderStatus.Processing;
                 order.AddressId = address;
                 _context.Orders.Add(order);
-
+                var user = await _userManager.FindByIdAsync(detail.UserId.ToString());
                 foreach (var items in cartItem)
                 {
                     string OrderId2 = GenerateOrderId();
@@ -480,6 +484,47 @@ namespace PoPoy.Api.Services.AuthService
                 var result = _context.SaveChanges();
                 if (result != 1)
                 {
+                    //EmailDto emailDto = new EmailDto
+                    //{
+                    //    Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId}",
+                    //    Body = $"<h1 style=\"font-size:17px;font-weight:bold;color:#444;padding:0 0 5px 0;margin:0\">" +
+                    //    $"Cảm ơn quý khách {user.LastName+" "+user.FirstName}" +
+                    //    $" đã đặt hàng tại Popoy,</h1>"+
+                    //    $"<p style=\"margin:4px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal\">" +
+                    //    $"Popoy rất vui thông báo đơn hàng #{OrderId} của quý khách đã được tiếp nhận và đang trong quá trình xử lý. " +
+                    //    "Popoy sẽ thông báo đến quý khách ngay khi hàng chuẩn bị được giao.</p>",
+                    //    To = user.Email
+                    //};
+                    var path = Path.Combine(_env.ContentRootPath, "wwwroot/ordersuccesfullymail.html");
+                    string bodyBuilder = null;
+                    using (StreamReader SourceReader = System.IO.File.OpenText(path))
+                    {
+                        bodyBuilder = SourceReader.ReadToEnd();
+                    }
+                    bodyBuilder = bodyBuilder.Replace("[oder-id]", OrderId.ToString().ToUpper());
+                    bodyBuilder = bodyBuilder.Replace("[user-first-name]", user.FirstName);
+                    bodyBuilder = bodyBuilder.Replace("[order-date]", order.OrderDate.ToString("dddd, dd MMMM yyyy HH:mm:ss"));
+                    bodyBuilder = bodyBuilder.Replace("[user-full-name]", user.LastName+" "+user.FirstName);
+                    bodyBuilder = bodyBuilder.Replace("[user-mail]", user.Email);
+                    bodyBuilder = bodyBuilder.Replace("[user-list-order]", _configuration["ClientUrl"]+ "/user/list-order");
+                    bodyBuilder = bodyBuilder.Replace("[user-phone-number]", user.PhoneNumber);
+                    bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
+                    bodyBuilder = bodyBuilder.Replace("[user-address]", await _context.Addresses.Where(x => x.UserId == detail.UserId)
+                        .Select(x => x.Street+" "+x.Ward+" "+x.District+" "+x.City).FirstOrDefaultAsync());
+                    EmailDto emailDto = new EmailDto
+                    {
+                        Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
+                        Body = bodyBuilder,
+                        To = user.Email
+                    };
+                    try
+                    {
+                        _emailService.SendEmail(emailDto);
+                    }
+                    catch
+                    {
+                        return "Không thể gửi mail";
+                    }
                     return OrderId;
                 }
                 return null;
@@ -524,8 +569,8 @@ namespace PoPoy.Api.Services.AuthService
             Address add = new Address()
             {
                 City = address.City,
-                Country = address.Country,
-                State = address.State,
+                District = address.District,
+                Ward = address.Ward,
                 Street = address.Street,
                 UserId = address.UserId,
             };
@@ -560,8 +605,8 @@ namespace PoPoy.Api.Services.AuthService
             }
             else
             {
-                dbAddress.State = address.State;
-                dbAddress.Country = address.Country;
+                dbAddress.Ward = address.Ward;
+                dbAddress.District = address.District;
                 dbAddress.City = address.City;
                 dbAddress.Street = address.Street;
                 response.Data = dbAddress;
@@ -586,8 +631,8 @@ namespace PoPoy.Api.Services.AuthService
                 UserId = x.a.UserId,
                 Street = x.a.Street,
                 City = x.a.City,
-                State = x.a.State,
-                Country = x.a.Country
+                Ward = x.a.Ward,
+                District = x.a.District
             }).ToListAsync();
         }
 

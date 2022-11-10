@@ -1,19 +1,20 @@
 ﻿@page "/payment-thanks"
 @layout EmptyLayout
-<div class="jumbotron text-center">
-    <h1 class="display-3">Cảm ơn đã mua hàng!</h1>
-    <p class="lead"><strong>Hãy kiểm tra email</strong> của bạn.</p>
-    <hr>
-    <p>
-        Gặp sự cố? <ReloadPage Uri="/" Title="Liên hệ ngay"></ReloadPage>
-    </p>
-    <p class="lead">
-        <ReloadPage Title="Quay lại trang chủ" Uri="/"></ReloadPage>
-        <br />
+<div class="text-center">
+    <header class="site-header" id="header" style="display:flex;justify-content: center;
+align-items: center;">
+        <h1 class="site-header__title" data-lead-id="site-header-title">THANK YOU!</h1>
+    </header>
+
+    <div class="main-content">
+        <i class="fa fa-check main-content__checkmark" id="checkmark"></i>
+        <p class="main-content__body" data-lead-id="main-content-body">Thanks a bunch for filling that out. It means a lot to us, just like you do! We really appreciate you giving us a moment of your time today. Thanks for being you.</p>
+    </div>
+
         <AuthorizeView>
             <Authorized>
                 <a href="/user/list-order">Xem lịch sử mua hàng</a>
             </Authorized>
         </AuthorizeView>
-    </p>
+
 </div>

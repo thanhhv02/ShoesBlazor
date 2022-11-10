@@ -344,6 +344,7 @@ ul.devided > li:last-child {
     outline: 0;
     font-weight: 600;
     text-transform: uppercase;
+    border-radius: 25px;
 }
 
 .btn-hover {
@@ -582,6 +583,7 @@ ul.devided > li:last-child {
     font-size: 15px;
     padding: 5px 10px;
     line-height: 17px;
+    border-radius:25px;
 }
 
 .sp-item-name {
