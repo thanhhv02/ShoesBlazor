@@ -97,6 +97,27 @@ namespace PoPoy.Api.Data
                 await userManager.CreateAsync(user2, "123321");
                 await userManager.AddToRoleAsync(user2, RoleName.Customer);
             }
+
+
+            var shipper = await userManager.FindByEmailAsync("shipper@gmail.com");
+            if (shipper == null)
+            {
+                shipper = new User()
+                {
+                    Id = Guid.NewGuid(),
+
+                    FirstName = "Hoàng",
+                    LastName = "ne",
+                    Email = "shipper@gmail.com",
+                    NormalizedEmail = "shipper@gmail.com",
+                    PhoneNumber = "032232151",
+                    UserName = "shipper",
+                    NormalizedUserName = "Long",
+                    EmailConfirmed = true // không cần xác thực email nữa , 
+                };
+                await userManager.CreateAsync(shipper, "thanh123");
+                await userManager.AddToRoleAsync(shipper, RoleName.Shipper);
+            }
         }
 
     }

@@ -9,8 +9,10 @@ namespace PoPoy.Shared.Enum
     public enum OrderStatus
     {
         Processing,
+        Confirmed,
         Delivering,
         Delivered,
-        Cancelled
+        Cancelled,
+
     }
 }

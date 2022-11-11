@@ -1,0 +1,54 @@
+﻿@page "/listordershipper"
+@using PoPoy.Shared.Entities.OrderDto
+
+@inject IOrderService OrderService
+@inject IAuthService AuthService
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách đơn hàng đang giao</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid  Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@orders" TItem="Order" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single"  >
+                <Columns>
+                    <RadzenDataGridColumn Frozen="true" Width="421px" Title="Thao tác" TItem="Order" Context="item" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                        <Template>
+                            <RadzenButton Text="Thành công" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Success" Class="m-1" Click="args => UpdateStatus(item.Id,OrderStatus.Delivered , item.UserId , item.Shipper?.LastName)">
+                            </RadzenButton>
+                            <RadzenButton Text="Thất bại" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => UpdateStatus(item.Id,OrderStatus.Cancelled , item.UserId , item.Shipper?.LastName)">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="161px" Frozen="true" TItem="Order" Property="Id" Title="Mã đơn hàng" CssClass="MyInputClass" />
+
+                    <RadzenDataGridColumn TItem="Order" Filterable="false" Property="TotalPrice" Title="Tổng đơn hàng" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Property="PaymentMode" Title="Phương thức thanh toán" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Property="OrderStatus" Title="Tình trạng đơn hàng" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Tên người dùng">
+                        <Template>
+                            @(order.User?.FirstName + " " + order.User?.LastName)
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Context="item" Title="Địa chỉ">
+                        <Template>
+                            @(item.Address?.Street + ", " + item.Address?.Ward + ", " + item.Address?.District + ", " + item.Address?.City);
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Ngày đặt">
+                        <Template>
+                            @order.OrderDate.ToString("MM/dd/yyyy")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
+    </div>
+</div>
+
+
+

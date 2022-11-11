@@ -22,5 +22,11 @@ namespace PoPoy.Shared.Dto
         public User User { get; set; }
         public Address Address { get; set; }
         public List<OrderDetails> OrderDetails { get; set; }
+
+        public Guid? ShipperId { get; set; }
+
+        [ForeignKey("ShipperId")]
+        public User Shipper { get; set; }
+
     }
 }

@@ -54,13 +54,13 @@
                                     <InputText id="password" type="password" class="form-control" @bind-Value="LoginModel.Password"></InputText>
                                     <ValidationMessage class="invalid-feedback" For="()=> LoginModel.Password"></ValidationMessage>
                                 </div>
-                               @* <div class="col-12">
-                                    <div class="form-check">
-                                        <InputCheckbox @bind-Value="LoginModel." class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe"></InputCheckbox>
-                                        <label class="form-check-label" for="rememberMe">Remember me</label>
-                                    </div>
+                                @* <div class="col-12">
+                                <div class="form-check">
+                                <InputCheckbox @bind-Value="LoginModel." class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe"></InputCheckbox>
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                                </div>
                                 </div>*@
-                                <button  class="btn btn-primary w-100"  type="submit" >Login</button>
+                                <button class="btn btn-primary w-100" type="submit">Login</button>
                                 <div class="col-12">
                                     <p class="small mb-0">Don't have account? <a href="pages-register.html">Create an account</a></p>
                                 </div>
@@ -95,7 +95,7 @@
         }
         else
         {
-      
+
             _toastSvc.ShowError(result.Message);
         }
     }

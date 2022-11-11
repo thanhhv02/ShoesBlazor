@@ -1,0 +1,96 @@
+﻿
+
+
+    <div  class="">
+        
+
+        <div class="row ">
+            <div class="col-md-12">
+
+                <div class="card " id="chat2" style="max-height: 100%">
+                 
+                    <div class="card-body" id="chat-user" data-mdb-perfect-scrollbar="true" style=" height: 500px; overflow:auto">
+                        @*https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp*@
+                        @foreach (var item in ListChat)
+                        {
+                            @if (true)
+                            {
+                                var avt = @item.UserChat.AvatarPath;
+                                item.UserChat.AvatarPath = string.IsNullOrEmpty(avt) ? "/images/avatar.jpg" : avt;
+
+                            }
+                            if (item.Chat.IsMe)
+                            {
+                                if (item.Chat.Message == "{{html}}")
+                                {
+                                     <div class="d-flex flex-row justify-content-end ">
+                                        <div>
+                                             <p class="p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                                                      @((MarkupString)item.Chat.Data)
+                                                </p>
+                                            <p class="me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">@item.Chat.Created.ToString("dd - HH:mm")</p>
+                                        </div>
+                                        <img src="@item.UserChat.AvatarPath"
+                                     alt="avatar 1" style="width: 45px; height: 100%;">
+                                    </div>
+                                }else{
+                                         <div class="d-flex flex-row justify-content-end ">
+                                            <div>
+                                                <p class="p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                                                    @item.Chat.Message
+                                                </p>
+                                                <p class="me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">@item.Chat.Created.ToString("dd - HH:mm")</p>
+                                            </div>
+                                            <img src="@item.UserChat.AvatarPath"
+                                         alt="avatar 1" style="width: 45px; height: 100%;">
+                                        </div>
+                                }
+                           
+                            }
+
+                            else
+                            {
+                                if (item.Chat.Message == "{{html}}")
+                                {
+                                        <div class="d-flex flex-row justify-content-start mb-1">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                                            alt="avatar 1" style="width: 45px; height: 100%;">
+                                            <div>
+                                                 <p class="p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                                                        @((MarkupString)item.Chat.Data)
+                                                </p>
+
+                                                <p class=" ms-3 mb-3 rounded-3 text-muted">@item.Chat.Created.ToString("dd - HH:mm")</p>
+                                            </div>
+                                        </div>
+                                }
+                                else{
+                                <div class="d-flex flex-row justify-content-start mb-1">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                             alt="avatar 1" style="width: 45px; height: 100%;">
+                                    <div>
+                                        <p class=" p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">@item.Chat.Message</p>
+                                        <p class=" ms-3 mb-3 rounded-3 text-muted">@item.Chat.Created.ToString("dd - HH:mm")</p>
+                                    </div>
+                                </div>
+                                }
+                             
+                            }
+
+                        }
+
+                    </div>
+                    <form @onsubmit="SendAsync" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+
+                        <input @bind="Message" type="text" class="form-control form-control-lg"
+                               placeholder="Type message">
+
+                        <a style="text-align: center;width: 100px;font-size: 30px;" class="ms-3" @onclick="SendAsync " href="#!"><i class="fas fa-paper-plane"></i></a>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+

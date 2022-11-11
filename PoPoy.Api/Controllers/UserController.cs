@@ -289,5 +289,11 @@ namespace PoPoy.Api.Controllers
 
             return Ok(uploadResults.Data);
         }
+
+        [HttpGet("GetShippers")]
+        public async Task<ActionResult<ServiceResponse<Address>>> GetShippers()
+        {
+            return Ok(await _authService.GetShippers());
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿@inject IProductService _productSvc;
+﻿@using BlazorTemplater
+@inject IProductService _productSvc;
 @inject IToastService _toastSvc;
 @inject ICartService _cartSvc;
 @inject IConfiguration _config;
@@ -6,6 +7,7 @@
 @inject NavigationManager _navigation;
 @inject IAuthService AuthService;
 @inject ILocalStorageService LocalStorage;
+@inject DialogService DialogService
 
 <div class="bg-main">
     <div class="mid-header container">
@@ -52,6 +54,13 @@
                     </div>
                 </Authorized>
             </AuthorizeView>
+            <li class="has_dropdown">
+                <a style="cursor:pointer" @onclick="OpenChat"><i class='bx bx-message'></i></a>
+                <span class="position-absolute top-0 start-100 translate-middle">
+                    <span class="visually-hidden">@*unread messages*@</span>
+                </span>
+            </li>
+
             <Notify></Notify>
             <li class="has_dropdown">
                 <a href="/cart"><i class='bx bx-cart'></i></a>
@@ -116,7 +125,6 @@
 
                             </div>
                         }
-
                     }
                 </div>
             </li>
@@ -128,13 +136,14 @@
     private List<Cart> carts { get; set; } = new List<Cart>();
     public User user = new User();
     public string AvatarPath { get; set; }
+    string html = string.Empty;
     [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
     protected override async Task OnInitializedAsync()
     {
         cartCount = await GetCartCount();
         CartState.OnQuantityChanged += OnCountChanged;
         carts = await _cartSvc.GetAllAsync();
-
+     
         await CheckUserAvatarPath();
     }
 
@@ -160,6 +169,13 @@
         carts = await _cartSvc.GetAllAsync();
         await CheckUserAvatarPath();
         StateHasChanged();
+    }
+
+
+    public async Task OpenChat()
+    {
+          await DialogService.OpenAsync<PoPoy.Client.Pages.Chat.Chat>("Hộp thư",options: new DialogOptions() {  Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });
+
     }
     public void Dispose()
         => CartState.OnQuantityChanged -= OnCountChanged;

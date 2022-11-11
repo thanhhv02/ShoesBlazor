@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities.OrderDto;
+using PoPoy.Shared.Enum;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using System;
@@ -39,7 +41,12 @@ namespace PoPoy.Api.Controllers
             var orderDetails = await _orderService.GetOrderDetails(orderId);
             return Ok(orderDetails);
         }
-
+        [HttpGet("getOrderWithUser/{orderId}")]
+        public async Task<ActionResult<List<Order>>> GetOrderWithUser(string orderId)
+        {
+            var orderDetails = await _orderService.GetOrderWithUser(orderId);
+            return Ok(orderDetails);
+        }
         [HttpGet("searchOrder/{searchText}")]
         public async Task<IActionResult> SearchProduct(string searchText)
         {
@@ -73,6 +80,44 @@ namespace PoPoy.Api.Controllers
             var result = await _orderService.GetOrderDetailsForClient(orderId);
             return Ok(result);
         }
+        //[Authorize(Roles = RoleName.Admin)]
+        [HttpPost("AssignShipper")]
+        public async Task<ActionResult<ServiceResponse<bool>>> AssignShipper(AssignShipperDto model)
+        {
+            var result = await _orderService.AssignShipper(model);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Không thêm được người vận chuyển");
+        }
+        [HttpPost("GetOrderByShipper")]
+        //[Authorize(Roles = RoleName.Shipper + "," + RoleName.Admin)]
+        public async Task<ActionResult<ServiceResponse<bool>>> GetOrderByShipper(OrderShipperSearchDto input)
+        {
+            var result = await _orderService.GetOrderByShipper(input);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("UpdateStatusOrder")]
+        //[Authorize(Roles = RoleName.Shipper + "," + RoleName.Admin + RoleName.Staff )]
+
+
+        public async Task<ActionResult<bool>> UpdateStatusOrder(UpdateStatusOrderDto input)
+        {
+            var result = await _orderService.UpdateStatusOrder(input);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+      
+
         private string GetUserId()
         => _httpContext.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
     }

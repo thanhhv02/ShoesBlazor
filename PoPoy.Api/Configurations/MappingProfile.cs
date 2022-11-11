@@ -13,6 +13,8 @@ namespace PoPoy.Api.Configurations
             CreateMap<NotificationDto, Notification>();
             CreateMap<CreateOrUpdateChatDto, ChatDto>();
             CreateMap<ChatDto, Chat>();
+            CreateMap<Chat, ChatDto>();
+
 
         }
     }

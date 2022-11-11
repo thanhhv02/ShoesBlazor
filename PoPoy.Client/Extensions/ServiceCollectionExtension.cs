@@ -15,6 +15,7 @@ using PoPoy.Client.Services.ProductService;
 using PoPoy.Client.Services.UserAvatarService;
 using PoPoy.Client.State;
 using PoPoy.Shared.Common;
+using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,13 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<IPublicReviewService, PublicReviewService>();
             services.AddScoped<RefreshTokenService>();
             services.AddScoped<HttpInterceptorService>();
+
+            services.AddScoped<DialogService>();
+            services.AddScoped<NotificationService>();
+            services.AddScoped<TooltipService>();
+            services.AddScoped<ContextMenuService>();
+
+
             return services;
         }
 

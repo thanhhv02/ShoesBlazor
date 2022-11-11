@@ -1,46 +1,69 @@
 ﻿<ul class="sidebar-nav" id="sidebar-nav">
 
-    <li class="nav-item">
-        <NavLink class="nav-link collapsed " href="/Dashboard">
-            <i class="bi bi-grid"></i>
-            <span>Dashboard</span>
-        </NavLink>
-    </li>
+        <AuthorizeView Roles="@RoleName.Shipper">
+               
+                <Authorized >
+                      <li class="nav-item">
+                        <NavLink class="nav-link collapsed" href="/shipper">
+                    <i class="fas fa-sort-amount-up-alt"></i>
+                            <span>Đơn hàng được giao</span>
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link collapsed" href="/listordershipper">
+                    <i class="fas fa-border-all"></i>
+                            <span>Danh sách đơn hàng</span>
+                        </NavLink>
+                    </li>
+                </Authorized>
+           
+        </AuthorizeView>
+        <AuthorizeView Roles="@(RoleName.Staff + "," + RoleName.Admin)">
 
-    <li class="nav-item">
-        <NavLink class="nav-link collapsed" href="/listUser">
-            <i class="fas fa-user"></i>
-            <span>Người dùng</span>
-        </NavLink>
-    </li>
+            <Authorized>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed " href="/Dashboard">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </NavLink>
+            </li>
+
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/listUser">
+                    <i class="fas fa-user"></i>
+                    <span>Người dùng</span>
+                </NavLink>
+            </li>
 
 
-    <li class="nav-item">
-        <NavLink class="nav-link collapsed" href="/listProduct">
-            <i class="fas fa-box"></i>
-            <span>Sản phẩm</span>
-        </NavLink>
-    </li>
-        
-    <li class="nav-item">
-        <NavLink class="nav-link collapsed" href="/listCategory">
-            <i class="fas fa-cubes"></i>
-            <span>Loại hàng</span>
-        </NavLink>
-    </li>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/listProduct">
+                    <i class="fas fa-box"></i>
+                    <span>Sản phẩm</span>
+                </NavLink>
+            </li>
 
-    <li class="nav-item">
-        <NavLink class="nav-link collapsed" href="/listOrder">
-            <i class="fas fa-shipping-fast"></i>
-            <span>Đơn hàng</span>
-        </NavLink>
-    </li>
-    <li class="nav-item">
-        <NavLink class="nav-link collapsed" href="/chat">
-            <i class="fas fa-comment-alt"></i>
-            <span>Chat</span>
-        </NavLink>
-    </li>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/listCategory">
+                    <i class="fas fa-cubes"></i>
+                    <span>Loại hàng</span>
+                </NavLink>
+            </li>
+
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/listOrder">
+                    <i class="fas fa-shipping-fast"></i>
+                    <span>Đơn hàng</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/chat">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>Chat</span>
+                </NavLink>
+            </li>
+            </Authorized>
+        </AuthorizeView>
 
     @*vi du co menu con *@
    @* <li class="nav-item">

@@ -96,12 +96,57 @@ namespace PoPoy.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> SendMessage(CreateOrUpdateChatDto chatDto)
+        public async Task<IActionResult> SendMessageUserId(CreateOrUpdateChatDto chatDto)
         {
             var chat = mapper.Map<ChatDto>(chatDto);
             chat.SenderId = Guid.Parse(userManager.GetUserId(User));
-            await broadCastService.SendMessage(chat);
+            await broadCastService.SendMessageUserId(chat);
             return Ok(chatDto);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SendMessageAllAdmin(CreateOrUpdateChatDto chatDto)
+        {
+            var chat = mapper.Map<ChatDto>(chatDto);
+            chat.SenderId = Guid.Parse(userManager.GetUserId(User));
+            await broadCastService.SendMessageAllAdmin(chat);
+            return Ok(chatDto);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ReadMessage(Guid receiverId, Guid senderId)
+        {
+            await broadCastService.ReadMessage(receiverId, senderId); 
+            return Ok();
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetListChatSender(Guid userId)
+        {
+            var chats = await broadCastService.GetListChatSender(userId);
+            var result = new ServiceResponse<List<ListChatSender>>();
+
+            result.Message = "Lấy danh sách chat thành công";
+            result.Success = true;
+            result.Data = chats;
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetListChatUser(Guid userId)
+        {
+            var chats = await broadCastService.GetListChatUser(userId);
+            var result = new ServiceResponse<List<ListChatUser>>();
+            result.Message = "Lấy danh sách chat thành công";
+            result.Success = true;
+            result.Data = chats;
+
+            return Ok(result);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace PoPoy.Shared.ViewModels
 {
     public class OrderDetailsProductResponse
     {
+        public string OrderId { get; set; }
         public int ProductId { get; set; }
         public string Title { get; set; }
         public string ProductType { get; set; }

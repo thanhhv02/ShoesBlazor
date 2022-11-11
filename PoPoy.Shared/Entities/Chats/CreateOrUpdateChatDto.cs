@@ -10,7 +10,11 @@ namespace PoPoy.Shared.Dto.Chats
     {
         public string Message { get; set; }
         public string Data { get; set; }
-        public Guid? ReceiverId { get; set; } 
+
+        public string Avatar { get; set; }
+        public Guid? ReceiverId { get; set; }
+
+
 
     }
 }

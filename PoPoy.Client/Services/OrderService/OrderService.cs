@@ -85,5 +85,12 @@ namespace PoPoy.Client.Services.OrderService
             ListOrderResponse.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
         }
 
+
+        public async Task<Order> GetOrderWithUser(string orderId)
+        {
+            var result = await _http.GetFromJsonAsync<Order>($"/api/order/GetOrderWithUser/{orderId}");
+            return result;
+        }
+
     }
 }

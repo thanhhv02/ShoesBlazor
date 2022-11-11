@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PoPoy.Api.Data;
+using PoPoy.Api.Extensions;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Enum;
 using System;
@@ -55,6 +56,8 @@ namespace PoPoy.Api.Services.NotificationService
             var userStaffIds = await userManager.GetUsersInRoleAsync(RoleName.Staff);
             listUser.AddRange(userAdminIds);
             listUser.AddRange(userStaffIds);
+            listUser = listUser.DistinctBy(p => p.Id).ToList();
+
             var notis = new List<Notification>();
             foreach (var id in listUser.Select(p => p.Id))
             {

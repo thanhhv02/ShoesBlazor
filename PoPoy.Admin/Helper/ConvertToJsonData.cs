@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
-namespace PoPoy.Client.Extensions
+namespace PoPoy.Admin.Extensions
 {
     public static class ConvertToJsonData
     {
@@ -31,5 +34,12 @@ namespace PoPoy.Client.Extensions
             }
             return str2.ToLower();
         }
+
+     
+            public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+            {
+                return listToClone.Select(item => (T)item.Clone()).ToList();
+            }
+       
     }
 }

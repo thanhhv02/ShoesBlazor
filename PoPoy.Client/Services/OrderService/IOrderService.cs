@@ -1,4 +1,5 @@
-﻿using PoPoy.Shared.Paging;
+﻿using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace PoPoy.Client.Services.OrderService
         OrderDetailsResponse ListOrderDetailsResponse { get; set; }
         Task GetOrders(ProductParameters productParameters);
         Task GetOrderDetails(string orderId);
+        Task<Order> GetOrderWithUser(string orderId);
     }
 }

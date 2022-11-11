@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
@@ -35,5 +36,7 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId);
         Task<ServiceResponse<Address>> GetAddress(Guid userId);
         Task<ServiceResponse<List<UploadResult>>> UploadUserImage(List<IFormFile> files, string userId);
+        string UserId();
+        Task<List<SelectItem>> GetShippers();
     }
 }

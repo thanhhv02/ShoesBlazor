@@ -1,6 +1,10 @@
 ﻿@inject IOrderService _svc;
 @implements IDisposable;
 @inject NavigationManager NavigationManager;
+@inject IBroadCastService broadCastService;
+@inject DialogService dialogService;
+
+
 <div class="chat_area cardify">
     <div class="chat_area--title">
         <h3>Lịch sử mua hàng <span class="name">chi tiết</span></h3>
@@ -45,16 +49,22 @@
 
                             @foreach (var item in _svc.ListOrderDetailsResponse.Products)
                             {
-                                <div class="col-6">
+                                <div class="col-8">
                                     <p><a href="/product-detail/@item.ProductId">@item.Title</a></p>
                                     <p>Size: @item.ProductSize</p>
                                     <p>Số lượng: @item.Quantity</p>
-                                    <button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
+                                    <div class="d-flex">
+                                         <RadzenButton Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                    Click="()=>WriteReview(item)" Text="Đánh giá"></RadzenButton>
+                                        <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                          Click="()=>ViewDetail(item.OrderId)" Text="Xem chi tiết "></RadzenButton>
+                                     </div>
+                                    @*<button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
                                 @onclick="@(() => WriteReview(item))">
                                         Đánh giá sản phẩm này
-                                    </button>
+                                    </button>*@
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     @try
                                     {
                                         @if (item.ProductImages != null || item.ProductImages.Count > 0)
@@ -96,4 +106,18 @@
 
     private void WriteReview(OrderDetailsProductResponse particular)
         => NavigationManager.NavigateTo($"/products/{particular.ProductId}/review/new");
+
+
+    private async void SendChat(OrderDetailsProductResponse product){
+        await broadCastService.SendInfoOrderModel(product, _svc.ListOrderDetailsResponse);
+        await OpenChat();
+    }
+    private void ViewDetail ( string orderID)
+      => NavigationManager.NavigateTo($"/order/{orderID}");
+
+    public async Task OpenChat()
+    {
+        await dialogService.OpenAsync<PoPoy.Client.Pages.Chat.Chat>("Hộp thư", options: new DialogOptions() { Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });
+
+    }
 }

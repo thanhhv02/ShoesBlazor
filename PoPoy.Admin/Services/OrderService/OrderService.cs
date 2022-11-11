@@ -1,6 +1,10 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using PoPoy.Admin.Extensions;
+using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities.OrderDto;
+using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +38,36 @@ namespace PoPoy.Admin.Services.OrderService
         {
             var result = await _httpClient.GetFromJsonAsync<List<OrderDetails>>($"/api/order/orderDetails/{orderId}");
             return result;
+        }
+
+        public async Task<Order> GetOrderWithUser(string orderId)
+        {
+            var result = await _httpClient.GetFromJsonAsync<Order>($"/api/order/GetOrderWithUser/{orderId}");
+            return result;
+        }
+        public async Task<bool> AssignShipper(AssignShipperDto model)
+        {
+            var resp = await _httpClient.PostAsync($"/api/order/AssignShipper", model.ToJsonBody());
+            return resp.IsSuccessStatusCode;
+        }
+        public async Task<List<SelectItem>> GetShippers()
+        {
+            var resp = await _httpClient.GetFromJsonAsync<List<SelectItem>>($"/api/user/GetShippers");
+            return resp;
+        }
+
+        public async Task<List<Order>> GetOrderByShipper(OrderShipperSearchDto input)
+        {
+            var result = await _httpClient.PostAsync($"/api/order/GetOrderByShipper", input.ToJsonBody());
+            //await result.CheckAuthorized(this);
+            return await result.Content.ReadFromJsonAsync<List<Order>>();
+        }
+
+        public async Task<bool> UpdateStatusOrder(UpdateStatusOrderDto input)
+        {
+            var result = await _httpClient.PostAsync($"/api/order/UpdateStatusOrder", input.ToJsonBody());
+            //await result.CheckAuthorized(this);
+            return await result.Content.ReadFromJsonAsync<bool>();
         }
 
         public async Task<List<Order>> SearchOrder(string searchText)

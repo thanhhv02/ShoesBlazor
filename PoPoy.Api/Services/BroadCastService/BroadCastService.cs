@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.ChatService;
+using PoPoy.Shared.Dto.Chats;
 
 namespace PoPoy.Api.Services.BroadCastService
 {
@@ -67,12 +68,40 @@ namespace PoPoy.Api.Services.BroadCastService
             await hubContext.Clients.User(notification.UserId.ToString()).SendAsync(BroadCastType.Notify, notification);
         }
 
+        public async Task<List<ListChatSender>> GetListChatSender(Guid userId)
+        {
 
-        public async Task SendMessage(ChatDto chatDto)
+            return await chatService.GetListChatSender(userId);
+
+        }
+
+        public async Task<List<ListChatUser>> GetListChatUser(Guid userId)
+        {
+
+            return await chatService.GetListChatUser(userId);
+
+        }
+
+        public async Task ReadMessage(Guid receiverId, Guid senderId)
+        {
+            await chatService.ReadMessage(receiverId , senderId);
+        }
+
+        public async Task SendMessageAllAdmin(ChatDto chatDto)
         {
             chatDto.Created = DateTime.Now;
             chatDto.IsRead = false;
-            await chatService.CreateChat(chatDto);
+            chatDto.IsMe = true;
+            var userIds = await chatService.CreateChatAllAdmin(chatDto);
+            await chatHubContext.Clients.Users(userIds).SendAsync(BroadCastType.Message, chatDto);
+        }
+
+        public async Task SendMessageUserId(ChatDto chatDto)
+        {
+            chatDto.Created = DateTime.Now;
+            chatDto.IsRead = false;
+            chatDto.IsMe = true;
+            await chatService.CreateChatUserId(chatDto);
             await chatHubContext.Clients.User(chatDto.ReceiverId.ToString()).SendAsync(BroadCastType.Message, chatDto);
         }
 

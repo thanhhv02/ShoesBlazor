@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,9 @@ namespace PoPoy.Admin.Shared.Notify
         [Inject] private IConfiguration configuration { get; set; }
         [Inject] public ILocalStorageService localStorageService { get; set; }
         [Inject] public IBroadCastService broadCastService { get; set; }
+
+        [Inject] public IToastService toastService { get; set; }
+
         [Inject] public NavigationManager navigationManager { get; set; }
 
 
@@ -42,6 +46,7 @@ namespace PoPoy.Admin.Shared.Notify
                 {
                     notifications.Add(noti);
                     notifications = notifications.OrderByDescending(p => p.Created).ToList();
+                    toastService.ShowInfo(noti.Message);
                     StateHasChanged();
                 });
 

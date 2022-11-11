@@ -19,6 +19,8 @@ namespace PoPoy.Admin.Services.AuthService
         Task<bool> UpdateUser(UserVM user);
         Task<bool> DeleteUser(Guid id);
         Task<Guid> GetUserId(LoginRequest request);
+        Task<Guid> GetUserId();
+        Task<ServiceResponse<User>> GetUserFromId(string id);
         Task<UserVM> GetUserById(Guid id);
         Task Logout();
     }

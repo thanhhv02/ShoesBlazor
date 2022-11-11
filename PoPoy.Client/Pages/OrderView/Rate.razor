@@ -1,0 +1,111 @@
+﻿@inject NavigationManager NavigationManager
+@inject IProductService PublicProductService
+@inject IReviewService ReviewService
+@inject IPublicReviewService PublicReviewService
+@inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider AuthProvider
+
+<div class="row">
+    <div class="col-12">
+        <EditForm Model="@review" OnValidSubmit="@(() => Mode == FormEditMode.New ? Post() : Put())" style="margin: 0 auto; text-align: center;" align="center">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+            <div class="form-group mb-3">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H1"> @review.Title</RadzenText>
+                <RadzenRating Style="width: 100px" Change=@(args => OnQuantityChanged(args)) />
+
+            </div>
+
+            <div class="form-group mb-3">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H1">Nội dung đánh giá</RadzenText>
+                <RadzenTextArea Change="val => OnChange(val)" Value="@review.ReviewText" Class="w-100" />
+            </div>
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Xác nhận" Icon="rate_review" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary" Class="m-1">
+            </RadzenButton>
+        </EditForm>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int ProductId { get; set; }
+
+    [Parameter]
+    public int ReviewId { get; set; }
+
+    [Parameter]
+    public FormEditMode Mode { get; set; }
+
+    private Review review = new();
+    private Product product = new();
+    private bool isMyReview;
+
+    private void OnQuantityChanged(int rating)
+    {
+        switch (rating)
+        {
+            case 1:
+                review.Title = "Cực kỳ không hài lòng";
+                break;
+            case 2:
+                review.Title = "Không hài lòng";
+                break;
+            case 3:
+                review.Title = "Bình thường";
+                break;
+            case 4:
+                review.Title = "Hài lòng";
+                break;
+            default:
+                review.Title = "Cực kỳ hài lòng";
+                break;
+        }
+        review.Rating = rating;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await PublicProductService.Get(ProductId);
+        if (result.Success)
+        {
+            product = result.Data;
+            Console.WriteLine(product != null);
+        }
+        review.ProductId = product.Id;
+        review.Title = "Cực kỳ hài lòng";
+        if (Mode == FormEditMode.Update)
+        {
+            review = await PublicReviewService.GetAsync(ReviewId);
+            isMyReview = await IsMyReview(review.UserId);
+        }
+    }
+
+    private async Task Post()
+    {
+        await ReviewService.PostAsync(review);
+        NavigationManager.NavigateTo($"/product-detail/{review.ProductId}");
+        //await JSRuntime.InvokeVoidAsync("showInfoToast", "レビューを投稿しました。");
+    }
+
+    private async Task Put()
+    {
+        await ReviewService.PutAsync(review);
+        NavigationManager.NavigateTo($"/product-detail/{review.ProductId}");
+        //await JSRuntime.InvokeVoidAsync("showInfoToast", "レビューを修正しました。");
+    }
+
+    private async ValueTask<bool> IsMyReview(Guid reviewUserId)
+    {
+        var authState = await AuthProvider.GetAuthenticationStateAsync();
+        if (Guid.TryParse(authState.User.GetUserId(), out Guid value))
+        {
+            return reviewUserId == value;
+        }
+        return false;
+    }
+
+    private void OnChange(string value)
+    {
+        review.ReviewText = value;
+    }
+}

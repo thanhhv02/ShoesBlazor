@@ -18,9 +18,13 @@ namespace PoPoy.Shared.Dto
         public bool? IsRead { get; set; } = false;
         public string Data { get; set; }
 
+        public bool IsMe { get; set; }
         public Guid? SenderId { get; set; }
         public Guid? ReceiverId { get; set; }
 
+        public IReadOnlyList<string> UserIds { get; set; }
+
+        public string Avatar { get; set; }
 
     }
 

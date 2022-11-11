@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Server.IIS.Core;
+﻿using MailKit.Search;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Data;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities.OrderDto;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using System;
@@ -55,6 +57,51 @@ namespace PoPoy.Api.Services.OrderService
 
             return orderDetails;
         }
+        public async Task<Order> GetOrderWithUser(string orderId)
+        {
+            var orderDetails = await _context.Orders.Include(p => p.OrderDetails).ThenInclude(p=>p.Product).ThenInclude(p => p.ProductImages)
+                .Include(p => p.User).Include(p => p.Address).Include(p=>p.Shipper).Where(p => p.Id == orderId).FirstOrDefaultAsync(); ;  
+
+            return orderDetails;
+        }
+
+        public async Task<bool> AssignShipper(AssignShipperDto model)
+        {
+            if (model.ShipperId != Guid.Empty && !string.IsNullOrEmpty(model.OrderId))
+            {
+                var order = await _context.Orders.FindAsync(model.OrderId);
+                order.ShipperId = model.ShipperId;
+                order.OrderStatus = Shared.Enum.OrderStatus.Confirmed;
+                 _context.Update(order);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            return false;
+
+        }
+
+
+        public async Task<List<Order>> GetOrderByShipper(OrderShipperSearchDto input)
+        {
+            var orderDetails = await _context.Orders.Include(p => p.OrderDetails).ThenInclude(p => p.Product).ThenInclude(p => p.ProductImages)
+                 .Include(p => p.User).Include(p => p.Address)
+                 .Include(p => p.Shipper).Where(p => p.ShipperId == input.ShipperId && p.OrderStatus == input.Status).ToListAsync(); ;
+            return orderDetails;
+
+        }
+
+
+        public async Task<bool> UpdateStatusOrder(UpdateStatusOrderDto input)
+        {
+            var order = await _context.Orders.FindAsync(input.OrderId);
+            if (order != null)
+            {
+                order.OrderStatus = input.OrderStatus;
+                _context.Update(order);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+
 
         public async Task<List<Order>> SearchOrder(string searchText)
         {
@@ -152,6 +199,7 @@ namespace PoPoy.Api.Services.OrderService
             order.OrderDetails.ForEach(item =>
             orderDetailsResponse.Products.Add(new OrderDetailsProductResponse
             {
+                OrderId = order.Id,
                 ProductId = item.ProductId,
                 ProductSize = item.Size,
                 ProductImages = _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList().Count > 0 ?

@@ -75,6 +75,13 @@ namespace PoPoy.Admin.Services.AuthService
             var result = await _httpClient.GetFromJsonAsync<Guid>("api/user/getUserId");
             return result;
         }
+
+        public async Task<Guid> GetUserId()
+        {
+            var cl = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            var id = cl.User.GetUserId();
+            return Guid.Parse(id);
+        }
         public async Task AssignRole(RoleAssignRequest request)
         {
             await _httpClient.PutAsJsonAsync($"api/user/roles/{request.Id}", request);
@@ -96,6 +103,12 @@ namespace PoPoy.Admin.Services.AuthService
                 });
             }
             return roleAssignRequest;
+        }
+        public async Task<ServiceResponse<User>> GetUserFromId(string id)
+        {
+            var result = await _httpClient.PostAsync($"/api/user/get-user-from-id?id={id}", null);
+            //await result.CheckAuthorized(this);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<User>>();
         }
 
         public async Task<bool> UpdateUser(UserVM user)

@@ -1,0 +1,236 @@
+﻿@page "/order/{orderId}"
+@using PoPoy.Client.Extensions
+@using PoPoy.Client.Services.BroadCastService
+@using PoPoy.Shared.Common
+@using PoPoy.Shared.Entities.OrderDto
+@inject IConfiguration _config;
+
+@inject IOrderService OrderService
+@inject IProductService ProductService
+@inject DialogService dialogService
+
+<div class="bg-main">
+<div class="container">
+        <div class="box">
+            <div class="breadcumb">
+                <a href="./index.html">home</a>
+                <span><i class='bx bxs-chevrons-right'></i></span>
+                <a href="./products.html">all products</a>
+            </div>
+        </div>
+@if (order != null)
+{
+            <div class="  ">
+
+        <div class="pb-3">
+            <h2 class="card-title" style="color:#012970">Chi tiết đơn hàng <b>#@orderId</b></h2>
+            <RadzenSteps  SelectedIndex="@((int)order.OrderStatus)" ShowStepsButtons="false">
+
+                <Steps >
+                            <RadzenStepsItem Disabled="order.OrderStatus != OrderStatus.Processing" Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
+
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div>
+
+                                        <h2 style="color:#012970">Đơn hàng của bạn đang chờ xác nhận </h2>
+                                    </div>
+                                        <img src="/images/choxacnhan.png" width="100" />
+
+                                </div>
+                    </RadzenStepsItem>
+
+                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Confirmed" Disabled="order.OrderStatus != OrderStatus.Confirmed" Text="Đơn hàng đã được tiếp nhận">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div>
+
+                                <h2 style="color:#012970">Đã bàn giao cho <b>@(order.Shipper != null ? order.Shipper.FirstName + " "+  order.Shipper.LastName : "")</b> !</h2>
+                            </div>
+
+                            <img src="/images/choxacnhan.gif" width="100" />
+                        </div>
+                    </RadzenStepsItem>
+
+                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivering" Disabled="order.OrderStatus != OrderStatus.Delivering" Text="Đang trong quá trình vận chuyển">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <div>
+
+                                <h2 style="color:#012970">Shipper <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "") </b> đang giao hàng !</h2>
+                            </div>
+
+                            <img src="/images/danggiaohang.gif" width="100" />
+                        </div>
+                    </RadzenStepsItem>
+
+                    <RadzenStepsItem Selected="order.OrderStatus != OrderStatus.Delivered ||order.OrderStatus != OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
+                          <div class="d-flex justify-content-center align-items-center">
+                                        
+                                    @if (order.OrderStatus == OrderStatus.Delivered)
+                                    {
+                                        <div>
+                                            <h2 style="color:#012970">Đơn hàng được <b>@(order.Shipper != null ? order.Shipper?.FirstName + " " + order.Shipper?.LastName : "") </b> giao thành công !</h2>
+                                        </div>
+                                        <img src="/images/danhanhang.png" width="100" />
+
+                                    }
+                                    else if (order.OrderStatus == OrderStatus.Cancelled)
+                                    {
+                                        <div>
+                                            <h2 style="color:#012970">Đơn hàng giao không thành công !</h2>
+                                        </div>
+                                        <img src="/images/giaothatbai.png" width="100" />
+
+                                    }
+
+                        </div>
+                    </RadzenStepsItem>
+                </Steps>
+            </RadzenSteps>
+
+                    <hr />
+                    @*<h6 style="color:#012970"><b>Thông tin người đặt</b></h6>*@
+                    <div class="row mt-1">
+                        <div class="text-field col-lg-6 mb-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="name">Mã đơn hàng</label>
+                                    <input disabled class="form-control" value="@(order.Id)" />
+                                </div>
+                                <div class="col-6">
+                                    <label>Thao tác</label>
+                                    <RadzenButton  class="form-control" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                              Click="()=>SendChat(order)" Text="Gửi tin nhắn kèm thông tin "></RadzenButton>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-field col-lg-6 mb-4">
+                            <label for="name">Tên người đặt</label>
+                            <input disabled class="form-control" value="@(order.User.FirstName + " " + order.User.LastName)" />
+                        </div>
+                        <div class="text-field col-lg-6 mb-4">
+                            <label for="name">Địa chỉ</label>
+                            <input disabled class="form-control" value="@(order.Address.Street.ToString() + ", " + order.Address.Ward.ToString() + ", " + order.Address.District.ToString() + ", " + order.Address.City.ToString())" />
+                        </div>
+                        <div class="text-field col-lg-6 mb-4">
+                            <label for="name">Ngày đặt</label>
+                            <input disabled class="form-control" value="@(order.OrderDate)" />
+                        </div>
+                        <div class="text-field col-lg-6 mb-4">
+                            <label for="name">Phương thức thanh toán</label>
+                            <input disabled class="form-control" value="@(order.PaymentMode)" />
+                        </div>
+                        <div class="text-field col-lg-6 mb-4">
+                            <label for="name">Tổng tiền</label>
+                            <input disabled class="form-control" value="@(order.TotalPrice)" />
+                        </div>
+
+                    </div>
+                    <hr />
+                    <RadzenFieldset AllowCollapse="true"  >
+                        <HeaderTemplate>
+                            <span class="d-inline-flex align-items-center align-middle">
+                                <RadzenIcon Icon="account_box" Class="me-1" /><b>Sản phẩm đã mua</b>
+                            </span>
+                        </HeaderTemplate>
+                        <ChildContent>
+                            <RadzenDataList PageSize="4" WrapItems="true" AllowPaging="true"
+                                        Data="@OrderDetails" TItem="OrderDetails">
+                                <Template Context="orderDetail">
+                                    <RadzenCard Style="width: 250px">
+                                        <div class="row">
+                                            <div class="col-md-8 text-truncate">
+                                                <RadzenBadge BadgeStyle="BadgeStyle.Light" Text=@($"{orderDetail.OrderId}") Class="me-1" />
+                                                @*<b>@(order.ShipName)</b>*@
+                                            </div>
+                                            <div class="col-md-4 text-end">
+                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-VND"), "{0:C}", orderDetail.Product.Price).Replace(",00","")}") />
+                                            </div>
+                                        </div>
+                                        <hr style="border: none; background-color: rgba(0,0,0,.08); height: 1px; margin: 1rem 0;" />
+                                        <div class="d-flex flex-row align-items-center">
+                                            @{
+                                                var img = orderDetail.Product.ProductImages.FirstOrDefault();
+                                                var path = img == null ? @_config["BackendApiUrl"] + "/uploads/no-photo-available.png" : img.ImagePath;
+                                            }
+                                            <RadzenImage Path="@path" Class="rounded-circle float-start me-3" Style="width: 120px; height: 100px;" />
+                                            <div>
+                                                <h4 class="mb-0">@(orderDetail.Product.Title)</h4>
+                                                <div style="font-size: .8em">Size: @(orderDetail.Size), Số lượng: @(orderDetail.Quantity)</div>
+                                               
+                                                <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
+                                                </RadzenButton>
+                                            </div>
+                                        </div>
+                                    </RadzenCard>
+                                </Template>
+                            </RadzenDataList>
+                        </ChildContent>
+                        <SummaryTemplate>
+                            <RadzenCard class="mt-3">
+                                <b>@order.OrderDetails.Count Orders</b>
+                            </RadzenCard>
+                        </SummaryTemplate>
+                    </RadzenFieldset>
+
+                </div>
+
+    </div>
+}
+else{
+    <h2>Chờ chút</h2>
+}
+</div>
+</div>
+@code {
+    [Parameter]
+    public string orderId { get; set; }
+    [Inject] private IToastService toastService { get; set; }
+    [Inject] private IBroadCastService broadCastService { get; set; }
+
+    private List<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
+    private Order order;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrderDetails();
+        StateHasChanged();
+    }
+
+    private async Task GetOrderDetails()
+    {
+        order = await OrderService.GetOrderWithUser(orderId);
+        OrderDetails = order.OrderDetails;
+    }
+    public async Task OpenChat()
+    {
+        await dialogService.OpenAsync<PoPoy.Client.Pages.Chat.Chat>("Hộp thư", options: new DialogOptions() { Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });
+
+    }
+
+    public async Task OpenRate(int productId)
+    {
+        await dialogService.OpenAsync<Rate>($"Đánh giá sản phẩm",
+              new Dictionary<string, object>() { { "ProductId", productId }, { "Mode" , FormEditMode.New} },
+              new DialogOptions() { Width = "400px", Height = "312px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+
+
+
+    void OnLoadData(object value)
+    {
+
+
+        InvokeAsync(StateHasChanged);
+    }
+    private async void SendChat(Order order)
+    {
+
+        await broadCastService.SendInfoOrderModelAllAdmin(order);
+        toastService.ShowSuccess("Gửi thông tin thành công");
+        await OpenChat();
+    }
+
+
+}

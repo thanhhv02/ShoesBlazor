@@ -13,6 +13,7 @@ using PoPoy.Api.Data;
 using PoPoy.Api.Helpers.TokenHelpers;
 using PoPoy.Api.SendMailService;
 using PoPoy.Api.VNPay;
+using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.ApiModels;
 using PoPoy.Shared.Dto.RefreshToken;
@@ -68,6 +69,7 @@ namespace PoPoy.Api.Services.AuthService
             _context = context;
         }
         public HttpContext Context => _httpContext.HttpContext;
+        public string UserId() => _httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
         public async Task<Guid> GetUserId(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
@@ -612,7 +614,12 @@ namespace PoPoy.Api.Services.AuthService
                 .FirstOrDefaultAsync(x => x.UserId == userId);
             return new ServiceResponse<Address> { Data = address };
         }
+        public async Task<List<SelectItem>> GetShippers()
+        {
+            var list = await _userManager.GetUsersInRoleAsync(roleName: RoleName.Shipper);
+            return list.Select(p => new SelectItem { Id = p.Id.ToString() , Name = p.FirstName + " " + p.LastName }).ToList();
 
+        }
         public async Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId)
         {
             var response = new ServiceResponse<Address>();
