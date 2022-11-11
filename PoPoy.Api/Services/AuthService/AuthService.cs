@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using MailKit.Search;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Utilities;
 using PoPoy.Api.Data;
 using PoPoy.Api.Helpers.TokenHelpers;
 using PoPoy.Api.SendMailService;
@@ -22,10 +24,13 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static PoPoy.Shared.PayPal.PayPalPaymentExecutedResponse;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace PoPoy.Api.Services.AuthService
@@ -460,6 +465,8 @@ namespace PoPoy.Api.Services.AuthService
                 order.AddressId = address;
                 _context.Orders.Add(order);
                 var user = await _userManager.FindByIdAsync(detail.UserId.ToString());
+                var userAddress = _context.Addresses.Where(x => x.UserId == detail.UserId).FirstOrDefault();
+                List<string> products = new List<string>();
                 foreach (var items in cartItem)
                 {
                     string OrderId2 = GenerateOrderId();
@@ -472,7 +479,22 @@ namespace PoPoy.Api.Services.AuthService
                     _orderDetail.Quantity = items.Quantity;
                     _orderDetail.TotalPrice = (double)(items.Price * items.Quantity);
                     _context.OrderDetails.Add(_orderDetail);
-
+                    products.Add("<tr>\r\n" +
+                        "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +
+                        $"<span>{_context.Products.Where(x => x.Id == items.Product.Id).FirstOrDefault().Title} - {items.Size}</span>\r\n" +
+                        "<br>\r\n" +
+                        "</td>\r\n" +
+                        "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +
+                        $"<span>{items.Price}đ</span>\r\n" +
+                        "</td>\r\n                                            " +
+                        $"<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">{items.Quantity}</td>\r\n" +
+                        "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +
+                        "<span>0đ</span>\r\n" +
+                        "</td>\r\n" +
+                        "<td align=\"right\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +
+                        $"<span>{(double)(items.Price * items.Quantity)}đ</span>\r\n" +
+                        "</td>\r\n" +
+                        "</tr>");
                     var selected_product = prods.Where(x => x.ProductId == items.ProductId && x.SizeId == items.SizeId).FirstOrDefault();
                     selected_product.Quantity = selected_product.Quantity - items.Quantity;
                     var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == items.ProductId);
@@ -484,47 +506,46 @@ namespace PoPoy.Api.Services.AuthService
                 var result = _context.SaveChanges();
                 if (result != 1)
                 {
-                    //EmailDto emailDto = new EmailDto
-                    //{
-                    //    Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId}",
-                    //    Body = $"<h1 style=\"font-size:17px;font-weight:bold;color:#444;padding:0 0 5px 0;margin:0\">" +
-                    //    $"Cảm ơn quý khách {user.LastName+" "+user.FirstName}" +
-                    //    $" đã đặt hàng tại Popoy,</h1>"+
-                    //    $"<p style=\"margin:4px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal\">" +
-                    //    $"Popoy rất vui thông báo đơn hàng #{OrderId} của quý khách đã được tiếp nhận và đang trong quá trình xử lý. " +
-                    //    "Popoy sẽ thông báo đến quý khách ngay khi hàng chuẩn bị được giao.</p>",
-                    //    To = user.Email
-                    //};
-                    var path = Path.Combine(_env.ContentRootPath, "wwwroot/ordersuccesfullymail.html");
-                    string bodyBuilder = null;
-                    using (StreamReader SourceReader = System.IO.File.OpenText(path))
+                    //await SendMailOrderSuccessfully(OrderId, order, user, products, detail);
+                    Thread thr = new Thread(delegate ()
                     {
-                        bodyBuilder = SourceReader.ReadToEnd();
-                    }
-                    bodyBuilder = bodyBuilder.Replace("[oder-id]", OrderId.ToString().ToUpper());
-                    bodyBuilder = bodyBuilder.Replace("[user-first-name]", user.FirstName);
-                    bodyBuilder = bodyBuilder.Replace("[order-date]", order.OrderDate.ToString("dddd, dd MMMM yyyy HH:mm:ss"));
-                    bodyBuilder = bodyBuilder.Replace("[user-full-name]", user.LastName+" "+user.FirstName);
-                    bodyBuilder = bodyBuilder.Replace("[user-mail]", user.Email);
-                    bodyBuilder = bodyBuilder.Replace("[user-list-order]", _configuration["ClientUrl"]+ "/user/list-order");
-                    bodyBuilder = bodyBuilder.Replace("[user-phone-number]", user.PhoneNumber);
-                    bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
-                    bodyBuilder = bodyBuilder.Replace("[user-address]", await _context.Addresses.Where(x => x.UserId == detail.UserId)
-                        .Select(x => x.Street+" "+x.Ward+" "+x.District+" "+x.City).FirstOrDefaultAsync());
-                    EmailDto emailDto = new EmailDto
+                        var path = Path.Combine(_env.ContentRootPath, "wwwroot/ordersuccesfullymail.html");
+                        string bodyBuilder = null;
+                        using (StreamReader SourceReader = System.IO.File.OpenText(path))
+                        {
+                            bodyBuilder = SourceReader.ReadToEnd();
+                        }
+
+                        bodyBuilder = bodyBuilder.Replace("[oder-id]", OrderId.ToString().ToUpper());
+                        bodyBuilder = bodyBuilder.Replace("[user-first-name]", user.FirstName);
+                        bodyBuilder = bodyBuilder.Replace("[order-date]", order.OrderDate.ToString("dddd, dd MMMM yyyy HH:mm:ss"));
+                        bodyBuilder = bodyBuilder.Replace("[user-full-name]", user.LastName + " " + user.FirstName);
+                        bodyBuilder = bodyBuilder.Replace("[user-mail]", user.Email);
+                        bodyBuilder = bodyBuilder.Replace("[user-list-order]", _configuration["ClientUrl"] + "/user/list-order");
+                        bodyBuilder = bodyBuilder.Replace("[user-phone-number]", user.PhoneNumber);
+                        bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
+                        bodyBuilder = bodyBuilder.Replace("[total-price]", order.TotalPrice.ToString());
+                        bodyBuilder = bodyBuilder.Replace("[all-products]", String.Join("", products.ToArray()));
+                        bodyBuilder = bodyBuilder.Replace("[user-address]", userAddress.Street+" "+userAddress.Ward+" "+userAddress.District+" "+userAddress.City);
+                        EmailDto emailDto = new EmailDto
+                        {
+                            Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
+                            Body = bodyBuilder,
+                            To = user.Email
+                        };
+                        try
+                        {
+                            _emailService.SendEmail(emailDto);
+                        }
+                        catch
+                        {
+
+                        }
+                    })
                     {
-                        Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
-                        Body = bodyBuilder,
-                        To = user.Email
+                        IsBackground = true
                     };
-                    try
-                    {
-                        _emailService.SendEmail(emailDto);
-                    }
-                    catch
-                    {
-                        return "Không thể gửi mail";
-                    }
+                    thr.Start();
                     return OrderId;
                 }
                 return null;
@@ -696,6 +717,41 @@ namespace PoPoy.Api.Services.AuthService
             return paymentUrl;
         }
 
-        
+        private async void SendMailOrderSuccessfully(string OrderId, Order order, User user, List<string> products, Cart detail)
+        {
+            var path = Path.Combine(_env.ContentRootPath, "wwwroot/ordersuccesfullymail.html");
+            string bodyBuilder = null;
+            using (StreamReader SourceReader = System.IO.File.OpenText(path))
+            {
+                bodyBuilder = SourceReader.ReadToEnd();
+            }
+
+            bodyBuilder = bodyBuilder.Replace("[oder-id]", OrderId.ToString().ToUpper());
+            bodyBuilder = bodyBuilder.Replace("[user-first-name]", user.FirstName);
+            bodyBuilder = bodyBuilder.Replace("[order-date]", order.OrderDate.ToString("dddd, dd MMMM yyyy HH:mm:ss"));
+            bodyBuilder = bodyBuilder.Replace("[user-full-name]", user.LastName + " " + user.FirstName);
+            bodyBuilder = bodyBuilder.Replace("[user-mail]", user.Email);
+            bodyBuilder = bodyBuilder.Replace("[user-list-order]", _configuration["ClientUrl"] + "/user/list-order");
+            bodyBuilder = bodyBuilder.Replace("[user-phone-number]", user.PhoneNumber);
+            bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
+            bodyBuilder = bodyBuilder.Replace("[total-price]", order.TotalPrice.ToString());
+            bodyBuilder = bodyBuilder.Replace("[all-products]", String.Join("", products.ToArray()));
+            bodyBuilder = bodyBuilder.Replace("[user-address]", await _context.Addresses.Where(x => x.UserId == detail.UserId)
+                .Select(x => x.Street + " " + x.Ward + " " + x.District + " " + x.City).FirstOrDefaultAsync());
+            EmailDto emailDto = new EmailDto
+            {
+                Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
+                Body = bodyBuilder,
+                To = user.Email
+            };
+            try
+            {
+                _emailService.SendEmail(emailDto);
+            }
+            catch
+            {
+                
+            }
+        }
     }
 }

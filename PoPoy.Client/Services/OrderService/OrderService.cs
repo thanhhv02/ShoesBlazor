@@ -27,16 +27,19 @@ namespace PoPoy.Client.Services.OrderService
         private readonly NavigationManager _navigationManager;
         private readonly ILocalStorageService _localStorage;
         private readonly HttpInterceptorService httpInterceptorService;
+        private readonly IAuthService authService;
 
         public OrderService(HttpClient http,
             AuthenticationStateProvider authStateProvider,
             NavigationManager navigationManager, ILocalStorageService localStorage,
-            HttpInterceptorService httpInterceptorService)
+            HttpInterceptorService httpInterceptorService,
+            IAuthService authService)
         {
             _http = http;
             _navigationManager = navigationManager;
             this._localStorage = localStorage;
             this.httpInterceptorService = httpInterceptorService;
+            this.authService = authService;
         }
 
         public PagingResponse<OrderOverviewResponse> ListOrderResponse { get; set; } = new PagingResponse<OrderOverviewResponse>();
@@ -68,6 +71,8 @@ namespace PoPoy.Client.Services.OrderService
                 ["pageNumber"] = productParameters.PageNumber.ToString()
             };
             var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user", queryStringParam));
+
+            await response.CheckAuthorized(authService);
             
             var content = await response.Content.ReadAsStringAsync();
 

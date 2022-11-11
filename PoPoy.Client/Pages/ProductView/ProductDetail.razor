@@ -33,7 +33,7 @@
                                 @foreach (var item in product.ProductImages)
                                 {
                                     <div class="product-img-item">
-                                        <img src="@item.ImagePath" @onclick="()=>ClickToImage(item.ImagePath)" alt="">
+                                        <img src="@item.ImagePath" @onmouseover="()=>ClickToImage(item.ImagePath)" alt="">
                                     </div>
                                 }
                             </div>

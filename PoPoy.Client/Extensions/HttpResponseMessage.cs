@@ -24,7 +24,6 @@ namespace PoPoy.Client.Extensions
         {
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                if(string.IsNullOrEmpty(await authService.RefreshToken()))
                 await authService.Logout();
             }
         }

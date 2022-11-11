@@ -31,7 +31,7 @@ else if (Mode == FormEditMode.Update && !isMyReview)
 }
 else
 {
-    <EditForm Model="@review" OnValidSubmit="@(() => Mode == FormEditMode.New ? Post() : Put())">
+    <EditForm Model="@review" OnValidSubmit="@(() => Mode == FormEditMode.New ? Post() : Put())" style="margin: 0 auto; text-align: center;" align = "center">
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <ValidationSummary></ValidationSummary>
         <div class="form-group mb-3">
@@ -44,11 +44,12 @@ else
                     <option value="@value">@value</option>
                 }
             </InputSelect>
+            @review.Title
         </div>
-        <div class="form-group mb-3" style="width: 70%;">
+@*        <div class="form-group mb-3" style="width: 70%;">
             <label class="mb-2">Tiêu đề</label>
             <InputText class="form-control" @bind-Value="@review.Title"></InputText>
-        </div>
+        </div>*@ 
         <div class="form-group mb-3">
             <label class="mb-2">Nội dung đánh giá</label>
             <InputTextArea class="form-control" @bind-Value="@review.ReviewText" style="width: 70%;"></InputTextArea>
@@ -71,8 +72,27 @@ else
     private Product product = new();
     private bool isMyReview;
 
-    private void OnQuantityChanged(int rating)
-        => review.Rating = rating;
+    private void OnQuantityChanged(int rating){
+        switch(rating){
+            case 1:
+                review.Title = "Cực kỳ không hài lòng";
+                break;
+            case 2:
+                review.Title = "Không hài lòng";
+                break;
+            case 3:
+                review.Title = "Bình thường";
+                break;
+            case 4:
+                review.Title = "Hài lòng";
+                break;
+            default:
+                review.Title = "Cực kỳ hài lòng";
+                break;
+        }
+        review.Rating = rating;
+    }
+        
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,7 +103,7 @@ else
             Console.WriteLine(product != null);
         }
         review.ProductId = product.Id;
-
+        review.Title = "Cực kỳ hài lòng";
         if (Mode == FormEditMode.Update)
         {
             review = await PublicReviewService.GetAsync(ReviewId);

@@ -33,7 +33,7 @@ namespace PoPoy.Api.Controllers
             var username = principal.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-                return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request" });
+                return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request 2" });
             var signingCredentials = _tokenService.GetSigningCredentials();
             var claims = await _tokenService.GetClaims(user);
             var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);

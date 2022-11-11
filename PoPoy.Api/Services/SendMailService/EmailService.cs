@@ -20,7 +20,7 @@ namespace PoPoy.Api.SendMailService
         public void SendEmail(EmailDto request)
         {
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("Giày Popoy", _config.GetSection("EmailUsername").Value));
+            email.From.Add(new MailboxAddress("Popoy", _config.GetSection("EmailUsername").Value));
             email.To.Add(MailboxAddress.Parse(request.To));
             email.Subject = request.Subject;
             email.Body = new TextPart(TextFormat.Html) { Text = request.Body };

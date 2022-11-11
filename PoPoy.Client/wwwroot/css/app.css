@@ -809,6 +809,7 @@ footer ul li {
     height: 35px;
     margin-left: 5px;
     font-size: 20px;
+    border-radius: 25px;
 }
 
 .pagination > li > a.active {
