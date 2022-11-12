@@ -1,20 +1,21 @@
 ﻿@page "/shipper"
+@attribute [Authorize(Roles = RoleName.Shipper)]
 
 <div class="row">
     <div class="col-12">
         <div class="card">
 
-        <div class="card-body pt-3">
-            <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Đơn hàng được bàn giao</h2>
+            <div class="card-body pt-3">
+                <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Đơn hàng được bàn giao</h2>
 
                 <div class="container-fluid">
                     <div class="row my-5">
                         @foreach (var item in orders)
                         {
-                           
-                                 <div class="col-lg-12  ">
+
+                            <div class="col-lg-12  ">
                                 <RadzenCard Class="m-3">
-                                    <h6  style="color:#012970">Mã đơn hàng <b>#@item.Id</b></h6>
+                                    <h6 style="color:#012970">Mã đơn hàng <b>#@item.Id</b></h6>
                                     <RadzenCard Class="my-3 --rz-series-7  rz-shadow-0  rz-border-radius-0" style="margin: 0 calc(-1 * var(--rz-card-padding)); padding: 2rem; background-color:rgba(67, 64, 210, 0.12)">
                                         <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary-light"><strong>Thông tin người nhận</strong></RadzenText>
                                         <div class="row">
@@ -40,8 +41,8 @@
                                         <div class="d-flex flex-row p-3">
                                             <hr>
                                             @{
-                                                var path = oderDetail.Product.ProductImages.Count > 0 ? oderDetail.Product.ProductImages[0]?.ImagePath :  _config["BackendApiUrl"] + "/uploads/no-photo-available.png";
-                                                
+                                                var path = oderDetail.Product.ProductImages.Count > 0 ? oderDetail.Product.ProductImages[0]?.ImagePath : _config["BackendApiUrl"] + "/uploads/no-photo-available.png";
+
                                             }
                                             <RadzenImage Path="@path" Class="rounded-circle float-start me-3" Style="width: 100px; height: 100px;" />
                                             <div>
@@ -49,18 +50,18 @@
                                                 <RadzenText TextStyle="TextStyle.Body1"><b>@oderDetail.Product?.Title x @oderDetail.Quantity</b></RadzenText>
                                                 <RadzenText TextStyle="TextStyle.Overline" Class="d-flex mt-1 mb-0">Giá sản phẩm</RadzenText>
                                                 <RadzenText TextStyle="TextStyle.Body1"><b>@oderDetail.Product?.Price</b></RadzenText>
-                                               
+
                                             </div>
                                         </div>
-                                     }
+                                    }
                                     <div class="text-end">
                                         <RadzenButton Click="() => UpdateStatus(item.Id , OrderStatus.Processing,item.UserId, item.Shipper?.FirstName)" Icon="close" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Danger" Text="Từ chối" Class="me-1" />
-                                        <RadzenButton Click="() => UpdateStatus(item.Id , OrderStatus.Delivering,item.UserId, item.Shipper?.FirstName)" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="check_circle" Text="Chấp nhận"  />
+                                        <RadzenButton Click="() => UpdateStatus(item.Id , OrderStatus.Delivering,item.UserId, item.Shipper?.FirstName)" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="check_circle" Text="Chấp nhận" />
                                     </div>
                                 </RadzenCard>
 
                             </div>
-                           <hr />
+                            <hr />
                         }
                     </div>
                 </div>

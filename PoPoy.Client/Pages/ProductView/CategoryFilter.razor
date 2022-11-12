@@ -11,7 +11,7 @@
     <ul class="filter-list">
         @foreach (var category in CategoryService.Categories)
         {
-            <li><a href="/category/@category.Url" @onclick="()=>OnClicked(category.Name)">@category.Name</a></li>
+            <li><a href="/category/@category.Url" style="width:1000px" @onclick="()=>OnClicked(category.Name)">@category.Name</a></li>
         }
     </ul>
 </div>

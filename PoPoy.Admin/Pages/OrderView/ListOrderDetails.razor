@@ -4,81 +4,81 @@
 @using PoPoy.Admin.Services.BroadCastService
 @using PoPoy.Shared.Common
 @using PoPoy.Shared.Entities.OrderDto
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
 
 
 @inject IOrderService OrderService
 @inject IProductService ProductService
-
 @*<div class="row">
-    <h2 class="ml-2 mt-4 mb-3 col-11" style="color:darkblue">Chi tiết đơn hàng</h2>
-    <a href="/listOrder" class="btn btn-danger col-1 mt-4" style="height:40px;width:40px"><i class="oi oi-arrow-left"></i></a>
-</div>
+        <h2 class="ml-2 mt-4 mb-3 col-11" style="color:darkblue">Chi tiết đơn hàng</h2>
+        <a href="/listOrder" class="btn btn-danger col-1 mt-4" style="height:40px;width:40px"><i class="oi oi-arrow-left"></i></a>
+    </div>
 
 
-<div class="row mt-4 ml-3">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Mã đơn hàng
-                </th>
-                <th>
-                    Tên hàng
-                </th>
-                <th>
-                    Kích cỡ
-                </th>
-                <th>
-                    Số lượng
-                </th>
-                <th>
-                    Giá 1 đơn vị
-                </th>
-                <th>
-                    Tổng đơn hàng
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var items in OrderDetails)
-            {
+    <div class="row mt-4 ml-3">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@items.OrderId</td>
-                    <td>@Products.FirstOrDefault(x => x.Id == items.ProductId).Title</td>
-                    <td>@items.Size</td>
-                    <td>@items.Quantity</td>
-                    <td>@items.Price</td>
-                    <td>@items.TotalPrice</td>
+                    <th>
+                        Mã đơn hàng
+                    </th>
+                    <th>
+                        Tên hàng
+                    </th>
+                    <th>
+                        Kích cỡ
+                    </th>
+                    <th>
+                        Số lượng
+                    </th>
+                    <th>
+                        Giá 1 đơn vị
+                    </th>
+                    <th>
+                        Tổng đơn hàng
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>*@
+            </thead>
+            <tbody>
+                @foreach (var items in OrderDetails)
+                {
+                    <tr>
+                        <td>@items.OrderId</td>
+                        <td>@Products.FirstOrDefault(x => x.Id == items.ProductId).Title</td>
+                        <td>@items.Size</td>
+                        <td>@items.Quantity</td>
+                        <td>@items.Price</td>
+                        <td>@items.TotalPrice</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>*@
 @if (order != null)
 {
     <div class="card">
 
         <div class="card-body pt-3">
             <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Chi tiết đơn hàng <b>#@orderId</b></h2>
-            <RadzenSteps  SelectedIndex="@((int)order.OrderStatus)" ShowStepsButtons="false">
+            <RadzenSteps SelectedIndex="@((int)order.OrderStatus)" ShowStepsButtons="false">
 
-                <Steps >
+                <Steps>
                     <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
                         <hr />
                         @*<h6 style="color:#012970"><b>Thông tin người đặt</b></h6>*@
                         <div class="row mt-1">
                             <div class="text-field col-lg-6 mb-4">
-                              <div class="row">
-                                   <div class="col-6">
-                                    <label for="name">Mã đơn hàng</label>
-                                    <input disabled class="form-control" value="@(order.Id)" />
-                               </div>
-                               <div class="col-6">
-                                    <RadzenButton Style="height:53px" class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                                              Click="()=>SendChat(order, order.UserId)" Text="Gửi tin nhắn"></RadzenButton>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="name">Mã đơn hàng</label>
+                                        <input disabled class="form-control" value="@(order.Id)" />
+                                    </div>
+                                    <div class="col-6">
+                                        <RadzenButton Style="height:53px" class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                                      Click="()=>SendChat(order, order.UserId)" Text="Gửi tin nhắn"></RadzenButton>
+                                    </div>
                                 </div>
-                              </div>
                             </div>
                             <div class="text-field col-lg-6 mb-4">
                                 <label for="name">Tên người đặt</label>
@@ -100,16 +100,16 @@
                                 <label for="name">Tổng tiền</label>
                                 <input disabled class="form-control" value="@(order.TotalPrice)" />
                             </div>
-                        
+
                         </div>
                         <hr />
                         <h6 style="color:#012970"><b>Thông tin sản phẩm</b></h6>
 
                         <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
-                                    FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@OrderDetails" TItem="OrderDetails" ColumnWidth="300px"
-                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                    LogicalFilterOperator="LogicalFilterOperator.Or"
-                                    SelectionMode="DataGridSelectionMode.Single" Context="OrderDetails">
+                                        FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@OrderDetails" TItem="OrderDetails" ColumnWidth="300px"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        LogicalFilterOperator="LogicalFilterOperator.Or"
+                                        SelectionMode="DataGridSelectionMode.Single" Context="OrderDetails">
                             <Columns>
                                 <RadzenDataGridColumn TItem="OrderDetails" Context="product" Filterable="false" Sortable="true" Title="Tên sản phẩm">
                                     <Template>
@@ -127,15 +127,15 @@
                         <h6 style="color:#012970"><b>Bàn giao cho người vận chuyển</b></h6>
                         <EditForm Model="AssignShipperModel" OnValidSubmit="AssignShipper">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn người vận chuyển</RadzenText>
-                            <RadzenListBox  LoadData="OnLoadDataShipper" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" @bind-Value=@shipperId
-                                       Data=@shippers TextProperty="Name" Change=@(args => OnLoadData(args)) ValueProperty="Id" Style="height:200px" Class="w-100" />
+                            <RadzenListBox LoadData="OnLoadDataShipper" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" @bind-Value=@shipperId
+                                           Data=@shippers TextProperty="Name" Change=@(args => OnLoadData(args)) ValueProperty="Id" Style="height:200px" Class="w-100" />
 
-                            <div  class="row mt-3 @(order.OrderStatus == OrderStatus.Processing ? "" : "d-none")">
+                            <div class="row mt-3 @(order.OrderStatus == OrderStatus.Processing ? "" : "d-none")">
                                 <div class="col-md-12 text-end">
-                                    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="handshake" Text="Bàn giao"  />
+                                    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="handshake" Text="Bàn giao" />
                                 </div>
                             </div>
-                      </EditForm>
+                        </EditForm>
                     </RadzenStepsItem>
 
                     <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Confirmed" Disabled="order.OrderStatus != OrderStatus.Confirmed" Text="Đơn hàng đã được tiếp nhận">
@@ -150,7 +150,7 @@
                     </RadzenStepsItem>
 
                     <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivering" Disabled="order.OrderStatus != OrderStatus.Delivering" Text="Đang trong quá trình vận chuyển">
-                          <div class="d-flex justify-content-center align-items-center">
+                        <div class="d-flex justify-content-center align-items-center">
                             <div>
 
                                 <h2 style="color:#012970">Shipper <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "") </b>đang giao hàng !</h2>
@@ -161,14 +161,15 @@
                     </RadzenStepsItem>
 
                     <RadzenStepsItem Selected="order.OrderStatus != OrderStatus.Delivered ||order.OrderStatus != OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
-                          <div class="d-flex justify-content-center align-items-center">
+                        <div class="d-flex justify-content-center align-items-center">
                             <div>
 
-                                    <h2 style="color:#012970">Đơn hàng được <b>@(order.User != null ? order.User?.FirstName + " " + order.User?.LastName : "") </b> nhận thành công !</h2>
+                                <h2 style="color:#012970">Đơn hàng được <b>@(order.User != null ? order.User?.FirstName + " " + order.User?.LastName : "") </b> nhận thành công !</h2>
                             </div>
 
                             <img src="/images/danhanhang.png" width="300" />
                         </div>
+
                     </RadzenStepsItem>
                 </Steps>
             </RadzenSteps>
@@ -176,8 +177,9 @@
 
     </div>
 }
-else{
-    <h2>Chờ chút</h2>
+else
+{
+   <Loading></Loading>
 }
 @code {
     [Parameter]
@@ -218,7 +220,7 @@ else{
         var list = shippers;
         if (!string.IsNullOrEmpty(args.Filter))
         {
-            list = shippers.Where(c => c.Name.ConvertToUnSign().Contains(args.Filter.ConvertToUnSign()) ).ToList();
+            list = shippers.Where(c => c.Name.ConvertToUnSign().Contains(args.Filter.ConvertToUnSign())).ToList();
         }
         shippers = list;
         await InvokeAsync(StateHasChanged);
@@ -231,14 +233,15 @@ else{
             AssignShipperModel.ShipperId = Guid.Parse(shipperId);
         }
 
-        var result =  await OrderService.AssignShipper(AssignShipperModel);
+        var result = await OrderService.AssignShipper(AssignShipperModel);
         if (result)
         {
             toastService.ShowSuccess("Bàn giao cho shipper thành công ");
             await GetOrderDetails();
 
             StateHasChanged();
-        }else
+        }
+        else
         {
             toastService.ShowError("Bàn giao cho shipper thất bại ");
         }
@@ -260,7 +263,7 @@ else{
     private async void SendChat(Order order, Guid userId)
     {
         await broadCastService.SendInfoOrderModelToUserId(order, userId);
-         toastService.ShowSuccess("Gửi thông tin thành công");
+        toastService.ShowSuccess("Gửi thông tin thành công");
     }
 
 

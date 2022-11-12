@@ -45,6 +45,20 @@ namespace PoPoy.Shared.PayPal
             }
         }
 
+        public async Task<PayPalPaymentExecutedResponse> executedPayment(string paymentId, string payerId)
+        {
+            try
+            {
+                HttpClient http = GetPaypalHttpClient();
+                PayPalAccessToken accessToken = await GetPayPalAccessTokenAsync(http);
+                return await ExecutePaypalPaymentAsync(http, accessToken, paymentId, payerId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private HttpClient GetPaypalHttpClient()
         {
             const string sandbox = "https://api.sandbox.paypal.com";

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.ProductService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
@@ -52,6 +53,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> CreateProduct(ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -75,6 +78,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPut("categories/{id}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> CategoryAssign(int id, CategoryAssignRequest request)
         {
             if (!ModelState.IsValid)
@@ -89,6 +94,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPut("{productId}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> UpdateProduct(ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -100,6 +107,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpDelete("{productId}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             var affectedResult = await _productServices.DeleteProduct(productId);
@@ -148,6 +157,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPut("sizes/{id}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> SizeAssign(int id, SizeAssignRequest request)
         {
             if (!ModelState.IsValid)

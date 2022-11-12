@@ -3,16 +3,17 @@
 
 @inject IOrderService OrderService
 @inject IAuthService AuthService
+@attribute [Authorize(Roles = RoleName.Shipper)]
 
 <div class="card">
     <div class="card-body">
         <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách đơn hàng đang giao</h2>
         <div class="row mt-4 ml-3">
-            <RadzenDataGrid  Responsive AllowFiltering="true" AllowColumnResize="true"
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
                             FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@orders" TItem="Order" ColumnWidth="300px"
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             LogicalFilterOperator="LogicalFilterOperator.Or"
-                            SelectionMode="DataGridSelectionMode.Single"  >
+                            SelectionMode="DataGridSelectionMode.Single">
                 <Columns>
                     <RadzenDataGridColumn Frozen="true" Width="421px" Title="Thao tác" TItem="Order" Context="item" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
                         <Template>

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities.OrderDto;
@@ -18,6 +20,7 @@ namespace PoPoy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -42,6 +45,7 @@ namespace PoPoy.Api.Controllers
             return Ok(orderDetails);
         }
         [HttpGet("getOrderWithUser/{orderId}")]
+        [AuthorizeToken()]
         public async Task<ActionResult<List<Order>>> GetOrderWithUser(string orderId)
         {
             var orderDetails = await _orderService.GetOrderWithUser(orderId);
@@ -67,7 +71,7 @@ namespace PoPoy.Api.Controllers
             return Ok(affectedResult);
         }
         [HttpGet("get-all-order-user")]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters)
         {
             var result = await _orderService.GetOrders(productParameters, GetUserId());
@@ -82,6 +86,7 @@ namespace PoPoy.Api.Controllers
         }
         //[Authorize(Roles = RoleName.Admin)]
         [HttpPost("AssignShipper")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
         public async Task<ActionResult<ServiceResponse<bool>>> AssignShipper(AssignShipperDto model)
         {
             var result = await _orderService.AssignShipper(model);
@@ -93,6 +98,8 @@ namespace PoPoy.Api.Controllers
         }
         [HttpPost("GetOrderByShipper")]
         //[Authorize(Roles = RoleName.Shipper + "," + RoleName.Admin)]
+        [AuthorizeToken(AuthorizeToken.ADMIN_SHIPPER)]
+
         public async Task<ActionResult<ServiceResponse<bool>>> GetOrderByShipper(OrderShipperSearchDto input)
         {
             var result = await _orderService.GetOrderByShipper(input);
@@ -105,6 +112,7 @@ namespace PoPoy.Api.Controllers
 
         [HttpPost("UpdateStatusOrder")]
         //[Authorize(Roles = RoleName.Shipper + "," + RoleName.Admin + RoleName.Staff )]
+        [AuthorizeToken(AuthorizeToken.PAGEADMIN)]
 
 
         public async Task<ActionResult<bool>> UpdateStatusOrder(UpdateStatusOrderDto input)

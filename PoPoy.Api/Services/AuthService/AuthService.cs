@@ -573,6 +573,29 @@ namespace PoPoy.Api.Services.AuthService
             }
             return OrderId;
         }
+        public async Task<bool> UpdatePaymentStatus(Guid userId)
+        {
+            try
+            {
+                var orders = _context.Orders.Where(x => x.UserId == userId && x.PaymentMode == "PayPal").Select(o => o);
+                foreach (var order in orders)
+                {
+                    order.PaymentStatus = PaymentStatus.Paid;
+                    _context.Orders.Update(order);
+                }
+
+                var result = await _context.SaveChangesAsync();
+                if (result == 1)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public async Task<string> MakePaymentPaypal(double total)
         {
@@ -760,5 +783,7 @@ namespace PoPoy.Api.Services.AuthService
                 
             }
         }
+
+
     }
 }

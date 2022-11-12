@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
+using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Shared.Dto;
@@ -17,6 +18,7 @@ namespace PoPoy.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+
 
     public class BroadCastController : ControllerBase
     {
@@ -35,7 +37,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> SendNotiAllAdmin(CreateOrUpdateNotiDto notiDto)
         {
 
@@ -45,7 +47,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> SendNotiUserId(CreateOrUpdateNotiDto notiDto)
         {
             var notification = mapper.Map<NotificationDto>(notiDto);
@@ -55,7 +57,7 @@ namespace PoPoy.Api.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [AuthorizeToken]
 
         public async Task<IActionResult> ReadNoti(Guid notiId)
         {
@@ -73,7 +75,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [AuthorizeToken]
 
         public async Task<IActionResult> GetAllNotiByUserId(Guid id)
         {
@@ -95,7 +97,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> SendMessageUserId(CreateOrUpdateChatDto chatDto)
         {
             var chat = mapper.Map<ChatDto>(chatDto);
@@ -105,7 +107,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> SendMessageAllAdmin(CreateOrUpdateChatDto chatDto)
         {
             var chat = mapper.Map<ChatDto>(chatDto);
@@ -114,7 +116,7 @@ namespace PoPoy.Api.Controllers
             return Ok(chatDto);
         }
         [HttpPost]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> ReadMessage(Guid receiverId, Guid senderId)
         {
             await broadCastService.ReadMessage(receiverId, senderId); 
@@ -123,7 +125,7 @@ namespace PoPoy.Api.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> GetListChatSender(Guid userId)
         {
             var chats = await broadCastService.GetListChatSender(userId);
@@ -137,7 +139,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [AuthorizeToken]
         public async Task<IActionResult> GetListChatUser(Guid userId)
         {
             var chats = await broadCastService.GetListChatUser(userId);

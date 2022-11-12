@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.CategoryService;
 using PoPoy.Shared.ViewModels;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace PoPoy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -32,6 +34,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
         public async Task<IActionResult> CreateCategory(CategoryCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -43,6 +46,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPut("{categoryId}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> UpdateCategory(CategoryUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -54,6 +59,8 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpDelete("{categoryId}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
         public async Task<IActionResult> DeleteCategory(int categoryId)
         {
             var result = await _categoryService.DeleteCategory(categoryId);
@@ -63,6 +70,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpGet("searchCategory/{searchText}")]
+
         public async Task<IActionResult> SearchCategory(string searchText)
         {
             var result = await _categoryService.SearchCategory(searchText);

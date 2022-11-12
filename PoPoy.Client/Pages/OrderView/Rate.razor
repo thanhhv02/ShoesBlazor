@@ -12,7 +12,7 @@
             <ValidationSummary></ValidationSummary>
             <div class="form-group mb-3">
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H1"> @review.Title</RadzenText>
-                <RadzenRating Style="width: 100px" Change=@(args => OnQuantityChanged(args)) />
+                <RadzenRating @bind-Value="@review.Rating" Style="width: 100px" Change=@(args => OnQuantityChanged(args)) />
 
             </div>
 
@@ -34,6 +34,7 @@
 
     [Parameter]
     public FormEditMode Mode { get; set; }
+    [Inject] private IToastService toastService { get; set; }
 
     private Review review = new();
     private Product product = new();
@@ -90,7 +91,8 @@
     private async Task Put()
     {
         await ReviewService.PutAsync(review);
-        NavigationManager.NavigateTo($"/product-detail/{review.ProductId}");
+        toastService.ShowSuccess("Cập nhật đánh giá thành công");
+        //NavigationManager.NavigateTo($"/product-detail/{review.ProductId}");
         //await JSRuntime.InvokeVoidAsync("showInfoToast", "レビューを修正しました。");
     }
 

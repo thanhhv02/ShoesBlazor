@@ -1,0 +1,43 @@
+﻿@page "/location"
+
+@*@inject IJSRuntime JSRuntime
+
+<div id="map" style="height:800px;width:100%;">
+</div>
+
+@code{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initialize", null); 
+            StateHasChanged();
+        }
+    }
+}*@
+<div class="row mt-5">
+    <div class="col-xl-12">
+@*        <h3>
+            <RadzenCheckBox @bind-Value="@showMadridMaker" />
+        </h3>*@
+        <RadzenGoogleMap class="googleMap" style="height:600px;width:100%" Zoom="@zoom" Center="@(new GoogleMapPosition(){Lat = 10.762622,Lng = 106.660172})" MapClick="@OnMapClick" MarkerClick="@OnMarkerClick">
+            <Markers>
+                <RadzenGoogleMapMarker Title="Cửa hàng Popoy" Label="Cửa hàng PoPoy" Position="@(new GoogleMapPosition(){Lat = 10.762622,Lng = 106.66017})"></RadzenGoogleMapMarker>
+            </Markers>
+        </RadzenGoogleMap>
+    </div>
+</div>
+@code{
+    int zoom = 18;
+    bool showMadridMaker;
+    string clickedPosition = "";
+
+    void OnMapClick(GoogleMapClickEventArgs args)
+    {
+        clickedPosition = $"Map clicked LAT : {args.Position.Lat}, LNG : {args.Position.Lng}";
+    }
+    void OnMarkerClick(RadzenGoogleMapMarker args)
+    {
+        clickedPosition = $"Map : {args.Title} clicked LAT : {args.Position.Lat}, LNG : {args.Position.Lng}";
+    }
+}

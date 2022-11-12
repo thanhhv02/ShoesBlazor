@@ -1,21 +1,20 @@
 ﻿@page "/listCategory"
 @using PoPoy.Admin.Helper
-
 @inject IConfiguration Configuration
 @inject ICategoryService CategoryService
-
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
 @*<div class="input-group" style="left: 950px;">
-    <div class="form-outline">
-        <input @bind-value="searchText"
-               type="search"
-               list="users"
-               class="form-control"
-               placeholder="Search..." />
-    </div>
-    <button type="button" class="btn btn-primary" @onclick="SearchCategories">
-        <i class="fas fa-search"></i>
-    </button>
-</div>*@
+        <div class="form-outline">
+            <input @bind-value="searchText"
+                   type="search"
+                   list="users"
+                   class="form-control"
+                   placeholder="Search..." />
+        </div>
+        <button type="button" class="btn btn-primary" @onclick="SearchCategories">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>*@
 @*<td><a @onclick= class="btn btn-primary ml-3"><i class="oi oi-plus"></i></a></td>*@
 <RadzenButton Icon="add_circle_outline" Text="Tạo loại hàng mới" class="col-lg-4" ButtonStyle="ButtonStyle.Success" Click=@OpenCreate />
 <div class="card">
@@ -33,7 +32,7 @@
                     <RadzenDataGridColumn Sortable="true" Filterable="false" TItem="CateVM" Property="SortOrder" Title="Thứ tự" CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="CateVM" Property="Url" Title="Url" CssClass="MyInputClass" />
 
-                 
+
                     <RadzenDataGridColumn TItem="CateVM" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
                         <Template>
                             <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(product.Id.ToString())">
@@ -64,7 +63,7 @@
     public event Action<dynamic> Close;
     protected override async Task OnInitializedAsync()
     {
-        Close += async (r) => { await GetCategories();  StateHasChanged(); };
+        Close += async (r) => { await GetCategories(); StateHasChanged(); };
         DialogService.OnClose += Close;
         await GetCategories();
         await base.OnInitializedAsync();
@@ -132,9 +131,9 @@
 
     }
 }@*   public async Task OpenCreate()
-    {
-        await DialogService.OpenAsync<CreateCategory>($"Order",
-               new Dictionary<string, object>() { { "OrderID" , null} },
-               new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
-    }
-}*@
+        {
+            await DialogService.OpenAsync<CreateCategory>($"Order",
+                   new Dictionary<string, object>() { { "OrderID" , null} },
+                   new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+        }
+    }*@

@@ -19,6 +19,7 @@ namespace PoPoy.Client.Services.AuthService
         Task<string> Checkout(List<Cart> cartItems);
         Task<bool> CreateAddress(Address address);
         Task<Address> GetAddress(Guid userId);
+        Task PaymentPaypal(string paymentId, string payerId, Guid userId);
         Task<Address> AddOrUpdateAddress(Address address, Guid userId);
         Task<bool> IsUserAuthenticated();
         Task<Guid> GetUserId(LoginRequest request);

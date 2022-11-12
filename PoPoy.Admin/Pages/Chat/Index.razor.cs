@@ -76,6 +76,17 @@ namespace PoPoy.Admin.Pages.Chat
             ListChatSenders = result.Data;
             hostClient = configuration["ClientUrl"];
         }
+        private async Task Search(string str)
+        {
+            await LoadDataAsync();
+            var list = ListChatSenders;
+            if (!string.IsNullOrEmpty(str))
+            {
+                list = ListChatSenders.Where(c => c.User.FullName.ConvertToUnSign().Contains(str.ConvertToUnSign())).ToList();
+            }
+            ListChatSenders = list;
+            await InvokeAsync(StateHasChanged);
+        }
 
         private async Task SelectUserChat(Guid id)
         {

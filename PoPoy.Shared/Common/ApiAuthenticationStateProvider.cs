@@ -84,12 +84,26 @@ namespace PoPoy.Shared.Common
 
         private byte[] ParseBase64WithoutPadding(string base64)
         {
-            switch (base64.Length % 4)
-            {
-                case 2: base64 += "=="; break;
-                case 3: base64 += "="; break;
-            }
+            base64 = ValidateBase64EncodedString(base64);
             return Convert.FromBase64String(base64);
+        }
+
+        private string ValidateBase64EncodedString(string inputText)
+        {
+            string stringToValidate = inputText;
+            stringToValidate = stringToValidate.Replace('-', '+'); // 62nd char of encoding
+            stringToValidate = stringToValidate.Replace('_', '/'); // 63rd char of encoding
+            switch (stringToValidate.Length % 4) // Pad with trailing '='s
+            {
+                case 0: break; // No pad chars in this case
+                case 2: stringToValidate += "=="; break; // Two pad chars
+                case 3: stringToValidate += "="; break; // One pad char
+                default:
+                    throw new System.Exception(
+             "Illegal base64url string!");
+            }
+
+            return stringToValidate;
         }
     }
 }

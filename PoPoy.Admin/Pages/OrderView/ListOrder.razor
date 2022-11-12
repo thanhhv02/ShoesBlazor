@@ -1,4 +1,5 @@
 ﻿@page "/listOrder"
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
 
 @inject IOrderService OrderService
 @inject IAuthService AuthService
@@ -7,11 +8,11 @@
     <div class="card-body">
         <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách đơn hàng</h2>
         <div class="row mt-4 ml-3">
-            <RadzenDataGrid  Responsive AllowFiltering="true" AllowColumnResize="true"
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
                             FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Orders" TItem="Order" ColumnWidth="300px"
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             LogicalFilterOperator="LogicalFilterOperator.Or"
-                            SelectionMode="DataGridSelectionMode.Single"  >
+                            SelectionMode="DataGridSelectionMode.Single">
                 <Columns>
                     <RadzenDataGridColumn Frozen="true" Width="221px" Title="Thao tác" TItem="Order" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
                         <Template>
@@ -22,7 +23,7 @@
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn Width="161px" Frozen="true" TItem="Order" Property="Id" Title="Mã đơn hàng" CssClass="MyInputClass" />
-                 
+
                     <RadzenDataGridColumn TItem="Order" Filterable="false" Property="TotalPrice" Title="Tổng đơn hàng" CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="Order" Property="PaymentMode" Title="Phương thức thanh toán" CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="Order" Property="OrderStatus" Title="Tình trạng đơn hàng" CssClass="MyInputClass" />
@@ -43,7 +44,7 @@
                     </RadzenDataGridColumn>
 
 
-              
+
                 </Columns>
             </RadzenDataGrid>
 
@@ -139,4 +140,4 @@
     //           new DialogOptions() { Width = "400px", Height = "512px", Resizable = true, Draggable = false, CssClass = "modal-content" });
 
     //}
-}   
+}

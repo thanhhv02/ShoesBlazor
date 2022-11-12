@@ -133,6 +133,11 @@ namespace PoPoy.Client.Services.AuthService
             return response.Content.ReadFromJsonAsync<ServiceResponse<Address>>().Result.Data;
         }
 
+        public async Task PaymentPaypal(string paymentId, string payerId, Guid userId)
+        {
+            await _httpClient.GetFromJsonAsync($"/api/user/paymentPaypal/?paymentId={paymentId}&payerId={payerId}&userId={userId}", null);
+        }
+
         public async Task<string> MakePayPalPayment(double total)
         {
             var url = await _httpClient.GetStringAsync("api/user/checkoutPayPal/?total=" + total);

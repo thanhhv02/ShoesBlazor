@@ -11,7 +11,8 @@
 
 <div class="bg-main">
     <div class="mid-header container">
-        <ReloadPage Title="Popoy" Class="logo" Uri="/"></ReloadPage>
+        @*<ReloadPage Title="Popoy" Class="logo" Uri="/"></ReloadPage>*@
+        <a href="/"><img src="./images/logoTop.png" style="width:180px;height:75px;"/></a>
         <Search></Search>
         <ul class="user-menu">
             <AuthorizeView>
@@ -52,15 +53,18 @@
                             </ul>
                         </div>
                     </div>
+
                 </Authorized>
             </AuthorizeView>
-            <li class="has_dropdown">
-                <a style="cursor:pointer" @onclick="OpenChat"><i class='bx bx-message'></i></a>
-                <span class="position-absolute top-0 start-100 translate-middle">
-                    <span class="visually-hidden">@*unread messages*@</span>
-                </span>
-            </li>
-
+     
+            <AuthorizeView>
+                <li class="has_dropdown">
+                    <a style="cursor:pointer" @onclick="OpenChat"><i class='bx bx-message'></i></a>
+                    <span class="position-absolute top-0 start-100 translate-middle">
+                        <span class="visually-hidden">@*unread messages*@</span>
+                    </span>
+                </li>
+            </AuthorizeView>
             <Notify></Notify>
             <li class="has_dropdown">
                 <a href="/cart"><i class='bx bx-cart'></i></a>
@@ -81,7 +85,7 @@
                     }
                     else if (carts.Count == 0)
                     {
-                        <h2>Hiện tại không có sản phẩm nào trong giỏ hàng của bạn.</h2>
+                        <h4 class="m-2">Hiện tại không có sản phẩm nào trong giỏ hàng của bạn.</h4>
                     }
                     else
                     {

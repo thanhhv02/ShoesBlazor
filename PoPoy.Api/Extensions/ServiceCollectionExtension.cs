@@ -63,8 +63,14 @@ namespace PoPoy.Api.Extensions
 
         public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
+
             services.AddAuthorization(options =>
             {
+                options.AddPolicy("Jwt", policy =>
+                {
+                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                });
                 var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
                 defaultAuthorizationPolicyBuilder =
                     defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
@@ -76,10 +82,7 @@ namespace PoPoy.Api.Extensions
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/login";
-                })
+                
                 .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
@@ -115,6 +118,7 @@ namespace PoPoy.Api.Extensions
                         }
                     };
                 });
+        
 
             return services;
         }

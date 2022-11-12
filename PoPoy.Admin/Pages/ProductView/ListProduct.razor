@@ -1,4 +1,5 @@
 ﻿@page "/listProduct"
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
 
 @inject IConfiguration Configuration
 @inject IProductService ProductService
@@ -16,13 +17,13 @@
                                 LogicalFilterOperator="LogicalFilterOperator.Or"
                                 SelectionMode="DataGridSelectionMode.Single">
                     <Columns>
-                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Id" Title="Id" Width="50px"  CssClass="MyInputClass" />
-                        <RadzenDataGridColumn TItem="ProductVM" Property="Title" Title="Tên sản phẩm"  CssClass="MyInputClass" />
-                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Price"  Resizable="false" Title="Giá" CssClass="MyInputClass" />
+                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
+                        <RadzenDataGridColumn TItem="ProductVM" Property="Title" Title="Tên sản phẩm" CssClass="MyInputClass" />
+                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Price" Resizable="false" Title="Giá" CssClass="MyInputClass" />
                         <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="OriginalPrice" Resizable="false" Title="Giá gốc" CssClass="MyInputClass" />
-                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Views"  Resizable="false" Title="Lượt xem" CssClass="MyInputClass" />
+                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Views" Resizable="false" Title="Lượt xem" CssClass="MyInputClass" />
 
-                        <RadzenDataGridColumn TItem="ProductVM" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" >
+                        <RadzenDataGridColumn TItem="ProductVM" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
                             <Template>
                                 <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(product.Id.ToString())">
                                 </RadzenButton>

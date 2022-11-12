@@ -1,20 +1,44 @@
 ﻿@page "/payment-thanks"
+@inject NavigationManager NavigationManager;
+@inject IAuthService AuthService;
+@inject ILocalStorageService LocalStorage;
+
 @layout EmptyLayout
-<div class="text-center">
-    <header class="site-header" id="header" style="display:flex;justify-content: center;
-align-items: center;">
-        <h1 class="site-header__title" data-lead-id="site-header-title">THANK YOU!</h1>
-    </header>
-
-    <div class="main-content">
-        <i class="fa fa-check main-content__checkmark" id="checkmark"></i>
-        <p class="main-content__body" data-lead-id="main-content-body">Cảm ơn quý khách đã đặt hàng. Chúng tôi sẽ gửi mail sau ít phút !</p>
-    </div>
-
+<div class="jumbotron text-center">
+    <h1 class="display-3">Cảm ơn đã mua hàng!</h1>
+    <p class="lead"><strong>Hãy kiểm tra email</strong> của bạn.</p>
+    <hr>
+    <p>
+        Gặp sự cố? <ReloadPage Uri="/" Title="Liên hệ ngay"></ReloadPage>
+    </p>
+    <p class="lead">
+        <ReloadPage Title="Quay lại trang chủ" Uri="/"></ReloadPage>
+        <br />
         <AuthorizeView>
             <Authorized>
                 <a href="/user/list-order">Xem lịch sử mua hàng</a>
             </Authorized>
         </AuthorizeView>
-
+    </p>
 </div>
+
+@code{
+    private string _paymentId;
+    private string _payerId;
+
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var queryStrings = QueryHelpers.ParseQuery(uri.Query);
+        if (queryStrings.TryGetValue("paymentId", out var paymentId))
+        {
+            _paymentId = paymentId;
+        }
+        if (queryStrings.TryGetValue("PayerId", out var payerId))
+        {
+            _payerId = payerId;
+        }
+        var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
+        await AuthService.PaymentPaypal(paymentId, payerId, userId);
+    }
+}

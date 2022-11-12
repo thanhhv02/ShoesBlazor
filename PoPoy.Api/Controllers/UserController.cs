@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Enum;
+using PoPoy.Shared.PayPal;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,6 +17,7 @@ namespace PoPoy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class UserController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -111,6 +115,8 @@ namespace PoPoy.Api.Controllers
 
 
         [HttpDelete("{id}")]
+        [AuthorizeToken(RoleName.Admin)]
+            
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var user = await _authService.DeleteUser(id);
@@ -249,6 +255,26 @@ namespace PoPoy.Api.Controllers
                 }
             }
             return BadRequest(record);
+        }
+
+        [HttpGet("paymentPaypal")]
+        public async Task<IActionResult> PaymentPaypal(string paymentId, string payerId, Guid userId)
+        {
+            try
+            {
+                var payPalAPI = new PayPalAPI(_configuration);
+                var status = await payPalAPI.executedPayment(paymentId, payerId);
+                if (status.state == "approved")
+                {
+                    var result = await _authService.UpdatePaymentStatus(userId);
+                    return Ok(result);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet("checkoutPayPal")]

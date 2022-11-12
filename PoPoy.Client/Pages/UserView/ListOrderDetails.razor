@@ -55,7 +55,7 @@
                                     <p>Số lượng: @item.Quantity</p>
                                     <div class="d-flex">
                                          <RadzenButton Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                                    Click="()=>WriteReview(item)" Text="Đánh giá"></RadzenButton>
+                                    Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
                                         <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
                                           Click="()=>ViewDetail(item.OrderId)" Text="Xem chi tiết "></RadzenButton>
                                      </div>
@@ -107,6 +107,13 @@
     private void WriteReview(OrderDetailsProductResponse particular)
         => NavigationManager.NavigateTo($"/products/{particular.ProductId}/review/new");
 
+    public async Task OpenRate(int productId)
+    {
+        await dialogService.OpenAsync<PoPoy.Client.Pages.OrderView.Rate>($"Đánh giá sản phẩm",
+              new Dictionary<string, object>() { { "ProductId", productId }, { "Mode", FormEditMode.New } },
+              new DialogOptions() { Width = "400px", Height = "312px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
 
     private async void SendChat(OrderDetailsProductResponse product){
         await broadCastService.SendInfoOrderModel(product, _svc.ListOrderDetailsResponse);

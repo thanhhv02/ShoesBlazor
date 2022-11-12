@@ -19,6 +19,7 @@ namespace PoPoy.Shared.Dto
         public decimal TotalPrice { get; set; }
         public string PaymentMode { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public User User { get; set; }
         public Address Address { get; set; }
         public List<OrderDetails> OrderDetails { get; set; }

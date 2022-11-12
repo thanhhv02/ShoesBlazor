@@ -51,7 +51,7 @@
                                 @if (userId == review.UserId)
                                 {
 
-                                    <a class="btn-flat btn-hover" href=@($"/products/{ProductId}/review/{review.Id}/update")>Sửa review</a>
+                                    <a class="btn-flat btn-hover" href="javascript:void(0)" @onclick="() => OpenRate(ProductId , review.Id)">Sửa review</a>
                                     <a class="btn-flat btn-hover" href="javascript:void(0)"
                            @onclick="@(() => DeleteReview(review))">Xóa review</a>
 
@@ -80,13 +80,15 @@
 
     [Parameter]
     public EventCallback<ReviewAverageCalculatedEventArgs> OnReviewAverageCalculated { get; set; }
-
+    [Inject] private DialogService dialogService { get; set; }
     private Guid userId;
     private List<Review> reviews = new();
     public MetaData MetaData { get; set; } = new MetaData();
     private ProductParameters _productParameters = new ProductParameters();
+    private event Action<dynamic> OnModalClose;
     protected override async Task OnInitializedAsync()
     {
+        OnModalClose = async (p) => await GetReview();
         await GetReview();
         //reviews = await PublicReviewService.FilterByProductIdAsync(ProductId);
         await InvokeReviewAverageCalculatedEvent();
@@ -96,6 +98,14 @@
         {
             userId = value;
         }
+        dialogService.OnClose += OnModalClose;
+    }
+
+    
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        dialogService.OnClose -= OnModalClose;
     }
 
     private async void DeleteReview(Review review)
@@ -116,10 +126,10 @@
     private async ValueTask InvokeReviewAverageCalculatedEvent()
     {
         var args = new ReviewAverageCalculatedEventArgs
-            {
-                ReviewAverage = reviews.Count == 0 ? 0 : (decimal)reviews.Average(x => x.Rating),
-                ReviewCount = reviews.Count()
-            };
+        {
+            ReviewAverage = reviews.Count == 0 ? 0 : (decimal)reviews.Average(x => x.Rating),
+            ReviewCount = reviews.Count()
+        };
 
         await OnReviewAverageCalculated.InvokeAsync(args);
     }
@@ -133,5 +143,12 @@
     {
         _productParameters.PageNumber = page;
         await GetReview();
+    }
+    public async Task OpenRate(int productId , int reviewId)
+    {
+        await dialogService.OpenAsync<PoPoy.Client.Pages.OrderView.Rate>($"Đánh giá sản phẩm",
+              new Dictionary<string, object>() { { "ProductId", productId }, { "Mode", FormEditMode.Update }, { "reviewId" , reviewId } },
+              new DialogOptions() { Width = "400px", Height = "312px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
     }
 }
