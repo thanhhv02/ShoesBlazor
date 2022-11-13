@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 .svn*
+
+PoPoy.Api/Migrations/*
