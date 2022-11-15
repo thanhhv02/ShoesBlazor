@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoPoy.Shared.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace PoPoy.Shared.Dto
         public string OrderIdFromOrder { get; set; }
         public int ProductId { set; get; }
         public int Quantity { set; get; }
-        public int Size { get; set; }
-
+        public string SizeName { get; set; }
+        public ColorProduct ColorName { get; set; }
         [Column(TypeName = "decimal(18,0)")]
         public decimal Price { set; get; }
         public double TotalPrice { set; get; }

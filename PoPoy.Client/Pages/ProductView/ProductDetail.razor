@@ -1,4 +1,6 @@
 ﻿@page "/product-detail/{id:int}"
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inject IProductService _productSvc;
 @inject ILocalStorageService LocalStorage
 @inject IToastService _toastSvc;
@@ -85,10 +87,17 @@
                         </span>
                     </div>
 
-                    <div class="product-info-price">@product.Price.ToString("n0")<sup>VND</sup></div>
+                    <div class="product-info-price">
+                        @if(_ready){
+                            @Price
+                            <sup>VND</sup>
+                        }
+                    </div>
 
                     <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
-                    <SelectSize Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="StateHasChanged"></SelectSize>
+                    @if(_ready){
+                        <SelectSize productVariants="@product.ProductQuantities" Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="GetPriceProduct"></SelectSize>
+                    }
                     <div>
                         <button class="btn-flat btn-hover" @onclick="AddToCart">Thêm vào giỏ hàng</button>
                     </div>
@@ -133,6 +142,8 @@
     private int reviewCount;
     private bool IsViewAll { get; set; } = false;
     private string imagePath { get; set; } = null;
+    private string Price { get; set; } = "0";
+    bool _ready = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -146,6 +157,7 @@
         }
         cart = new Cart() { Quantity = 1, Product = product };
         await GetProducts();
+        
     }
 
     private async Task SelectedPage(int page)
@@ -158,15 +170,17 @@
         await _productSvc.GetAll(_productParameters, product.ProductInCategories.FirstOrDefault().Category.Url);
         MetaData = _productSvc.Products.MetaData;
     }
-    public async Task<int> GetQuantity(int sizeid, int prodid)
+    public async Task<int> GetProductQuantityAndPrice(int sizeid, int prodid, int colorid)
     {
-        var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
-        var result = await res.Content.ReadAsStringAsync();
-        return Convert.ToInt32(result.ToString());
+        var res = await _httpClient.GetStringAsync($"/api/product/get-product-quantity-price?sizeId={sizeid}&Prodid={prodid}&colorId={colorid}");
+        var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
+        var quantity = (string)result["Quantity"];
+        var price = (string)result["Price"];
+        return Convert.ToInt32(quantity.ToString());
     }
     private async void AddToCart()
     {
-        var stock = await GetQuantity(cart.SizeId, id);
+        var stock = await GetProductQuantityAndPrice(cart.SizeId, id, cart.ColorId);
         if (cart.SizeId <= 0)
         {
             _toastSvc.ShowError("Mời chọn size!");
@@ -197,6 +211,10 @@
         reviewAverage = args.ReviewAverage;
         Console.WriteLine("reviewAverage" + reviewAverage);
     }
+    private void GetPriceProduct(string price){
+        Price = price;
+        StateHasChanged();
+    }
     private void ButtonViewAllClick()
     {
         IsViewAll = !IsViewAll;
@@ -205,5 +223,12 @@
     private void ClickToImage(string imgPath){
         this.imagePath = imgPath;
         StateHasChanged();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_ready == false)
+        {
+            _ready = true;
+        }
     }
 }

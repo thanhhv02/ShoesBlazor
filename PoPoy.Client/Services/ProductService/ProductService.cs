@@ -26,7 +26,7 @@ namespace PoPoy.Client.Services.ProductService
         Task GetProductForSlide();
         Task<ServiceResponse<Product>> Get(int id);
         Task<List<ProductSize>> GetSizeProduct(int id);
-        ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes);
+        ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes, int[] color);
         Task<List<string>> GetProductSearchSuggestions(string searchText);
     }
     public class ProductService : IProductService
@@ -49,10 +49,11 @@ namespace PoPoy.Client.Services.ProductService
 
         public event Action ProductsChanged;
 
-        public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
+        public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes, int[] color)
         {
             var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
             var query2 = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            var query3 = System.Web.HttpUtility.ParseQueryString(string.Empty);
             foreach (var id in ids)
             {
                 query.Add("ids", id.ToString());
@@ -61,7 +62,11 @@ namespace PoPoy.Client.Services.ProductService
             {
                 query.Add("sizes", size.ToString());
             }
-            var response = await _httpClient.GetAsync($"api/product/filter?{query}&{query2}");
+            foreach (var t in color)
+            {
+                query.Add("color", t.ToString());
+            }
+            var response = await _httpClient.GetAsync($"api/product/filter?{query}&{query2}&{query3}");
             //await response.HandleError();
 
             return await response.Content.ReadFromJsonAsync<List<ProductQuantity>>();

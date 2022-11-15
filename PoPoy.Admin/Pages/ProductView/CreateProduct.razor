@@ -34,7 +34,7 @@
                         <ValidationMessage For="()=> Product.Description"></ValidationMessage>
 
                     </div>
-                    <div class="text-field col-lg-12 mb-4">
+                    @*<div class="text-field col-lg-12 mb-4">
                         <label for="price">Giá</label>
                         <InputNumber id="price" @bind-Value="Product.Price"></InputNumber>
                         <ValidationMessage For="()=> Product.Price"></ValidationMessage>
@@ -43,7 +43,7 @@
                         <label for="originalPrice">Giá gốc</label>
                         <InputNumber id="originalPrice" @bind-Value="Product.OriginalPrice"></InputNumber>
                         <ValidationMessage For="()=> Product.OriginalPrice"></ValidationMessage>
-                    </div>
+                    </div>*@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <RadzenButton Icon="close" Click="@((args) => dialogService.Close(false))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Cancel" Style="width: 120px" Class="me-1" />

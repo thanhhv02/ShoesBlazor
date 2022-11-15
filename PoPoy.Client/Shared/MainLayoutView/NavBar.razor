@@ -64,8 +64,9 @@
                         <span class="visually-hidden">@*unread messages*@</span>
                     </span>
                 </li>
+                <Notify></Notify>
             </AuthorizeView>
-            <Notify></Notify>
+           
             <li class="has_dropdown">
                 <a href="/cart"><i class='bx bx-cart'></i></a>
                 <span class="position-absolute top-0 start-100 translate-middle">
@@ -117,7 +118,7 @@
                                         <div class="name_time">
                                             <div class="name">
                                                 <p class="text-break text-wrap">@cart.Product.Title </p>
-                                                <p class="text-break text-wrap">Size: @cart.Size</p>
+                                                <p class="text-break text-wrap">Size: @cart.SizeName</p>
                                             </div>
                                             <span class="time">
 

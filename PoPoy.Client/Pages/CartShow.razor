@@ -1,4 +1,6 @@
 ﻿@page "/cart"
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inject ICartService CartService
 @inject IAuthService AuthService
 @inject ILocalStorageService LocalStorage
@@ -50,7 +52,7 @@
                                 <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">
                             }
                             <div class="col-sm-8">
-                                <h4>@cart.Product.Title - @cart.Size</h4>
+                                <h4>@cart.Product.Title - @cart.SizeName - @cart.ColorName</h4>
                                 <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" QuantityChanged="() => StateHasChanged()" />
                                 <div class="d-flex flex-row align-items-center mt-3">
                                     <i class="oi oi-trash"></i>
@@ -60,7 +62,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-2">
-                                <h4>@cart.Product.Price.ToString("n0")</h4>
+                                <h4>@cart.Price.ToString("n0")</h4>
                             </div>
                         </div>
                         <hr />
@@ -76,7 +78,7 @@
                             <EditForm Model="paymentModel">
 
                                 <RadzenRadioButtonList @bind-Value=@paymentModel.Name TValue="string" Orientation="Orientation.Vertical"
-                                                       Data="@rdOptions" />
+                                                   Data="@rdOptions" />
                             </EditForm>
                         </div>
                         @if (@paymentModel.Name == "CashOnDelivery")
@@ -155,7 +157,7 @@
             var finalTotal = CalcTotalAmount();
             foreach (var item in carts)
             {
-                productStock = await GetQuantity(item.SizeId, item.ProductId);
+                productStock = await GetQuantity(item.SizeId, item.ProductId, item.ColorId);
                 productQuantity = item.Quantity;
                 if (productStock < productQuantity)
                 {
@@ -204,8 +206,8 @@
                         addressModel.UserId = userId;
                         carts.FirstOrDefault().ProductId = item.ProductId;
                         carts.FirstOrDefault().UserId = userId;
-                        carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault(x => x.SizeId == item.SizeId).Size = item.Size;
-                        carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault(x => x.SizeId == item.SizeId).Price = item.Product.Price;
+                        carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault(x => x.SizeId == item.SizeId).SizeName = item.SizeName;
+                        carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault(x => x.SizeId == item.SizeId).Price = item.Price;
                         carts.Where(x => x.Product.Id == item.Product.Id).FirstOrDefault(x => x.SizeId == item.SizeId).Quantity = item.Quantity;
                     }
                     carts.FirstOrDefault().TotalPrice = CalcTotalAmount();
@@ -265,10 +267,12 @@
             buttonDisabled = false;
         }
     }
-    public async Task<int> GetQuantity(int sizeid, int prodid)
-        {
-            var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
-            var result = await res.Content.ReadAsStringAsync();
-            return Convert.ToInt32(result.ToString());
-        }
+    public async Task<int> GetQuantity(int sizeid, int prodid, int colorid)
+    {
+        var res = await _httpClient.GetStringAsync($"/api/product/get-product-quantity-price?sizeId={sizeid}&Prodid={prodid}&colorId={colorid}");
+        var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
+        var quantity = (string)result["Quantity"];
+        var price = (string)result["Price"];
+        return Convert.ToInt32(quantity.ToString());
+    }
 }

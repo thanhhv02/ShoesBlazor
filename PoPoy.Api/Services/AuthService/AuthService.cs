@@ -476,14 +476,15 @@ namespace PoPoy.Api.Services.AuthService
                     _orderDetail.OrderIdFromOrder = OrderId;
                     _orderDetail.OrderId = OrderId2;
                     _orderDetail.ProductId = items.Product.Id;
-                    _orderDetail.Size = items.Size; /*cartItem.Where(x => x.Product.Id == items.Product.Id).FirstOrDefault().Size;*/
+                    _orderDetail.SizeName = items.SizeName; /*cartItem.Where(x => x.Product.Id == items.Product.Id).FirstOrDefault().Size;*/
                     _orderDetail.Price = items.Price;
                     _orderDetail.Quantity = items.Quantity;
+                    _orderDetail.ColorName = items.ColorName;
                     _orderDetail.TotalPrice = (double)(items.Price * items.Quantity);
                     _context.OrderDetails.Add(_orderDetail);
                     products.Add("<tr>\r\n" +
                         "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +
-                        $"<span>{_context.Products.Where(x => x.Id == items.Product.Id).FirstOrDefault().Title} - {items.Size}</span>\r\n" +
+                        $"<span>{_context.Products.Where(x => x.Id == items.Product.Id).FirstOrDefault().Title} - {items.SizeName}</span>\r\n" +
                         "<br>\r\n" +
                         "</td>\r\n" +
                         "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +

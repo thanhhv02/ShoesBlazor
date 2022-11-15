@@ -18,34 +18,34 @@ namespace PoPoy.Api.Extensions
                 new ProductColor()
                 {
                     Id = 1,
-                    Color = ColorProduct.Yellow
+                    ColorName = ColorProduct.Yellow
                 },
                 new ProductColor()
                 {
                     Id = 2,
-                    Color = ColorProduct.Red
+                    ColorName = ColorProduct.Red
                 },
                 new ProductColor()
                 {
                     Id = 3,
-                    Color = ColorProduct.Green
+                    ColorName = ColorProduct.Green
                 }
                 );
             modelBuilder.Entity<ProductSize>().HasData(
                 new ProductSize()
                 {
                     Id = 1,
-                    Size = 38
+                    Size = 38.ToString()
                 },
                 new ProductSize()
                 {
                     Id = 2,
-                    Size = 39
+                    Size = 39.ToString()
                 },
                 new ProductSize()
                 {
                     Id = 3,
-                    Size = 40
+                    Size = 40.ToString()
                 }
                 );
             //modelBuilder.Entity<ProductQuantity>().HasData(
@@ -123,10 +123,10 @@ namespace PoPoy.Api.Extensions
                     Id = 1,
                     Title = "ADIDAS ALPHABOOST “CORE BLACK”",
                     Description = "ADIDAS ALPHABOOST “CORE BLACK”",
-                    Price = 2150000,
+                    //Price = 2150000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 2150000,
+                    //OriginalPrice = 2150000,
                      
                 },
                 new Product()
@@ -134,10 +134,10 @@ namespace PoPoy.Api.Extensions
                     Id = 2,
                     Title = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                     Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
-                    Price = 1650000,
+                    //Price = 1650000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 1650000,
+                    //OriginalPrice = 1650000,
                      
                 },
                 new Product()
@@ -145,10 +145,10 @@ namespace PoPoy.Api.Extensions
                     Id = 3,
                     Title = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                     Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
-                    Price = 3250000,
+                    //Price = 3250000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 3250000,
+                    //OriginalPrice = 3250000,
                      
                 },
                 new Product()
@@ -156,10 +156,10 @@ namespace PoPoy.Api.Extensions
                     Id = 4,
                     Title = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                     Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
-                    Price = 1650000,
+                    //Price = 1650000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 1650000,
+                    //OriginalPrice = 1650000,
                      
                 },
                 new Product()
@@ -167,10 +167,10 @@ namespace PoPoy.Api.Extensions
                     Id = 5,
                     Title = "ADIDAS NMD R1 TOKYO DRAGON",
                     Description = "ADIDAS NMD R1 TOKYO DRAGON",
-                    Price = 1850000,
+                    //Price = 1850000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 1850000,
+                    //OriginalPrice = 1850000,
                      
                 },
                 new Product()
@@ -178,10 +178,10 @@ namespace PoPoy.Api.Extensions
                     Id = 6,
                     Title = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                     Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
-                    Price = 2550000,
+                    //Price = 2550000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 2550000,
+                    //OriginalPrice = 2550000,
                      
                 },
                 new Product()
@@ -189,10 +189,10 @@ namespace PoPoy.Api.Extensions
                     Id = 7,
                     Title = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                     Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
-                    Price = 6100000,
+                    //Price = 6100000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 6100000,
+                    //OriginalPrice = 6100000,
                      
                 },
                 new Product()
@@ -200,10 +200,10 @@ namespace PoPoy.Api.Extensions
                     Id = 8,
                     Title = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                     Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
-                    Price = 6450000,
+                    //Price = 6450000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 6450000,
+                    //OriginalPrice = 6450000,
                      
                 },
                 new Product()
@@ -211,10 +211,10 @@ namespace PoPoy.Api.Extensions
                     Id = 9,
                     Title = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                     Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
-                    Price = 4850000,
+                    //Price = 4850000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 4850000,
+                    //OriginalPrice = 4850000,
                      
                 },
                 new Product()
@@ -222,10 +222,10 @@ namespace PoPoy.Api.Extensions
                     Id = 10,
                     Title = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                     Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
-                    Price = 5550000,
+                    //Price = 5550000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 5550000,
+                    //OriginalPrice = 5550000,
                      
                 },
                 new Product()
@@ -233,10 +233,10 @@ namespace PoPoy.Api.Extensions
                     Id = 11,
                     Title = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                     Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
-                    Price = 3850000,
+                    //Price = 3850000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 3850000,
+                    //OriginalPrice = 3850000,
                      
                 },
                 new Product()
@@ -244,10 +244,10 @@ namespace PoPoy.Api.Extensions
                     Id = 12,
                     Title = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                     Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
-                    Price = 4350000,
+                    //Price = 4350000,
                     CategoryId = 2,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 4350000,
+                    //OriginalPrice = 4350000,
                      
                 },
                 new Product()
@@ -255,10 +255,10 @@ namespace PoPoy.Api.Extensions
                     Id = 13,
                     Title = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                     Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
-                    Price = 4300000,
+                    //Price = 4300000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 4300000,
+                    //OriginalPrice = 4300000,
                      
                 },
                 new Product()
@@ -266,10 +266,10 @@ namespace PoPoy.Api.Extensions
                     Id = 14,
                     Title = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                     Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
-                    Price = 4850000,
+                    //Price = 4850000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 4850000,
+                    //OriginalPrice = 4850000,
                      
                 },
                 new Product()
@@ -277,10 +277,10 @@ namespace PoPoy.Api.Extensions
                     Id = 15,
                     Title = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                     Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
-                    Price = 3950000,
+                    //Price = 3950000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 3950000,
+                    //OriginalPrice = 3950000,
                      
                 },
                 new Product()
@@ -288,10 +288,10 @@ namespace PoPoy.Api.Extensions
                     Id = 16,
                     Title = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                     Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
-                    Price = 2950000,
+                    //Price = 2950000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 2950000,
+                    //OriginalPrice = 2950000,
                      
                 },
                 new Product()
@@ -299,10 +299,10 @@ namespace PoPoy.Api.Extensions
                     Id = 17,
                     Title = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                     Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
-                    Price = 2850000,
+                    //Price = 2850000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 2850000,
+                    //OriginalPrice = 2850000,
                      
                 },
                 new Product()
@@ -310,10 +310,10 @@ namespace PoPoy.Api.Extensions
                     Id = 18,
                     Title = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                     Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
-                    Price = 3200000,
+                    //Price = 3200000,
                     CategoryId = 3,
                     DateCreated = DateTime.Now,
-                    OriginalPrice = 3200000,
+                    //OriginalPrice = 3200000,
                      
                 }
             );

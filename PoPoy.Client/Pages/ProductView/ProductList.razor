@@ -58,12 +58,12 @@
                                 @item.ReviewAverage<i class="fa fa-star"></i> | Đã bán: @item.CheckoutCount
                             </div>
                             <div class="product-card-price" style="font-size: 18px">
-                                <span class="curr-price">@item.Price<sup>VND</sup></span>
+                                @*<span class="curr-price">@item.Price<sup>VND</sup></span>
                                 @if (item.Price < item.OriginalPrice)
                                 {
                                     var change = ((item.OriginalPrice - item.Price) / Math.Abs(item.Price)) * 100;
                                     <span class="curr-price" style="font-size: 14px">-@change.ToString("0")%</span>
-                                }
+                                }*@
                             </div>
                             @*<span style="font-size:15px">Số lượng còn lại: </span><span style="color:red;font-size:15px">@item.Stock</span>*@
                         </div>

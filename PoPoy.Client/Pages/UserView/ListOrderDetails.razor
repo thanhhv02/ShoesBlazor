@@ -54,7 +54,7 @@
                                     <p>Size: @item.ProductSize</p>
                                     <p>Số lượng: @item.Quantity</p>
                                     <div class="d-flex">
-                                         <RadzenButton Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                        <RadzenButton Disabled="@(_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Delivered && _svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Cancelled)" Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
                                     Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
                                         <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
                                           Click="()=>ViewDetail(item.OrderId)" Text="Xem chi tiết "></RadzenButton>

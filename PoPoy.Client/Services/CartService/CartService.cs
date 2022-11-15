@@ -39,7 +39,7 @@ namespace PoPoy.Client.Services.CartService
             var storages = await storageService.GetItemAsync<List<CartStorage>>(CART)
                            ?? new List<CartStorage>();
 
-            var storage = storages.Find(x => x.ProductId == cart.ProductId && x.SizeId == cart.SizeId);
+            var storage = storages.Find(x => x.ProductId == cart.ProductId && x.SizeId == cart.SizeId && x.ColorId == cart.ColorId);
             if (storage is null)
             {
                 if (type is not CartStorageType.Remove)
@@ -56,6 +56,7 @@ namespace PoPoy.Client.Services.CartService
                 case CartStorageType.Add:
                     storage.Quantity += cart.Quantity;
                     storage.SizeId = cart.SizeId;
+                    storage.ColorId = cart.ColorId;
                     break;
                 case CartStorageType.Update:
                     storage.Quantity = cart.Quantity;
@@ -98,7 +99,7 @@ namespace PoPoy.Client.Services.CartService
 
 
             var products = await publicProductService.FilterAllByIdsAsync(storages.Select(x => x.ProductId).ToArray(),
-                storages.Select(x => x.SizeId).ToArray());
+                storages.Select(x => x.SizeId).ToArray(), storages.Select(x => x.ColorId).ToArray());
 
             List<Cart> result = new List<Cart>();
 
@@ -106,11 +107,14 @@ namespace PoPoy.Client.Services.CartService
             {
                 result.Add(new Cart
                 {
-                    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId && s.SizeId == p.SizeId).Quantity,
+                    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId && s.SizeId == p.SizeId && s.ColorId == p.ColorId).Quantity,
                     Product = p.Product,
                     ProductId = p.ProductId,
                     SizeId = p.Size.Id,
-                    Size = p.Size.Size
+                    SizeName = p.Size.Size,
+                    ColorId = p.ColorId,
+                    ColorName = p.Color.ColorName,
+                    Price = p.Price
                 });
             }
 

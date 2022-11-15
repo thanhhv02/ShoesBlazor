@@ -14,7 +14,7 @@ namespace PoPoy.Api.Configurations
         {
             builder.ToTable("ProductColors");
             builder.HasKey(x => x.Id);
-            builder.Property(e => e.Color)
+            builder.Property(e => e.ColorName)
         .HasConversion<string>();
         }
     }

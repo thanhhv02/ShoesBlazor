@@ -1,12 +1,12 @@
 ﻿@page "/sizesd/{Id}"
-
+@inject HttpClient _httpClient;
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
 
 <div class="card-body">
     <EditForm Model="Model" OnValidSubmit="AssignSizes">
         <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn kích cở</RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn kích cỡ</RadzenText>
             <RadzenListBox Multiple AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" @bind-Value=@listSize
                            Data=@Model.Sizes TextProperty="Name" ValueProperty="Id" Change=@(args => OnChangeSize(args)) Style="height:200px" Class="w-100">
             </RadzenListBox>
@@ -14,20 +14,37 @@
         </RadzenCard>
         <RadzenCard>
             <hr>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Nhập số lượng</RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Các thuộc tính khác</RadzenText>
             @if (Model != null)
             {
                 <div class="row mt-4">
                     @foreach (var item in Model.Sizes.Where(p => p.Selected == true).ToList())
                     {
-                        <div class="text-field col-3 mb-4 mr-1">
-                            <label style="font-size:17px;">Size @item.Name</label>
+                        <div class="text-field col-4 mb-4 mr-1">
+                            <label style="font-size:17px;">Số lượng size @item.Name</label>
                             <input type="number" min="0" @bind-value="@item.Qty" />
+                        </div>
+                        <div class="text-field col-4 mb-4 mr-1">
+                            <label style="font-size:17px;">Giá Size @item.Name</label>
+                            <input type="number" min="0" @bind-value="@item.Price" />
+                        </div>
+                        <div class="text-field col-4 mb-4 mr-1">
+                            <label style="font-size:17px;">Màu size @item.Name</label>
+                            <select @bind="@item.ColorId">
+                                @foreach (var itemColor in listColor)
+                                {
+                                    <option value="@itemColor.Key">
+                                        @itemColor.Value
+                                    </option>
+                                }
+
+                            </select>
                         </div>
                     }
                 </div>
 
             }
+
 
             <div class="row mt-3">
                 <div class="col-md-12 text-end">
@@ -38,20 +55,32 @@
     </EditForm>
 </div>
 
-@code{
+@code {
     [Parameter]
     public string Id { get; set; }
     public SizeAssignRequest Model = new SizeAssignRequest();
     List<string> listSize = new List<string>();
+    Dictionary<int, ColorProduct> listColor = new Dictionary<int, ColorProduct>();
     [Inject] private IToastService toastService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Model = await ProductService.GetSizeAssignRequest(int.Parse(Id));
         Model.Id = int.Parse(Id);
+        var colorObj = await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
+        if (colorObj != null)
+        {
+            colorObj.ForEach(x =>
+            {
+                listColor.Add(x.Id, x.ColorName);
+            });
+        }
         Model.Sizes.ForEach(p =>
         {
-            if (p.Selected) listSize.Add(p.Id);
+            if (p.Selected)
+            {
+                listSize.Add(p.Id);
+            }
         });
     }
 
@@ -60,7 +89,10 @@
         if (listSize != null)
         {
 
-            Model.Sizes.ForEach(p => { if (listSize.Any(C => C == p.Id)) p.Selected = true; else p.Selected = false; });
+            Model.Sizes.ForEach(p =>
+            {
+                if (listSize.Any(C => C == p.Id)) p.Selected = true; else p.Selected = false;
+            });
 
         }
 
@@ -70,7 +102,7 @@
     private async Task AssignSizes()
     {
         await ProductService.AssignSize(Model);
-        toastService.ShowSuccess("Cập nhật kích thước thành công");
+        toastService.ShowSuccess("Đã lưu");
 
         StateHasChanged();
     }

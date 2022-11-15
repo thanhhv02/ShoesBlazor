@@ -119,8 +119,8 @@ namespace PoPoy.Api.Controllers
         [HttpGet("filter")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async ValueTask<ActionResult<List<Product>>> FilterAllByIds([FromQuery] int[] ids, [FromQuery] int[] sizes)
-        => Ok(await _productServices.FilterAllByIdsAsync(ids, sizes));
+        public async ValueTask<ActionResult<List<Product>>> FilterAllByIds([FromQuery] int[] ids, [FromQuery] int[] sizes, [FromQuery] int[] color)
+        => Ok(await _productServices.FilterAllByIdsAsync(ids, sizes, color));
 
         [HttpPost("upload-image")]
         public async Task<ActionResult<List<UploadResult>>> UploadFile(List<IFormFile> files, int id)
@@ -153,6 +153,12 @@ namespace PoPoy.Api.Controllers
         public async Task<IActionResult> GetAllSizes()
         {
             var products = await _productServices.GetAllSizesProduct();
+            return Ok(products);
+        }
+        [HttpGet("get-all-color")]
+        public async Task<IActionResult> GetAllColor()
+        {
+            var products = await _productServices.GetAllColorProduct();
             return Ok(products);
         }
 
@@ -195,10 +201,16 @@ namespace PoPoy.Api.Controllers
             else
                 return BadRequest("Seed loi");
         }
-        [HttpGet("get-quantity-of-product")]
-        public async Task<ActionResult<int>> GetQuantityOfProduct(int sizeId, int Prodid)
+        [HttpGet("get-product-quantity-price")]
+        public async Task<ActionResult<int>> GetQuantityOfProduct(int sizeId, int Prodid, int colorId)
         {
-            return Ok(_productServices.GetQuantityOfProduct(sizeId, Prodid));
+            return Ok(await _productServices.GetProductQuantityAndPrice(sizeId, Prodid,colorId));
+        }
+        [HttpGet("get-product-variant/{id}")]
+        public async Task<ActionResult<string>> GetProductVariants(int id)
+        {
+            var result = await _productServices.GetProductVariants(id);
+            return Ok(result);
         }
     }
 }

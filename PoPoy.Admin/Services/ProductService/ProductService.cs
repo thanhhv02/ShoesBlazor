@@ -1,5 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.ViewModels;
@@ -103,25 +105,47 @@ namespace PoPoy.Admin.Services.ProductService
         {
             var prodObj = await _httpClient.GetFromJsonAsync<ProductVM>($"/api/product/getProductById/{productId}");
             var sizeObj = await _httpClient.GetFromJsonAsync<List<ProductSize>>("api/product/getSizes");
-  
+            var colorObj = await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
+            var test = sizeObj.Zip(colorObj, (s,c) => (s,c));
+
             var sizeAssignRequest = new SizeAssignRequest();
-            foreach (var size in sizeObj)
+            foreach (var item in test)
             {
+                var res = await _httpClient.GetStringAsync($"/api/product/get-product-quantity-price?sizeId={item.s.Id}&Prodid={prodObj.Id}&colorId={item.c.Id}");
+                var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
+                var quantity = (string)result["Quantity"];
+                var price = (string)result["Price"];
                 sizeAssignRequest.Sizes.Add(new SelectItem()
                 {
-                    Id = size.Id.ToString(),
-                    Name = size.Size.ToString(),
-                    Selected = prodObj.Sizes.Contains(size.Id.ToString()),
-                    Qty = await GetQuantity(size.Id,prodObj.Id)
+                    Id = item.s.Id.ToString(),
+                    Name = item.s.Size.ToString(),
+                    ColorId = item.c.Id.ToString(),
+                    ColorName = item.c.ColorName.ToString(),
+                    Selected = false,
+                    Qty = Convert.ToInt32(quantity),
+                    Price = Convert.ToInt32(price)
                 });
             }
             return sizeAssignRequest;
         }
         public async Task<int> GetQuantity(int sizeid, int prodid)
         {
-            var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
+            var res = await _httpClient.GetAsync($"/api/product/get-product-quantity-price?sizeId={sizeid}&Prodid={prodid}");
             var result = await res.Content.ReadAsStringAsync();
             return Convert.ToInt32(result.ToString());
+        }
+
+        public Task DeleteProductVariant(int variantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<ProductQuantity>> GetAllProductsVariant(int productId)
+        {
+            var res = await _httpClient.GetStringAsync($"/api/product/get-product-variant/{productId}");
+            var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
+            return JsonConvert.DeserializeObject<List<ProductQuantity>>(result["variants"].ToString());
+            
         }
     }
 }

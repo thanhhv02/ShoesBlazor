@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Polly;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
@@ -100,8 +101,8 @@ namespace PoPoy.Api.Services.ProductService
                 Title = x.p.Title,
                 DateCreated = x.p.DateCreated,
                 Description = x.p.Description,
-                OriginalPrice = x.p.OriginalPrice,
-                Price = x.p.Price,
+                //OriginalPrice = x.p.OriginalPrice,
+                //Price = x.p.Price,
                 Views = x.p.Views,
                 //ProductQuantities = productQuantities,
                 ProductSizes = productSizes,
@@ -129,8 +130,8 @@ namespace PoPoy.Api.Services.ProductService
                 Title = product.Title,
                 DateCreated = product.DateCreated,
                 Description = product.Description,
-                OriginalPrice = product.OriginalPrice,
-                Price = product.Price,
+                //OriginalPrice = product.OriginalPrice,
+                //Price = product.Price,
       
                 Views = product.Views,
                 Categories = categories,
@@ -143,9 +144,9 @@ namespace PoPoy.Api.Services.ProductService
         {
             var product = new Product()
             {
-                Price = request.Price,
+                //Price = request.Price,
                 Title = request.Title,
-                OriginalPrice = request.OriginalPrice,
+                //OriginalPrice = request.OriginalPrice,
                 Description = request.Description,
                 Views = 0,
                 DateCreated = DateTime.Now
@@ -165,8 +166,8 @@ namespace PoPoy.Api.Services.ProductService
 
             product.Title = request.Title;
             product.Description = request.Description;
-            product.Price = request.Price;
-            product.OriginalPrice = request.OriginalPrice;
+            //product.Price = request.Price;
+            //product.OriginalPrice = request.OriginalPrice;
 
             _dataContext.Products.Update(product);
             var result = await _dataContext.SaveChangesAsync();
@@ -188,19 +189,20 @@ namespace PoPoy.Api.Services.ProductService
             return await _dataContext.SaveChangesAsync();
         }
 
-        public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes)
+        public async ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes, int[] color)
         {
             using (_dataContext)
             {
                 List<ProductQuantity> productQuantities = new List<ProductQuantity>();
-                var sortedList = new List<IdAndSize>();
+                var sortedList = new List<GetProductToCart>();
 
                 for (int index = 0; index < ids.Length; index++)
                 {
-                    sortedList.Add(new IdAndSize()
+                    sortedList.Add(new GetProductToCart()
                     {
                         Id = ids[index],
-                        Size = sizes[index]
+                        SizeId = sizes[index],
+                        ColorId = color[index]
                     });
                 }
                 if (ids != null && sizes != null)
@@ -211,10 +213,10 @@ namespace PoPoy.Api.Services.ProductService
                             .Where(x => x.ProductId == p.Id)
                                 .Include(x => x.Product)
                                 .ThenInclude(x => x.ProductImages)
-                            .Where(x => x.SizeId == p.Size)
+                            .Where(x => x.SizeId == p.SizeId)
                                 .Include(x => x.Size)
-                                .Include(x => x.Product)
-                                    .ThenInclude(x => x.ProductQuantities)
+                            .Where(x => x.ColorId == p.ColorId)
+                                .Include(x => x.Color)
                             .FirstOrDefaultAsync());
                     }
                     return productQuantities;
@@ -240,8 +242,8 @@ namespace PoPoy.Api.Services.ProductService
                 Id = x.p.Id,
                 Title = x.p.Title,
                 Description = x.p.Description,
-                Price = x.p.Price,
-                OriginalPrice = x.p.OriginalPrice,
+                //Price = x.p.Price,
+                //OriginalPrice = x.p.OriginalPrice,
                 Views = x.p.Views,
                 Categories = categories
             }).ToListAsync();
@@ -372,30 +374,33 @@ namespace PoPoy.Api.Services.ProductService
         {
             try
             {
-                var product = await _dataContext.ProductQuantities.FirstOrDefaultAsync(x => x.ProductId == id);
+                //var product = await _dataContext.ProductQuantities.FirstOrDefaultAsync(x => x.ProductId == id);
                 foreach (var item in request.Sizes)
                 {
                     var productQuantity = await _dataContext.ProductQuantities
                         .FirstOrDefaultAsync(x => x.SizeId == int.Parse(item.Id)
-                        && x.ProductId == id);
+                        && x.ProductId == id && x.ColorId == int.Parse(item.ColorId));
 
-                    if (productQuantity != null && item.Selected == false)
-                    {
-                        _dataContext.ProductQuantities.Remove(productQuantity);
-                    }
-                    else if (productQuantity == null && item.Selected)
+                    //if (productQuantity != null && item.Selected == false)
+                    //{
+                    //    _dataContext.ProductQuantities.Remove(productQuantity);
+                    //}
+                    if (productQuantity == null && item.Selected)
                     {
                         await _dataContext.ProductQuantities.AddAsync(new ProductQuantity()
                         {
                             SizeId = int.Parse(item.Id),
-                            ColorId = 1,
+                            ColorId = Convert.ToInt32(item.ColorId),
                             ProductId = id,
-                            Quantity = item.Qty
+                            Quantity = item.Qty,
+                            Price = item.Price
                         });
                     }
-                    else if(productQuantity != null && item.Selected == true && productQuantity.Quantity != item.Qty)
+                    else if (productQuantity != null && item.Selected == true 
+                        && (productQuantity.Quantity != item.Qty || productQuantity.Price != item.Price))
                     {
                         productQuantity.Quantity = item.Qty;
+                        productQuantity.Price = item.Price;
                         _dataContext.Update(productQuantity);
                     }
                 }
@@ -469,22 +474,28 @@ namespace PoPoy.Api.Services.ProductService
             {
                 var productsTable = _dataContext.Products.ToList();
                 var productSizeTable = _dataContext.ProductSizes.ToList();
+                var productColorTable = _dataContext.ProductSizes.ToList();
                 var pmax = productsTable.Max(x => x.Id);
                 var pmin = productsTable.Min(x => x.Id);
                 var smax = productSizeTable.Max(x => x.Id);
                 var smin = productSizeTable.Min(x => x.Id);
+                var cmax = productColorTable.Max(x => x.Id);
+                var cmin = productColorTable.Min(x => x.Id);
                 for (int i = pmin; i <= pmax; i++)
                 {
                     for (int j = smin; j <= smax; j++)
                     {
-                        if (productsTable.Where(x => x.Id == i) != null && productSizeTable.Where(x=>x.Id == j) != null)
+                        var random = new Random();
+                        if (productsTable.Where(x => x.Id == i) != null
+                                && productSizeTable.Where(x => x.Id == j) != null)
                         {
                             var product = new ProductQuantity()
                             {
                                 ProductId = i,
                                 SizeId = j,
-                                ColorId = 1,
-                                Quantity = 1000
+                                ColorId = j,
+                                Quantity = 1000,
+                                Price = random.Next(2000000, 3000000)
                             };
                             _dataContext.ProductQuantities.Add(product);
                         }
@@ -492,8 +503,9 @@ namespace PoPoy.Api.Services.ProductService
                         {
                             continue;
                         }
-                        
+
                     }
+
                 }
                 await _dataContext.SaveChangesAsync();
                 return true;
@@ -502,17 +514,60 @@ namespace PoPoy.Api.Services.ProductService
             return false;
         }
 
-        public int GetQuantityOfProduct(int sizeId, int prodId)
+        public async Task<string> GetProductQuantityAndPrice(int sizeId, int prodId, int colorId)
         {
 
-            var query = _dataContext.ProductQuantities.FirstOrDefault(x => x.ProductId == prodId && x.SizeId == sizeId);
+            var query = await _dataContext.ProductQuantities.FirstOrDefaultAsync(x => x.ProductId == prodId && x.SizeId == sizeId && x.ColorId == colorId);
             if (query != null)
             {
-                var quantity = query.Quantity;
-                return quantity;
+                object results = new
+                {
+                    Quantity = query.Quantity,
+                    Price = query.Price
+                };
+                return JsonConvert.SerializeObject(results, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
             }
-            return 0;
+            object result = new
+            {
+                Quantity = 0,
+                Price = 0
+            };
+            return JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
 
+        }
+
+        public async Task<List<ProductColor>> GetAllColorProduct()
+        {
+            var query = from p in _dataContext.ProductColors.Include(x => x.ProductQuantities)
+                        select new { p };
+            return await query.Select(x => new ProductColor()
+            {
+                Id = x.p.Id,
+                ColorName = x.p.ColorName,
+                ProductQuantities = null,
+            }).ToListAsync();
+        }
+        public async Task<string> GetProductVariants(int productId)
+        {
+            //var result = new List<string>();
+            var temp = new List<int>();
+            var list_quantity = await _dataContext.ProductQuantities.Where(x => x.ProductId == productId)
+                .ToListAsync();
+
+            object result = new
+            {
+                variants = list_quantity
+            };
+            return JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
     }
 }

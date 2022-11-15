@@ -142,7 +142,7 @@
                                                 @*<b>@(order.ShipName)</b>*@
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-VND"), "{0:C}", orderDetail.Product.Price).Replace(",00","")}") />
+                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-VND"), "{0:C}", orderDetail.Price).Replace(",00","")}") />
                                             </div>
                                         </div>
                                         <hr style="border: none; background-color: rgba(0,0,0,.08); height: 1px; margin: 1rem 0;" />
@@ -153,8 +153,8 @@
                                             }
                                             <RadzenImage Path="@path" Class="rounded-circle float-start me-3" Style="width: 120px; height: 100px;" />
                                             <div>
-                                                <h4 class="mb-0">@(orderDetail.Product.Title)</h4>
-                                                <div style="font-size: .8em">Size: @(orderDetail.Size), Số lượng: @(orderDetail.Quantity)</div>
+                                                <h4 class="mb-0">@(orderDetail.Product.Title) - @orderDetail.SizeName - @orderDetail.ColorName</h4>
+                                                <div style="font-size: .8em">Size: @(orderDetail.SizeName), Số lượng: @(orderDetail.Quantity)</div>
                                                
                                                 <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
                                                 </RadzenButton>

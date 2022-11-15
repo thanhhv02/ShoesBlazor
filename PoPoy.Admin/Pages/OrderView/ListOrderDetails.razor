@@ -82,7 +82,7 @@
                             </div>
                             <div class="text-field col-lg-6 mb-4">
                                 <label for="name">Tên người đặt</label>
-                                <input disabled class="form-control" value="@(order.User.FirstName + " " + order.User.LastName)" />
+                                <input disabled class="form-control" value="@(order.User.LastName + " " + order.User.FirstName)" />
                             </div>
                             <div class="text-field col-lg-6 mb-4">
                                 <label for="name">Địa chỉ</label>
@@ -116,7 +116,8 @@
                                         @product.Product.Title
                                     </Template>
                                 </RadzenDataGridColumn>
-                                <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.Size" Width="30" Title="Kích cỡ" CssClass="MyInputClass" />
+                                <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.SizeName" Width="30" Title="Kích cỡ" CssClass="MyInputClass" />
+                                <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.ColorName" Width="30" Title="Màu" CssClass="MyInputClass" />
                                 <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.Quantity" Width="30" Title="Số lượng" CssClass="MyInputClass" />
                                 <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.Price" Title="Giá 1 đơn vị" CssClass="MyInputClass" />
                                 <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.TotalPrice" Title="Tổng giá thành" CssClass="MyInputClass" />

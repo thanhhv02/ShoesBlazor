@@ -201,7 +201,7 @@ namespace PoPoy.Api.Services.OrderService
             {
                 OrderId = order.Id,
                 ProductId = item.ProductId,
-                ProductSize = item.Size,
+                ProductSize = item.SizeName,
                 ProductImages = _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList().Count > 0 ?
                                 _context.ProductImages.Where(x => x.ProductId == item.ProductId).ToList() : 
                                 new List<ProductImage>() { new ProductImage() { ImagePath = configuration["ApiUrl"]+ "/uploads/no-photo-available.png" } },

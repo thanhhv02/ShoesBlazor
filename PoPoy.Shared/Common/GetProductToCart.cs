@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace PoPoy.Shared.Common
 {
-    public class IdAndSize
+    public class GetProductToCart
     {
         public int Id { get; set; }
-        public int Size { get; set; }
+        public int SizeId { get; set; }
+        public int ColorId { get; set; }
     }
 }

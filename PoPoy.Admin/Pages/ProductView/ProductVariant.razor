@@ -1,0 +1,82 @@
+﻿@page "/product-variant/{Id}"
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+
+@inject IConfiguration Configuration
+@inject IProductService ProductService
+@inject DialogService DialogService
+<div class="card">
+        <div class="card-body">
+            <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách các thuộc tính</h2>
+            <div class="row mt-4 ml-3">
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Products" TItem="ProductQuantity"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single">
+                <Columns>
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="SizeId" Title="Size Id"  CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="ColorId" Title="Color Id"  CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Quantity" Title="Số lượng"  CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Price" Title="Giá"  CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="ProductQuantity" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                        <Template>
+                            <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask(product.Id)">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                </Columns>
+            </RadzenDataGrid>
+            </div>
+        </div>
+    </div>
+
+<Confirmation ConfirmationMessage="Bạn chắc chắn xóa loại hàng này?"
+              ConfirmationTitle="Xóa loại hàng"
+              @ref="DeleteConfirmation"
+              ConfirmationChanged="OnConfirmDeleteTask">
+
+</Confirmation>
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private Confirmation DeleteConfirmation { set; get; }
+    private string searchText = string.Empty;
+    private int ProductId { set; get; }
+    private List<ProductQuantity> Products { get; set; } = new List<ProductQuantity>();
+    public event Action<dynamic> Close;
+    protected override async Task OnInitializedAsync()
+    {
+        Close += async (r) => { await GetProducts(); StateHasChanged(); };
+        DialogService.OnClose += Close;
+        await GetProducts();
+    }
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        DialogService.OnClose -= Close;
+    }
+    public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await ProductService.DeleteProduct(ProductId);
+            await GetProducts();
+            StateHasChanged();
+        }
+    }
+    private async Task GetProducts()
+    {
+        var pagingResponse = await ProductService.GetAllProductsVariant(Convert.ToInt32(Id));
+        if (searchText != null)
+        {
+            Products = pagingResponse;
+        }
+    }
+    public void OnDeleteTask(int productId)
+    {
+        ProductId = productId;
+        DeleteConfirmation.Show();
+    }
+}

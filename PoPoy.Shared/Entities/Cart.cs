@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoPoy.Shared.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -12,8 +13,10 @@ namespace PoPoy.Shared.Dto
         public int Id { set; get; }
         public int ProductId { set; get; }
         public int Quantity { set; get; }
-        public int Size { get; set; }
+        public string SizeName { get; set; }
         public int SizeId { get; set; } = 0;
+        public ColorProduct ColorName { get; set; }
+        public int ColorId { get; set; } = 0;
 
         [Column(TypeName = "decimal(18,0)")]
         public decimal Price { set; get; }
@@ -31,7 +34,7 @@ namespace PoPoy.Shared.Dto
         public User User { get; set; }
         public decimal CalcAmount()
         {
-            return Math.Round(Quantity * Product.Price, MidpointRounding.AwayFromZero);
+            return Math.Round(Quantity * Price, MidpointRounding.AwayFromZero);
         }
 
         public CartStorage ToCartStorage()
@@ -40,7 +43,8 @@ namespace PoPoy.Shared.Dto
             {
                 ProductId = Product.Id,
                 Quantity = Quantity,
-                SizeId = SizeId
+                SizeId = SizeId,
+                ColorId = ColorId
             };
         }
     }

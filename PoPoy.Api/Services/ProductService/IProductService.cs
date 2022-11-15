@@ -22,15 +22,17 @@ namespace PoPoy.Api.Services.ProductService
         Task<List<ProductVM>> SearchProduct(string searchText);
         Task<ServiceResponse<List<UploadResult>>> UploadProductImage(List<IFormFile> files, int productId);
         Task<bool> DeleteProductImage(int imageId);
-        Task<ServiceResponse<bool>> CategoryAssign(int productId, CategoryAssignRequest request);     
-        ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes);
+        Task<ServiceResponse<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
+        ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes, int[] color);
         Task<PagedList<Product>> GetProductsByCategory(ProductParameters productParameters, string categoryUrl);
         Task<List<ProductSize>> GetSizeProduct(int productId);
         Task<List<ProductSize>> GetAllSizesProduct();
+        Task<List<ProductColor>> GetAllColorProduct();
         Task<ServiceResponse<bool>> SizeAssign(int productId, SizeAssignRequest request);
         Task<PagedList<Product>> SearchProducts(ProductParameters productParameters);
         Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText);
         Task<bool> SeedProduct();
-        int GetQuantityOfProduct(int sizeId, int prodId);
+        Task<string> GetProductQuantityAndPrice(int sizeId, int prodId, int colorId);
+        Task<string> GetProductVariants(int productId);
     }
 }

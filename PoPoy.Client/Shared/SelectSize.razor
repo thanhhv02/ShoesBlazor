@@ -1,40 +1,72 @@
 ﻿@inject ICartService CartService
 @inject IProductService _prodSvc;
 @inject HttpClient _httpClient
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @using PoPoy.Client.Services.CartService
 @using PoPoy.Shared.Dto
 <div class="d-flex flex-row align-items-center mt-3">
-    <span>Size&emsp;&emsp;&ensp;</span>
+
     <EditForm Model="@Model">
+        <span>Size&emsp;&emsp;&ensp;</span>
         <InputSelect class="form-control" Value="@Model.SizeId" ValueExpression="@(() => Model.SizeId)"
                      ValueChanged="@((int value) => OnSizeChanged(value, Model))"
                      style="width: 130px;">
-            @foreach (var num in List_Size)
+            @if (productVariants?.Count != 0)
             {
-                <option value="@num.Id">@num.Size</option>
+                @foreach (var num in productVariants.GroupBy(x=>x.SizeId).Select(grp => grp.First()))
+                {
+                    <option value="@num.SizeId">@num.Size.Size</option>
+                }
             }
+
         </InputSelect>
+        <span>Color&emsp;&emsp;&ensp;</span>
+        @if(Model.ColorId != 0){
+            <InputSelect class="form-control" Value="@Model.ColorId" ValueExpression="@(() => Model.ColorId)"
+                     ValueChanged="@((int value) => OnColorChanged(value, Model))"
+                     style="width: 130px;">
+            @if (productVariants?.Count != 0)
+            {
+                @foreach (var num in productVariants.Where(x => x.SizeId == Model.SizeId).ToList().GroupBy(x => x.ColorId).Select(grp => grp.First()))
+                {
+                    <option value="@num.ColorId">@num.Color.ColorName</option>
+                }
+            }
+
+        </InputSelect>
+        }
+        
     </EditForm>
 </div>
 @code {
     [Parameter]
     public Cart Model { get; set; } = new Cart();
 
+    [Parameter]
+    public List<ProductQuantity> productVariants { get; set; } = new List<ProductQuantity>();
+
     public List<ProductSize> List_Size { get; set; } = new List<ProductSize>();
     [Parameter]
-    public EventCallback QuantityChanged { get; set; }
+    public EventCallback<string> QuantityChanged { get; set; }
     [Parameter]
     public CartUpdateType CartUpdateType { get; set; }
     [Parameter]
     public int Product_Id { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
-        List_Size = await _prodSvc.GetSizeProduct(Product_Id);
         if (Model.SizeId == 0)
         {
-            Model.SizeId = (List_Size.Count > 0 || List_Size is not null) ? List_Size.FirstOrDefault().Id : 0;
+            Model.SizeId = (productVariants.Count > 0 || productVariants is not null) ? productVariants[0].SizeId : 0;
         }
+        if (Model.ColorId == 0)
+        {
+            Model.ColorId = (productVariants.Where(x => x.SizeId == Model.SizeId).ToList().Count > 0 
+                            || productVariants.Where(x => x.SizeId == Model.SizeId).ToList() is not null) 
+                            ? productVariants.Where(x => x.SizeId == Model.SizeId).FirstOrDefault().ColorId : 0;
+        }
+        await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
     }
     private async void OnSizeChanged(int sizeid, Cart cart)
     {
@@ -43,14 +75,25 @@
         {
             await CartService.UpdateAsync(cart.ToCartStorage());
         }
-
-        await QuantityChanged.InvokeAsync();
+        StateHasChanged();
+        
+        await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
     }
-    public async Task<int> GetQuantity(int sizeid, int prodid)
+    private async void OnColorChanged(int colorid, Cart cart)
     {
-        var res = await _httpClient.GetAsync($"/api/product/get-quantity-of-product?sizeId={sizeid}&Prodid={prodid}");
-        var result = await res.Content.ReadAsStringAsync();
-        return Convert.ToInt32(result.ToString());
+        Model.ColorId = colorid;
+        if (CartUpdateType is CartUpdateType.Update)
+        {
+            await CartService.UpdateAsync(cart.ToCartStorage());
+        }
+        await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
+    }
+    public async Task<string> GetPrice(int sizeid, int prodid, int colorid)
+    {
+        var res = await _httpClient.GetStringAsync($"/api/product/get-product-quantity-price?sizeId={sizeid}&Prodid={prodid}&colorId={colorid}");
+        var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
+        var price = (string)result["Price"];
+        return price;
     }
 }
 

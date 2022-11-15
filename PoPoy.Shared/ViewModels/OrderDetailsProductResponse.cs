@@ -13,7 +13,7 @@ namespace PoPoy.Shared.ViewModels
         public int ProductId { get; set; }
         public string Title { get; set; }
         public string ProductType { get; set; }
-        public int ProductSize { get; set; }
+        public string ProductSize { get; set; }
         public List<ProductImage> ProductImages { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }

@@ -10,8 +10,8 @@ namespace PoPoy.Shared.ViewModels
 {
     public class ProductCreateRequest
     {
-        public decimal Price { set; get; }
-        public decimal OriginalPrice { set; get; }
+        //public decimal Price { set; get; }
+        //public decimal OriginalPrice { set; get; }
         [MaxLength(50)]
         public string Title { set; get; }
         public int Quantity { get; set; }

@@ -16,9 +16,9 @@ namespace PoPoy.Shared.Dto
         public string Title { get; set; } = String.Empty;
         public string Description { get; set; } = String.Empty;
         [Column(TypeName = "decimal(18,0)")]
-        public decimal Price { get; set; }
-        [Column(TypeName = "decimal(18,0)")]
-        public decimal OriginalPrice { get; set; }
+        //public decimal Price { get; set; }
+        //[Column(TypeName = "decimal(18,0)")]
+        //public decimal OriginalPrice { get; set; }
         public decimal ReviewAverage { get; set; } = 0;
         public int CheckoutCount { get; set; } 
         public int CategoryId { get; set; }
