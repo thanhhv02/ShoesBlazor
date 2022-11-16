@@ -3,6 +3,7 @@ using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace PoPoy.Admin.Services.ProductService
         Task DeleteFile(int productId);
         Task AssignCate(CategoryAssignRequest request);
         Task<CategoryAssignRequest> GetCateAssignRequest(int productId);
-        Task AssignSize(SizeAssignRequest request);
+        Task<HttpResponseMessage> AssignSize(SizeAssignRequest request);
         Task<SizeAssignRequest> GetSizeAssignRequest(int productId);
     }
 }

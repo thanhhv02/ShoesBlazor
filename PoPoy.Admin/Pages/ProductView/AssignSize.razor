@@ -31,10 +31,10 @@
                         <div class="text-field col-4 mb-4 mr-1">
                             <label style="font-size:17px;">Màu size @item.Name</label>
                             <select @bind="@item.ColorId">
-                                @foreach (var itemColor in listColor)
+                                @foreach (var itemColor in ListColor)
                                 {
-                                    <option value="@itemColor.Key">
-                                        @itemColor.Value
+                                    <option value="@itemColor.Id" @onchange="()=>Console.WriteLine(item.ColorId)">
+                                        @itemColor.ColorName
                                     </option>
                                 }
 
@@ -61,20 +61,21 @@
     public SizeAssignRequest Model = new SizeAssignRequest();
     List<string> listSize = new List<string>();
     Dictionary<int, ColorProduct> listColor = new Dictionary<int, ColorProduct>();
+    List<ProductColor> ListColor { get; set; } = new List<ProductColor>();
     [Inject] private IToastService toastService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Model = await ProductService.GetSizeAssignRequest(int.Parse(Id));
         Model.Id = int.Parse(Id);
-        var colorObj = await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
-        if (colorObj != null)
-        {
-            colorObj.ForEach(x =>
-            {
-                listColor.Add(x.Id, x.ColorName);
-            });
-        }
+        ListColor = await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
+        //if (colorObj != null)
+        //{
+        //    colorObj.ForEach(x =>
+        //    {
+        //        listColor.Add(x.Id, x.ColorName);
+        //    });
+        //}
         Model.Sizes.ForEach(p =>
         {
             if (p.Selected)
@@ -101,8 +102,8 @@
 
     private async Task AssignSizes()
     {
-        await ProductService.AssignSize(Model);
-        toastService.ShowSuccess("Đã lưu");
+        var code = await ProductService.AssignSize(Model);
+        toastService.ShowInfo(code.StatusCode.ToString());
 
         StateHasChanged();
     }

@@ -66,7 +66,7 @@
                             || productVariants.Where(x => x.SizeId == Model.SizeId).ToList() is not null) 
                             ? productVariants.Where(x => x.SizeId == Model.SizeId).FirstOrDefault().ColorId : 0;
         }
-        await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
+        await QuantityChanged.InvokeAsync(GetSelectedVariant().Price.ToString());
     }
     private async void OnSizeChanged(int sizeid, Cart cart)
     {
@@ -78,7 +78,7 @@
         Console.WriteLine("price: " + GetSelectedVariant().Price);
         StateHasChanged();
         
-        await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
+        await QuantityChanged.InvokeAsync(GetSelectedVariant().Price.ToString());
     }
     private async void OnColorChanged(int colorid, Cart cart)
     {
@@ -87,21 +87,11 @@
         {
             await CartService.UpdateAsync(cart.ToCartStorage());
         }
-        await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
-    }
-    public async Task<string> GetPrice(int sizeid, int prodid, int colorid)
-    {
-        var res = await _httpClient.GetStringAsync($"/api/product/get-product-quantity-price?sizeId={sizeid}&Prodid={prodid}&colorId={colorid}");
-        var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
-        var price = (string)result["Price"];
-        return price;
+        await QuantityChanged.InvokeAsync(GetSelectedVariant().Price.ToString());
     }
     private ProductQuantity GetSelectedVariant()
     {
-        Console.WriteLine("id: " + Product_Id);
-        Console.WriteLine("size: " + Model.SizeId);
-        Console.WriteLine("color: " + Model.ColorId);
-        var variant = productVariants.FirstOrDefault(v => v.SizeId == Model.SizeId && v.ColorId == Model.ColorId);
+        var variant = productVariants.FirstOrDefault(x => x.ProductId == Product_Id && x.SizeId == Model.SizeId && x.ColorId == Model.ColorId);
         return variant;
     }
 }

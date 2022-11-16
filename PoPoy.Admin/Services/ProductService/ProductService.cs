@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace PoPoy.Admin.Services.ProductService
 {
@@ -95,10 +96,11 @@ namespace PoPoy.Admin.Services.ProductService
             return cateAssignRequest;
         }
 
-        public async Task AssignSize(SizeAssignRequest request)
+        public async Task<HttpResponseMessage> AssignSize(SizeAssignRequest request)
         {
-            await _httpClient.PutAsJsonAsync($"api/product/sizes/{request.Id}", request);
+            var code = await _httpClient.PutAsJsonAsync($"api/product/sizes/{request.Id}", request);
             await GetSizeAssignRequest(request.Id);
+            return code;
         }
 
         public async Task<SizeAssignRequest> GetSizeAssignRequest(int productId)
