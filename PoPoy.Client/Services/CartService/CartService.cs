@@ -111,7 +111,7 @@ namespace PoPoy.Client.Services.CartService
                     Product = p.Product,
                     ProductId = p.ProductId,
                     SizeId = p.Size.Id,
-                    SizeName = p.Size.Size,
+                    SizeName = p.Size.SizeName,
                     ColorId = p.ColorId,
                     ColorName = p.Color.ColorName,
                     Price = p.Price

@@ -15,8 +15,8 @@
                             SelectionMode="DataGridSelectionMode.Single">
                 <Columns>
                     <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
-                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="SizeId" Title="Size Id"  CssClass="MyInputClass" />
-                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="ColorId" Title="Color Id"  CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Size.SizeName" Title="Size" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Color.ColorName" Title="Color"  CssClass="MyInputClass" />
                     <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Quantity" Title="Số lượng"  CssClass="MyInputClass" />
                     <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Price" Title="Giá"  CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="ProductQuantity" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
@@ -61,7 +61,7 @@
     {
         if (deleteConfirmed)
         {
-            await ProductService.DeleteProduct(ProductId);
+            await ProductService.DeleteProductVariant(ProductId);
             await GetProducts();
             StateHasChanged();
         }

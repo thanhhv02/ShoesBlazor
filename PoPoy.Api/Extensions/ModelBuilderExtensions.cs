@@ -35,17 +35,17 @@ namespace PoPoy.Api.Extensions
                 new ProductSize()
                 {
                     Id = 1,
-                    Size = 38.ToString()
+                    SizeName = 38.ToString()
                 },
                 new ProductSize()
                 {
                     Id = 2,
-                    Size = 39.ToString()
+                    SizeName = 39.ToString()
                 },
                 new ProductSize()
                 {
                     Id = 3,
-                    Size = 40.ToString()
+                    SizeName = 40.ToString()
                 }
                 );
             //modelBuilder.Entity<ProductQuantity>().HasData(

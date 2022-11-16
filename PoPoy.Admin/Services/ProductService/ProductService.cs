@@ -118,7 +118,7 @@ namespace PoPoy.Admin.Services.ProductService
                 sizeAssignRequest.Sizes.Add(new SelectItem()
                 {
                     Id = item.s.Id.ToString(),
-                    Name = item.s.Size.ToString(),
+                    Name = item.s.SizeName.ToString(),
                     ColorId = item.c.Id.ToString(),
                     ColorName = item.c.ColorName.ToString(),
                     Selected = false,
@@ -128,16 +128,10 @@ namespace PoPoy.Admin.Services.ProductService
             }
             return sizeAssignRequest;
         }
-        public async Task<int> GetQuantity(int sizeid, int prodid)
-        {
-            var res = await _httpClient.GetAsync($"/api/product/get-product-quantity-price?sizeId={sizeid}&Prodid={prodid}");
-            var result = await res.Content.ReadAsStringAsync();
-            return Convert.ToInt32(result.ToString());
-        }
 
-        public Task DeleteProductVariant(int variantId)
+        public async Task DeleteProductVariant(int variantId)
         {
-            throw new NotImplementedException();
+            await _httpClient.DeleteAsync($"api/product/delete-variant/{variantId}");
         }
 
         public async Task<List<ProductQuantity>> GetAllProductsVariant(int productId)

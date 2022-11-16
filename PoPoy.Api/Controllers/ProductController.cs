@@ -212,5 +212,15 @@ namespace PoPoy.Api.Controllers
             var result = await _productServices.GetProductVariants(id);
             return Ok(result);
         }
+        [HttpDelete("delete-variant/{variantId}")]
+        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+
+        public async Task<IActionResult> DeleteProductVariant(int variantId)
+        {
+            var affectedResult = await _productServices.DeleteProductVariant(variantId);
+            if (affectedResult == 0)
+                return BadRequest();
+            return Ok(affectedResult);
+        }
     }
 }

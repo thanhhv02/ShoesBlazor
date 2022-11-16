@@ -16,7 +16,7 @@
             {
                 @foreach (var num in productVariants.GroupBy(x=>x.SizeId).Select(grp => grp.First()))
                 {
-                    <option value="@num.SizeId">@num.Size.Size</option>
+                    <option value="@num.SizeId">@num.Size.SizeName</option>
                 }
             }
 
@@ -75,6 +75,7 @@
         {
             await CartService.UpdateAsync(cart.ToCartStorage());
         }
+        Console.WriteLine("price: " + GetSelectedVariant().Price);
         StateHasChanged();
         
         await QuantityChanged.InvokeAsync(await GetPrice(Model.SizeId, Product_Id, Model.ColorId));
@@ -94,6 +95,14 @@
         var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
         var price = (string)result["Price"];
         return price;
+    }
+    private ProductQuantity GetSelectedVariant()
+    {
+        Console.WriteLine("id: " + Product_Id);
+        Console.WriteLine("size: " + Model.SizeId);
+        Console.WriteLine("color: " + Model.ColorId);
+        var variant = productVariants.FirstOrDefault(v => v.SizeId == Model.SizeId && v.ColorId == Model.ColorId);
+        return variant;
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization;
 @using Blazored.Toast.Configuration
-
+@implements IDisposable;
 <body>
     <!-- header -->
     <header>
@@ -145,6 +145,16 @@
     public void Collapse(){
         collapse = !collapse;
     }
+    [Inject]
+    public HttpInterceptorService Interceptor { get; set; }
+    [Inject]
+    public IAuthService authService{get;set;}
+    protected async override Task OnInitializedAsync()
+    {
+        if(await authService.IsUserAuthenticated())
+            Interceptor.RegisterEvent();
+    }
+    public void Dispose() => Interceptor.DisposeEvent();
 }
 
 <RadzenDialog />

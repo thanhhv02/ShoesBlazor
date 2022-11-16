@@ -34,5 +34,6 @@ namespace PoPoy.Api.Services.ProductService
         Task<bool> SeedProduct();
         Task<string> GetProductQuantityAndPrice(int sizeId, int prodId, int colorId);
         Task<string> GetProductVariants(int productId);
+        Task<int> DeleteProductVariant(int variantId);
     }
 }

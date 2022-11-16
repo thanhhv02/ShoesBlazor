@@ -365,7 +365,7 @@ namespace PoPoy.Api.Services.ProductService
             return await query.Select(x => new ProductSize()
             {
                 Id = x.p.Id,
-                Size = x.p.Size,
+                SizeName = x.p.SizeName,
                 ProductQuantities = null,
             }).ToListAsync();
         }
@@ -558,6 +558,8 @@ namespace PoPoy.Api.Services.ProductService
             //var result = new List<string>();
             var temp = new List<int>();
             var list_quantity = await _dataContext.ProductQuantities.Where(x => x.ProductId == productId)
+                .Include(x=>x.Color)
+                .Include(x=>x.Size)
                 .ToListAsync();
 
             object result = new
@@ -568,6 +570,14 @@ namespace PoPoy.Api.Services.ProductService
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
+        }
+
+        public async Task<int> DeleteProductVariant(int variantId)
+        {
+            var product = await _dataContext.ProductQuantities.FirstOrDefaultAsync(x => x.Id == variantId);
+            _dataContext.ProductQuantities.Remove(product);
+
+            return await _dataContext.SaveChangesAsync();
         }
     }
 }
