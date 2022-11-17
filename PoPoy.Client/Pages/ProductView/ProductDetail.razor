@@ -26,7 +26,7 @@
                 {
                     @if (product.ProductImages.Any())
                     {
-                        
+
                         <div class="product-img" id="product-img">
                             <img src="@imagePath" alt="">
                         </div>
@@ -86,17 +86,17 @@
                             @(reviewCount)
                         </span>
                     </div>
-
+                    @if (_ready && product.ProductQuantities != null && product.ProductQuantities.Count > 0)
+                        {
                     <div class="product-info-price">
-                        @if(_ready){
+                        
                             @Price
                             <sup>VND</sup>
-                        }
+                        
                     </div>
+                    
+                    <SelectSize productVariants="@product.ProductQuantities" Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="GetPriceProduct"></SelectSize>
 
-                    <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Add" />
-                    @if(_ready){
-                        <SelectSize productVariants="@product.ProductQuantities" Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="GetPriceProduct"></SelectSize>
                     }
                     <div>
                         <button class="btn-flat btn-hover" @onclick="AddToCart">Thêm vào giỏ hàng</button>
@@ -152,12 +152,12 @@
         if (result.Success)
         {
             product = result.Data;
-            if(product.ProductImages.Any())
+            if (product.ProductImages.Any())
                 imagePath = product.ProductImages.FirstOrDefault().ImagePath;
         }
         cart = new Cart() { Quantity = 1, Product = product };
         await GetProducts();
-        
+
     }
 
     private async Task SelectedPage(int page)
@@ -211,7 +211,8 @@
         reviewAverage = args.ReviewAverage;
         Console.WriteLine("reviewAverage" + reviewAverage);
     }
-    private void GetPriceProduct(string price){
+    private void GetPriceProduct(string price)
+    {
         Price = price;
         StateHasChanged();
     }
@@ -220,7 +221,8 @@
         IsViewAll = !IsViewAll;
         StateHasChanged();
     }
-    private void ClickToImage(string imgPath){
+    private void ClickToImage(string imgPath)
+    {
         this.imagePath = imgPath;
         StateHasChanged();
     }

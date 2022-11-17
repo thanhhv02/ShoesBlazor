@@ -53,7 +53,8 @@
                             }
                             <div class="col-sm-8">
                                 <h4>@cart.Product.Title - @cart.SizeName - @cart.ColorName</h4>
-                                <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" QuantityChanged="() => StateHasChanged()" />
+
+                                <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" MAX_QUANTITY_PRODUCT="@cart.ProductVariantQuantity" QuantityChanged="() => StateHasChanged()" />
                                 <div class="d-flex flex-row align-items-center mt-3">
                                     <i class="oi oi-trash"></i>
                                     @*<button class="btn btn-danger deleteBtn" href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</button>*@

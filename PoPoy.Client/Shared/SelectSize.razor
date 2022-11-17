@@ -5,39 +5,43 @@
 @using Newtonsoft.Json.Linq
 @using PoPoy.Client.Services.CartService
 @using PoPoy.Shared.Dto
+
 <div class="d-flex flex-row align-items-center mt-3">
-
     <EditForm Model="@Model">
-        <span>Size&emsp;&emsp;&ensp;</span>
-        <InputSelect class="form-control" Value="@Model.SizeId" ValueExpression="@(() => Model.SizeId)"
-                     ValueChanged="@((int value) => OnSizeChanged(value, Model))"
-                     style="width: 130px;">
+        <RadzenCard Class="w-100">
             @if (productVariants?.Count != 0)
             {
-                @foreach (var num in productVariants.GroupBy(x=>x.SizeId).Select(grp => grp.First()))
-                {
-                    <option value="@num.SizeId">@num.Size.SizeName</option>
-                }
-            }
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn size</RadzenText>
+                <RadzenRadioButtonList @bind-Value=@Model.SizeId TValue="int" Change=@((args) => OnSizeChanged(args, Model))>
+                    <Items>
 
-        </InputSelect>
-        <span>Color&emsp;&emsp;&ensp;</span>
-        @if(Model.ColorId != 0){
-            <InputSelect class="form-control" Value="@Model.ColorId" ValueExpression="@(() => Model.ColorId)"
-                     ValueChanged="@((int value) => OnColorChanged(value, Model))"
-                     style="width: 130px;">
-            @if (productVariants?.Count != 0)
-            {
-                @foreach (var num in productVariants.Where(x => x.SizeId == Model.SizeId).ToList().GroupBy(x => x.ColorId).Select(grp => grp.First()))
-                {
-                    <option value="@num.ColorId">@num.Color.ColorName</option>
-                }
-            }
+                        @foreach (var num in productVariants.GroupBy(x => x.SizeId).Select(grp => grp.First()))
+                        {
+                            <RadzenRadioButtonListItem Text="@num.Size.SizeName" Value="@num.SizeId" />
+                        }
 
-        </InputSelect>
-        }
-        
+                    </Items>
+                </RadzenRadioButtonList>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn màu</RadzenText>
+                <RadzenRadioButtonList @bind-Value=@Model.ColorId TValue="int" Change=@((args) => OnColorChanged(args, Model))>
+                    <Items>
+
+                        @foreach (var num in productVariants.Where(x => x.SizeId == Model.SizeId).ToList().GroupBy(x => x.ColorId).Select(grp => grp.First()))
+                        {
+
+                            <RadzenRadioButtonListItem Text="@num.Color.ColorName.ToString()" Value="@num.ColorId" />
+                        }
+
+                    </Items>
+                </RadzenRadioButtonList>
+                
+                <SelectQuantity Model="@Model" CartUpdateType="CartUpdateType.Add" />
+            }
+        </RadzenCard>
     </EditForm>
+    
+
 </div>
 @code {
     [Parameter]
@@ -62,8 +66,8 @@
         }
         if (Model.ColorId == 0)
         {
-            Model.ColorId = (productVariants.Where(x => x.SizeId == Model.SizeId).ToList().Count > 0 
-                            || productVariants.Where(x => x.SizeId == Model.SizeId).ToList() is not null) 
+            Model.ColorId = (productVariants.Where(x => x.SizeId == Model.SizeId).ToList().Count > 0
+                            || productVariants.Where(x => x.SizeId == Model.SizeId).ToList() is not null)
                             ? productVariants.Where(x => x.SizeId == Model.SizeId).FirstOrDefault().ColorId : 0;
         }
         await QuantityChanged.InvokeAsync(GetSelectedVariant().Price.ToString());
@@ -75,9 +79,8 @@
         {
             await CartService.UpdateAsync(cart.ToCartStorage());
         }
-        Console.WriteLine("price: " + GetSelectedVariant().Price);
         StateHasChanged();
-        
+
         await QuantityChanged.InvokeAsync(GetSelectedVariant().Price.ToString());
     }
     private async void OnColorChanged(int colorid, Cart cart)

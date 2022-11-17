@@ -13,6 +13,7 @@ namespace PoPoy.Shared.Dto
         public int Id { set; get; }
         public int ProductId { set; get; }
         public int Quantity { set; get; }
+        public int ProductVariantQuantity { set; get; }
         public string SizeName { get; set; }
         public int SizeId { get; set; } = 0;
         public ColorProduct ColorName { get; set; }

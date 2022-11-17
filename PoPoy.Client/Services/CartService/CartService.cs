@@ -114,7 +114,8 @@ namespace PoPoy.Client.Services.CartService
                     SizeName = p.Size.SizeName,
                     ColorId = p.ColorId,
                     ColorName = p.Color.ColorName,
-                    Price = p.Price
+                    Price = p.Price,
+                    ProductVariantQuantity = p.Quantity
                 });
             }
 
