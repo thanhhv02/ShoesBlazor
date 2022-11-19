@@ -5,6 +5,7 @@ using PoPoy.Api.Configurations;
 using PoPoy.Api.Extensions;
 using PoPoy.Shared;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,7 @@ namespace PoPoy.Api.Data
             modelBuilder.ApplyConfiguration(new ProductSizeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductColorConfiguration());
             modelBuilder.ApplyConfiguration(new ProductQuantityConfiguration());
+            modelBuilder.ApplyConfiguration(new RefundConfiguration());
 
             modelBuilder.Seed();
 
@@ -55,6 +57,7 @@ namespace PoPoy.Api.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Refund> Refunds { get; set; }
 
 
     }

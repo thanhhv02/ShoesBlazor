@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
@@ -785,6 +786,10 @@ namespace PoPoy.Api.Services.AuthService
             }
         }
 
-
+        public async Task<User> GetCurrentUserAsync()
+        {
+            var newUser = await _userManager.GetUserAsync(_httpContext.HttpContext.User);
+            return newUser;
+        }
     }
 }

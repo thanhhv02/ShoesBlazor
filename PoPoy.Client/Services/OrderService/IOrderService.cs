@@ -1,4 +1,5 @@
 ﻿using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using System;
@@ -15,5 +16,6 @@ namespace PoPoy.Client.Services.OrderService
         Task GetOrders(ProductParameters productParameters);
         Task GetOrderDetails(string orderId);
         Task<Order> GetOrderWithUser(string orderId);
+        Task<Refund> CancelOrder(string id);
     }
 }

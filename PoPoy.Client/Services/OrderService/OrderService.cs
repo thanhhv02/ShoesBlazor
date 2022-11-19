@@ -18,6 +18,7 @@ using Blazored.LocalStorage;
 using PoPoy.Client.Extensions;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.HttpRepository;
+using PoPoy.Shared.Entities;
 
 namespace PoPoy.Client.Services.OrderService
 {
@@ -46,6 +47,12 @@ namespace PoPoy.Client.Services.OrderService
         public OrderDetailsResponse ListOrderDetailsResponse { get; set; } = new OrderDetailsResponse();
 
         public event Action OrderDetailsChanged;
+
+        public async Task<Refund> CancelOrder(string id)
+        {
+            var result = await _http.GetAsync($"/api/Order/cancel-order?id={id}");
+            throw new NotImplementedException();
+        }
 
         public void Dispose() => httpInterceptorService.DisposeEvent();
 

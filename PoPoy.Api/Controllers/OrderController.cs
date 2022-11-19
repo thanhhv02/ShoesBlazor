@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PoPoy.Api.Helpers;
+using PoPoy.Api.Services.AuthService;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities;
 using PoPoy.Shared.Entities.OrderDto;
 using PoPoy.Shared.Enum;
 using PoPoy.Shared.Paging;
@@ -25,10 +27,12 @@ namespace PoPoy.Api.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IHttpContextAccessor _httpContext;
-        public OrderController(IOrderService orderService, IHttpContextAccessor httpContext)
+        private readonly IAuthService _auth;
+        public OrderController(IOrderService orderService, IHttpContextAccessor httpContext, IAuthService authService)
         {
             _orderService = orderService;
             _httpContext = httpContext;
+            this._auth = authService;
         }
 
         [HttpGet]
@@ -113,8 +117,6 @@ namespace PoPoy.Api.Controllers
         [HttpPost("UpdateStatusOrder")]
         //[Authorize(Roles = RoleName.Shipper + "," + RoleName.Admin + RoleName.Staff )]
         [AuthorizeToken(AuthorizeToken.PAGEADMIN)]
-
-
         public async Task<ActionResult<bool>> UpdateStatusOrder(UpdateStatusOrderDto input)
         {
             var result = await _orderService.UpdateStatusOrder(input);
@@ -124,7 +126,38 @@ namespace PoPoy.Api.Controllers
             }
             return BadRequest();
         }
-      
+
+        [HttpGet("cancel-order")]
+        [AuthorizeToken]
+        public async Task<ActionResult<bool>> CancelOrder(string id)
+        {
+            if (!await _orderService.HasOrderById(id))
+            {
+                return BadRequest(new ServiceErrorResponse<string>("no order"));
+            }
+            var order = await _orderService.FindOrderById(id);
+
+            var currentUser = await _auth.GetCurrentUserAsync();
+
+            if (!currentUser.Id.Equals(order.UserId))
+            {
+                return BadRequest(new ServiceErrorResponse<string>("something went wrong!"));
+            }
+
+            var result = await _orderService.CancelOrder(order);
+            result.Order = null;
+
+            return Ok(new ServiceSuccessResponse<Refund>()
+            {
+                Success = true,
+                Data = new Refund()
+                {
+                    DateRefunded = result.DateRefunded,
+                    RefundRate = result.RefundRate
+                }
+            });
+        }
+
 
         private string GetUserId()
         => _httpContext.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;

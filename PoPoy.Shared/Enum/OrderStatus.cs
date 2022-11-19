@@ -13,6 +13,5 @@ namespace PoPoy.Shared.Enum
         Delivering,
         Delivered,
         Cancelled,
-
     }
 }

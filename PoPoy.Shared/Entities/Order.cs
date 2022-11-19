@@ -1,4 +1,5 @@
-﻿using PoPoy.Shared.Enum;
+﻿using PoPoy.Shared.Entities;
+using PoPoy.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,6 +29,7 @@ namespace PoPoy.Shared.Dto
 
         [ForeignKey("ShipperId")]
         public User Shipper { get; set; }
+        public Refund Refund { get; set; }
 
     }
 }

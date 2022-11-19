@@ -55,14 +55,16 @@
                                     <p>Số lượng: @item.Quantity</p>
                                     <div class="d-flex">
                                         <RadzenButton Disabled="@(_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Delivered && _svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Cancelled)" Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                                    Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
+                                          Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
                                         <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
                                           Click="()=>ViewDetail(item.OrderId)" Text="Xem chi tiết "></RadzenButton>
-                                     </div>
+                                        <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Text="Hủy đơn hàng"
+                                          Click=@(args => dialogService.Confirm("Tiếp tục?", "Hủy đơn hàng", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" }))></RadzenButton>
+                                    </div>
                                     @*<button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
-                                @onclick="@(() => WriteReview(item))">
-                                        Đánh giá sản phẩm này
-                                    </button>*@
+                        @onclick="@(() => WriteReview(item))">
+                        Đánh giá sản phẩm này
+                        </button>*@
                                 </div>
                                 <div class="col-4">
                                     @try
@@ -115,11 +117,12 @@
 
     }
 
-    private async void SendChat(OrderDetailsProductResponse product){
+    private async void SendChat(OrderDetailsProductResponse product)
+    {
         await broadCastService.SendInfoOrderModel(product, _svc.ListOrderDetailsResponse);
         await OpenChat();
     }
-    private void ViewDetail ( string orderID)
+    private void ViewDetail(string orderID)
       => NavigationManager.NavigateTo($"/order/{orderID}");
 
     public async Task OpenChat()

@@ -5,7 +5,9 @@ using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Data;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities;
 using PoPoy.Shared.Entities.OrderDto;
+using PoPoy.Shared.Enum;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using System;
@@ -24,6 +26,16 @@ namespace PoPoy.Api.Services.OrderService
         {
             _context = context;
             this.configuration = configuration;
+        }
+        public async Task<Order> FindOrderById(string id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(oi => oi.Product)
+                .ThenInclude(pi => pi.ProductImages)
+                .OrderByDescending(o => o.OrderDate)
+                .FirstOrDefaultAsync(o=> o.Id == id);
+            return order;
         }
         public async Task<List<Order>> GetAllOrders()
         {
@@ -213,6 +225,49 @@ namespace PoPoy.Api.Services.OrderService
             response.Data = orderDetailsResponse;
 
             return response;
+        }
+
+        public async Task<bool> HasOrderById(string id)
+        {
+            return await _context.Orders.AnyAsync(o => o.Id == id);
+        }
+
+        public async Task<Refund> CancelOrder(Order order)
+        {
+            var refund = new Refund
+            {
+                DateRefunded = DateTime.Now,
+                RefundRate = RefundRate(order)
+            };
+
+            order.Refund = refund;
+            order.OrderStatus = OrderStatus.Cancelled;
+
+            await _context.SaveChangesAsync();
+            return refund;
+        }
+        private static double RefundRate(Order order)
+        {
+            switch ((OrderStatus)order.OrderStatus)
+            {
+                case OrderStatus.Processing:
+                    var daysApart = DateTime.Now.Subtract(order.OrderDate).Days;
+                    if (daysApart < 3)
+                    {
+                        return 0.9;
+                    }
+
+                    if (daysApart < 7)
+                    {
+                        return 0.7;
+                    }
+
+                    return 0.5;
+                case OrderStatus.Delivering:
+                    return 0.3;
+            }
+
+            return 0;
         }
     }
 }

@@ -39,5 +39,6 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<List<UploadResult>>> UploadUserImage(List<IFormFile> files, string userId);
         string UserId();
         Task<List<SelectItem>> GetShippers();
+        Task<User> GetCurrentUserAsync();
     }
 }

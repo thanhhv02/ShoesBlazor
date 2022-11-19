@@ -1,5 +1,6 @@
 ﻿using PoPoy.Api.Data;
 using PoPoy.Shared.Dto;
+using PoPoy.Shared.Entities;
 using PoPoy.Shared.Entities.OrderDto;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
@@ -22,5 +23,8 @@ namespace PoPoy.Api.Services.OrderService
         Task<bool> AssignShipper(AssignShipperDto model);
         Task<List<Order>> GetOrderByShipper(OrderShipperSearchDto input);
         Task<bool> UpdateStatusOrder(UpdateStatusOrderDto input);
+        Task<Order> FindOrderById(string id);
+        Task<bool> HasOrderById(string id);
+        Task<Refund> CancelOrder(Order order);
     }
 }
