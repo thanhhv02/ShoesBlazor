@@ -1,5 +1,4 @@
-﻿
-@page "/user/setting/{id}"
+﻿@page "/user/setting/{id}"
 
 @inject Microsoft.Extensions.Configuration.IConfiguration config;
 @using System.Net;
@@ -8,6 +7,7 @@
 @inject NavigationManager NavigationManager
 @using PoPoy.Shared.ViewModels
 @inject IAuthService AuthService;
+
 @attribute [Authorize]
 <UserNav></UserNav>
 <PageInfos Title="Cài đặt"></PageInfos>
@@ -17,8 +17,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                <ChangePassword></ChangePassword>
-                <AddressForm></AddressForm>
+                    <ChangePassword></ChangePassword>
+                    <AddressForm></AddressForm>
                 </div>
                 <div class="col-lg-6">
                     <UserAvatar id="@id"></UserAvatar>
@@ -30,6 +30,11 @@
     </div>
 </section>
 
-@code{
+@code {
     [Parameter] public string id { get; set; }
+    public Area areas { get; set; } = new Area();
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
 }

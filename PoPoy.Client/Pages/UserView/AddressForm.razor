@@ -1,67 +1,127 @@
 ﻿@inject IAuthService AuthService
 @inject ILocalStorageService LocalStorage
+@inject IAreaService _area
+<div class="information_module">
+    <button class="toggle_title astext" data-toggle="collapse" @onclick="InitAddress">
+        <h4>
+            Nhập địa chỉ
+            <span class="fa-solid fa-chevron-down"></span>
+        </h4>
+    </button>
+    @if (editAddress)
+    {
+        <EditForm Model="address" OnValidSubmit="SubmitAddress">
+            <div class="information__set toggle_module collapse show" id="changepass-collapse">
+                <div class="information_wrapper form--fields">
+                    <div class="form-group">
+                        <label>Thành phố/ Tỉnh <sup>*</sup></label>
+                        @if (province.results != null)
+                        {
 
-    <div class="information_module">
-        <button class="toggle_title astext" data-toggle="collapse" @onclick="InitAddress">
+                            <select id="province" @onchange="e=>OnChange(e,onchangeProvince)" class="form-control">
 
-                <h4>
-                    Nhập địa chỉ
-                    <span class="fa-solid fa-chevron-down"></span>
-                </h4>
+                                @foreach (var item in province.results)
+                                {
+                                    if (item.name == address.City)
+                                    {
+                                        <option value="@item.code" selected>@item.name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.code">@item.name</option>
+                                    }
+                                }
+                            </select>
 
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label>Quận/ Huyện <sup>*</sup></label>
 
-        </button>
-        @if (editAddress)
-        {
-            <EditForm Model="address" OnValidSubmit="SubmitAddress">
-                <div class="information__set toggle_module collapse show" id="changepass-collapse">
-                    <div class="information_wrapper form--fields">
-                        <div class="form-group">
-                            <label>Thành phố/ Tỉnh <sup>*</sup></label>
-                            <InputText id="street" @bind-Value="address.City" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Đường/ Thôn <sup>*</sup></label>
-                            <InputText id="street" @bind-Value="address.Street" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Phường/ Xã <sup>*</sup></label>
-                            <InputText id="street" @bind-Value="address.Ward" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Quận/ Huyện <sup>*</sup></label>
-                            <InputText id="street" @bind-Value="address.District" class="form-control" />
-                        </div>
-                        <div class="form-group" style="margin-bottom:0; text-align:right">
-                            <button class="btn btn--xs" type="submit">Lưu</button>
-                        </div>
+                        @if (district.results != null)
+                        {
+
+                            <select id="district" @onchange="e=>OnChange(e,onchangeDistrict)" class="form-control">
+                                <option value="" selected disabled> Chọn quận / huyện</option>
+                                @foreach (var item in district.results)
+                                {
+                                    if (item.name == address.District)
+                                    {
+                                        <option value="@item.code" selected>@item.name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.code">@item.name</option>
+                                    }
+                                }
+                            </select>
+
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label>Phường/ Xã <sup>*</sup></label>
+                        @if (commune.results != null)
+                        {
+
+                            <select id="commune" @onchange="e=>OnChange(e,onchangeCommune)" class="form-control">
+                                <option value="" selected disabled> Chọn phường / xã</option>
+                                @foreach (var item in commune.results)
+                                {
+                                    if (item.name == address.Ward)
+                                    {
+                                        <option value="@item.code" selected>@item.name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.code">@item.name</option>
+                                    }
+                                }
+                            </select>
+
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label>Đường/ Thôn <sup>*</sup></label>
+                        <InputText id="street" @bind-Value="address.Street" class="form-control" />
+                    </div>
+                    <div class="form-group" style="margin-bottom:0; text-align:right">
+                        <button class="btn btn--xs" type="submit">Lưu</button>
                     </div>
                 </div>
-            </EditForm>
-        }
-        else if(address is not null)
-        {
-            <div class="author_module about_author">
-                <p><span class="indam">Thành phố/ Tỉnh:</span> @address.City</p>
-                <p><span class="indam">Đường/ Thôn:</span> @address.Street</p>
-                <p><span class="indam">Phường/ Xã:</span> @address.Ward</p>
-                <p><span class="indam">Quận/ Huyện:</span> @address.District</p>
             </div>
-        }
-    </div>
+        </EditForm>
+    }
+    else if (address is not null)
+    {
+        <div class="author_module about_author">
+            <p><span class="indam">Địa chỉ:</span> @address.Street, @address.Ward, @address.District, @address.City</p>
+            @*<p><span class="indam">Quận/ Huyện:</span> @address.District</p>
+        <p><span class="indam">Phường/ Xã:</span> @address.Ward</p>
+        <p><span class="indam">Đường/ Thôn:</span> @address.Street</p>*@
+        </div>
+    }
+</div>
 @code {
-    private Address address{ get; set; } = new Address();
+    private Address address { get; set; } = new Address();
     bool editAddress = false;
-
+    public Area province { get; set; } = new Area();
+    public Area district { get; set; } = new Area();
+    public Area commune { get; set; } = new Area();
+    int onchangeProvince = 1;
+    int onchangeDistrict = 2;
+    int onchangeCommune = 3;
     protected override async Task OnInitializedAsync()
     {
         var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
         var temp = await AuthService.GetAddress(userId);
-        if(temp is not null)
+        if (temp is not null)
         {
             address = new Address();
             address = temp;
         }
+        province = await _area.GetProvince();
+        district = await _area.GetDistrict(province.results.FirstOrDefault().code);
+        commune = await _area.GetComune(district.results.FirstOrDefault().code);
     }
 
     private async Task SubmitAddress()
@@ -80,5 +140,33 @@
     private void EditAddress()
     {
         editAddress = true;
+    }
+    private async void OnChange(ChangeEventArgs args, int p)
+    {
+        if (args.Value == null)
+        {
+            address.City = null;
+            address.District = null;
+            return;
+        }
+
+        switch (p)
+        {
+            case 1:
+                address.City = province.results.FirstOrDefault(x => x.code == args.Value.ToString()).name;
+                district = await _area.GetDistrict(args.Value.ToString());
+                break;
+            case 2:
+                address.District = district.results.FirstOrDefault(x => x.code == args.Value.ToString()).name;
+                commune = await _area.GetComune(args.Value.ToString());
+                break;
+            case 3:
+                address.Ward = commune.results.FirstOrDefault(x => x.code == args.Value.ToString()).name;
+                break;
+            default:
+                break;
+        }
+
+        StateHasChanged();
     }
 }

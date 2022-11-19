@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoPoy.Client.Services;
+using PoPoy.Client.Services.AreaService;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Client.Services.CartService;
@@ -42,7 +43,7 @@ namespace PoPoy.Client.Extensions
             services.AddScoped<IPublicReviewService, PublicReviewService>();
             services.AddScoped<RefreshTokenService>();
             services.AddScoped<HttpInterceptorService>();
-
+            services.AddScoped<IAreaService, AreaService>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
