@@ -20,9 +20,13 @@
 
                             <select id="province" @onchange="e=>OnChange(e,onchangeProvince)" class="form-control">
 
+                                    @if(address.City == null){
+                                        <option value="" selected disabled> Chọn thành phố / tỉnh</option>
+                                    }
+                                
                                 @foreach (var item in province.results)
                                 {
-                                    if (item.name == address.City)
+                                    if (item.name.Trim().ToLower().Equals(address.City.ToLower()))
                                     {
                                         <option value="@item.code" selected>@item.name</option>
                                     }
@@ -42,10 +46,14 @@
                         {
 
                             <select id="district" @onchange="e=>OnChange(e,onchangeDistrict)" class="form-control">
-                                <option value="" selected disabled> Chọn quận / huyện</option>
+                                @if (address.District == null)
+                                {
+                                    <option value="" selected disabled> Chọn quận / huyện</option>
+                                }
+                                
                                 @foreach (var item in district.results)
                                 {
-                                    if (item.name == address.District)
+                                    if (item.name.Trim().ToLower().Equals(address.District.Trim().ToLower()))
                                     {
                                         <option value="@item.code" selected>@item.name</option>
                                     }
@@ -53,6 +61,7 @@
                                     {
                                         <option value="@item.code">@item.name</option>
                                     }
+                                    
                                 }
                             </select>
 
@@ -64,7 +73,11 @@
                         {
 
                             <select id="commune" @onchange="e=>OnChange(e,onchangeCommune)" class="form-control">
-                                <option value="" selected disabled> Chọn phường / xã</option>
+                                @if (address.Ward == null)
+                                {
+                                    <option value="" selected disabled> Chọn phường / xã</option>
+                                }
+                                
                                 @foreach (var item in commune.results)
                                 {
                                     if (item.name == address.Ward)
@@ -120,8 +133,12 @@
             address = temp;
         }
         province = await _area.GetProvince();
-        district = await _area.GetDistrict(province.results.FirstOrDefault().code);
-        commune = await _area.GetComune(district.results.FirstOrDefault().code);
+        district = await _area.GetDistrict(address.City != null ? 
+                    province.results.FirstOrDefault(x=>x.name == address.City).code :
+                    province.results.FirstOrDefault().code);
+        commune = await _area.GetComune(address.District != null ?
+                    district.results.FirstOrDefault(x => x.name == address.District).code :
+                    district.results.FirstOrDefault().code);
     }
 
     private async Task SubmitAddress()
@@ -147,6 +164,7 @@
         {
             address.City = null;
             address.District = null;
+            address.Ward = null;
             return;
         }
 
@@ -155,10 +173,16 @@
             case 1:
                 address.City = province.results.FirstOrDefault(x => x.code == args.Value.ToString()).name;
                 district = await _area.GetDistrict(args.Value.ToString());
+
+                address.District = district.results.FirstOrDefault().name;
+                
+                commune = await _area.GetComune(district.results.FirstOrDefault().code);
+                address.Ward = commune.results.FirstOrDefault().name;
                 break;
             case 2:
                 address.District = district.results.FirstOrDefault(x => x.code == args.Value.ToString()).name;
                 commune = await _area.GetComune(args.Value.ToString());
+                address.Ward = commune.results.FirstOrDefault().name;
                 break;
             case 3:
                 address.Ward = commune.results.FirstOrDefault(x => x.code == args.Value.ToString()).name;
