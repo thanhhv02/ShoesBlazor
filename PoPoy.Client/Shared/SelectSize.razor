@@ -75,6 +75,7 @@
     private async void OnSizeChanged(int sizeid, Cart cart)
     {
         Model.SizeId = sizeid;
+        Model.ColorId = productVariants.Where(x => x.SizeId == Model.SizeId).FirstOrDefault().ColorId;
         if (CartUpdateType is CartUpdateType.Update)
         {
             await CartService.UpdateAsync(cart.ToCartStorage());
