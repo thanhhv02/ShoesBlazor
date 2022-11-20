@@ -50,8 +50,8 @@ namespace PoPoy.Client.Services.OrderService
 
         public async Task<Refund> CancelOrder(string id)
         {
-            var result = await _http.GetAsync($"/api/Order/cancel-order?id={id}");
-            throw new NotImplementedException();
+            var result = await _http.GetFromJsonAsync<Refund>($"/api/Order/cancel-order?id={id}");
+            return result;
         }
 
         public void Dispose() => httpInterceptorService.DisposeEvent();

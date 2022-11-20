@@ -62,7 +62,6 @@
         <div class="card-body pt-3">
             <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Chi tiết đơn hàng <b>#@orderId</b></h2>
             <RadzenSteps SelectedIndex="@((int)order.OrderStatus)" ShowStepsButtons="false">
-
                 <Steps>
                     <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
                         <hr />

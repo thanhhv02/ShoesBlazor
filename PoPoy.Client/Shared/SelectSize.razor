@@ -36,7 +36,7 @@
                     </Items>
                 </RadzenRadioButtonList>
                 
-                <SelectQuantity Model="@Model" CartUpdateType="CartUpdateType.Add" />
+                <SelectQuantity MAX_QUANTITY_PRODUCT="@GetSelectedVariant().Quantity" Model="@Model" CartUpdateType="CartUpdateType.Add" />
             }
         </RadzenCard>
     </EditForm>

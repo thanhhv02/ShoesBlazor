@@ -153,7 +153,6 @@ namespace PoPoy.Api.Controllers
                 Data = new Refund()
                 {
                     DateRefunded = result.DateRefunded,
-                    RefundRate = result.RefundRate
                 }
             });
         }

@@ -16,6 +16,5 @@ namespace PoPoy.Shared.Entities
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
         public DateTime DateRefunded { get; set; }
-        public double RefundRate { get; set; }
     }
 }

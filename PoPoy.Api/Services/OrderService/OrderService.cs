@@ -237,7 +237,6 @@ namespace PoPoy.Api.Services.OrderService
             var refund = new Refund
             {
                 DateRefunded = DateTime.Now,
-                RefundRate = RefundRate(order)
             };
 
             order.Refund = refund;
@@ -245,29 +244,6 @@ namespace PoPoy.Api.Services.OrderService
 
             await _context.SaveChangesAsync();
             return refund;
-        }
-        private static double RefundRate(Order order)
-        {
-            switch ((OrderStatus)order.OrderStatus)
-            {
-                case OrderStatus.Processing:
-                    var daysApart = DateTime.Now.Subtract(order.OrderDate).Days;
-                    if (daysApart < 3)
-                    {
-                        return 0.9;
-                    }
-
-                    if (daysApart < 7)
-                    {
-                        return 0.7;
-                    }
-
-                    return 0.5;
-                case OrderStatus.Delivering:
-                    return 0.3;
-            }
-
-            return 0;
         }
     }
 }
