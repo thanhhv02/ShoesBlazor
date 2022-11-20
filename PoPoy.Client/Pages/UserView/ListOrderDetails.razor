@@ -49,63 +49,50 @@
 
                             @foreach (var item in _svc.ListOrderDetailsResponse.Products)
                             {
-                                <div class="col-8">
-                                    <p><a href="/product-detail/@item.ProductId">@item.Title</a></p>
-                                    <p>Size: @item.ProductSize</p>
-                                    <p>Số lượng: @item.Quantity</p>
-                                    
-                                    @*<button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
-                        @onclick="@(() => WriteReview(item))">
-                        Đánh giá sản phẩm này
-                        </button>*@
-                                </div>
-                                <div class="col-4">
-                                    @try
-                                    {
-                                        @if (item.ProductImages != null || item.ProductImages.Count > 0)
+                                <div class="col-12">
+                                    <div class="col-8">
+                                        <p><a href="/product-detail/@item.ProductId">@item.Title</a></p>
+                                        <p>Size: @item.ProductSize</p>
+                                        <p>Số lượng: @item.Quantity</p>
+                                    </div>
+                                    <div class="col-4">
+                                        @try
                                         {
-                                            @foreach (var item2 in item.ProductImages)
+                                            @if (item.ProductImages != null || item.ProductImages.Count > 0)
                                             {
-                                                <div class="col-4">
-                                                    <p><img src="@item2.ImagePath" alt="" class="fr-dii fr-draggable" title=""><br></p>
-                                                </div>
+                                                @foreach (var item2 in item.ProductImages)
+                                                {
+                                                    <div class="col-4">
+                                                        <p><img src="@item2.ImagePath" alt="" class="fr-dii fr-draggable" title=""><br></p>
+                                                    </div>
+                                                }
                                             }
                                         }
-                                    }
-                                    catch { }
+                                        catch { }
 
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <RadzenButton Disabled="@(_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Delivered || _svc.ListOrderDetailsResponse.OrderStatus == OrderStatus.Cancelled)" Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                          Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
+                                    </div>
                                 </div>
-                                <div class="d-flex">
-                                    <RadzenButton Disabled="@(_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Delivered || _svc.ListOrderDetailsResponse.OrderStatus == OrderStatus.Cancelled)" Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                                      Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
-                                    <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                                      Click="()=>ViewDetail(item.OrderId)" Text="Xem chi tiết "></RadzenButton>
-                                    @if (_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Cancelled)
-                                    {
-                                        <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Text="Hủy đơn hàng"
-                                      Click="args => OnDeleteTask(item.OrderId)"></RadzenButton>
-                                    }
-                                </div>
+                                
                             }
 
                         </div>
 
                     }
+                    
                 </div>
 
             }
         </div>
     </div>
 </div>
-<Confirmation ConfirmationMessage="Bạn chắc chắn xóa loại hàng này?"
-              ConfirmationTitle="Xóa loại hàng"
-              @ref="DeleteConfirmation"
-              ConfirmationChanged="OnConfirmDeleteTask">
 
-</Confirmation>
 @code {
-    public string OrderId { get; set; } = null;
-    private Confirmation DeleteConfirmation { set; get; }
+    
     protected override void OnInitialized()
     {
         _svc.OrderDetailsChanged += StateHasChanged;
@@ -140,18 +127,5 @@
         await dialogService.OpenAsync<PoPoy.Client.Pages.Chat.Chat>("Hộp thư", options: new DialogOptions() { Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });
 
     }
-    public void OnDeleteTask(string orderId)
-    {
-        OrderId = orderId;
-        DeleteConfirmation.Show();
-    }
-
-    public async Task OnConfirmDeleteTask(bool deleteConfirmed)
-    {
-        if (deleteConfirmed)
-        {
-            await _svc.CancelOrder(OrderId);
-            StateHasChanged();
-        }
-    }
+   
 }

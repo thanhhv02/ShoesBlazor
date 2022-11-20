@@ -1,5 +1,6 @@
 ﻿@inject IOrderService _svc;
 @inject IToastService _toastSvc;
+@inject NavigationManager NavigationManager;
 <div class="cardify messaging_sidebar">
     @try
     {
@@ -34,7 +35,17 @@
                                     <p>@item.Product</p>
                                 </div>
                             </div>
+                            <div class="d-flex">
+                                @if (item.OrderStatus != OrderStatus.Cancelled)
+                            {
+                                <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Text="Hủy đơn hàng"
+                              Click="args => OnDeleteTask(item.Id)"></RadzenButton>
+                            }
+                            <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                              Click="()=>ViewDetail(item.Id)" Text="Xem chi tiết "></RadzenButton>
+                            </div>
                         </div>
+
                     }
                     <Pagination MetaData="@_svc.ListOrderResponse.MetaData" Spread="2" SelectedPage="SelectedPage" />
 
@@ -44,10 +55,17 @@
     }
     catch { }
 </div>
+<Confirmation ConfirmationMessage="Tiếp tục?"
+              ConfirmationTitle="Hủy đơn hàng"
+              @ref="DeleteConfirmation"
+              ConfirmationChanged="OnConfirmDeleteTask">
 
+</Confirmation>
 @code {
     [Parameter]
     public string id { get; set; }
+    public string OrderId { get; set; } = null;
+    private Confirmation DeleteConfirmation { set; get; }
     private ProductParameters _productParameters = new ProductParameters();
     protected override async Task OnInitializedAsync()
     {
@@ -68,4 +86,21 @@
     {
         await _svc.GetOrderDetails(id);
     }
+    public void OnDeleteTask(string orderId)
+    {
+        OrderId = orderId;
+        DeleteConfirmation.Show();
+    }
+
+    public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await _svc.CancelOrder(OrderId);
+            await GetOrders();
+            StateHasChanged();
+        }
+    }
+    private void ViewDetail(string orderID)
+      => NavigationManager.NavigateTo($"/order/{orderID}");
 }
