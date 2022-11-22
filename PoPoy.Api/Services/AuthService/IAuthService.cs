@@ -40,5 +40,6 @@ namespace PoPoy.Api.Services.AuthService
         string UserId();
         Task<List<SelectItem>> GetShippers();
         Task<User> GetCurrentUserAsync();
+        Task<ServiceResponse<bool>> UpdateUserProfile(User user);
     }
 }

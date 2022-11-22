@@ -321,5 +321,24 @@ namespace PoPoy.Api.Controllers
         {
             return Ok(await _authService.GetShippers());
         }
+        [HttpPut("update-user-profile")]
+        //[AuthorizeToken]
+        public async Task<IActionResult> UpdateUserProfile([FromBody] User request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _authService.GetCurrentUserAsync();
+            if (!user.Id.Equals(request.Id))
+            {
+                return BadRequest(new ServiceErrorResponse<string>("something went wrong!"));
+            }
+            var result = await _authService.UpdateUserProfile(request);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

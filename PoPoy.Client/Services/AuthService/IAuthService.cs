@@ -27,5 +27,6 @@ namespace PoPoy.Client.Services.AuthService
         Task<string> MakeVNPayPayment(double total);
         Task Logout();
         Task<string> RefreshToken();
+        Task<bool> UpdateUser(User user);
     }
 }

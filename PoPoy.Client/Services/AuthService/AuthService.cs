@@ -168,5 +168,13 @@ namespace PoPoy.Client.Services.AuthService
             Console.WriteLine(result.Token);
             return result.Token;
         }
+
+        public async Task<bool> UpdateUser(User user)
+        {
+            var result = await _httpClient.PutAsJsonAsync($"api/user/update-user-profile", user);
+            if (result.IsSuccessStatusCode)
+                return true;
+            return false;
+        }
     }
 }

@@ -75,7 +75,7 @@ namespace PoPoy.Api.Controllers
             return Ok(affectedResult);
         }
         [HttpGet("get-all-order-user")]
-        [AuthorizeToken]
+        [AuthorizeToken()]
         public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters)
         {
             var result = await _orderService.GetOrders(productParameters, GetUserId());
@@ -128,7 +128,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpGet("cancel-order")]
-        [AuthorizeToken]
+        [AuthorizeToken()]
         public async Task<ActionResult<bool>> CancelOrder(string id)
         {
             if (!await _orderService.HasOrderById(id))

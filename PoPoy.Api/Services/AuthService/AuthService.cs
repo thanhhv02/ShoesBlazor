@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,6 +19,7 @@ using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.ApiModels;
 using PoPoy.Shared.Dto.RefreshToken;
+using PoPoy.Shared.Entities.Area;
 using PoPoy.Shared.Enum;
 using PoPoy.Shared.PayPal;
 using PoPoy.Shared.ViewModels;
@@ -89,14 +91,7 @@ namespace PoPoy.Api.Services.AuthService
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
-                var error = new string[changePasswordResult.Errors.Count()];
-                var listError = new List<string>();
-                foreach (var item in changePasswordResult.Errors)
-                {
-                    listError.Add(item.Description);
-                }
-                error = listError.ToArray();
-                return new ServiceErrorResponse<string>(error);
+                return new ServiceErrorResponse<string>(changePasswordResult.Errors.Select(x=>x.Description).FirstOrDefault().ToString());
             }
             else
             {
@@ -162,7 +157,7 @@ namespace PoPoy.Api.Services.AuthService
         {
             var user = await _userManager.FindByIdAsync(idUser);
             if (user == null) return new ServiceResponse<User>();
-
+            user.UserName = null;
             return new ServiceSuccessResponse<User>(user);
         }
 
@@ -791,5 +786,21 @@ namespace PoPoy.Api.Services.AuthService
             var newUser = await _userManager.GetUserAsync(_httpContext.HttpContext.User);
             return newUser;
         }
+
+        public async Task<ServiceResponse<bool>> UpdateUserProfile(User user)
+        {
+            var findUser = await _userManager.FindByIdAsync(user.Id.ToString());
+            if(findUser != null)
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return new ServiceSuccessResponse<bool>();
+                }
+            }
+            
+            return new ServiceErrorResponse<bool>("Cập nhật không thành công");
+        }
+
     }
 }

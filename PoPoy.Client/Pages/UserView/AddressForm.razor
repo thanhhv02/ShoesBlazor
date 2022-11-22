@@ -2,12 +2,12 @@
 @inject ILocalStorageService LocalStorage
 @inject IAreaService _area
 <div class="information_module">
-    <button class="toggle_title astext" data-toggle="collapse" @onclick="InitAddress">
+    <a href="javascript:void(0)" class="toggle_title astext" data-toggle="collapse" @onclick="InitAddress">
         <h4>
             Nhập địa chỉ
-            <span class="fa-solid fa-chevron-down"></span>
+            <span class="fal fa-chevron-down"></span>
         </h4>
-    </button>
+    </a>
     @if (editAddress)
     {
         <EditForm Model="address" OnValidSubmit="SubmitAddress">
@@ -20,10 +20,11 @@
 
                             <select id="province" @onchange="e=>OnChange(e,onchangeProvince)" class="form-control">
 
-                                    @if(address.City == null){
-                                        <option value="" selected disabled> Chọn thành phố / tỉnh</option>
-                                    }
-                                
+                                @if (address.City == null)
+                                {
+                                    <option value="" selected disabled> Chọn thành phố / tỉnh</option>
+                                }
+
                                 @foreach (var item in province.results)
                                 {
                                     if (item.name.Trim().ToLower().Equals(address.City.ToLower()))
@@ -50,7 +51,7 @@
                                 {
                                     <option value="" selected disabled> Chọn quận / huyện</option>
                                 }
-                                
+
                                 @foreach (var item in district.results)
                                 {
                                     if (item.name.Trim().ToLower().Equals(address.District.Trim().ToLower()))
@@ -61,7 +62,7 @@
                                     {
                                         <option value="@item.code">@item.name</option>
                                     }
-                                    
+
                                 }
                             </select>
 
@@ -77,7 +78,7 @@
                                 {
                                     <option value="" selected disabled> Chọn phường / xã</option>
                                 }
-                                
+
                                 @foreach (var item in commune.results)
                                 {
                                     if (item.name == address.Ward)
@@ -108,9 +109,6 @@
     {
         <div class="author_module about_author">
             <p><span class="indam">Địa chỉ:</span> @address.Street, @address.Ward, @address.District, @address.City</p>
-            @*<p><span class="indam">Quận/ Huyện:</span> @address.District</p>
-        <p><span class="indam">Phường/ Xã:</span> @address.Ward</p>
-        <p><span class="indam">Đường/ Thôn:</span> @address.Street</p>*@
         </div>
     }
 </div>
@@ -133,8 +131,8 @@
             address = temp;
         }
         province = await _area.GetProvince();
-        district = await _area.GetDistrict(address.City != null ? 
-                    province.results.FirstOrDefault(x=>x.name == address.City).code :
+        district = await _area.GetDistrict(address.City != null ?
+                    province.results.FirstOrDefault(x => x.name == address.City).code :
                     province.results.FirstOrDefault().code);
         commune = await _area.GetComune(address.District != null ?
                     district.results.FirstOrDefault(x => x.name == address.District).code :
@@ -175,7 +173,7 @@
                 district = await _area.GetDistrict(args.Value.ToString());
 
                 address.District = district.results.FirstOrDefault().name;
-                
+
                 commune = await _area.GetComune(district.results.FirstOrDefault().code);
                 address.Ward = commune.results.FirstOrDefault().name;
                 break;

@@ -44,25 +44,86 @@
                         </aside>
                     </div>
                     <div class="col-lg-8 col-md-12">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <div class="author_module about_author">
-                                    <h2>
-                                        Thông tin tài khoản
-                                        <span>@KhachName</span>
-                                    </h2>
-                                    <p><span class="indam">Họ tên:</span> @KhachName</p>
-                                    <p><span class="indam">Tên đăng nhập:</span> @user.UserName</p>
-                                    <p><span class="indam">Email:</span> @user.Email</p>
+                        <div class="information_module">
+                            <a class="toggle_title" href="javascript:void(0)" @onclick="EditProfile" data-toggle="collapse">
+                                <h4>
+                                    Thông tin tài khoản
+                                    <span>@KhachName</span>
+                                    <span class="fal fa-chevron-down"></span>
+                                </h4>
+                            </a>
+                            @if (bEditProfile)
+                            {
+                                <EditForm id="formdangky" OnValidSubmit="Submit" Model="user" Context="edituser">
+                                    <input name="__RequestVerificationToken" type="hidden" value="qz6umO-dQ8azUpImx38JmfUWj0vqVvltUjQ1MtOtV5ut4_yjDClrRGK4WxRCZc6AALSsi6ib9QPpXi_G50Aqd1cOBNG4wCjT4hPjZzq8K9o1">
+                                    <div class="cardify signup_form">
+
+                                        <div id="divCheckbox" style="display: none;">
+                                            <DataAnnotationsValidator />
+                                            <ValidationSummary />
+                                        </div>
+                                        <div class="login--form">
+                                            <div class="row">
+                                                <div class="form-group col-6">
+                                                    <label for="hotentxt">Họ của bạn:</label>
+                                                    <InputText @bind-Value="user.LastName" id="hotentxt" type="text" class="text_field" placeholder="Nhập tên của bạn" name="hoten" autocomplete="off" required="" autofocus=""></InputText>
+                                                </div>
+                                                <div class="form-group col-6">
+                                                    <label for="hotentxt">Tên đệm và tên của bạn:</label>
+                                                    <InputText @bind-Value="user.FirstName" id="hotentxt" type="text" class="text_field" placeholder="Nhập tên đệm và tên của bạn" name="hoten" autocomplete="off" required="" autofocus=""></InputText>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="passtxt">Mật khẩu:</label>
+                                                <InputDate @bind-Value="user.Dob" id="dob" class="text_field" placeholder="Nhập ngày tháng năm sinh" name="dob" required=""></InputDate>
+                                                <span id="passerrortxt" class="text-danger" style="color:red; float:right; margin-bottom:20px">
+                                                    <ValidationMessage For="()=>user.Dob"></ValidationMessage>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="passtxt">Số điện thoại:</label>
+                                                <InputText @bind-Value="user.PhoneNumber" id="passtxt" type="text" class="text_field" placeholder="Nhập số điện thoại" name="pass" required=""></InputText>
+                                                <span id="passerrortxt" class="text-danger" style="color:red; float:right; margin-bottom:20px">
+                                                    <ValidationMessage For="()=>user.PhoneNumber"></ValidationMessage>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="emailtxt">Email:</label>
+                                                <InputText @bind-Value="user.Email" id="emailtxt" type="email" class="text_field" placeholder="Nhập email của bạn" name="email" autocomplete="off" required=""></InputText>
+                                                <span id="emailerrortxt" class="text-danger" style="color: red; float: right; margin-bottom: 20px; ">
+                                                    <ValidationMessage For="()=>user.Email"></ValidationMessage>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn--xs register_btn" type="submit" disabled=@isLoading>
+                                                @if (isLoading)
+                                                {
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                }
+                                                Lưu
+                                            </button>
+                                        </div>
+                                    </div>
+                                </EditForm>
+                            }
+                            else
+                            {
+                                <div class="information__set profile_images toggle_module collapse show" id="changeavatar-collapse">
+                                    <div class="information_wrapper">
+                                        <div class="author_module about_author">
+                                            <p><span class="indam">Họ tên:</span> @KhachName</p>
+                                            <p><span class="indam">Ngày sinh:</span> @user.Dob.ToString("dd/MM/yyyy")</p>
+                                            <p><span class="indam">Số điện thoại:</span> @user.PhoneNumber</p>
+                                            <p><span class="indam">Email:</span> @user.Email</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                        
                     </div>
                 </div>
 
             </div>
-            
+
         </section>
     </Authorized>
     <NotAuthorized>
@@ -76,19 +137,41 @@
     public string KhachName;
     public string UserName;
     public string Email;
+    bool bEditProfile = false;
+    public bool isLoading = false;
     //public string NgayThamGia;
     //protected void OnInitialized()
     [Parameter] public string id { get; set; }
-    public User user = new User();
+    public User user { get; set; } = new User();
     protected override async Task OnInitializedAsync()
     {
         var _user = await AuthService.GetUserFromId(id);
         user.LastName = _user.Data.LastName;
         user.FirstName = _user.Data.FirstName;
         KhachName = _user.Data.LastName + " " + _user.Data.FirstName;
-        user.UserName = _user.Data.UserName;
+        //user.UserName = _user.Data.UserName;
         user.Email = _user.Data.Email;
         user.AvatarPath = _user.Data.AvatarPath;
+        user.PhoneNumber = _user.Data.PhoneNumber;
+    }
+    private void EditProfile()
+    {
+        bEditProfile = bEditProfile == true ? false : true;
+    }
+    private async Task Submit()
+    {
+        isLoading = true;
+        user.Id = Guid.Parse((await AuthStat).User.GetUserId());
+        var isSuccess = await AuthService.UpdateUser(user);
+        if (isSuccess)
+        {
+            _toastSvc.ShowSuccess("Cập nhật thành công !");
+        }
+        else
+        {
+            _toastSvc.ShowError("Có lỗi xảy ra !");
+        }
+        isLoading = false;
     }
 }
 
