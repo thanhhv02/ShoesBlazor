@@ -792,11 +792,25 @@ namespace PoPoy.Api.Services.AuthService
             var findUser = await _userManager.FindByIdAsync(user.Id.ToString());
             if(findUser != null)
             {
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
+                try
                 {
-                    return new ServiceSuccessResponse<bool>();
+                    findUser.LastName = user.LastName;
+                    findUser.FirstName = user.FirstName;
+                    findUser.Email = user.Email;
+                    findUser.Dob = user.Dob;
+                    findUser.PhoneNumber = user.PhoneNumber;
+                    var result = await _userManager.UpdateAsync(findUser);
+
+                    if (result.Succeeded)
+                    {
+                        return new ServiceSuccessResponse<bool>();
+                    }
                 }
+                catch
+                {
+
+                }
+                
             }
             
             return new ServiceErrorResponse<bool>("Cập nhật không thành công");

@@ -322,7 +322,7 @@ namespace PoPoy.Api.Controllers
             return Ok(await _authService.GetShippers());
         }
         [HttpPut("update-user-profile")]
-        //[AuthorizeToken]
+        [Authorize]
         public async Task<IActionResult> UpdateUserProfile([FromBody] User request)
         {
             if (!ModelState.IsValid)
