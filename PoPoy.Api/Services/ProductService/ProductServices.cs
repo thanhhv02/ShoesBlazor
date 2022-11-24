@@ -292,7 +292,7 @@ namespace PoPoy.Api.Services.ProductService
                 return false;
             _dataContext.Remove(images);
             await _dataContext.SaveChangesAsync();
-            var GET_FILE_NAME_FROM_PATH = images.ImagePath.Replace(_configuration["ApiUrl"] + "/", "");
+            var GET_FILE_NAME_FROM_PATH = images.ImagePath.Replace(_configuration["ApiUrl"] + "/uploads/", "");
             var path = Path.Combine(_env.ContentRootPath, "wwwroot/uploads", GET_FILE_NAME_FROM_PATH);
             if (System.IO.File.Exists(path))
             {
