@@ -141,6 +141,8 @@ namespace PoPoy.Api.Services.OrderService
                                       join o in _context.Orders on od.OrderIdFromOrder equals o.Id
                                       where od.OrderIdFromOrder == orderId
                                       select od).ToListAsync();
+            var refund = await _context.Refunds.FirstOrDefaultAsync(x => x.Order.Id == orderId);
+            _context.Refunds.Remove(refund);
             foreach (var item in orderDetails)
             {
                 _context.OrderDetails.Remove(item);
