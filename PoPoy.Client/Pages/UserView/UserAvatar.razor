@@ -3,6 +3,7 @@
 @inject HttpClient httpClient;
 @inject ICartState _state;
 @inject IUserAvatarService _svc;
+@inject IToastService _toast;
 
 <div class="information_module">
     <a class="toggle_title" href="#changeavatar-collapse" data-toggle="collapse">
@@ -19,7 +20,7 @@
                         @if (user.AvatarPath != null)
                         {
                             <img id="avatar-img" src="@user.AvatarPath" alt="Hình đại diện thành viên @KhachName" style="width:200px; height:200px">
-                            <a href="javascipt:void(0)" class="text-center" style="display: flex;
+                            <a href="javascipt:void(0)" class="text-center" @onclick="DeleteAvatar" style="display: flex;
     justify-content: center;">Xóa avatar</a>
                         }
                         else
@@ -66,6 +67,14 @@
         user.UserName = _user.Data.UserName;
         user.Email = _user.Data.Email;
         user.AvatarPath = _user.Data.AvatarPath;
+    }
+    private async Task DeleteAvatar(){
+        var result = await AuthService.DeleteAvatar();
+        if(!result){
+            _toast.ShowError("Lỗi");
+        }
+        await GetUser();
+        StateHasChanged();
     }
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {

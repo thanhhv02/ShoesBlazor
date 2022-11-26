@@ -37,9 +37,10 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId);
         Task<ServiceResponse<Address>> GetAddress(Guid userId);
         Task<ServiceResponse<List<UploadResult>>> UploadUserImage(List<IFormFile> files, string userId);
-        string UserId();
+        Guid UserId();
         Task<List<SelectItem>> GetShippers();
         Task<User> GetCurrentUserAsync();
         Task<ServiceResponse<bool>> UpdateUserProfile(User user);
+        Task<bool> DeleteUserAvatar(string id);
     }
 }

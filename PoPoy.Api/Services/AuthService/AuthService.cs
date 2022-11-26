@@ -72,7 +72,7 @@ namespace PoPoy.Api.Services.AuthService
             _context = context;
         }
         public HttpContext Context => _httpContext.HttpContext;
-        public string UserId() => _httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+        public Guid UserId() => Guid.Parse(_httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString());
         public async Task<Guid> GetUserId(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
@@ -91,7 +91,7 @@ namespace PoPoy.Api.Services.AuthService
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
-                return new ServiceErrorResponse<string>(changePasswordResult.Errors.Select(x=>x.Description).FirstOrDefault().ToString());
+                return new ServiceErrorResponse<string>(changePasswordResult.Errors.Select(x => x.Description).FirstOrDefault().ToString());
             }
             else
             {
@@ -288,7 +288,7 @@ namespace PoPoy.Api.Services.AuthService
                 var result = await _userManager.ResetPasswordAsync(user, normalToken, model.NewPassword);
 
                 if (result.Succeeded)
-                    return new ServiceErrorResponse<string>("Password has been reset successfully!");
+                    return new ServiceSuccessResponse<string>("Password has been reset successfully!");
                 else
                 {
                     return new ServiceErrorResponse<string>(result.Errors.FirstOrDefault().Description.ToString());
@@ -525,7 +525,7 @@ namespace PoPoy.Api.Services.AuthService
                         bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
                         bodyBuilder = bodyBuilder.Replace("[total-price]", order.TotalPrice.ToString());
                         bodyBuilder = bodyBuilder.Replace("[all-products]", String.Join("", products.ToArray()));
-                        bodyBuilder = bodyBuilder.Replace("[user-address]", userAddress.Street+" "+userAddress.Ward+" "+userAddress.District+" "+userAddress.City);
+                        bodyBuilder = bodyBuilder.Replace("[user-address]", userAddress.Street + " " + userAddress.Ward + " " + userAddress.District + " " + userAddress.City);
                         EmailDto emailDto = new EmailDto
                         {
                             Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
@@ -637,7 +637,7 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<List<SelectItem>> GetShippers()
         {
             var list = await _userManager.GetUsersInRoleAsync(roleName: RoleName.Shipper);
-            return list.Select(p => new SelectItem { Id = p.Id.ToString() , Name = p.FirstName + " " + p.LastName }).ToList();
+            return list.Select(p => new SelectItem { Id = p.Id.ToString(), Name = p.FirstName + " " + p.LastName }).ToList();
 
         }
         public async Task<ServiceResponse<Address>> AddOrUpdateAddress(Address address, Guid userId)
@@ -708,7 +708,7 @@ namespace PoPoy.Api.Services.AuthService
 
                 var currentAvatar = user.AvatarPath != null ? user.AvatarPath : null;
 
-                if(currentAvatar != null)
+                if (currentAvatar != null)
                 {
                     var GET_FILE_NAME_FROM_PATH = currentAvatar.Replace(_configuration["ApiUrl"] + "/uploads/", "");
                     var pathav = Path.Combine(_env.ContentRootPath, "wwwroot/uploads", GET_FILE_NAME_FROM_PATH);
@@ -717,7 +717,7 @@ namespace PoPoy.Api.Services.AuthService
                         System.IO.File.Delete(pathav);
                     }
                 }
-                
+
 
                 user.AvatarPath = _configuration["ApiUrl"] + "/uploads/" + untrustedFileName;
             }
@@ -789,7 +789,7 @@ namespace PoPoy.Api.Services.AuthService
             }
             catch
             {
-                
+
             }
         }
 
@@ -802,7 +802,7 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<ServiceResponse<bool>> UpdateUserProfile(User user)
         {
             var findUser = await _userManager.FindByIdAsync(user.Id.ToString());
-            if(findUser != null)
+            if (findUser != null)
             {
                 try
                 {
@@ -822,11 +822,28 @@ namespace PoPoy.Api.Services.AuthService
                 {
 
                 }
-                
+
             }
-            
+
             return new ServiceErrorResponse<bool>("Cập nhật không thành công");
         }
 
+        public async Task<bool> DeleteUserAvatar(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if(user == null)
+            {
+                return false;
+            }
+
+            user.AvatarPath = null;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+                return false;
+
+            return true;
+        }
     }
 }

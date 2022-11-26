@@ -47,6 +47,7 @@ namespace PoPoy.Api.Services.ProductService
                     .Search(productParameters.searchText)
                     .Sort(productParameters.OrderBy)
                     .Include(x => x.ProductImages)
+                    .Include(x=>x.ProductQuantities)
                     .ToListAsync();
 
                 //list_product.Shuffle();

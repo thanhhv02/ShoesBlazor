@@ -145,6 +145,9 @@
     public User user { get; set; } = new User();
     protected override async Task OnInitializedAsync()
     {
+        await GetUser();
+    }
+    private async Task GetUser(){
         var _user = await AuthService.GetUserFromId(id);
         user.LastName = _user.Data.LastName;
         user.FirstName = _user.Data.FirstName;
@@ -166,11 +169,14 @@
         if (isSuccess)
         {
             _toastSvc.ShowSuccess("Cập nhật thành công !");
+            //NavigationManager.NavigateTo(NavigationManager.Uri, true);
         }
         else
         {
             _toastSvc.ShowError("Có lỗi xảy ra !");
         }
+        await GetUser();
+        StateHasChanged();
         isLoading = false;
     }
 }

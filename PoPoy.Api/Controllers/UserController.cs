@@ -154,6 +154,7 @@ namespace PoPoy.Api.Controllers
             return BadRequest(result);
         }
 
+        [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePasword(ChangePasswordRequest model)
         {
@@ -173,14 +174,14 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordRequest model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
             if (ModelState.IsValid)
             {
                 var result = await _authService.ResetPassword(model);
 
                 if (result.Success)
-                    return Redirect($"{_configuration["ApiUrl"]}/resetpassword.html"); ;
+                    return Ok(result); 
 
                 return BadRequest(result);
             }
@@ -340,5 +341,25 @@ namespace PoPoy.Api.Controllers
             }
             return Ok(result);
         }
+        [HttpDelete("user-avatar")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUserAvatar()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _authService.GetCurrentUserAsync();
+            if (!user.Id.Equals(_authService.UserId()))
+            {
+                return BadRequest(new ServiceErrorResponse<string>("something went wrong!"));
+            }
+            var result = await _authService.DeleteUserAvatar(_authService.UserId().ToString());
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
     }
 }

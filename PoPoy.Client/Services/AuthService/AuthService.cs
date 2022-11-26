@@ -164,7 +164,7 @@ namespace PoPoy.Client.Services.AuthService
                 await Logout();
                 return null;
             }
-                 
+            Console.WriteLine("REFRESH TOEKN !!!");
             await _localStorage.SetItemAsync("authToken", result.Token);
             await _localStorage.SetItemAsync("refreshToken", result.RefreshToken);
 
@@ -176,6 +176,14 @@ namespace PoPoy.Client.Services.AuthService
         public async Task<bool> UpdateUser(User user)
         {
             var result = await _httpClient.PutAsJsonAsync($"api/user/update-user-profile", user);
+            if (result.IsSuccessStatusCode)
+                return true;
+            return false;
+        }
+
+        public async Task<bool> DeleteAvatar()
+        {
+            var result = await _httpClient.DeleteAsync($"api/user/user-avatar");
             if (result.IsSuccessStatusCode)
                 return true;
             return false;

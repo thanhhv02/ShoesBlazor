@@ -28,5 +28,6 @@ namespace PoPoy.Client.Services.AuthService
         Task Logout();
         Task<string> RefreshToken();
         Task<bool> UpdateUser(User user);
+        Task<bool> DeleteAvatar();
     }
 }

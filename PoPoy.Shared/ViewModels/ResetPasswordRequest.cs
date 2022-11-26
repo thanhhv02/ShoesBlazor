@@ -18,10 +18,13 @@ namespace PoPoy.Shared.ViewModels
 
         [Required]
         [StringLength(50, MinimumLength = 5)]
+        [DataType(DataType.Password)]
         public string NewPassword { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         [StringLength(50, MinimumLength = 5)]
+        [Compare("NewPassword", ErrorMessage = "Hai mật khẩu không giống nhau")]
         public string ConfirmPassword { get; set; }
     }
 }
