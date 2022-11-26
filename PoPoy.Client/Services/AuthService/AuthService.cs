@@ -159,8 +159,12 @@ namespace PoPoy.Client.Services.AuthService
             var refreshResult = await _httpClient.PostAsync("api/token/refresh", bodyContent);
             var refreshContent = await refreshResult.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<AuthResponseDto>(refreshContent, _options);
-            if (!refreshResult.IsSuccessStatusCode)
-                throw new ApplicationException("Something went wrong during the refresh token action");
+            if (!result.IsAuthSuccessful)
+            {
+                await Logout();
+                return null;
+            }
+                 
             await _localStorage.SetItemAsync("authToken", result.Token);
             await _localStorage.SetItemAsync("refreshToken", result.RefreshToken);
 

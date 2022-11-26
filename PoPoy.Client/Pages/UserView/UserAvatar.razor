@@ -19,13 +19,15 @@
                         @if (user.AvatarPath != null)
                         {
                             <img id="avatar-img" src="@user.AvatarPath" alt="Hình đại diện thành viên @KhachName" style="width:200px; height:200px">
+                            <a href="javascipt:void(0)" class="text-center" style="display: flex;
+    justify-content: center;">Xóa avatar</a>
                         }
                         else
                         {
                             <img id="avatar-img" src="/images/avatar.jpg" alt="Hình đại diện thành viên @KhachName" style="width:200px; height:200px">
                         }
-                        <InputFile OnChange="OnInputFileChange" type="file" id="avatar-input" style="display:none" 
-                            accept="image/png, image/jpeg, image/gif, image/jpg">
+                        <InputFile OnChange="OnInputFileChange" type="file" id="avatar-input" style="display:none"
+                                   accept="image/png, image/jpeg, image/gif, image/jpg">
                         </InputFile>
                     </label>
                 </div>

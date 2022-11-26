@@ -706,6 +706,18 @@ namespace PoPoy.Api.Services.AuthService
                 uploadResult.ContentType = file.ContentType;
                 uploadResults.Add(uploadResult);
 
+                var currentAvatar = user.AvatarPath != null ? user.AvatarPath : null;
+
+                if(currentAvatar != null)
+                {
+                    var GET_FILE_NAME_FROM_PATH = currentAvatar.Replace(_configuration["ApiUrl"] + "/uploads/", "");
+                    var pathav = Path.Combine(_env.ContentRootPath, "wwwroot/uploads", GET_FILE_NAME_FROM_PATH);
+                    if (System.IO.File.Exists(pathav))
+                    {
+                        System.IO.File.Delete(pathav);
+                    }
+                }
+                
 
                 user.AvatarPath = _configuration["ApiUrl"] + "/uploads/" + untrustedFileName;
             }
