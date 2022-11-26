@@ -22,7 +22,7 @@
     {
         _productParameters = new ProductParameters();
         _productParameters.PageSize = 3;
-        _productParameters.OrderBy = "CheckoutCount";
+        _productParameters.OrderBy = "CheckoutCount desc";
         await _productSvc.GetAll(_productParameters, null);
     }
 

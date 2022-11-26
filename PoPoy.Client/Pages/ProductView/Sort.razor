@@ -2,12 +2,12 @@
     <div class="col-md-12">
         <div class="filter-bar">
             <div class="pull-right" style="background:var(--filler)">
-                <div class="filter__option filter--dropdown filter--range">
+                @*<div class="filter__option filter--dropdown filter--range">
                     <a style="cursor:pointer" href="javascript:void(0)" class="dropdown-trigger dropdown-toggle" @onclick="()=>Modal.Open()">
                         Bộ lọc nâng cao
                         <span class="fal fa-chevron-down"></span>
                     </a>
-                </div>
+                </div>*@
            
                     <div class="filter__option filter--dropdown">
                         <a href="#" id="drop2" class="dropdown-trigger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,8 +30,8 @@
 <Modal @ref="Modal"></Modal>
 @code {
     Dictionary<string, string> SortOptions = new Dictionary<string, string>() {
-            ["Price desc"] = "Giá Thấp - Cao",
-            ["Price"] = "Giá Cao - Thấp",
+            //["Price"] = "Giá Thấp - Cao",
+            //["Price desc"] = "Giá Cao - Thấp",
             ["DateCreated desc"] = "Mới nhất",
             ["Views desc"] = "Xem nhiều nhất",
             ["ReviewAverage desc"] = "Đánh giá cao nhất",

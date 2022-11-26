@@ -43,7 +43,7 @@ namespace PoPoy.Api.Services.ProductService
         {
             using (_dataContext)
             {
-                var list_product = await _dataContext.Products
+                var list_product =  await _dataContext.Products
                     .Search(productParameters.searchText)
                     .Sort(productParameters.OrderBy)
                     .Include(x => x.ProductImages)

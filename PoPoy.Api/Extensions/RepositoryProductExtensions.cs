@@ -5,6 +5,10 @@ using System.Text;
 using System.Linq.Dynamic.Core;
 using System;
 using PoPoy.Shared.Paging;
+using PoPoy.Api.Data;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace PoPoy.Api.Extensions
 {
@@ -48,5 +52,6 @@ namespace PoPoy.Api.Extensions
 
             return products.OrderBy(orderQuery);
         }
+       
     }
 }
