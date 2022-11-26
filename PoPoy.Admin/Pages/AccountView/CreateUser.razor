@@ -1,0 +1,131 @@
+﻿@page "/CreateUser/"
+@using PoPoy.Admin.Extensions
+@inject IAuthService Authservice
+@inject NavigationManager NavigationManager
+@inject Radzen.DialogService dialogService;
+
+@if (ShowErrors)
+{
+    <span class="alert alert-danger">@Message</span>
+}
+else
+{
+
+        <div class="card-body ml-3 col-12">
+        <RadzenTabs>
+            <Tabs>
+
+                <RadzenTabsItem Text="Thông tin chung">
+                    <EditForm Model="UserModel" OnValidSubmit="FCrateUser">
+
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="lastname">Họ</label>
+                            <InputText id="lastname" class="form-control" @bind-Value="UserModel.LastName"></InputText>
+                            <ValidationMessage For="()=> UserModel.LastName"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="firstname">Tên</label>
+                            <InputText id="firstname" class="form-control" @bind-Value="UserModel.FirstName"></InputText>
+                            <ValidationMessage For="()=> UserModel.FirstName"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="email">Email</label>
+                            <InputText id="email" class="form-control" @bind-Value="UserModel.Email"></InputText>
+                            <ValidationMessage For="()=> UserModel.Email"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="phonenumber">Số điện thoại</label>
+                            <InputText id="phonenumber" class="form-control" @bind-Value="UserModel.PhoneNumber"></InputText>
+                            <ValidationMessage For="()=> UserModel.PhoneNumber"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="username">Username</label>
+                            <InputText id="username" class="form-control" @bind-Value="UserModel.UserName"></InputText>
+                            <ValidationMessage For="()=> UserModel.UserName"></ValidationMessage>
+                        </div>
+
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="password">Mật khẩu mới</label>
+                            <InputText id="Password" type="Password" class="form-control" @bind-Value="UserModel.Password"></InputText>
+                            <ValidationMessage For="()=> UserModel.Password"></ValidationMessage>
+                        </div>
+                        <div class="text-field col-lg-12 mb-4">
+                            <label for="password">Nhập lại mật khẩu </label>
+                            <InputText id="Password" type="Password" class="form-control" @bind-Value="UserModel.ConfirmPassword"></InputText>
+                            <ValidationMessage For="()=> UserModel.ConfirmPassword"></ValidationMessage>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12 text-end">
+                                <RadzenButton Icon="close" Click="@((args) => dialogService.Close(false))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Cancel" Style="width: 120px" Class="me-1" />
+                                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="add_circle" Text="Lưu lại" Style="width: 120px" />
+                            </div>
+                        </div>
+                    </EditForm>
+        
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="Vai trò">
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn vai trò</RadzenText>
+                    <RadzenListBox Multiple AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" @bind-Value=@UserModel.Roles
+                               Data=@RolesName Style="height:200px" Class="w-100" />
+                </RadzenTabsItem>
+
+            </Tabs>
+        </RadzenTabs>
+    </div>
+
+}
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    [Inject] private IToastService toastService { get; set; }
+    public PoPoy.Shared.ViewModels.CreateUser UserModel = new();
+    public bool ShowErrors = false;
+    public string Message;
+    public List<string> RolesName { get; set; } = new();
+    public event Action<dynamic> Close;
+
+    protected async override Task OnInitializedAsync()
+    {
+        UserModel.Roles.Add(RoleName.Staff);
+        await LoadRoles();
+
+    }
+    private async Task LoadRoles(){
+        RolesName = await  Authservice.GetRoleNames();
+    }
+    private async Task FCrateUser()
+    {
+        var result = await Authservice.CreateUser(UserModel);
+        if (result.Success)
+        {
+            toastService.ShowSuccess("Thêm người dùng mới thành công !");
+            NavigationManager.NavigateTo("/listUser");
+
+        }else
+        {
+            toastService.ShowError(result.Message);
+
+        }
+    }
+
+
+
+    async Task OnLoadData(LoadDataArgs args)
+    {
+        await LoadRoles();
+
+        var list = RolesName;
+        if (!string.IsNullOrEmpty(args.Filter))
+        {
+            list = RolesName.Where(c => c.ConvertToUnSign().Contains(args.Filter.ConvertToUnSign())).ToList();
+        }
+        RolesName = list;
+        await InvokeAsync(StateHasChanged);
+    }
+
+}

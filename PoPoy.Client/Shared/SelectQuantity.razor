@@ -3,7 +3,7 @@
 @using PoPoy.Shared.Dto
 
 
-<RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn số lượng (Còn @MAX_QUANTITY_PRODUCT sản phẩm)</RadzenText>
+<RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn số lượng (Còn <strong style="font-size: 18px;">@MAX_QUANTITY_PRODUCT</strong> sản phẩm)</RadzenText>
 <RadzenNumeric ValueExpression="@(() => Model.Quantity)" Value="@Model.Quantity"
                TValue="int" Min="1" Max="@MAX_QUANTITY_PRODUCT" Change=@(args => OnQuantityChanged(args, Model)) />
 

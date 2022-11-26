@@ -24,7 +24,7 @@
 
         <div class="pb-3">
             <h2 class="card-title" style="color:#012970">Chi tiết đơn hàng <b>#@orderId</b></h2>
-            <RadzenSteps  SelectedIndex="@((int)order.OrderStatus)" ShowStepsButtons="false">
+            <RadzenSteps   ShowStepsButtons="false">
 
                 <Steps >
                             <RadzenStepsItem Disabled="order.OrderStatus != OrderStatus.Processing" Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
@@ -61,7 +61,7 @@
                         </div>
                     </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus != OrderStatus.Delivered ||order.OrderStatus != OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
+                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivered ||order.OrderStatus == OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
                           <div class="d-flex justify-content-center align-items-center">
                                         
                                     @if (order.OrderStatus == OrderStatus.Delivered)
@@ -142,7 +142,7 @@
                                                 @*<b>@(order.ShipName)</b>*@
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-VND"), "{0:C}", orderDetail.Price).Replace(",00","")}") />
+                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-Vn"), "{0:C}", orderDetail.Price).Replace(",00","")}") />
                                             </div>
                                         </div>
                                         <hr style="border: none; background-color: rgba(0,0,0,.08); height: 1px; margin: 1rem 0;" />
@@ -156,7 +156,7 @@
                                                 <h4 class="mb-0">@(orderDetail.Product.Title) - @orderDetail.SizeName - @orderDetail.ColorName</h4>
                                                 <div style="font-size: .8em">Size: @(orderDetail.SizeName), Số lượng: @(orderDetail.Quantity)</div>
                                                
-                                                <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered || order.OrderStatus == OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
+                                                <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
                                                 </RadzenButton>
                                             </div>
                                         </div>

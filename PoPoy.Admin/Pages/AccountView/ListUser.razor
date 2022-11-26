@@ -68,7 +68,7 @@ else
     </div>
 *@
 }
-<RadzenButton Icon="add_circle_outline" Text="Tạo người dùng mới" class="col-lg-4" ButtonStyle="ButtonStyle.Success"/>
+<RadzenButton Icon="add_circle_outline" Click="OpenCreate" Text="Tạo người dùng mới" class="col-lg-4" ButtonStyle="ButtonStyle.Success"/>
 <div class="card">
     <div class="card-body">
         <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách người dùng</h2>
@@ -118,8 +118,12 @@ else
     private Guid DeleteId { set; get; }
     private Confirmation DeleteConfirmation { set; get; }
     [Inject] private DialogService DialogService { get; set; }
+    public event Action<dynamic> Close;
+
     protected override async Task OnInitializedAsync()
     {
+        Close += async (r) => { await GetUsers(); StateHasChanged(); };
+        DialogService.OnClose += Close;
         await GetUsers();
     }
 
@@ -128,7 +132,11 @@ else
         DeleteId = deleteId;
         DeleteConfirmation.Show();
     }
-
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        DialogService.OnClose -= Close;
+    }
     public async Task OnConfirmDeleteTask(bool deleteConfirmed)
     {
         if (deleteConfirmed)
@@ -170,6 +178,13 @@ else
     {
         await DialogService.OpenAsync<EditUser>($"Chỉnh sửa người dùng",
                new Dictionary<string, object>() { { "Id", id } },
+               new DialogOptions() { Width = "1400px", Height = "612px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+    public async Task OpenCreate()
+    {
+        await DialogService.OpenAsync<CreateUser>("Tạo người dùng",
+               options:
                new DialogOptions() { Width = "1400px", Height = "612px", Resizable = true, Draggable = false, CssClass = "modal-content" });
 
     }

@@ -24,7 +24,7 @@ body {
     font-family: "Poppins", sans-serif;
     overflow-x: hidden;
     position: relative;
-    background-color: var(--main-bg-color);
+    /*background-color: var(--main-bg-color);*/
     overflow-x: hidden;
 }
 
@@ -280,14 +280,11 @@ ul.devided > li:last-child {
 }
 
 .hero {
-    height: calc(
-        100vh -
-            (
+    height: calc( 100vh - (
                 var(--top-header-size) + var(--mid-header-size) +
                     var(--bottom-header-size)
-            )
-    );
-    padding: 0 20px;
+            ) );
+    /*    padding: 0 20px;*/
 }
 
 .slider,
@@ -499,26 +496,41 @@ ul.devided > li:last-child {
 }
 
 .product-card {
-    background-color: var(--main-bg-color);
-    transition: all 0.3s ease-in-out;
+    background-color: #f1ecec;
+    border-radius: 30px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin-top: 30px;
+    /*    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+*/
 }
 
-.product-card:hover {
-    background-color: var(--second-bg-color);
-}
+    .product-card:hover {
+        height: 425px;
+        opacity: 0.7;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        background-color: #e7e7e7;
+        transition: all 0.5s ease-in;
+    }
 
 .product-card-img {
     height: 300px;
     overflow: hidden;
     display: flex;
     align-items: center;
+    border-radius: 25px 25px 0 0;
     justify-content: center;
 }
 
-.product-card-img img {
-    max-height: 100%;
-    transition: all 0.3s ease-in-out;
-}
+    .product-card-img:hover {
+        transition: all 1.5s ease-in-out;
+    }
+
+    .product-card-img img {
+        max-height: 100%;
+        margin-top: -61px;
+        transition: all 0.5s ease-in;
+    }
+
 
 .product-card-img img:nth-child(2) {
     display: none;
@@ -526,14 +538,22 @@ ul.devided > li:last-child {
 
 .product-card:hover .product-card-img img:nth-child(1) {
     display: none;
+    transition: all 0.3s ease-in-out;
 }
 
 .product-card:hover .product-card-img img:nth-child(2) {
+    transform: scale(2.5);
     display: block;
 }
 
+.product-card:hover .product-card-info .product-card-name,
+.product-card:hover .product-card-info .product-card-info,
+.product-card:hover .product-card-info .viewInfo {
+    display: none;
+}
+
 .product-card-info {
-    padding: 20px;
+    height: 125px;
     text-align: center;
     position: relative;
 }
@@ -557,6 +577,7 @@ ul.devided > li:last-child {
 .product-btn {
     position: absolute;
     bottom: 100%;
+    top: -142px;
     left: 0;
     width: 100%;
     display: flex;
@@ -569,7 +590,7 @@ ul.devided > li:last-child {
 }
 
 .product-card:hover .product-btn {
-    opacity: 1;
+    opacity: 0.8;
     visibility: visible;
     transform: translateY(0);
 }
@@ -1067,13 +1088,10 @@ footer ul li {
     }
 
     .hero {
-        height: calc(
-            80vh -
-                (
+        height: calc( 80vh - (
                     var(--top-header-size) + var(--mid-header-size) +
                         var(--bottom-header-size)
-                )
-        );
+                ) );
         margin-bottom: 60px;
     }
 
@@ -1163,13 +1181,10 @@ footer ul li {
 
 @media only screen and (max-width: 750px) {
     .hero {
-        height: calc(
-            70vh -
-                (
+        height: calc( 70vh - (
                     var(--top-header-size) + var(--mid-header-size) +
                         var(--bottom-header-size)
-                )
-        );
+                ) );
         margin-bottom: 60px;
     }
 
@@ -1185,4 +1200,137 @@ footer ul li {
     .promotion-box {
         height: unset;
     }
+}
+
+.module_service_details {
+    margin-top: 15px;
+}
+
+    .module_service_details .item_service img {
+        height: 35px;
+    }
+
+    .module_service_details .item_service {
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 50px;
+        width: 1000px;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 400;
+        padding: 10px 0 10px px 45px;
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+        .module_service_details .item_service h4 {
+            margin-left: 10px;
+        }
+
+.box-input {
+    width: 75px;
+    margin-left: 10px;
+}
+
+.bottom-header .main-menu li a {
+    font-size: 20px;
+    padding: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+    .bottom-header .main-menu li a:hover,
+    .filter-list li a:hover {
+        color: #916841;
+        font-weight: bold;
+        background-color: transparent;
+    }
+
+.hero .slider {
+    background: #edeef3;
+}
+
+    .hero .slider .container {
+        background-color: #edeef3;
+    }
+
+    .hero .slider .slide .info {
+        margin-left: 15px;
+    }
+
+.filter-list li a {
+    font-size: 16px;
+}
+
+footer {
+    color: rgb(253, 226, 226);
+    background: url("https://kingshoes.vn/template/Default/img/parallax.jpg") no-repeat fixed center;
+}
+
+#autos {
+    font-size: .9rem;
+    padding: 5px 10px;
+    background: #ffd600 !important;
+    color:black;
+    margin-left: -5px;
+}
+
+#autos2 {
+    font-size: .9rem;
+    padding: 5px 10px;
+    background: var(--rz-danger) !important;
+    color: black;
+    margin-left: 10px;
+}
+
+.deleteBtn {
+    background-color: #ef0e1c !important;
+    border-radius: 50px !important;
+    height: 80px !important;
+    width:80px !important;
+    position: absolute !important;
+    top: 10px !important;
+    left: 750px !important;
+}
+
+.rz-button-icon-left{
+    font-size:25px !important;
+}
+
+.xmark {
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    top: 3px;
+    left: 500px;
+}
+
+.priceInfo {
+    color: #2b2bbb;
+    font-weight: bold;
+}
+
+.detailInfo h1 {
+    font-weight: bold;
+    letter-spacing: 3px;
+    width: 800px;
+}
+
+.detailInfo {
+    font-size: 18px;
+    letter-spacing: 1.5px;
+}
+
+.priceTotal{
+    font-weight:bold;
+}
+
+.viewInfo {
+    color: #DC143C !important;
+    font-size: 15px !important;
+    background-color: #6deb56 !important;
+    margin-bottom: 5px !important;
+    font-weight: bolder !important;
 }

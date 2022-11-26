@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.AuthService;
+using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities;
@@ -28,11 +29,14 @@ namespace PoPoy.Api.Controllers
         private readonly IOrderService _orderService;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IAuthService _auth;
-        public OrderController(IOrderService orderService, IHttpContextAccessor httpContext, IAuthService authService)
+        private readonly IBroadCastService broadCastService;
+
+        public OrderController(IOrderService orderService, IHttpContextAccessor httpContext, IAuthService auth, IBroadCastService broadCastService)
         {
             _orderService = orderService;
             _httpContext = httpContext;
-            this._auth = authService;
+            _auth = auth;
+            this.broadCastService = broadCastService;
         }
 
         [HttpGet]
@@ -90,10 +94,12 @@ namespace PoPoy.Api.Controllers
         }
         //[Authorize(Roles = RoleName.Admin)]
         [HttpPost("AssignShipper")]
-        [AuthorizeToken(AuthorizeToken.ADMIN_STAFF)]
+        [AuthorizeToken(AuthorizeToken.PAGEADMIN)]
         public async Task<ActionResult<ServiceResponse<bool>>> AssignShipper(AssignShipperDto model)
         {
             var result = await _orderService.AssignShipper(model);
+            // send thông báo 
+            await broadCastService.SendOrderForShipper(model.ShipperId);
             if (result)
             {
                 return Ok(result);

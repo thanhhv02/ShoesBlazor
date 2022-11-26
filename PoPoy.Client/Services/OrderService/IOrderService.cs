@@ -15,6 +15,7 @@ namespace PoPoy.Client.Services.OrderService
         OrderDetailsResponse ListOrderDetailsResponse { get; set; }
         Task GetOrders(ProductParameters productParameters);
         Task GetOrderDetails(string orderId);
+        Task DeleteOrder(string orderId);
         Task<Order> GetOrderWithUser(string orderId);
         Task<Refund> CancelOrder(string id);
     }

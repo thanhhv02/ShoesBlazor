@@ -13,6 +13,8 @@ namespace PoPoy.Shared.Dto.Chats
 
         public string Avatar { get; set; }
         public Guid? ReceiverId { get; set; }
+        public Guid? SenderId { get; set; }
+
 
 
 

@@ -52,18 +52,18 @@
                                 <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">
                             }
                             <div class="col-sm-8">
-                                <h4>@cart.Product.Title - @cart.SizeName - @cart.ColorName.GetEnumDisplayName()</h4>
-
+                                <h4 style="font-weight:bold">@cart.Product.Title</h4> <span class="xmark">X</span>
+                                <p class="badge bg-secondary" id="autos"><strong>Size Giày: @cart.SizeName</strong></p> <span class="badge bg-secondary" id="autos2"><strong>Color: @cart.ColorName</strong></span>
                                 <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" MAX_QUANTITY_PRODUCT="@cart.ProductVariantQuantity" QuantityChanged="() => StateHasChanged()" />
                                 <div class="d-flex flex-row align-items-center mt-3">
                                     <i class="oi oi-trash"></i>
                                     @*<button class="btn btn-danger deleteBtn" href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</button>*@
-                                    <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => RemoveCart(cart)">
+                                    <RadzenButton Icon="delete_forever" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Danger" Class="m-1 deleteBtn" Click="args => RemoveCart(cart)">
                                     </RadzenButton>
                                 </div>
                             </div>
-                            <div class="col-sm-2">
-                                <h4>@cart.Price.ToString("n0")</h4>
+                            <div class="col-sm-2 priceInfo">
+                                <h4>@cart.Price.ToString("n0") ₫</h4>
                             </div>
                         </div>
                         <hr />
@@ -73,8 +73,8 @@
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-subtitle mb-2">Tổng số @(CalcTotalQuantity()) sản phẩm (đã bao gồm thuế) </h5>
-                        <h4 class="card-title text-danger">@CalcTotalAmount().ToString("n0")</h4>
+                        <h5 class="card-subtitle mb-2">Tổng : @(CalcTotalQuantity()) sản phẩm (đã bao gồm <span style="color:tomato">10%</span> thuế)  </h5>
+                        <h4 class="card-title text-danger priceTotal">@CalcTotalAmount().ToString("n0") ₫</h4>
                         <div style="text-align:left;margin:0px;">
                             <EditForm Model="paymentModel">
 
@@ -85,19 +85,19 @@
                         @if (@paymentModel.Name == "CashOnDelivery")
                         {
                             <div class="d-grid gap-2 mx-auto">
-                                <button class="button-63 mt-3" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Đặt hàng</button>
+                                <button class="button-43 mt-3" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Đặt hàng</button>
                             </div>
                         }
                         @if (@paymentModel.Name == "VNPay")
                         {
                             <div class="d-grid gap-2 mx-auto">
-                                <button class="button-63 mt-3" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Thanh toán VNPay</button>
+                                <button class="button-43 mt-3" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Thanh toán VNPay</button>
                             </div>
                         }
                         @if (@paymentModel.Name == "PayPal")
                         {
                             <div class="d-grid gap-2 mx-auto">
-                                <button class="button-63 mt-3" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Thanh toán Paypal</button>
+                                <button class="button-43 mt-3" @onclick="@(() => CheckOut())" disabled="@buttonDisabled">Thanh toán Paypal</button>
                             </div>
                         }
                     </div>
@@ -136,7 +136,7 @@
     }
 
     private decimal CalcTotalAmount()
-        => carts.Sum(x => x.CalcAmount());
+        => carts.Sum(x => x.CalcAmount() + 100000);
 
     private int CalcTotalQuantity()
         => carts.Sum(x => x.Quantity);
@@ -153,6 +153,7 @@
     {
         try
         {
+            var url = "";
             var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
             var address = await AuthService.GetAddress(userId);
             var finalTotal = CalcTotalAmount();
@@ -186,8 +187,7 @@
                     carts.FirstOrDefault().PaymentMode = paymentModel.Name;
                     var total = CalcTotalAmount();
                     total *= 100;
-                    var url = await AuthService.MakeVNPayPayment((double)total);
-                    NavigationManager.NavigateTo(url);
+                    url = await AuthService.MakeVNPayPayment((double)total);
                 }
                 if (paymentModel.Name == "PayPal")
                 {
@@ -195,9 +195,7 @@
                     carts.FirstOrDefault().PayPalPayment = (double)finalTotal;
                     carts.FirstOrDefault().PaymentMode = paymentModel.Name;
                     var total = CalcTotalAmount();
-                    var url = await AuthService.MakePayPalPayment((double)total);
-                    NavigationManager.NavigateTo(url);
-
+                    url = await AuthService.MakePayPalPayment((double)total);
                 }
                 buttonDisabled = true;
                 if (carts != null && carts.Count > 0)
@@ -225,25 +223,31 @@
                     {
                         carts.Clear();
                         await CartService.RemoveAllAsync();
+                        await LocalStorage.RemoveItemAsync("getUrlPayment");
                         StateHasChanged();
-                        if (paymentModel.Name != "PayPal")
+                        //send thông báo cho admin
+
+                        var hostAdmin = configuration["AdminUrl"];
+                        NotiSendConfig config = new NotiSendConfig(title: "Có đơn hàng mới",
+                        message: $"Có một đơn hàng mới được đặt", dataUrl: $"{hostAdmin}/listOrderDetails/{orderId}");
+                        await broadCastService.SendNotiAllAdmin(config);
+
+                        //send thông báo cho người đặt hàng
+
+                        NotiSendConfig config2 = new NotiSendConfig(title: "Đặt hàng thành công",
+                        message: $"Đơn hàng {orderId} được đặt thành công", dataUrl: $"user/list-order");
+                        await broadCastService.SendNotiCurrentUser(config2);
+                        if (paymentModel.Name != "CashOnDelivery")
+                        {
+                            NavigationManager.NavigateTo(url);
+                            await LocalStorage.SetItemAsStringAsync("getUrlPayment",url);
+                        }
+                        else
                         {
                             NavigationManager.NavigateTo("payment-thanks");
                             _toastSvc.ShowSuccess("Thanh toán thành công");
 
 
-                            //send thông báo cho admin
-
-                            var hostAdmin = configuration["AdminUrl"];
-                            NotiSendConfig config = new NotiSendConfig(title: "Có đơn hàng mới",
-                            message: $"Có một đơn hàng mới được đặt", dataUrl: $"{hostAdmin}/listOrderDetails/{orderId}");
-                            await broadCastService.SendNotiAllAdmin(config);
-
-                            //send thông báo cho người đặt hàng
-
-                            NotiSendConfig config2 = new NotiSendConfig(title: "Đặt hàng thành công",
-                            message: $"Đơn hàng {orderId} được đặt thành công", dataUrl: $"user/list-order");
-                            await broadCastService.SendNotiCurrentUser(config2);
                         }
                     }
                 }

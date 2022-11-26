@@ -20,7 +20,7 @@
     <ul style="max-height:60vh; overflow:hidden; overflow-y:auto;" class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
         <li class="dropdown-header">
             Có @notifications.Count(p => !p.IsRead) thông báo mới
-            <a @onclick="ReadAllNoti" href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Đánh dấu tất cả là đã đọc đã đọc</span></a>
+            <a @onclick="ReadAllNoti" href="Javascript:void(0)"><span class="badge rounded-pill bg-primary p-2 ms-2">Đánh dấu tất cả là đã đọc đã đọc</span></a>
         </li>
         <li>
             <hr class="dropdown-divider">
@@ -32,12 +32,14 @@
         {
             var isread = item.IsRead ? "bi bi-check-circle text-success" : "bi bi-info-circle text-primary";
             <li style="cursor:pointer;" @onclick="() => ReadNoti(item)" class="notification-item">
+                <a href="@item.DataUrl" class="notification-item">
                     <i class="@isread"></i>
                     <div>
                         <h4>@item.Title</h4>
                         <p>@item.Message</p>
                         <p>@item.Created.ToString("dd/MM/yyyy hh:mm")</p>
                     </div>
+                </a>
             </li>
 
             <li>

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using PoPoy.Api.Helpers;
+using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.Chats;
 using PoPoy.Shared.Enum;
@@ -8,19 +11,31 @@ using System.Threading.Tasks;
 
 namespace PoPoy.Api.Hubs
 {
-    [Authorize]
+    [AuthorizeToken]
 
     public class ChatHub : Hub
     {
 
-        public async Task SendMessageUserId(ChatDto chatDto)
+        private readonly IBroadCastService broadCastService;
+        private readonly IMapper mapper;
+
+        public ChatHub(IBroadCastService broadCastService, IMapper mapper)
         {
-            await Clients.User(chatDto.ReceiverId.ToString()).SendAsync(BroadCastType.Message , chatDto);
+            this.broadCastService = broadCastService;
+            this.mapper = mapper;
         }
 
-        public async Task SendMessageAllAdmin(ChatDto chatDto)
+        public async Task SendMessageUserId(CreateOrUpdateChatDto chatDto)
         {
-            await Clients.Users(chatDto.UserIds).SendAsync(BroadCastType.Message, chatDto);
+            var chat = mapper.Map<ChatDto>(chatDto);
+            await broadCastService.SendMessageUserId(chat);
+
+        }
+
+        public async Task SendMessageAllAdmin(CreateOrUpdateChatDto chatDto)
+        {
+            var chat = mapper.Map<ChatDto>(chatDto);
+            await broadCastService.SendMessageAllAdmin(chat);
         }
 
         public override Task OnConnectedAsync()

@@ -16,22 +16,20 @@ namespace PoPoy.Api.Services.BroadCastService
 {
     public class BroadCastService : IBroadCastService
     {
+        private readonly IHubContext<OrderHub> orderContext;
         private readonly IHubContext<NotificationHub> hubContext;
         private readonly IHubContext<ChatHub> chatHubContext;
         private readonly INotificationService notificationService;
         private readonly IChatService chatService;
 
-
-
-        public BroadCastService(IHubContext<NotificationHub> hubContext, IHubContext<ChatHub> chatHubContext, INotificationService notificationService, IChatService chatService)
+        public BroadCastService(IHubContext<OrderHub> orderContext, IHubContext<NotificationHub> hubContext, IHubContext<ChatHub> chatHubContext, INotificationService notificationService, IChatService chatService)
         {
+            this.orderContext = orderContext;
             this.hubContext = hubContext;
             this.chatHubContext = chatHubContext;
             this.notificationService = notificationService;
             this.chatService = chatService;
         }
-
-
 
         public async Task ReadNoti(Guid id)
         {
@@ -104,6 +102,13 @@ namespace PoPoy.Api.Services.BroadCastService
             await chatService.CreateChatUserId(chatDto);
             await chatHubContext.Clients.User(chatDto.ReceiverId.ToString()).SendAsync(BroadCastType.Message, chatDto);
         }
+
+        public async Task SendOrderForShipper(Guid shipperId)
+        {
+           
+            await orderContext.Clients.User(shipperId.ToString()).SendAsync(BroadCastType.Order,"Đơn hàng mới");
+        }
+
 
     }
 }

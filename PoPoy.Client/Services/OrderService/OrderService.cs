@@ -99,5 +99,9 @@ namespace PoPoy.Client.Services.OrderService
             return result;
         }
 
+        public async Task DeleteOrder(string orderId)
+        {
+            await _http.DeleteAsync($"/api/order/{orderId}");
+        }
     }
 }

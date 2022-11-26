@@ -83,7 +83,6 @@
     private bool ShowErrors;
     private string Error = "";
     private LoginRequest LoginModel = new LoginRequest();
-
     private async Task HandleLogin()
     {
         ShowErrors = false;
@@ -91,6 +90,15 @@
         var result = await AuthService.Login(LoginModel);
         if (result.Success)
         {
+            if (result.RoleNames.Any(p => p.Contains(RoleName.Customer)))
+            {
+                _toastSvc.ShowError("Xin lỗi bạn không đủ quyền truy cập !");
+            }
+            else if (result.RoleNames.Contains(RoleName.Shipper))
+            {
+                NavigationManager.NavigateTo("/shipper");
+            }
+            else
             NavigationManager.NavigateTo("/");
         }
         else

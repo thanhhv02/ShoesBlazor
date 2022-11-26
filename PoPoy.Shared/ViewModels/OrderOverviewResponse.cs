@@ -15,6 +15,7 @@ namespace PoPoy.Shared.ViewModels
         public string Product { get; set; }
         public string ProductImageUrl { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public string PaymentMode { get; set; }
     }
 }

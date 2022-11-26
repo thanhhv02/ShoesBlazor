@@ -48,7 +48,7 @@ else
                         </div>
 
                         <div class="text-field col-lg-12 mb-4">
-                            <label for="password">Password</label>
+                            <label for="password">Mật khẩu mới</label>
                             <InputText id="password" type="password" class="form-control" @bind-Value="User.Password"></InputText>
                             <ValidationMessage For="()=> User.Password"></ValidationMessage>
                         </div>
@@ -82,6 +82,7 @@ else
     public bool ShowErrors = false;
     public string Message;
 
+    [Inject] private IToastService toastService { get; set; }
     protected async override Task OnInitializedAsync()
     {
         User = await Authservice.GetUserById(Guid.Parse(Id));
@@ -93,11 +94,13 @@ else
         if (result)
         {
             NavigationManager.NavigateTo("/listUser");
+            toastService.ShowSuccess("Cập nhật thành công");
+
         }
         else
         {
-            ShowErrors = true;
-            Message = "Cập nhật không thành công";
+
+            toastService.ShowError("Cập nhật không thành công");
         }
     }
 

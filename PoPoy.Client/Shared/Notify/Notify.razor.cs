@@ -63,7 +63,6 @@ namespace PoPoy.Client.Shared.Notify
                     return;
                 }
             });
-            navigationManager.NavigateTo(noti.DataUrl);
         }
         private async Task ReadAllNoti()
         {

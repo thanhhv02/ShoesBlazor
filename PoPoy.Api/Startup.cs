@@ -105,6 +105,8 @@ namespace PoPoy.Api
             {
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapHub<NotificationHub>("/notificationhub");
+                endpoints.MapHub<OrderHub>("/orderhub");
+
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

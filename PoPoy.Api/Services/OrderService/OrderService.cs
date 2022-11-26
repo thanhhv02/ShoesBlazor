@@ -175,6 +175,7 @@ namespace PoPoy.Api.Services.OrderService
                 ProductImageUrl = o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath != null
                 ? o.OrderDetails.First().Product.ProductImages.FirstOrDefault()?.ImagePath : configuration["ApiUrl"] + "/uploads/no-photo-available.png",
                 OrderStatus = o.OrderStatus,
+                PaymentStatus = o.PaymentStatus,
                 PaymentMode = o.PaymentMode
             }));
 
@@ -206,6 +207,7 @@ namespace PoPoy.Api.Services.OrderService
                 OrderDate = order.OrderDate,
                 TotalPrice = order.TotalPrice,
                 Products = new List<OrderDetailsProductResponse>(),
+                PaymentStatus = order.PaymentStatus,
                 PaymentMode = order.PaymentMode,
                 OrderStatus = order.OrderStatus
             };

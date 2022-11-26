@@ -10,5 +10,6 @@ namespace PoPoy.Shared.Enum
     {
         public const string Notify = "ReceiveNotify";
         public const string Message = "ReceiveMessage";
+        public const string Order = "ReceiveOrder";
     }
 }

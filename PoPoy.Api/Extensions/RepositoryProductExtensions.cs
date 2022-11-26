@@ -52,6 +52,5 @@ namespace PoPoy.Api.Extensions
 
             return products.OrderBy(orderQuery);
         }
-       
     }
 }

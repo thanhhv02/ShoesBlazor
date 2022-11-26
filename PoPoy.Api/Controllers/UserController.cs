@@ -29,7 +29,7 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(LoginRequest request)
+        public async Task<ActionResult<LoginResponse<string>>> Login(LoginRequest request)
         {
             var response = await _authService.Login(request);
             if (!response.Success)
@@ -112,7 +112,17 @@ namespace PoPoy.Api.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("CreateUser")]
+        [AuthorizeToken(RoleName.Admin)]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUser request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var result = await _authService.CreateUser( request);
+        
+            return Ok(result);
+        }
 
         [HttpDelete("{id}")]
         [AuthorizeToken(RoleName.Admin)]

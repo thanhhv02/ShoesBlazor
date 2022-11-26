@@ -9,7 +9,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
-
 namespace PoPoy.Client
 {
     public class Program

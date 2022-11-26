@@ -49,6 +49,7 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032132131",
                     UserName = "Admin",
                     NormalizedUserName = "ADMIN",
+                    CreatedDate = DateTime.UtcNow,
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
                 await userManager.CreateAsync(useradmin, "Admin@123$");
@@ -72,6 +73,8 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032232131",
                     UserName = "thanhitc",
                     NormalizedUserName = "THANHITC",
+                    CreatedDate = DateTime.UtcNow,
+
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
                 await userManager.CreateAsync(user, "thanh123");
@@ -92,6 +95,8 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032232131",
                     UserName = "thanhhv",
                     NormalizedUserName = "THANHHV",
+                    CreatedDate = DateTime.UtcNow,
+
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
                 await userManager.CreateAsync(user2, "123321");
@@ -113,6 +118,7 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032232151",
                     UserName = "shipper",
                     NormalizedUserName = "Long",
+                    CreatedDate = DateTime.UtcNow,
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
                 await userManager.CreateAsync(shipper, "thanh123");

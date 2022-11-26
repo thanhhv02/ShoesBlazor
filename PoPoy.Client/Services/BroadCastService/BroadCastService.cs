@@ -79,14 +79,22 @@ namespace PoPoy.Client.Services.BroadCastService
             }
         }
 
-        public async Task SendMessageAllAdmin(string message , string data = null)
+        public async Task SendMessageAllAdmin(HubConnection hub, string message , string data = null)
         {
 
-            CreateOrUpdateChatDto model = new() { Data = data, Message = message , Avatar = await GetUserAvtChat()   };
-            var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
+            CreateOrUpdateChatDto model = new() { Data = data, Message = message , Avatar = await GetUserAvtChat() ,SenderId = Guid.Parse(await GetUserIdCurrentChat())  };
+            // var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
+            await hub.InvokeAsync("SendMessageAllAdmin", model);
 
         }
 
+        public async Task SendMessageAllAdmin(string message, string data = null)
+        {
+
+            CreateOrUpdateChatDto model = new() { Data = data, Message = message, Avatar = await GetUserAvtChat(), SenderId = Guid.Parse(await GetUserIdCurrentChat()) };
+             var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
+
+        }
 
         public async Task SendMessageUserId(string message, Guid? receiverId,   string data = null)
         {
@@ -281,7 +289,7 @@ namespace PoPoy.Client.Services.BroadCastService
 
         public async Task<HubConnection> BuidHubWithToken(string broadCastType = BroadCastType.Notify)
         {
-            var hubstring = broadCastType == BroadCastType.Notify ? "/notificationHub" : "/chathub";
+            var hubstring = broadCastType == BroadCastType.Notify ? "notificationHub" : "chathub";
             var token = await localStorageService.GetItemAsStringAsync("authToken");
             token = token.Remove(0, 1);
             token = token.Remove(token.Length - 1, 1);

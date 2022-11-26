@@ -32,7 +32,7 @@ namespace PoPoy.Admin.Pages.Chat
         {
             await LoadDataAsync();
             var cr = ListChatSenders.FirstOrDefault();
-            if (cr != null) SelectUserChat(cr.Id);
+            if (cr != null) await SelectUserChat(cr.Id);
             StateHasChanged();
             Avatar = await broadCastService.GetUserAvtChat();
             hubConnection = await broadCastService.BuidHubWithToken(BroadCastType.Message);
@@ -122,7 +122,7 @@ namespace PoPoy.Admin.Pages.Chat
             if (!string.IsNullOrEmpty(Message))
             {
                 await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.Now.ToString("HH:mm"), Avatar);
-                await broadCastService.SendMessageUserId(Message , Current.User.UserId);
+                await broadCastService.SendMessageUserId(hubConnection,Message , Current.User.UserId);
                 await jSRuntime.InvokeVoidAsync("sendChatmini2", Message, Current.User.UserId);
 
                 Message = string.Empty;

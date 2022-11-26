@@ -21,5 +21,6 @@ namespace PoPoy.Api.Services.BroadCastService
         Task ReadMessage(Guid receiverId, Guid senderId);
         Task<List<ListChatSender>> GetListChatSender(Guid userId);
         Task<List<ListChatUser>> GetListChatUser(Guid userId);
+        Task SendOrderForShipper(Guid shipperId);
     }
 }

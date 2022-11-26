@@ -1,25 +1,24 @@
 ﻿@page "/location"
-
 @*@inject IJSRuntime JSRuntime
 
 <div id="map" style="height:800px;width:100%;">
 </div>
 
-@code{
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+    @code{
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("initialize", null); 
-            StateHasChanged();
+            if (firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("initialize", null);
+                StateHasChanged();
+            }
         }
-    }
-}*@
+    }*@
 <div class="row mt-5">
     <div class="col-xl-12">
-@*        <h3>
-            <RadzenCheckBox @bind-Value="@showMadridMaker" />
-        </h3>*@
+        @*        <h3>
+                <RadzenCheckBox @bind-Value="@showMadridMaker" />
+            </h3>*@
         <RadzenGoogleMap class="googleMap" style="height:600px;width:100%" Zoom="@zoom" Center="@(new GoogleMapPosition(){Lat = 10.762622,Lng = 106.660172})" MapClick="@OnMapClick" MarkerClick="@OnMarkerClick">
             <Markers>
                 <RadzenGoogleMapMarker Title="Cửa hàng Popoy" Label="Cửa hàng PoPoy" Position="@(new GoogleMapPosition(){Lat = 10.762622,Lng = 106.66017})"></RadzenGoogleMapMarker>
@@ -27,7 +26,27 @@
         </RadzenGoogleMap>
     </div>
 </div>
-@code{
+<div class="row m-5">
+    <div class="col-xl-6">
+        <img data-thumb="original" original-height="1483" original-width="1184" src="//bizweb.dktcdn.net/100/292/624/files/ea7230b2-6879-4553-9c90-6dea123c1c12-14212-000006f17ba29c73.jpg?v=1648374288172">
+    </div>
+    <div class="col-xl-6 mt-5 mb-5">
+        <p style="text-align: center;">&nbsp;</p>
+        <p style="text-align: center;"><span style="font-size:20px;"><strong>T<span style="font-family:Verdana,Geneva,sans-serif;">HÀNH PHỐ HỒ CHÍ MINH:</span></strong></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:18px;">73 Lý Tự Trọng, Phường Bến Thành, Quận 1</span></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:18px;"><i aria-hidden="true"></i>13 Nguyễn Thiện Thuật, Phường 2, Quận 3</span></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:18px;"><i aria-hidden="true"></i>210B Hồ Văn Huê, Phường 9, Quận Phú Nhuận</span></span></p>
+        <p style="text-align: center;">&nbsp;</p>
+        <p style="text-align: center;"><span style="font-size: 20px;"><b>ĐÀ NẴNG:</b></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:18px;">371 Lê Duẩn, Phường Tân Chính,&nbsp;Quận Thanh Khê</span></span></p>
+        <p style="text-align: center;">&nbsp;</p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:16px;">Thời gian làm việc: <span style="color:#4e5f70;">09:00 - 22:00</span></span></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:16px;"><span style="color:#4e5f70;">Có chỗ đỗ Ôtô</span></span></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:16px;">Hotline: <span style="color:#4e5f70;">(+84) 898515689</span></span></span></p>
+        <p style="text-align: center;"><span style="font-family:Verdana,Geneva,sans-serif;"><span style="font-size:16px;">Miễn Phí Thanh Toán mọi loại thẻ: Visa/Master/JCB... - Momo - Chuyển Khoản.</span></span></p>
+    </div>
+</div>
+@code{ 
     int zoom = 18;
     bool showMadridMaker;
     string clickedPosition = "";
@@ -39,5 +58,4 @@
     void OnMarkerClick(RadzenGoogleMapMarker args)
     {
         clickedPosition = $"Map : {args.Title} clicked LAT : {args.Position.Lat}, LNG : {args.Position.Lng}";
-    }
-}
+    } }

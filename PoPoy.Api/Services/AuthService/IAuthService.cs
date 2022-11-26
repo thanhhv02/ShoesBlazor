@@ -13,7 +13,7 @@ namespace PoPoy.Api.Services.AuthService
     public interface IAuthService
     {
         Task<ServiceResponse<bool>> Register(RegisterRequest request);
-        Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest login);
+        Task<LoginResponse<AuthResponseDto>> Login(LoginRequest login);
         Task<ServiceResponse<string>> ForgetPassword(string email);
         Task<ServiceResponse<string>> ConfirmEmail(string userId, string token);
         Task<ServiceResponse<string>> ResetPassword(ResetPasswordRequest model);
@@ -28,6 +28,7 @@ namespace PoPoy.Api.Services.AuthService
         Task<UserVM> GetUserById(Guid id);
         Task<ServiceResponse<bool>> DeleteUser(Guid id);
         Task<ServiceResponse<bool>> UpdateUser(Guid id, UserUpdateRequest request);
+        Task<ServiceResponse<bool>> CreateUser(CreateUser request);
         Task<ServiceResponse<User>> GetUserFromId(string idUser);
         Task<string> MakePaymentPaypal(double total);
         Task<bool> UpdatePaymentStatus(Guid userId);

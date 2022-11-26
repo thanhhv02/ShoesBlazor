@@ -1,5 +1,7 @@
-﻿@inject IOrderService _svc;
+﻿@using PoPoy.Client.Extensions;
+@inject IOrderService _svc;
 @inject IToastService _toastSvc;
+@inject DialogService dialogSvc;
 @inject NavigationManager NavigationManager;
 <div class="cardify messaging_sidebar">
     @try
@@ -29,16 +31,17 @@
                             <div class="message_data" @onclick="()=>Clicked(item.Id)">
                                 <div class="name_time">
                                     <div class="name">
-                                        <p>@item.TotalPrice<sup>VND</sup></p>
+                                        <p>@FormatData.FormatAsPrice(item.TotalPrice)</p>
                                     </div>
                                     <span class="time">@item.OrderDate</span>
                                     <p>@item.Product</p>
                                 </div>
                             </div>
                             <div class="d-flex">
-                                @if (item.OrderStatus != OrderStatus.Cancelled)
+                                @if (item.OrderStatus == OrderStatus.Confirmed || item.OrderStatus == OrderStatus.Processing) 
+                                // thành nguyễn sửa lại chỉ trong trạng thái chờ xác nhận mới cho hủy đang ship hay giao rồi thì kh hủy chớ có gì sai thì sửa lại
                             {
-                                <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Text="Hủy đơn hàng"
+                                    <RadzenButton class="ml-3" Icon="cancel" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Text="Hủy đơn hàng"
                               Click="args => OnDeleteTask(item.Id)"></RadzenButton>
                             }
                             <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
@@ -55,17 +58,17 @@
     }
     catch { }
 </div>
-<Confirmation ConfirmationMessage="Tiếp tục?"
+@*<Confirmation ConfirmationMessage="Tiếp tục?"
               ConfirmationTitle="Hủy đơn hàng"
               @ref="DeleteConfirmation"
               ConfirmationChanged="OnConfirmDeleteTask">
 
-</Confirmation>
+</Confirmation>*@
 @code {
     [Parameter]
     public string id { get; set; }
-    public string OrderId { get; set; } = null;
-    private Confirmation DeleteConfirmation { set; get; }
+    //public string OrderId { get; set; } = null;
+   // private Confirmation DeleteConfirmation { set; get; }
     private ProductParameters _productParameters = new ProductParameters();
     protected override async Task OnInitializedAsync()
     {
@@ -86,21 +89,32 @@
     {
         await _svc.GetOrderDetails(id);
     }
-    public void OnDeleteTask(string orderId)
+    //public void OnDeleteTask(string orderId)
+    //{
+    //    OrderId = orderId;
+    //    DeleteConfirmation.Show();
+    //}
+    public async Task OnDeleteTask(string orderId)
     {
-        OrderId = orderId;
-        DeleteConfirmation.Show();
-    }
-
-    public async Task OnConfirmDeleteTask(bool deleteConfirmed)
-    {
-        if (deleteConfirmed)
+       var result = await dialogSvc.Confirm("Bạn có chắc muốn hủy?", "Xác nhận", new ConfirmOptions() { OkButtonText = "Có Hủy", CancelButtonText = "Không" } );
+       if (result.Value == true)
         {
-            await _svc.CancelOrder(OrderId);
+            await _svc.CancelOrder(orderId);
             await GetOrders();
             StateHasChanged();
         }
+
     }
+
+    //public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+    //{
+    //    if (deleteConfirmed)
+    //    {
+    //        await _svc.CancelOrder(OrderId);
+    //        await GetOrders();
+    //        StateHasChanged();
+    //    }
+    //}
     private void ViewDetail(string orderID)
       => NavigationManager.NavigateTo($"/order/{orderID}");
 }

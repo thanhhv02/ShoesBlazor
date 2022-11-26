@@ -1,12 +1,14 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using PoPoy.Admin.Extensions;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -30,11 +32,11 @@ namespace PoPoy.Admin.Services.AuthService
             _localStorage = localStorage;
             _navigationManager = navigationManager;
         }
-        public async Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest loginRequest)
+        public async Task<LoginResponse<AuthResponseDto>> Login(LoginRequest loginRequest)
         {
             var result = await _httpClient.PostAsJsonAsync("/api/user/login", loginRequest);
             var content = await result.Content.ReadAsStringAsync();
-            var loginResponse = JsonSerializer.Deserialize<ServiceResponse<AuthResponseDto>>(content,
+            var loginResponse = JsonSerializer.Deserialize<LoginResponse<AuthResponseDto>>(content,
                 new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = true
@@ -119,6 +121,14 @@ namespace PoPoy.Admin.Services.AuthService
             return false;
         }
 
+        public async Task<ServiceResponse<bool>> CreateUser(CreateUser user)
+        {
+            var result = await _httpClient.PostAsync($"/api/user/CreateUser", user.ToJsonBody());
+            //await result.CheckAuthorized(this);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        }
+
+
         public async Task<bool> DeleteUser(Guid id)
         {
             var result = await _httpClient.DeleteAsync($"/api/user/{id}");
@@ -137,6 +147,11 @@ namespace PoPoy.Admin.Services.AuthService
         {
             var result = await _httpClient.GetFromJsonAsync<List<Address>>("/api/user/getListAddress");
             return result;
+        }
+        public async Task<List<string>> GetRoleNames()
+        {
+            var result = await _httpClient.GetFromJsonAsync<List<RoleVM>>("/api/user/getRoles");
+            return result.Select(p => p.Name).ToList() ;
         }
     }
 }

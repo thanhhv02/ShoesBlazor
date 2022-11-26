@@ -222,6 +222,5 @@ namespace PoPoy.Api.Controllers
                 return BadRequest();
             return Ok(affectedResult);
         }
-
     }
 }

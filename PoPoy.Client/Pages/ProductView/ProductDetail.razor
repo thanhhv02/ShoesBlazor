@@ -1,6 +1,7 @@
 ﻿@page "/product-detail/{id:int}"
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
+@using PoPoy.Client.Extensions;
 @inject IProductService _productSvc;
 @inject ILocalStorageService LocalStorage
 @inject IToastService _toastSvc;
@@ -51,7 +52,7 @@
 
             </div>
             <div class="col-7">
-                <div class="product-info">
+                <div class="product-info detailInfo">
                     <h1>
                         @product.Title <br />
                     </h1>
@@ -76,7 +77,7 @@
                     </div>
                     <div class="product-info-detail">
                         <span class="product-info-detail-title">
-                            Rated:
+                            Đánh giá:
                             <RatingStar Rating="@reviewAverage"></RatingStar>
                         </span>
                     </div>
@@ -89,9 +90,8 @@
                     @if (_ready && product.ProductQuantities != null && product.ProductQuantities.Count > 0)
                         {
                     <div class="product-info-price">
-                        
-                            @Price
-                            <sup>VND</sup>
+
+                            @FormatData.FormatAsPrice(Price)
                         
                     </div>
                     
@@ -157,7 +157,6 @@
         }
         cart = new Cart() { Quantity = 1, Product = product };
         await GetProducts();
-
     }
 
     private async Task SelectedPage(int page)

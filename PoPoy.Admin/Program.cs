@@ -14,6 +14,7 @@ using PoPoy.Admin.Services.BroadCastService;
 using Blazored.Toast;
 using Smart.Blazor;
 using Radzen;
+using PoPoy.Admin.Services.DashBoardService;
 
 namespace PoPoy.Admin
 {
@@ -31,6 +32,8 @@ namespace PoPoy.Admin
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IBroadCastService, BroadCastService>();
+            builder.Services.AddScoped<IDashBoardService, DashBoarchService>();
+
             builder.Services.AddBlazoredToast();
             builder.Services.AddSmart();
 

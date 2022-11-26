@@ -6,7 +6,7 @@
                 <div class="modal-header">
                     <h3 class="modal-title" style="color:darkblue" id="exampleModalLabel">@ConfirmationTitle</h3>
                     <RadzenButton Icon="close" Variant="Variant.Text" ButtonStyle="ButtonStyle.Dark" type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            Click="args => OnConfirmationChange(false)">
+                                  Click="args => OnConfirmationChange(false)">
                     </RadzenButton>
                 </div>
                 <div class="modal-body">
@@ -14,11 +14,11 @@
                 </div>
                 <div class="modal-footer">
                     <RadzenButton Text="Hủy" Icon="close" ButtonStyle="ButtonStyle.Light" data-dismiss="modal"
-                            Click="() => OnConfirmationChange(false)">
-                        
+                                  Click="() => OnConfirmationChange(false)">
+
                     </RadzenButton>
                     <RadzenButton Text="Đồng ý" Icon="delete_forever" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Danger"
-                            Click="() => OnConfirmationChange(true)">
+                                  Click="() => OnConfirmationChange(true)">
                     </RadzenButton>
                 </div>
             </div>

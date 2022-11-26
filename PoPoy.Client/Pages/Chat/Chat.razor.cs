@@ -10,6 +10,7 @@ using System;
 using PoPoy.Client.Services.BroadCastService;
 using Blazored.Toast.Services;
 using Radzen;
+using PoPoy.Client.Services;
 
 namespace PoPoy.Client.Pages.Chat
 {
@@ -31,6 +32,8 @@ namespace PoPoy.Client.Pages.Chat
         {
 
             hubConnection = await broadCastService.BuidHubWithToken(BroadCastType.Message);
+            await hubConnection.StartAsync();
+
             SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
                 async chat =>
                 {
@@ -47,7 +50,6 @@ namespace PoPoy.Client.Pages.Chat
                     await ScrollToBottom();
                     StateHasChanged();
                 });
-            await broadCastService.StartAsync(hubConnection);
 
             await LoadDataAsync();
 
@@ -79,7 +81,9 @@ namespace PoPoy.Client.Pages.Chat
             if (!string.IsNullOrEmpty(Message))
             {
                 await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.Now.ToString("HH:mm"), AvatarPath);
-                await broadCastService.SendMessageAllAdmin(Message);
+                CreateOrUpdateChatDto model = new() { Data = null, Message = Message, Avatar =  AvatarPath, SenderId = Guid.Parse(currentUserIdChat) };
+                // var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
+                await broadCastService.SendMessageAllAdmin(hubConnection, message: Message);
                 Message = string.Empty;
 
             }

@@ -176,16 +176,16 @@ namespace PoPoy.Api.Services.AuthService
             return data;
         }
 
-        public async Task<ServiceResponse<AuthResponseDto>> Login(LoginRequest login)
+        public async Task<LoginResponse<AuthResponseDto>> Login(LoginRequest login)
         {
 
             var user = await _userManager.FindByNameAsync(login.UserName);
-            if (user == null) return new ServiceErrorResponse<AuthResponseDto>("Tài khoản không tồn tại");
+            if (user == null) return new LoginResponse<AuthResponseDto>() { Message = "Tài khoản không tồn tại", Success = false };
 
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
 
-            if (!result.Succeeded) return new ServiceErrorResponse<AuthResponseDto>("Tài khoản hoặc mật khẩu không đúng");
-            if (result.IsNotAllowed) return new ServiceErrorResponse<AuthResponseDto>("Tài khoản không được cấp quyền vào trang này");
+            if (!result.Succeeded) return new LoginResponse<AuthResponseDto>() { Message = "Tài khoản hoặc mật khẩu không đúng", Success = false };
+            if (result.IsNotAllowed) return new LoginResponse<AuthResponseDto>() { Message = "Tài khoản không được cấp quyền vào trang này", Success = false };
             var roles = await _userManager.GetRolesAsync(user);
 
 
@@ -204,7 +204,31 @@ namespace PoPoy.Api.Services.AuthService
                 RefreshToken = refreshToken
             };
 
-            return new ServiceSuccessResponse<AuthResponseDto>() { Success = true, Data = response };
+            return new LoginResponse<AuthResponseDto>() { Success = true, Data = response, RoleNames = roles.ToList() };
+        }
+        public async Task<ServiceResponse<bool>> CreateUser(CreateUser request)
+        {
+            var user = new User();
+            user.Email = request.Email;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+            user.UserName = request.UserName;
+            user.CreatedDate = DateTime.UtcNow;
+            var result = await _userManager.CreateAsync(user, request.Password);
+            foreach (var roleName in request.Roles)
+            {
+                await _userManager.AddToRoleAsync(user, roleName);
+            }
+            if (result.Succeeded)
+            {
+                return new ServiceSuccessResponse<bool>();
+
+            }
+            string error = "";
+            result.Errors.ToList().ForEach(p => error += p.Description + ", ");
+            return new ServiceErrorResponse<bool>(error);
+
         }
 
         public async Task<ServiceResponse<bool>> Register(RegisterRequest request)
@@ -396,7 +420,7 @@ namespace PoPoy.Api.Services.AuthService
                 Dob = user.Dob,
                 Id = user.Id,
                 UserName = user.UserName,
-                Password = user.PasswordHash,
+                //Password = user.PasswordHash,
                 LastName = user.LastName,
                 Roles = roles,
             };
@@ -525,7 +549,7 @@ namespace PoPoy.Api.Services.AuthService
                         bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
                         bodyBuilder = bodyBuilder.Replace("[total-price]", order.TotalPrice.ToString());
                         bodyBuilder = bodyBuilder.Replace("[all-products]", String.Join("", products.ToArray()));
-                        bodyBuilder = bodyBuilder.Replace("[user-address]", userAddress.Street + " " + userAddress.Ward + " " + userAddress.District + " " + userAddress.City);
+                        bodyBuilder = bodyBuilder.Replace("[user-address]", userAddress.Street+" "+userAddress.Ward+" "+userAddress.District+" "+userAddress.City);
                         EmailDto emailDto = new EmailDto
                         {
                             Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
@@ -802,7 +826,7 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<ServiceResponse<bool>> UpdateUserProfile(User user)
         {
             var findUser = await _userManager.FindByIdAsync(user.Id.ToString());
-            if (findUser != null)
+            if(findUser != null)
             {
                 try
                 {
@@ -822,9 +846,9 @@ namespace PoPoy.Api.Services.AuthService
                 {
 
                 }
-
+                
             }
-
+            
             return new ServiceErrorResponse<bool>("Cập nhật không thành công");
         }
 

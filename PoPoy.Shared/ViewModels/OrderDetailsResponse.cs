@@ -12,6 +12,7 @@ namespace PoPoy.Shared.ViewModels
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public string PaymentMode { get; set; }
         public List<OrderDetailsProductResponse> Products { get; set; }
     }

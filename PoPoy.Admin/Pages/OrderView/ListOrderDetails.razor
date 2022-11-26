@@ -61,7 +61,8 @@
 
         <div class="card-body pt-3">
             <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Chi tiết đơn hàng <b>#@orderId</b></h2>
-            <RadzenSteps SelectedIndex="@((int)order.OrderStatus)" ShowStepsButtons="false">
+            <RadzenSteps ShowStepsButtons="false">
+
                 <Steps>
                     <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
                         <hr />
@@ -153,21 +154,31 @@
                         <div class="d-flex justify-content-center align-items-center">
                             <div>
 
-                                <h2 style="color:#012970">Shipper <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "") </b>đang giao hàng !</h2>
+                                <h2 style="color:#012970">Shipper <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "") </b> đang giao hàng !</h2>
                             </div>
 
                             <img src="/images/danggiaohang.gif" width="300" />
                         </div>
                     </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus != OrderStatus.Delivered ||order.OrderStatus != OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
+                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivered ||order.OrderStatus == OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
                         <div class="d-flex justify-content-center align-items-center">
-                            <div>
+                            @if (order.OrderStatus == OrderStatus.Delivered)
+                            {
+                                <div>
+                                    <h2 style="color:#012970">Đơn hàng được <b>@(order.Shipper != null ? order.Shipper?.FirstName + " " + order.Shipper?.LastName : "") </b> giao thành công !</h2>
+                                </div>
+                                <img src="/images/danhanhang.png" width="100" />
 
-                                <h2 style="color:#012970">Đơn hàng được <b>@(order.User != null ? order.User?.FirstName + " " + order.User?.LastName : "") </b> nhận thành công !</h2>
-                            </div>
+                            }
+                            else if (order.OrderStatus == OrderStatus.Cancelled)
+                            {
+                                <div>
+                                    <h2 style="color:#012970">Đơn hàng giao không thành công !</h2>
+                                </div>
+                                <img src="/images/giaothatbai.png" width="100" />
 
-                            <img src="/images/danhanhang.png" width="300" />
+                            }
                         </div>
 
                     </RadzenStepsItem>
@@ -238,7 +249,9 @@ else
         {
             toastService.ShowSuccess("Bàn giao cho shipper thành công ");
             await GetOrderDetails();
-
+            // thông báo cho shippẻ
+            var noti = new NotiSendConfig("Đơn hàng ship mới", "Bạn được bàn giao một đơn hàng mới", "/shipper");
+            await broadCastService.SendNotiUserId(noti, Guid.Parse(shipperId));
             StateHasChanged();
         }
         else

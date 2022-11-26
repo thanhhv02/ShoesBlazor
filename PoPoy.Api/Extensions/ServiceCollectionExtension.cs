@@ -13,6 +13,7 @@ using PoPoy.Api.Services.AuthService;
 using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Api.Services.CategoryService;
 using PoPoy.Api.Services.ChatService;
+using PoPoy.Api.Services.DashBoard;
 using PoPoy.Api.Services.FileStorageService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
@@ -109,7 +110,8 @@ namespace PoPoy.Api.Extensions
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
                                 ((path.StartsWithSegments("/notificationHub") ||
-                                (path.StartsWithSegments("/chatHub")))))
+                                (path.StartsWithSegments("/chatHub")) ||
+                                (path.StartsWithSegments("/orderhub")))))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;
@@ -137,6 +139,8 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<ISortHelper<Product>, SortHelper<Product>>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<IDashBoardService, DashBoardService>();
+
             return services;
         }
 
