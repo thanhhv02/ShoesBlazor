@@ -122,7 +122,7 @@ namespace PoPoy.Api.Extensions
                 {
                     Id = 1,
                     Title = "ADIDAS ALPHABOOST “CORE BLACK”",
-                    Description = "ADIDAS ALPHABOOST “CORE BLACK”",
+                    Description = "MẪU GIÀY CHẠY ĐƯỢC THIẾT KẾ ĐỂ TĂNG TỐC ĐỘ, SỨC MẠNH VÀ SỰ LINH HOẠT.\r\nVới thiết kế chuyên dùng cho các vận động viên muốn nâng cao kỹ năng, đôi giày chạy bộ dành cho nam này là lựa chọn lý tượng cho các bài tập nặng và rèn luyện tốc độ. Lớp đệm mật độ kép và các tấm ổn định tăng cường khả năng nâng đỡ cho đế giữa để tăng khả năng kiểm soát trong các động tác đa hướng. Thân giày trên nhẹ và thoáng khí giúp nâng đỡ bàn chân những khi bạn cần nhất.",
                     //Price = 2150000,
                     CategoryId = 1,
                     DateCreated = DateTime.Now,

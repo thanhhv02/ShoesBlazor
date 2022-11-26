@@ -120,7 +120,7 @@
                 }
                 <div class="product-detail-description-content @isActive">
                     <p>
-                        @product.Description
+                        @((MarkupString)product.Description)
                     </p>
                 </div>
             </div>
@@ -167,6 +167,8 @@
     }
     private async Task GetProducts()
     {
+        _productParameters.PageSize = 3;
+        Console.WriteLine("_productParameters.PageSize: " + _productParameters.PageSize);
         await _productSvc.GetAll(_productParameters, product.ProductInCategories.FirstOrDefault().Category.Url);
         MetaData = _productSvc.Products.MetaData;
     }
@@ -193,11 +195,11 @@
             StateHasChanged();
             return;
         }
-        //if (product.Stock <= 0)
-        //{
-        //    _toastSvc.ShowError("Mặt hàng này đã hết. Mời quý khách vui lòng chọn món hàng khác!");
-        //    StateHasChanged();
-        //}
+        if (stock <= 0)
+        {
+            _toastSvc.ShowError("Mặt hàng này đã hết. Mời quý khách vui lòng chọn món hàng khác!");
+            StateHasChanged();
+        }
         if (cart.SizeId > 0 && cart.Quantity <= stock && stock > 0)
         {
             await _cartSvc.AddAsync(cart.ToCartStorage());

@@ -52,7 +52,7 @@
                                 <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">
                             }
                             <div class="col-sm-8">
-                                <h4>@cart.Product.Title - @cart.SizeName - @cart.ColorName</h4>
+                                <h4>@cart.Product.Title - @cart.SizeName - @cart.ColorName.GetEnumDisplayName()</h4>
 
                                 <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" MAX_QUANTITY_PRODUCT="@cart.ProductVariantQuantity" QuantityChanged="() => StateHasChanged()" />
                                 <div class="d-flex flex-row align-items-center mt-3">

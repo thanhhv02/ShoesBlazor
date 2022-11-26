@@ -83,6 +83,7 @@ namespace PoPoy.Client.Services.ProductService
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString(),
                 ["searchText"] = productParameters.searchText == null ? "" : productParameters.searchText,
+                ["pageSize"] = productParameters.PageSize.ToString(),
                 ["orderBy"] = productParameters.OrderBy
             };
             var response = categoryUrl == null ?
