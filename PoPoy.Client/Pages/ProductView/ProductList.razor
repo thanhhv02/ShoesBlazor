@@ -58,14 +58,14 @@
                                 @item.ReviewAverage<i class="fa fa-star"></i> | Đã bán: @item.CheckoutCount
                             </div>
                             <div class="product-card-price">
-                                <span class="curr-price" style="font-size: 14px">@GetPriceText(item)<sup>VND</sup></span>
+                                <span class="curr-price" style="font-size: 14px">@GetPriceText(item)</span>
                                 
                             </div>
                             @*<span style="font-size:15px">Số lượng còn lại: </span><span style="color:red;font-size:15px">@item.Stock</span>*@
                         </div>
                     </div>
+                    
                 </div>
-
             }
 
         }
@@ -103,10 +103,10 @@
         }
         else if (variants.Count == 1)
         {
-            return $"${variants[0].Price}";
+            return $"{FormatData.FormatAsPrice(variants[0].Price)}";
         }
         decimal minPrice = variants.Min(v => v.Price);
         decimal maxPrice = variants.Max(v => v.Price);
-        return $"{minPrice} - {maxPrice}";
+        return $"{FormatData.FormatAsPrice(minPrice)} - {FormatData.FormatAsPrice(maxPrice)}";
     }
 }
