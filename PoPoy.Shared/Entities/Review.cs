@@ -33,6 +33,7 @@ namespace PoPoy.Shared.Dto
         public DateTime UpdateDate { get; set; }
 
         //public virtual Product Product { get; set; }
+        public User User { get; set; }
     }
 }
 

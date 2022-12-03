@@ -164,7 +164,7 @@ namespace PoPoy.Client.Services.AuthService
                 await Logout();
                 return null;
             }
-            Console.WriteLine("REFRESH TOEKN !!!");
+            Console.WriteLine("REFRESH TOEKN !!! "+ result.IsAuthSuccessful);
             await _localStorage.SetItemAsync("authToken", result.Token);
             await _localStorage.SetItemAsync("refreshToken", result.RefreshToken);
 

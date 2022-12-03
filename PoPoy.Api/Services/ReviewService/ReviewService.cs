@@ -33,7 +33,17 @@ namespace PoPoy.Api.Services.ReviewService
                 var list_review = await context.Reviews
                     .Where(x => x.ProductId == productId)
                     .OrderByDescending(x => x.CreateDate)
+                    .Include(x=>x.User)
                     .ToListAsync();
+                foreach (var item in list_review)
+                {
+                    item.User = new User()
+                    {
+                        FirstName = item.User.FirstName,
+                        LastName = item.User.LastName,
+                        AvatarPath = item.User.AvatarPath
+                    };
+                }
                 return PagedList<Review>
                             .ToPagedList(list_review, productParameters.PageNumber, productParameters.PageSize);
             }

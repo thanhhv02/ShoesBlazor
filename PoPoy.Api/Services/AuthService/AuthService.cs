@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Extensions;
 using MimeKit;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Utilities;
@@ -504,7 +505,7 @@ namespace PoPoy.Api.Services.AuthService
                     _context.OrderDetails.Add(_orderDetail);
                     products.Add("<tr>\r\n" +
                         "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +
-                        $"<span>{_context.Products.Where(x => x.Id == items.Product.Id).FirstOrDefault().Title} - {items.SizeName}</span>\r\n" +
+                        $"<span>{_context.Products.Where(x => x.Id == items.Product.Id).FirstOrDefault().Title} - {items.SizeName} - {items.ColorName.GetDisplayName()}</span>\r\n" +
                         "<br>\r\n" +
                         "</td>\r\n" +
                         "<td align=\"left\" style=\"padding:3px 9px\" valign=\"top\">\r\n" +

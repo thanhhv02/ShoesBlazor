@@ -27,10 +27,10 @@
                         <div class="col-4">
                             <div class="user-info">
                                 <div class="user-avt">
-                                    <img src="/images/avatar.jpg" alt="">
+                                    <img src="@(review.User.AvatarPath != null ? review.User.AvatarPath : "/images/avatar.jpg")" alt="">
                                 </div>
                                 <div class="user-name">
-                                    <span class="name">Người dùng ẩn danh</span>
+                                    <span class="name">@(review.User.LastName + " " + review.User.FirstName)</span>
                                     <span class="rating">
                                         <RatingStar Rating="@review.Rating"></RatingStar>
                                     </span>
@@ -44,10 +44,10 @@
                             <div class="user-rate-content">
                                 @review.ReviewText
                             </div>
-                            <div class="text-muted fs-6 mb-2" style="float: right;">0 người thấy đánh giá này hữu ích</div>
+
                             <br />
                             <div style="display:inline-block;">
-                                <a class="btn-flat btn-hover" href="javascript:void(0)" style="margin-right: 5px">Hữu ích</a>
+              
                                 @if (userId == review.UserId)
                                 {
 
