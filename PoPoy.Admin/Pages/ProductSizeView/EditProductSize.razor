@@ -1,0 +1,46 @@
+﻿@page "/EditProductSize"
+@using PoPoy.Admin.Services.ProductSizeService;
+
+@inject IProductSizeService productSizeService;
+@inject NavigationManager NavigationManager
+@inject Radzen.DialogService dialogService;
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+<div class="container ml-3 col-12">
+
+    <EditForm Model="ProductSizeDto" OnValidSubmit="Edit">
+
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <input hidden id="Id" class="text-control_input" @bind-value="ProductSizeDto.Id"></input>
+
+        <div class="text-field col-lg-12 mb-2">
+            <label for="name">Tên kích cở</label>
+            <input type="number" id="SizeName" class="text-control_input" @bind-value="ProductSizeDto.SizeName"></input>
+            <ValidationMessage For="()=> ProductSizeDto.SizeName"></ValidationMessage>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-end">
+                <RadzenButton Icon="close" Click="@((args) => dialogService.Close(false))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Cancel" Style="width: 120px" Class="me-1" />
+                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="add_circle" Text="Lưu lại" Style="width: 120px" />
+            </div>
+        </div>
+    </EditForm>
+
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    public ProductSizeDto ProductSizeDto = new ProductSizeDto();
+    private async Task Edit()
+    {
+        var result = await productSizeService.UpdateProductSize(ProductSizeDto);
+        if (result)
+            NavigationManager.NavigateTo("/listProductSize");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        ProductSizeDto = await productSizeService.GetProductSizeById(int.Parse(Id));
+    }
+}
+

@@ -108,8 +108,7 @@ namespace PoPoy.Admin.Services.ProductService
             var prodObj = await _httpClient.GetFromJsonAsync<ProductVM>($"/api/product/getProductById/{productId}");
             var sizeObj = await _httpClient.GetFromJsonAsync<List<ProductSize>>("api/product/getSizes");
             var colorObj = await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
-            var test = sizeObj.Zip(colorObj, (s,c) => (s,c));
-
+            var test = sizeObj.Zip(colorObj, (s,c) => (s,c) );
             var sizeAssignRequest = new SizeAssignRequest();
             foreach (var item in test)
             {
@@ -128,6 +127,7 @@ namespace PoPoy.Admin.Services.ProductService
                     Price = Convert.ToInt32(price)
                 });
             }
+          
             return sizeAssignRequest;
         }
 

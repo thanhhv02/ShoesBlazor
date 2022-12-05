@@ -1,0 +1,114 @@
+﻿@page "/listProductSize"
+@using PoPoy.Admin.Helper
+@using PoPoy.Admin.Services.ProductSizeService;
+@inject IConfiguration Configuration
+@inject IProductSizeService productSizeService
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+
+<RadzenButton Icon="add_circle_outline" Text="Tạo loại kích cở" class="col-lg-4" ButtonStyle="ButtonStyle.Success" Click=@OpenCreate />
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách kích cở</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@productSizes" TItem="ProductSizeDto" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single">
+                <Columns>
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductSizeDto" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="ProductSizeDto" Property="SizeName" Title="Tên kích cở" CssClass="MyInputClass" />
+
+
+                    <RadzenDataGridColumn TItem="ProductSizeDto" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                        <Template>
+                            <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(product.Id.ToString())">
+                            </RadzenButton>
+                            <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask((int)product.Id)">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
+    </div>
+</div>
+
+<Confirmation ConfirmationMessage="Bạn chắc chắn xóa kích cở này?"
+              ConfirmationTitle="Xóa kích cở"
+              @ref="DeleteConfirmation"
+              ConfirmationChanged="OnConfirmDeleteTask">
+
+</Confirmation>
+@inject DialogService DialogService
+@code {
+    private string searchText = string.Empty;
+    private List<ProductSizeDto> productSizes { get; set; } = new();
+    private int productSizeId { get; set; }
+    private Confirmation DeleteConfirmation { get; set; }
+    public event Action<dynamic> Close;
+    protected override async Task OnInitializedAsync()
+    {
+        Close += async (r) => { await GetProductSizes(); StateHasChanged(); };
+        DialogService.OnClose += Close;
+        await GetProductSizes();
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        DialogService.OnClose -= Close;
+    }
+
+
+    public void OnDeleteTask(int id)
+    {
+        productSizeId = id;
+        DeleteConfirmation.Show();
+    }
+
+    public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await productSizeService.DeleteProductSize(productSizeId);
+            await GetProductSizes();
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task GetProductSizes()
+    {
+        var pagingResponse = await productSizeService.GetAllProductSize();
+      
+        productSizes = pagingResponse;
+        
+    }
+
+ 
+
+    public async Task OpenEdit(string id)
+    {
+        await DialogService.OpenAsync<EditProductSize>($"Chỉnh sửa kích cở",
+               new Dictionary<string, object>() { { "Id", id } },
+               new DialogOptions() { Width = "400px", Height = "512px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+
+    public async Task OpenCreate()
+    {
+        await DialogService.OpenAsync<CreateProductSize>($"Tạo mới kích cở"
+               , options:
+               new DialogOptions() { Width = "400px", Height = "512px", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+}@*   public async Task OpenCreate()
+        {
+            await DialogService.OpenAsync<CreateCategory>($"Order",
+                   new Dictionary<string, object>() { { "OrderID" , null} },
+                   new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+        }
+    }*@

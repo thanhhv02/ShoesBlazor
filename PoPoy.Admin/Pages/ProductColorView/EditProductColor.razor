@@ -1,0 +1,50 @@
+﻿@page "/EditProductColor"
+@using PoPoy.Admin.Services.ProductColorService;
+
+@inject IProductColorService productColorService;
+@inject NavigationManager NavigationManager
+@inject Radzen.DialogService dialogService;
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+<div class="container ml-3 col-12">
+
+    <EditForm Model="ProductColorDto" OnValidSubmit="Edit">
+
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <input hidden id="Id" class="text-control_input" @bind-value="ProductColorDto.Id"></input>
+
+        <div class=" col-lg-12 mb-2">
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn màu</RadzenText>
+            <RadzenDropDown Data="@(Enum.GetValues(typeof(ColorProduct)).Cast<Enum>())" @bind-Value=@ProductColorDto.ColorName
+                            AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Class="w-100">
+            </RadzenDropDown>
+
+            <ValidationMessage For="()=> ProductColorDto.ColorName"></ValidationMessage>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-end">
+                <RadzenButton Icon="close" Click="@((args) => dialogService.Close(false))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Cancel" Style="width: 120px" Class="me-1" />
+                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Icon="add_circle" Text="Lưu lại" Style="width: 120px" />
+            </div>
+        </div>
+    </EditForm>
+
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    public ProductColorDto ProductColorDto = new ProductColorDto();
+    private async Task Edit()
+    {
+        var result = await productColorService.UpdateProductColor(ProductColorDto);
+        if (result)
+            NavigationManager.NavigateTo("/listProductColor");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        ProductColorDto = await productColorService.GetProductColorById(int.Parse(Id));
+    }
+}
+

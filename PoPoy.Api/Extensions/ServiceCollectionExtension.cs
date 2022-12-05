@@ -17,7 +17,9 @@ using PoPoy.Api.Services.DashBoard;
 using PoPoy.Api.Services.FileStorageService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
+using PoPoy.Api.Services.ProductColorService;
 using PoPoy.Api.Services.ProductService;
+using PoPoy.Api.Services.ProductSizeService;
 using PoPoy.Api.Services.ReviewService;
 using PoPoy.Api.Services.SortService;
 using PoPoy.Shared.Dto;
@@ -140,6 +142,9 @@ namespace PoPoy.Api.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IDashBoardService, DashBoardService>();
+            services.AddTransient<IProductSizeService, ProductSizeService>();
+            services.AddTransient<IProductColorService, ProductColorService>();
+
 
             return services;
         }
