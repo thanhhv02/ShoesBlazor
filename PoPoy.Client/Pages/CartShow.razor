@@ -36,7 +36,7 @@
         <h2>Giỏ hàng</h2>
 
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-8">
                 <hr />
                 @foreach (var cart in carts)
                 {
@@ -70,16 +70,40 @@
                     }
                 }
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2">Tổng : @(CalcTotalQuantity()) sản phẩm (đã bao gồm <span style="color:tomato">10%</span> thuế)  </h5>
                         <h4 class="card-title text-danger priceTotal">@CalcTotalAmount().ToString("n0") ₫</h4>
                         <div style="text-align:left;margin:0px;">
-                            <EditForm Model="paymentModel">
+                            <style>
+                                fieldset {
+  overflow: hidden
+}
 
-                                <RadzenRadioButtonList @bind-Value=@paymentModel.Name TValue="string" Orientation="Orientation.Vertical"
-                                                   Data="@rdOptions" />
+.class {
+  float: left;
+  clear: none;
+}
+                                label {
+  float: left;
+  clear: both;
+  display:initial;
+}
+
+input[type=radio],input.radio {
+  float: left;
+  clear: both;     
+}
+                            </style>
+                            <EditForm Model="paymentModel">
+                                <InputRadioGroup @bind-Value="@paymentModel.Name">
+                                    @foreach (var option in rdOptions)
+                                    {
+                                        <label><InputRadio Value="@option.Key" /> @((MarkupString)option.Value)</label>   <br />
+                                    }
+                                </InputRadioGroup>
+
                             </EditForm>
                         </div>
                         @if (@paymentModel.Name == "CashOnDelivery")
@@ -124,7 +148,13 @@
             Name = "CashOnDelivery" // default value
         };
 
-    List<string> rdOptions = new List<string> { "CashOnDelivery", "PayPal", "VNPay" };
+    //List<string> rdOptions = new List<string> { "CashOnDelivery", "PayPal", "VNPay" };
+    Dictionary<string, string> rdOptions = new Dictionary<string, string>()
+        {
+            ["CashOnDelivery"] = "<img class=\"method - icon\" src=\"https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán khi nhận hàng",
+            ["PayPal"] = "<img class=\"method - icon\" src=\"https://sedberkdesign.com/wp-content/uploads/2020/06/kisspng-paypal-logo-brand-font-payment-paypal-logo-icon-paypal-icon-logo-png-and-vecto-5b7f273e45e8a9.9067728615350597742864.png\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán bằng PayPal",
+            ["VNPay"] = "<img class=\"method - icon\" src=\"https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-vnpay.png\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán bằng VNPay",
+        };
 
     protected override async Task OnInitializedAsync()
     {
@@ -240,7 +270,7 @@
                         if (paymentModel.Name != "CashOnDelivery")
                         {
                             NavigationManager.NavigateTo(url);
-                            await LocalStorage.SetItemAsStringAsync("getUrlPayment",url);
+                            await LocalStorage.SetItemAsStringAsync("getUrlPayment", url);
                         }
                         else
                         {

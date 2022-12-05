@@ -156,7 +156,7 @@
                                                 <h4 class="mb-0">@(orderDetail.Product.Title) - @orderDetail.SizeName - @orderDetail.ColorName</h4>
                                                 <div style="font-size: .8em">Size: @(orderDetail.SizeName), Số lượng: @(orderDetail.Quantity)</div>
                                                
-                                                <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
+                                                <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered && order.OrderStatus == OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
                                                 </RadzenButton>
                                             </div>
                                         </div>

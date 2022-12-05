@@ -79,7 +79,7 @@ namespace PoPoy.Api.Controllers
             return Ok(affectedResult);
         }
         [HttpGet("get-all-order-user")]
-        //[AuthorizeToken()]
+        [AuthorizeToken()]
         public async Task<ActionResult<List<OrderOverviewResponse>>> GetOrders([FromQuery] ProductParameters productParameters)
         {
             var result = await _orderService.GetOrders(productParameters, GetUserId());
