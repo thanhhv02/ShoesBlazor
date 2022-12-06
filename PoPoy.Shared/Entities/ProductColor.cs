@@ -10,7 +10,7 @@ namespace PoPoy.Shared.Dto
     public class ProductColor
     {
         public int Id { get; set; }
-        public ColorProduct ColorName { get; set; }
+        public string ColorName { get; set; }
         public List<ProductQuantity> ProductQuantities { get; set; }
     }
 }

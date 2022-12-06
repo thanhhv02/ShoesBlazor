@@ -15,7 +15,7 @@ namespace PoPoy.Shared.Dto
         public int ProductId { set; get; }
         public int Quantity { set; get; }
         public string SizeName { get; set; }
-        public ColorProduct ColorName { get; set; }
+        public string ColorName { get; set; }
         [Column(TypeName = "decimal(18,0)")]
         public decimal Price { set; get; }
         public double TotalPrice { set; get; }

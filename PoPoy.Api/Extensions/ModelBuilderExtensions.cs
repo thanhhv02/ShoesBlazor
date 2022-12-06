@@ -18,34 +18,109 @@ namespace PoPoy.Api.Extensions
                 new ProductColor()
                 {
                     Id = 1,
-                    ColorName = ColorProduct.Yellow
+                    ColorName = "Vàng"
                 },
                 new ProductColor()
                 {
                     Id = 2,
-                    ColorName = ColorProduct.Red
+                    ColorName = "Đỏ"
                 },
                 new ProductColor()
                 {
                     Id = 3,
-                    ColorName = ColorProduct.Green
+                    ColorName = "Xanh da trời"
+                },
+                new ProductColor()
+                {
+                    Id = 4,
+                    ColorName = "Xanh dương"
+                },
+                new ProductColor()
+                {
+                    Id = 5,
+                    ColorName = "Nâu"
+                },
+                new ProductColor()
+                {
+                    Id = 6,
+                    ColorName = "Tím"
                 }
                 );
             modelBuilder.Entity<ProductSize>().HasData(
                 new ProductSize()
                 {
                     Id = 1,
-                    SizeName = 38.ToString()
+                    SizeName = 32.ToString()
                 },
                 new ProductSize()
                 {
                     Id = 2,
-                    SizeName = 39.ToString()
+                    SizeName = 33.ToString()
                 },
                 new ProductSize()
                 {
                     Id = 3,
+                    SizeName = 34.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 4,
+                    SizeName = 35.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 5,
+                    SizeName = 36.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 6,
+                    SizeName = 37.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 7,
+                    SizeName = 38.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 8,
+                    SizeName = 39.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 9,
                     SizeName = 40.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 10,
+                    SizeName = 41.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 11,
+                    SizeName = 42.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 12,
+                    SizeName = 43.ToString()
+                }
+                ,
+                new ProductSize()
+                {
+                    Id = 13,
+                    SizeName = 44.ToString()
                 }
                 );
             //modelBuilder.Entity<ProductQuantity>().HasData(

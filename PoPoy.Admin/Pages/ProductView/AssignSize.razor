@@ -60,7 +60,7 @@
     public string Id { get; set; }
     public SizeAssignRequest Model = new SizeAssignRequest();
     List<string> listSize = new List<string>();
-    Dictionary<int, ColorProduct> listColor = new Dictionary<int, ColorProduct>();
+    Dictionary<int, string> listColor = new Dictionary<int, string>();
     List<ProductColor> ListColor { get; set; } = new List<ProductColor>();
     [Inject] private IToastService toastService { get; set; }
 

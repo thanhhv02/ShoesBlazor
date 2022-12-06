@@ -11,11 +11,9 @@
 
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <div class=" col-lg-12 mb-2">
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Chọn màu</RadzenText>
-                <RadzenDropDown Data="@(Enum.GetValues(typeof(ColorProduct)).Cast<Enum>())" @bind-Value=@ProductColorDto.ColorName
-                                AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                Class="w-100" >
-                </RadzenDropDown>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Thêm tên màu</RadzenText>
+            <InputText @bind-Value=@ProductColorDto.ColorName class="form-control">
+                </InputText>
          
             <ValidationMessage For="()=> ProductColorDto.ColorName"></ValidationMessage>
         </div>

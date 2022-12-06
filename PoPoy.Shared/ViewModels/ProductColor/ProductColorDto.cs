@@ -10,6 +10,6 @@ namespace PoPoy.Shared.ViewModels
     public class ProductColorDto
     {
         public int? Id { get; set; }
-        public ColorProduct ColorName { get; set; }
+        public string ColorName { get; set; }
     }
 }

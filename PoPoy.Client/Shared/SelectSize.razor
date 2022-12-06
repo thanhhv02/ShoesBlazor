@@ -30,7 +30,7 @@
                         @foreach (var num in productVariants.Where(x => x.SizeId == Model.SizeId).ToList().GroupBy(x => x.ColorId).Select(grp => grp.First()))
                         {
 
-                            <RadzenRadioButtonListItem Text="@num.Color.ColorName.GetEnumDisplayName()" Value="@num.ColorId" />
+                            <RadzenRadioButtonListItem Text="@num.Color.ColorName" Value="@num.ColorId" />
                         }
 
                     </Items>

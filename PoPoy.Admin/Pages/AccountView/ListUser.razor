@@ -81,7 +81,7 @@ else
                 <Columns>
                        <RadzenDataGridColumn TItem="User" Context="user" Filterable="false" Title="Họ Tên" Sortable="false" TextAlign="TextAlign.Left">
                         <Template>
-                           @(user.FirstName + " " + user.LastName);
+                           @(user.FirstName + " " + user.LastName)
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="User" Property="UserName" Title="Username" CssClass="MyInputClass" />
