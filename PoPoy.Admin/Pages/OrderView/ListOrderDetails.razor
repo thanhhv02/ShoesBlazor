@@ -99,7 +99,7 @@
                             </div>
                             <div class="text-field col-lg-6 mb-4">
                                 <label for="name">Tổng tiền</label>
-                                <input disabled class="form-control" value="@(order.TotalPrice)" />
+                                <input disabled class="form-control" value=" @AppExtensions.FormatAsPrice(order.TotalPrice)" />
                             </div>
 
                         </div>
@@ -120,8 +120,16 @@
                                 <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.SizeName" Width="30" Title="Kích cỡ" CssClass="MyInputClass" />
                                 <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.ColorName" Width="30" Title="Màu" CssClass="MyInputClass" />
                                 <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.Quantity" Width="30" Title="Số lượng" CssClass="MyInputClass" />
-                                <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.Price" Title="Giá 1 đơn vị" CssClass="MyInputClass" />
-                                <RadzenDataGridColumn TItem="OrderDetails" Filterable="false" Sortable="true" Property="OrderDetails.TotalPrice" Title="Tổng giá thành" CssClass="MyInputClass" />
+                                <RadzenDataGridColumn TItem="OrderDetails" Context="order" Filterable="false" Title="Giá 1 đơn vị" CssClass="MyInputClass">
+                                    <Template>
+                                        @AppExtensions.FormatAsPrice(order.Price)
+                                    </Template>
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="OrderDetails" Context="order" Filterable="false" Title="Tổng giá thành" CssClass="MyInputClass">
+                                <Template>
+                                    @AppExtensions.FormatAsPrice(order.TotalPrice)
+                                </Template>
+                            </RadzenDataGridColumn>
 
                             </Columns>
                         </RadzenDataGrid>
