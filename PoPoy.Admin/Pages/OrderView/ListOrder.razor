@@ -24,7 +24,12 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn Width="161px" Frozen="true" TItem="Order" Property="Id" Title="Mã đơn hàng" CssClass="MyInputClass" />
 
-                    <RadzenDataGridColumn TItem="Order" Filterable="false" Property="TotalPrice" Title="Tổng đơn hàng" CssClass="MyInputClass" />
+
+                    <RadzenDataGridColumn TItem="Order" Context="order" Filterable="false" Title="Tổng đơn hàng" CssClass="MyInputClass">
+                        <Template>
+                            @AppExtensions.FormatAsPrice(order.TotalPrice)
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Order" Property="PaymentMode" Title="Phương thức thanh toán" CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="Order" Property="OrderStatus" Title="Tình trạng đơn hàng" CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="Order" Context="order" Title="Tên người dùng">

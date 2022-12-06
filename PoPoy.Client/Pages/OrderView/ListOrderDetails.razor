@@ -13,9 +13,9 @@
 <div class="container">
         <div class="box">
             <div class="breadcumb">
-                <a href="./index.html">home</a>
+               @* <a href="./index.html">home</a>
                 <span><i class='bx bxs-chevrons-right'></i></span>
-                <a href="./products.html">all products</a>
+                <a href="./products.html">all products</a>*@
             </div>
         </div>
 @if (order != null)
@@ -120,7 +120,7 @@
                         </div>
                         <div class="text-field col-lg-6 mb-4">
                             <label for="name">Tổng tiền</label>
-                            <input disabled class="form-control" value="@(order.TotalPrice)" />
+                            <input disabled class="form-control" value="@AppExtensions.FormatAsPrice(order.TotalPrice)" />
                         </div>
 
                     </div>

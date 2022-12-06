@@ -19,8 +19,12 @@
                     <Columns>
                         <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
                         <RadzenDataGridColumn TItem="ProductVM" Property="Title" Title="Tên sản phẩm" CssClass="MyInputClass" />
-                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Price" Resizable="false" Title="Giá" CssClass="MyInputClass" />
-                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="OriginalPrice" Resizable="false" Title="Giá gốc" CssClass="MyInputClass" />
+       @*                 <RadzenDataGridColumn TItem="ProductVM" Context="order" Filterable="false" Title="Giá" Resizable="false" CssClass="MyInputClass">
+                            <Template>
+                                @AppExtensions.FormatAsPrice(order.Price)
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="OriginalPrice" Resizable="false" Title="Giá gốc" CssClass="MyInputClass" />*@
                         <RadzenDataGridColumn Filterable="false" TItem="ProductVM" Property="Views" Resizable="false" Title="Lượt xem" CssClass="MyInputClass" />
 
                         <RadzenDataGridColumn TItem="ProductVM" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">

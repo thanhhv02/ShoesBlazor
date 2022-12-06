@@ -65,7 +65,7 @@ namespace PoPoy.Api.Services.OrderService
             var orderDetails = await (from od in _context.OrderDetails
                                       join o in _context.Orders on od.OrderIdFromOrder equals o.Id
                                       where od.OrderIdFromOrder == orderId
-                                      select od).ToListAsync();
+                                      select od).OrderByDescending(p => p.Order.OrderDate).ToListAsync();
 
             return orderDetails;
         }

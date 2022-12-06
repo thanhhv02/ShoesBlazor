@@ -18,7 +18,11 @@
                     <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Size.SizeName" Title="Size" CssClass="MyInputClass" />
                     <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Color.ColorName" Title="Color"  CssClass="MyInputClass" />
                     <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Quantity" Title="Số lượng"  CssClass="MyInputClass" />
-                    <RadzenDataGridColumn Filterable="false" TItem="ProductQuantity" Property="Price" Title="Giá"  CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="ProductQuantity" Context="order" Filterable="false" Title="Giá" CssClass="MyInputClass">
+                        <Template>
+                            @AppExtensions.FormatAsPrice(order.Price)
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="ProductQuantity" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
                         <Template>
                             <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask(product.Id)">
