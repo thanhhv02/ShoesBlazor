@@ -67,10 +67,16 @@
                                                 <div class="form-group col-6">
                                                     <label for="hotentxt">Họ của bạn:</label>
                                                     <InputText @bind-Value="user.LastName" id="hotentxt" type="text" class="text_field" placeholder="Nhập tên của bạn" name="hoten" autocomplete="off" required="" autofocus=""></InputText>
+                                                    <span id="passerrortxt" class="text-danger" style="color:red; float:right; margin-bottom:20px">
+                                                    <ValidationMessage For="()=>user.LastName"></ValidationMessage>
+                                                </span>
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <label for="hotentxt">Tên đệm và tên của bạn:</label>
                                                     <InputText @bind-Value="user.FirstName" id="hotentxt" type="text" class="text_field" placeholder="Nhập tên đệm và tên của bạn" name="hoten" autocomplete="off" required="" autofocus=""></InputText>
+                                                    <span id="passerrortxt" class="text-danger" style="color:red; float:right; margin-bottom:20px">
+                                                        <ValidationMessage For="()=>user.FirstName"></ValidationMessage>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -165,16 +171,17 @@
     {
         isLoading = true;
         user.Id = Guid.Parse((await AuthStat).User.GetUserId());
-        var isSuccess = await AuthService.UpdateUser(user);
-        if (isSuccess)
+        var result = await AuthService.UpdateUser(user);
+        if (result.Success)
         {
             _toastSvc.ShowSuccess("Cập nhật thành công !");
+            await GetUser();
         }
         else
         {
-            _toastSvc.ShowError("Có lỗi xảy ra !");
+            _toastSvc.ShowError($"{result.Message}");
         }
-        await GetUser();
+        
         StateHasChanged();
         isLoading = false;
     }

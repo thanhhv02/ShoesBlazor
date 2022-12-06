@@ -4,6 +4,8 @@ using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PoPoy.Client.Services.AuthService
@@ -27,7 +29,7 @@ namespace PoPoy.Client.Services.AuthService
         Task<string> MakeVNPayPayment(double total);
         Task Logout();
         Task<string> RefreshToken();
-        Task<bool> UpdateUser(User user);
+        Task<ServiceResponse<bool>> UpdateUser(User user);
         Task<bool> DeleteAvatar();
     }
 }

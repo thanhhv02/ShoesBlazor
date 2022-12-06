@@ -173,12 +173,10 @@ namespace PoPoy.Client.Services.AuthService
             return result.Token;
         }
 
-        public async Task<bool> UpdateUser(User user)
+        public async Task<ServiceResponse<bool>> UpdateUser(User user)
         {
             var result = await _httpClient.PutAsJsonAsync($"api/user/update-user-profile", user);
-            if (result.IsSuccessStatusCode)
-                return true;
-            return false;
+            return await result.Content.ReadFromJsonAsync<ServiceErrorResponse<bool>>();
         }
 
         public async Task<bool> DeleteAvatar()

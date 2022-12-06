@@ -10,13 +10,14 @@ namespace PoPoy.Shared.Dto
 {
     public class User : IdentityUser<Guid>
     {
-        [MaxLength(250)]
-        [Required]
+        [MaxLength(30)]
+        [Required(ErrorMessage = "Không quá 30 ký tự")]
         public string FirstName { get; set; }
 
-        [MaxLength(250)]
-        [Required]
+        [MaxLength(30)]
+        [Required(ErrorMessage = "Không quá 30 ký tự")]
         public string LastName { get; set; }
+        [Required(ErrorMessage = "Phải nhập ngày tháng năm sinh")]
         public DateTime Dob { get; set; } // date of birth
         public List<Order> Orders { get; set; }
         public List<Cart> Carts { get; set; }

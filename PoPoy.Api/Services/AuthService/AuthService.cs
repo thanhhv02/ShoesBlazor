@@ -829,6 +829,15 @@ namespace PoPoy.Api.Services.AuthService
             var findUser = await _userManager.FindByIdAsync(user.Id.ToString());
             if(findUser != null)
             {
+                var isExistPhoneNumber = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == user.PhoneNumber) != null;
+
+                if (isExistPhoneNumber)
+                    return new ServiceErrorResponse<bool>("Số điện thoại đã được đăng ký");
+
+                var isExistEmail = await _context.Users.FirstOrDefaultAsync(x => x.Email == user.Email) != null;
+
+                if (isExistEmail)
+                    return new ServiceErrorResponse<bool>("Email này đã được đăng ký");
                 try
                 {
                     findUser.LastName = user.LastName;
