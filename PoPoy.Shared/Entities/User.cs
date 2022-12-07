@@ -11,11 +11,11 @@ namespace PoPoy.Shared.Dto
     public class User : IdentityUser<Guid>
     {
         [MaxLength(30)]
-        [Required(ErrorMessage = "Không quá 30 ký tự")]
+        [Required(ErrorMessage = "Phải nhập tên đệm và tên")]
         public string FirstName { get; set; }
 
         [MaxLength(30)]
-        [Required(ErrorMessage = "Không quá 30 ký tự")]
+        [Required(ErrorMessage = "Phải nhập họ")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Phải nhập ngày tháng năm sinh")]
         public DateTime Dob { get; set; } // date of birth

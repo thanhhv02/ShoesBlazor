@@ -245,6 +245,9 @@ namespace PoPoy.Api.Services.AuthService
                 return new ServiceErrorResponse<bool>("Email đã tồn tại");
             }
 
+            if (await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == user.PhoneNumber) != null)
+                return new ServiceErrorResponse<bool>("Số điện thoại đã được đăng ký");
+
             user = new User()
             {
                 Dob = request.Dob,
@@ -279,7 +282,6 @@ namespace PoPoy.Api.Services.AuthService
                 Subject = "Xác thực email người dùng",
                 Body = $"<h1>Xin chào, {user.LastName + " " + user.FirstName}</h1><br/>"
                 + $"<h3>Tài khoản: {user.UserName}</h3></br>"
-                + $"<h3>Mật khẩu: {request.Password}</h3></br>"
                 + $"<p>Hãy xác nhận email của bạn <a href='{url}'>Bấm vào đây</a></p>",
                 To = user.Email
             };
@@ -829,12 +831,14 @@ namespace PoPoy.Api.Services.AuthService
             var findUser = await _userManager.FindByIdAsync(user.Id.ToString());
             if(findUser != null)
             {
-                var isExistPhoneNumber = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == user.PhoneNumber) != null;
+                var isExistPhoneNumber = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == user.PhoneNumber) != null 
+                    && findUser.PhoneNumber != user.PhoneNumber;
 
                 if (isExistPhoneNumber)
                     return new ServiceErrorResponse<bool>("Số điện thoại đã được đăng ký");
 
-                var isExistEmail = await _context.Users.FirstOrDefaultAsync(x => x.Email == user.Email) != null;
+                var isExistEmail = await _context.Users.FirstOrDefaultAsync(x => x.Email == user.Email) != null
+                    && findUser.Email  != user.Email;
 
                 if (isExistEmail)
                     return new ServiceErrorResponse<bool>("Email này đã được đăng ký");
@@ -845,6 +849,7 @@ namespace PoPoy.Api.Services.AuthService
                     findUser.Email = user.Email;
                     findUser.Dob = user.Dob;
                     findUser.PhoneNumber = user.PhoneNumber;
+
                     var result = await _userManager.UpdateAsync(findUser);
 
                     if (result.Succeeded)

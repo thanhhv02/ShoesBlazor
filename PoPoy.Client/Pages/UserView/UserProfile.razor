@@ -149,6 +149,7 @@
     //protected void OnInitialized()
     [Parameter] public string id { get; set; }
     public User user { get; set; } = new User();
+    string oldEmail = "";
     protected override async Task OnInitializedAsync()
     {
         await GetUser();
@@ -162,6 +163,7 @@
         user.Email = _user.Data.Email;
         user.AvatarPath = _user.Data.AvatarPath;
         user.PhoneNumber = _user.Data.PhoneNumber;
+        oldEmail = user.Email;
     }
     private void EditProfile()
     {
