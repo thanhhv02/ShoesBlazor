@@ -125,7 +125,7 @@
             var userId = user.GetUserId();
             await LocalStorage.SetItemAsync<string>("getUserId", userId);
 
-            //_toastSvc.ShowSuccess("Đăng nhập thành công");
+            _toastSvc.ShowSuccess("Đăng nhập thành công");
             //await BusyDialog("Đăng nhập thành công");
             NavigationManager.NavigateTo(returnUrl, true);
         }

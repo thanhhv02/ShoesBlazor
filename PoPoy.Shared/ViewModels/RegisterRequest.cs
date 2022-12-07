@@ -28,6 +28,7 @@ namespace PoPoy.Shared.ViewModels
 
         [Display(Name = "Số điện thoại")]
         [StringLength(10, ErrorMessage = "Số điện thoại phải 10 kí tự")]
+        [RegularExpression("^(?!0+$)(\\+\\d{1,3}[- ]?)?(?!0+$)\\d{10,15}$", ErrorMessage = "Phải nhập đúng định dạng số điện thoại")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Tài khoản")]
