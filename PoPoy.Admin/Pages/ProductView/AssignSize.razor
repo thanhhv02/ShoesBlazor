@@ -33,7 +33,7 @@
                             <select @bind="@item.ColorId">
                                 @foreach (var itemColor in ListColor)
                                 {
-                                    <option value="@itemColor.Id" @onchange="()=>Console.WriteLine(item.ColorId)">
+                                    <option value="@itemColor.Id">
                                         @itemColor.ColorName
                                     </option>
                                 }

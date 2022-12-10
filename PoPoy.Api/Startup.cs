@@ -96,7 +96,7 @@ namespace PoPoy.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors();
+            //app.UseCors();
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseRouting();

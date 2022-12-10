@@ -116,7 +116,7 @@
                     @ViewAllOrViewLess
                 </button>
                 @{
-                    var isActive = IsViewAll ? "active" : "";
+                    var isActive = IsViewAll ? "" : "active";
                 }
                 <div class="product-detail-description-content @isActive">
                     <p>
@@ -167,7 +167,6 @@
     private async Task GetProducts()
     {
         _productParameters.PageSize = 3;
-        Console.WriteLine("_productParameters.PageSize: " + _productParameters.PageSize);
         await _productSvc.GetAll(_productParameters, product.ProductInCategories.FirstOrDefault().Category.Url);
         MetaData = _productSvc.Products.MetaData;
     }
@@ -210,7 +209,6 @@
     {
         reviewCount = args.ReviewCount;
         reviewAverage = args.ReviewAverage;
-        Console.WriteLine("reviewAverage" + reviewAverage);
     }
     private void GetPriceProduct(string price)
     {
