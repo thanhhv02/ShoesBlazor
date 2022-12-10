@@ -1,26 +1,32 @@
 ﻿<ul class="sidebar-nav" id="sidebar-nav">
 
-        <AuthorizeView Roles="@RoleName.Shipper">
-               
-                <Authorized >
-                      <li class="nav-item">
-                        <NavLink class="nav-link collapsed" href="/shipper">
-                    <i class="fas fa-sort-amount-up-alt"></i>
-                            <span>Đơn hàng được giao</span>
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link collapsed" href="/listordershipper">
-                    <i class="fas fa-border-all"></i>
-                            <span>Danh sách đơn hàng</span>
-                        </NavLink>
-                    </li>
-                </Authorized>
-           
-        </AuthorizeView>
-        <AuthorizeView Roles="@(RoleName.Staff + "," + RoleName.Admin)">
+    <AuthorizeView Roles="@RoleName.Shipper">
 
-            <Authorized>
+        <Authorized>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/shipper">
+                    <i class="fas fa-sort-amount-up-alt"></i>
+                    <span>Đơn hàng được giao</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/listordershipper">
+                    <i class="fas fa-border-all"></i>
+                    <span>Danh sách đang giao</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/all-my-order">
+                    <i class="fas fa-border-all"></i>
+                    <span>Lịch sử được giao</span>
+                </NavLink>
+            </li>
+        </Authorized>
+
+    </AuthorizeView>
+    <AuthorizeView Roles="@(RoleName.Staff + "," + RoleName.Admin)">
+
+        <Authorized>
             <li class="nav-item">
                 <NavLink class="nav-link collapsed " href="/Dashboard">
                     <i class="bi bi-grid"></i>
@@ -73,31 +79,31 @@
                     <span>Chat</span>
                 </NavLink>
             </li>
-            </Authorized>
-        </AuthorizeView>
+        </Authorized>
+    </AuthorizeView>
 
     @*vi du co menu con *@
-   @* <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-                <a href="charts-chartjs.html">
-                    <i class="bi bi-circle"></i><span>Chart.js</span>
-                </a>
-            </li>
-            <li>
-                <a href="charts-apexcharts.html">
-                    <i class="bi bi-circle"></i><span>ApexCharts</span>
-                </a>
-            </li>
-            <li>
-                <a href="charts-echarts.html">
-                    <i class="bi bi-circle"></i><span>ECharts</span>
-                </a>
-            </li>
-        </ul>
+    @* <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+    <li>
+    <a href="charts-chartjs.html">
+    <i class="bi bi-circle"></i><span>Chart.js</span>
+    </a>
+    </li>
+    <li>
+    <a href="charts-apexcharts.html">
+    <i class="bi bi-circle"></i><span>ApexCharts</span>
+    </a>
+    </li>
+    <li>
+    <a href="charts-echarts.html">
+    <i class="bi bi-circle"></i><span>ECharts</span>
+    </a>
+    </li>
+    </ul>
     </li><!-- End Charts Nav -->*@
 </ul>
 

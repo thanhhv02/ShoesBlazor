@@ -18,6 +18,7 @@ namespace PoPoy.Admin.Services.OrderService
         Task<bool> AssignShipper(AssignShipperDto model);
         Task<List<SelectItem>> GetShippers();
         Task<List<Order>> GetOrderByShipper(OrderShipperSearchDto input);
+        Task<List<Order>> GetOrderHistoryShipper();
         Task<bool> UpdateStatusOrder(UpdateStatusOrderDto input);
     }
 }

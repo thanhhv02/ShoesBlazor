@@ -5,6 +5,7 @@ using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities.OrderDto;
 using PoPoy.Shared.ViewModels;
+using Smart.Blazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,13 @@ namespace PoPoy.Admin.Services.OrderService
         public async Task DeleteOrder(string orderId)
         {
             await _httpClient.DeleteAsync($"/api/order/{orderId}");
+        }
+
+        public async Task<List<Order>> GetOrderHistoryShipper()
+        {
+            var result = await _httpClient.GetAsync($"/api/order/order-history-shipper");
+            //await result.CheckAuthorized(this);
+            return await result.Content.ReadFromJsonAsync<List<Order>>();
         }
     }
 }

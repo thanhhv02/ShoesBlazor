@@ -18,10 +18,11 @@ namespace PoPoy.Api.Services.OrderService
         Task<Order> GetOrderWithUser(string orderId);
         Task<List<Order>> SearchOrder(string searchText);
         Task<int> DeleteOrder(string orderId);
-        Task<PagedList<OrderOverviewResponse>> GetOrders(ProductParameters productParameters, string userId);
+        Task<PagedList<OrderOverviewResponse>> GetOrders(ProductParameters productParameters, Guid userId);
         Task<ServiceResponse<OrderDetailsResponse>> GetOrderDetailsForClient(string orderId);
         Task<bool> AssignShipper(AssignShipperDto model);
         Task<List<Order>> GetOrderByShipper(OrderShipperSearchDto input);
+        Task<List<Order>> OrderHistoryShipper(Guid userid);
         Task<bool> UpdateStatusOrder(UpdateStatusOrderDto input);
         Task<Order> FindOrderById(string id);
         Task<bool> HasOrderById(string id);

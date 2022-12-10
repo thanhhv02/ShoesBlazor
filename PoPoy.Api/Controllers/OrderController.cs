@@ -162,9 +162,20 @@ namespace PoPoy.Api.Controllers
                 }
             });
         }
+        [HttpGet("order-history-shipper")]
+        //[Authorize(Roles = RoleName.Shipper + "," + RoleName.Admin)]
+        [AuthorizeToken(AuthorizeToken.ADMIN_SHIPPER)]
 
+        public async Task<ActionResult<ServiceResponse<bool>>> OrderHistoryShipper()
+        {
+            var result = await _orderService.OrderHistoryShipper(GetUserId());
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
 
-        private string GetUserId()
-        => _httpContext.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        private Guid GetUserId() => Guid.Parse(_httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString());
     }
 }

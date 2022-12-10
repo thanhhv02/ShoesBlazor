@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Data;
+using PoPoy.Api.Migrations;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities;
@@ -152,13 +153,13 @@ namespace PoPoy.Api.Services.OrderService
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedList<OrderOverviewResponse>> GetOrders(ProductParameters productParameters, string userId)
+        public async Task<PagedList<OrderOverviewResponse>> GetOrders(ProductParameters productParameters, Guid userId)
         {
             var orders = await _context.Orders
                 .Include(o => o.OrderDetails)
                 .ThenInclude(oi => oi.Product)
                 .ThenInclude(pi => pi.ProductImages)
-                .Where(o => o.UserId == Guid.Parse(userId))
+                .Where(o => o.UserId == userId)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
 
@@ -248,6 +249,14 @@ namespace PoPoy.Api.Services.OrderService
 
             await _context.SaveChangesAsync();
             return refund;
+        }
+
+        public async Task<List<Order>> OrderHistoryShipper(Guid userid)
+        {
+            var orderDetails = await _context.Orders.Include(p => p.OrderDetails).ThenInclude(p => p.Product).ThenInclude(p => p.ProductImages)
+                 .Include(p => p.User).Include(p => p.Address)
+                 .Include(p => p.Shipper).Where(p => p.ShipperId == userid).ToListAsync(); ;
+            return orderDetails;
         }
     }
 }

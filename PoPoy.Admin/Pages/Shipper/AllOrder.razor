@@ -1,0 +1,52 @@
+﻿@page "/all-my-order"
+@using PoPoy.Shared.Entities.OrderDto
+
+@inject IOrderService OrderService
+@inject IAuthService AuthService
+@attribute [Authorize(Roles = RoleName.Shipper)]
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Tất cả đơn hàng được giao</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@orders" TItem="Order" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single">
+                <Columns>
+
+                    <RadzenDataGridColumn Width="161px" Frozen="true" TItem="Order" Property="Id" Title="Mã đơn hàng" CssClass="MyInputClass" />
+
+                    <RadzenDataGridColumn TItem="Order" Context="order" Filterable="false" Title="Tổng đơn hàng" CssClass="MyInputClass">
+                        <Template>
+                            @AppExtensions.FormatAsPrice(order.TotalPrice)
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Property="PaymentMode" Title="Phương thức thanh toán" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Property="OrderStatus" Title="Tình trạng đơn hàng" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Tên người dùng">
+                        <Template>
+                            @(order.User?.FirstName + " " + order.User?.LastName)
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Context="item" Title="Địa chỉ">
+                        <Template>
+                            @(item.Address?.Street + ", " + item.Address?.Ward + ", " + item.Address?.District + ", " + item.Address?.City);
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Order" Context="order" Title="Ngày đặt">
+                        <Template>
+                            @order.OrderDate.ToString("MM/dd/yyyy")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
+    </div>
+</div>
+
+
+
