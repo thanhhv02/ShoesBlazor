@@ -1,6 +1,4 @@
-﻿@page "/listOrderDetails/{orderId}"
-@page "/order/{orderId}"
-
+﻿
 @using PoPoy.Admin.Extensions
 @using PoPoy.Admin.Services.BroadCastService
 @using PoPoy.Shared.Common
@@ -10,52 +8,7 @@
 
 @inject IOrderService OrderService
 @inject IProductService ProductService
-@*<div class="row">
-        <h2 class="ml-2 mt-4 mb-3 col-11" style="color:darkblue">Chi tiết đơn hàng</h2>
-        <a href="/listOrder" class="btn btn-danger col-1 mt-4" style="height:40px;width:40px"><i class="oi oi-arrow-left"></i></a>
-    </div>
 
-
-    <div class="row mt-4 ml-3">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Mã đơn hàng
-                    </th>
-                    <th>
-                        Tên hàng
-                    </th>
-                    <th>
-                        Kích cỡ
-                    </th>
-                    <th>
-                        Số lượng
-                    </th>
-                    <th>
-                        Giá 1 đơn vị
-                    </th>
-                    <th>
-                        Tổng đơn hàng
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var items in OrderDetails)
-                {
-                    <tr>
-                        <td>@items.OrderId</td>
-                        <td>@Products.FirstOrDefault(x => x.Id == items.ProductId).Title</td>
-                        <td>@items.Size</td>
-                        <td>@items.Quantity</td>
-                        <td>@items.Price</td>
-                        <td>@items.TotalPrice</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>*@
 @if (order != null)
 {
     <div class="card">

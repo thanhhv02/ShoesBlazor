@@ -34,12 +34,12 @@
                     <RadzenDataGridColumn TItem="Order" Property="OrderStatus" Title="Tình trạng đơn hàng" CssClass="MyInputClass" />
                     <RadzenDataGridColumn TItem="Order" Context="order" Title="Tên người dùng">
                         <Template>
-                            @Users.FirstOrDefault(x => x.Id == order.UserId).FirstName @Users.FirstOrDefault(x => x.Id == order.UserId).LastName
+                            @Users?.FirstOrDefault(x => x.Id == order.UserId)?.FirstName @Users?.FirstOrDefault(x => x.Id == order.UserId)?.LastName
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Order" Context="order" Title="Địa chỉ">
                         <Template>
-                            @Addresses.FirstOrDefault(x => x.UserId == order.UserId).District , @Addresses.FirstOrDefault(x => x.UserId == order.UserId).City @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Street @Addresses.FirstOrDefault(x => x.UserId == order.UserId).Ward
+                            @Addresses?.FirstOrDefault(x => x.UserId == order.UserId)?.District , @Addresses?.FirstOrDefault(x => x.UserId == order.UserId)?.City @Addresses?.FirstOrDefault(x => x.UserId == order.UserId)?.Street @Addresses?.FirstOrDefault(x => x.UserId == order.UserId)?.Ward
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Order" Context="order" Title="Ngày đặt">
@@ -67,16 +67,17 @@
 @code {
     private string searchText = string.Empty;
     private List<Order> Orders { get; set; } = new List<Order>();
-    private List<User> Users { get; set; } = new List<User>();
+    private List<UserVM> Users { get; set; } = new List<UserVM>();
     private List<Address> Addresses { get; set; } = new List<Address>();
-    private string OrderId { set; get; }
-    private Confirmation DeleteConfirmation { set; get; }
+    private string OrderId { set; get; } = string.Empty;
+    private Confirmation DeleteConfirmation { set; get; } = new();
     [Inject] private DialogService DialogService { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await GetOrders();
         await GetUsers();
         await GetAddress();
+        StateHasChanged();
     }
 
     public void OnDeleteTask(string orderId)
@@ -132,7 +133,7 @@
 
     public async Task OpenDetail(string id)
     {
-        await DialogService.OpenAsync<ListOrderDetails>($"",
+        await DialogService.OpenAsync<OrderDetail>($"",
                new Dictionary<string, object>() { { "OrderID", id } },
                new DialogOptions() { Width = "1400px", Height = "712px", Resizable = true, Draggable = false, CssClass = "modal-content" });
 

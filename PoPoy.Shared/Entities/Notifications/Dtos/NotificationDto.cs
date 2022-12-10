@@ -27,6 +27,8 @@ namespace PoPoy.Shared.Dto
 
         public User User { get; set; }
 
+        public Guid? SenderId { get; set; }
+
         public IReadOnlyList<string> UserIds { get; set; }
     }
 }

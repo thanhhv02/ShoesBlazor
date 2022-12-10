@@ -63,7 +63,10 @@ namespace PoPoy.Api.Services.NotificationService
             {
                 var noti = mapper.Map<Notification>(notiDto);
                 noti.UserId = id;
-                notis.Add(noti);
+                if (id != notiDto.SenderId)
+                {
+                    notis.Add(noti);
+                }
             }
             await dataContext.Notifications.AddRangeAsync(notis);
             await dataContext.SaveChangesAsync();

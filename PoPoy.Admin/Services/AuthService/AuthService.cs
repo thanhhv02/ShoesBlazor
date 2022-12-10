@@ -59,9 +59,9 @@ namespace PoPoy.Admin.Services.AuthService
             _navigationManager.NavigateTo("/login");
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<List<UserVM>> GetUsers()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<User>>("/api/user/getUser");
+            var result = await _httpClient.GetFromJsonAsync<List<UserVM>>("/api/user/getUser");
             return result;
         }
 

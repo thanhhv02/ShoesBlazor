@@ -11,7 +11,7 @@ namespace PoPoy.Admin.Services.AuthService
     public interface IAuthService
     {
         Task<LoginResponse<AuthResponseDto>> Login(LoginRequest loginRequest);
-        Task<List<User>> GetUsers();
+        Task<List<UserVM>> GetUsers();
         Task<List<Address>> GetAddresses();
         Task<List<User>> SearchUser(string searchText);
         Task AssignRole(RoleAssignRequest request);

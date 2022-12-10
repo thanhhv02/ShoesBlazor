@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Api.Data;
-using PoPoy.Api.Migrations;
 using PoPoy.Api.Services.AuthService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities;

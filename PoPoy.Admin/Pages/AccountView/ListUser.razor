@@ -73,22 +73,20 @@ else
     <div class="card-body">
         <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách người dùng</h2>
         <div class="row mt-4 ml-3">
-            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
-                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Users" TItem="User" ColumnWidth="300px"
+              <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@Users" TItem="UserVM" ColumnWidth="300px"
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             LogicalFilterOperator="LogicalFilterOperator.Or"
                             SelectionMode="DataGridSelectionMode.Single">
                 <Columns>
-                       <RadzenDataGridColumn TItem="User" Context="user" Filterable="false" Title="Họ Tên" Sortable="false" TextAlign="TextAlign.Left">
-                        <Template>
-                           @(user.FirstName + " " + user.LastName)
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="User" Property="UserName" Title="Username" CssClass="MyInputClass" />
-                    <RadzenDataGridColumn TItem="User" Property="PhoneNumber" Title="Số điện thoại" CssClass="MyInputClass" />
-                    <RadzenDataGridColumn TItem="User" Property="Email" Title="Email" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="UserVM" Property="FirstName" Title="Họ" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="UserVM" Property="LastName" Title="Tên"  CssClass="MyInputClass" />
 
-                    <RadzenDataGridColumn TItem="User" Context="user" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                    <RadzenDataGridColumn TItem="UserVM" Property="UserName" Title="UserName" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="UserVM" Property="PhoneNumber" Title="Số điện thoại" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn Filterable="false" TItem="UserVM" Property="Email" Title="Email" CssClass="MyInputClass" />
+
+                    <RadzenDataGridColumn TItem="UserVM" Context="user" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
                         <Template>
                             <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(user.Id.ToString())">
                             </RadzenButton>
@@ -113,18 +111,20 @@ else
 @code {
     private string searchText = string.Empty;
     private bool ShowErrors;
-    private List<User> Users { get; set; } = new List<User>();
+    private List<UserVM> Users { get; set; } = new List<UserVM>();
     private string Error = "";
     private Guid DeleteId { set; get; }
-    private Confirmation DeleteConfirmation { set; get; }
+    private Confirmation DeleteConfirmation { set; get; } = new();
     [Inject] private DialogService DialogService { get; set; }
     public event Action<dynamic> Close;
 
     protected override async Task OnInitializedAsync()
     {
+      
+        await GetUsers();
         Close += async (r) => { await GetUsers(); StateHasChanged(); };
         DialogService.OnClose += Close;
-        await GetUsers();
+        StateHasChanged();
     }
 
     public void OnDeleteTask(Guid deleteId)
@@ -150,28 +150,10 @@ else
     {
         ShowErrors = false;
         var pagingResponse = await AuthService.GetUsers();
-        if (searchText != null)
-        {
-            Users = pagingResponse;
-        }
-        if (pagingResponse.Count == 0)
-        {
-            Error = "Không tìm thấy người dùng";
-        }
+         Users = pagingResponse;
+      
     }
 
-    public async Task SearchUsers()
-    {
-        var pagingResponse = await AuthService.GetUsers();
-        if (!String.IsNullOrEmpty(searchText))
-        {
-            Users = await AuthService.SearchUser(searchText);
-        }
-        else
-        {
-            Users = pagingResponse;
-        }
-    }
 
     
     public async Task OpenEdit(string id)

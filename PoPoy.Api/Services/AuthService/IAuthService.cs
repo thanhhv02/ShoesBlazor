@@ -19,7 +19,7 @@ namespace PoPoy.Api.Services.AuthService
         Task<ServiceResponse<string>> ResetPassword(ResetPasswordRequest model);
         Task<ServiceResponse<string>> ChangePassword(ChangePasswordRequest model);
         Task<ServiceResponse<bool>> RoleAssign(Guid id, RoleAssignRequest request);
-        Task<List<User>> GetUserPaging();
+        Task<List<UserVM>> GetUserPaging();
         Task<List<Address>> GetListAddress();
         Task<List<RoleVM>> GetAllRoles();
         Task<Guid> GetUserId(LoginRequest request);

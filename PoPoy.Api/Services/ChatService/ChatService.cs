@@ -67,7 +67,7 @@ namespace PoPoy.Api.Services.ChatService
 
         public async Task<List<ListChatSender>> GetListChatSender(Guid userId)
         {
-            var list = await dataContext.Chats.Include(p => p.Sender).Where(p => p.ReceiverId == userId).ToListAsync();
+            var list = await dataContext.Chats.Include(p => p.Sender).Where(p => p.ReceiverId == userId).Where(p => p.SenderId != p.ReceiverId).ToListAsync();
             List<ListChatSender> chats = list.GroupBy(p => p.Sender, p => p, (sender, chat) =>
 
             new ListChatSender { Id = Guid.NewGuid(), User = new UserChat

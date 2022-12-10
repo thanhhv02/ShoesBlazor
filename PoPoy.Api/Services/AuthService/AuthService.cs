@@ -26,6 +26,7 @@ using PoPoy.Shared.PayPal;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -162,17 +163,19 @@ namespace PoPoy.Api.Services.AuthService
             return new ServiceSuccessResponse<User>(user);
         }
 
-        public async Task<List<User>> GetUserPaging()
+        public async Task<List<UserVM>> GetUserPaging()
         {
             var query = _userManager.Users;
-            var data = await query.Select(x => new User()
+            var data = await query.Select(user => new UserVM()
             {
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                UserName = x.UserName,
-                FirstName = x.FirstName,
-                Id = x.Id,
-                LastName = x.LastName
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                Dob = user.Dob,
+                Id = user.Id,
+                UserName = user.UserName,
+                //Password = user.PasswordHash,
+                LastName = user.LastName,
             }).ToListAsync();
             return data;
         }

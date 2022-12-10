@@ -274,7 +274,7 @@ namespace PoPoy.Admin.Services.BroadCastService
 
         public async Task<HubConnection> BuidHubWithToken(string broadCastType = BroadCastType.Notify)
         {
-            var hubstring = broadCastType == BroadCastType.Notify ? "/notificationHub" : broadCastType == BroadCastType.Order ? "/orderhub" : "/chathub";
+            var hubstring = broadCastType == BroadCastType.Notify ? "notificationHub" : broadCastType == BroadCastType.Order ? "orderhub" : "chathub";
             var token = await localStorageService.GetItemAsStringAsync("authToken");
             token = token.Remove(0, 1);
             token = token.Remove(token.Length - 1, 1);

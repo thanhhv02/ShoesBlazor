@@ -42,6 +42,7 @@ namespace PoPoy.Api.Controllers
         {
 
             var notification = mapper.Map<NotificationDto>(notiDto);
+            notification.SenderId = Guid.Parse(userManager.GetUserId(User));
             await broadCastService.SendNotifyAllAdmin(notification);
             return Ok(notification);
         }
