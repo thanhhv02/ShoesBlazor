@@ -161,7 +161,7 @@ namespace PoPoy.Client.Services.AuthService
             var result = JsonSerializer.Deserialize<AuthResponseDto>(refreshContent, _options);
             if (!result.IsAuthSuccessful)
             {
-                //await Logout();
+                await Logout();
                 return null;
             }
             Console.WriteLine("REFRESH TOEKN !!! "+ result.IsAuthSuccessful);
