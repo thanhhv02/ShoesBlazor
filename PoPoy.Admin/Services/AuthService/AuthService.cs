@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace PoPoy.Admin.Services.AuthService
         private readonly ILocalStorageService _localStorage;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly NavigationManager _navigationManager;
+        private readonly JsonSerializerOptions _options;
         public List<User> Users { get; set; } = new List<User>();
         public AuthService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider,
                            ILocalStorageService localStorage, NavigationManager navigationManager)
@@ -31,6 +33,7 @@ namespace PoPoy.Admin.Services.AuthService
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
             _navigationManager = navigationManager;
+            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
         public async Task<LoginResponse<AuthResponseDto>> Login(LoginRequest loginRequest)
         {
@@ -46,6 +49,7 @@ namespace PoPoy.Admin.Services.AuthService
                 return loginResponse;
             }
             await _localStorage.SetItemAsync("authToken", loginResponse.Data.Token);
+            await _localStorage.SetItemAsync("refreshToken", loginResponse.Data.RefreshToken);
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResponse.Data.Token);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Data.Token);
             return loginResponse;
@@ -54,6 +58,7 @@ namespace PoPoy.Admin.Services.AuthService
         public async Task Logout()
         {
             await _localStorage.RemoveItemAsync("authToken");
+            await _localStorage.RemoveItemAsync("refreshToken");
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
             _navigationManager.NavigateTo("/login");
@@ -152,6 +157,31 @@ namespace PoPoy.Admin.Services.AuthService
         {
             var result = await _httpClient.GetFromJsonAsync<List<RoleVM>>("/api/user/getRoles");
             return result.Select(p => p.Name).ToList() ;
+        }
+        public async Task<string> RefreshToken()
+        {
+            var token = await _localStorage.GetItemAsync<string>("authToken");
+            var refreshToken = await _localStorage.GetItemAsync<string>("refreshToken");
+            var tokenDto = JsonSerializer.Serialize(new RefreshTokenDto { Token = token, RefreshToken = refreshToken });
+            var bodyContent = new StringContent(tokenDto, Encoding.UTF8, "application/json");
+            var refreshResult = await _httpClient.PostAsync("api/token/refresh", bodyContent);
+            var refreshContent = await refreshResult.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<AuthResponseDto>(refreshContent, _options);
+            if (!result.IsAuthSuccessful)
+            {
+                await Logout();
+                return null;
+            }
+            Console.WriteLine("REFRESH TOEKN !!! " + result.IsAuthSuccessful);
+            await _localStorage.SetItemAsync("authToken", result.Token);
+            await _localStorage.SetItemAsync("refreshToken", result.RefreshToken);
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
+            return result.Token;
+        }
+        public async Task<bool> IsUserAuthenticated()
+        {
+            return (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
         }
     }
 }

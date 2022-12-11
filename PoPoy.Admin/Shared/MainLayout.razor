@@ -1,7 +1,7 @@
 ﻿@using Blazored.Toast
 @using Blazored.Toast.Configuration
 @inherits LayoutComponentBase
-
+@implements IDisposable;
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -29,7 +29,11 @@
                 </a>
             </li><!-- End Search Icon-->
 
-           <PoPoy.Admin.Shared.Notify.Notify></PoPoy.Admin.Shared.Notify.Notify>
+           <AuthorizeView>
+                <Authorized>
+                    <PoPoy.Admin.Shared.Notify.Notify></PoPoy.Admin.Shared.Notify.Notify>
+                </Authorized>
+           </AuthorizeView>
 
             <!--<li class="nav-item dropdown">
 
@@ -162,3 +166,16 @@
 <RadzenNotification />
 <RadzenContextMenu />
 <RadzenTooltip />
+@code {
+
+    [Inject]
+    public HttpInterceptorService Interceptor { get; set; }
+    [Inject]
+    public IAuthService authService { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        if (await authService.IsUserAuthenticated())
+            Interceptor.RegisterEvent();
+    }
+    public void Dispose() => Interceptor.DisposeEvent();
+}

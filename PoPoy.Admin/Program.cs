@@ -17,6 +17,9 @@ using Radzen;
 using PoPoy.Admin.Services.DashBoardService;
 using PoPoy.Admin.Services.ProductSizeService;
 using PoPoy.Admin.Services.ProductColorService;
+using PoPoy.Client.Services.HttpRepository;
+using PoPoy.Admin.Services.HttpRepository;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace PoPoy.Admin
 {
@@ -37,7 +40,8 @@ namespace PoPoy.Admin
             builder.Services.AddScoped<IDashBoardService, DashBoarchService>();
             builder.Services.AddScoped<IProductSizeService , ProductSizeService>();
             builder.Services.AddScoped<IProductColorService, ProductColorService>();
-
+            builder.Services.AddScoped<RefreshTokenService>();
+            builder.Services.AddScoped<HttpInterceptorService>();
             builder.Services.AddBlazoredToast();
             builder.Services.AddSmart();
 
@@ -50,8 +54,8 @@ namespace PoPoy.Admin
             builder.Services.AddScoped(sp => new HttpClient
             {
                 BaseAddress = new Uri(builder.Configuration["BackendApiUrl"])
-            });
-            
+            }.EnableIntercept(sp));
+            builder.Services.AddHttpClientInterceptor();
             await builder.Build().RunAsync();
         }
     }

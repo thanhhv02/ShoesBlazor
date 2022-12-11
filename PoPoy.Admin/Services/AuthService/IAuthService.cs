@@ -25,5 +25,8 @@ namespace PoPoy.Admin.Services.AuthService
         Task<UserVM> GetUserById(Guid id);
         Task<List<string>> GetRoleNames();
         Task Logout();
+        Task<string> RefreshToken();
+
+        Task<bool> IsUserAuthenticated();
     }
 }
