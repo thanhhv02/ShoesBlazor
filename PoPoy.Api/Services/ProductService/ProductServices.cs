@@ -486,7 +486,7 @@ namespace PoPoy.Api.Services.ProductService
                 var cmin = productColorTable.Min(x => x.Id);
                 for (int i = pmin; i <= pmax; i++)
                 {
-                    for (int j = smin; j <= smax; j++)
+                    for (int j = smin; j <= 3; j++)
                     {
                         var random = new Random();
                         if (productsTable.Where(x => x.Id == i) != null
