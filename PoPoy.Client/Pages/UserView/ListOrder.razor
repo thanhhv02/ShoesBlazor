@@ -38,37 +38,42 @@
                                 </div>
                             </div>
                             <div class="d-flex">
-                                @if (item.OrderStatus == OrderStatus.Confirmed || item.OrderStatus == OrderStatus.Processing) 
-                                // thành nguyễn sửa lại chỉ trong trạng thái chờ xác nhận mới cho hủy đang ship hay giao rồi thì kh hủy chớ có gì sai thì sửa lại
-                            {
+                                @if (item.OrderStatus == OrderStatus.Confirmed || item.OrderStatus == OrderStatus.Processing && item.PaymentStatus.ToString() != "Paid")
+                                // thành nguyễn sửa lại chỉ trong trạng thái chờ xác nhận mới cho hủy đang ship hay giao rồi thì kh hủy + đã thanh toán thì không được hủy
+                                {
                                     <RadzenButton class="ml-3" Icon="cancel" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Text="Hủy đơn hàng"
-                              Click="args => OnDeleteTask(item.Id)"></RadzenButton>
-                            }
-                            <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                              Click="()=>ViewDetail(item.Id)" Text="Xem chi tiết "></RadzenButton>
-                            </div>
-                        </div>
+                                                  Click="args => OnDeleteTask(item.Id)"></RadzenButton>}
+                                @if (item.OrderStatus.ToString() != "Cancelled")
+                                {
+                                    @if (item.PaymentMode != "CashOnDelivery")
+                                    {
+                                        @if (item.PaymentStatus.ToString() != "Paid")
+                                        {
+                                            <RadzenButton class="ml-3" Icon="cancel" ButtonStyle="ButtonStyle.Warning" Variant="Variant.Outlined" Text="Thanh toán ngay"
+                                                          Click="args => RedirectToPayment(item.Id)"></RadzenButton>
+                                        }
+                                    }
 
+                                    <RadzenButton class="ml-3" Icon="ios_share" ButtonStyle="ButtonStyle.Info" Variant="Variant.Outlined"
+                                                  Click="() => ViewDetail(item.Id)" Text="Xem chi tiết "></RadzenButton>
+
+                                }
+                            </div>
+
+                        </div>
                     }
                     <Pagination MetaData="@_svc.ListOrderResponse.MetaData" Spread="2" SelectedPage="SelectedPage" />
-
                 </div>
             </div>
         }
     }
     catch { }
 </div>
-@*<Confirmation ConfirmationMessage="Tiếp tục?"
-              ConfirmationTitle="Hủy đơn hàng"
-              @ref="DeleteConfirmation"
-              ConfirmationChanged="OnConfirmDeleteTask">
 
-</Confirmation>*@
 @code {
     [Parameter]
     public string id { get; set; }
-    //public string OrderId { get; set; } = null;
-   // private Confirmation DeleteConfirmation { set; get; }
+    private string url { get; set; }
     private ProductParameters _productParameters = new ProductParameters();
     protected override async Task OnInitializedAsync()
     {
@@ -80,6 +85,13 @@
 
         await GetOrders();
     }
+
+    public async void RedirectToPayment(string orderId)
+    {
+        url = await _svc.GetPaymentUrl(orderId);
+        NavigationManager.NavigateTo(url);
+    }
+
     public async Task GetOrders()
     {
         await _svc.GetOrders(_productParameters);
@@ -89,15 +101,11 @@
     {
         await _svc.GetOrderDetails(id);
     }
-    //public void OnDeleteTask(string orderId)
-    //{
-    //    OrderId = orderId;
-    //    DeleteConfirmation.Show();
-    //}
+
     public async Task OnDeleteTask(string orderId)
     {
-       var result = await dialogSvc.Confirm("Bạn có chắc muốn hủy?", "Xác nhận", new ConfirmOptions() { OkButtonText = "Có Hủy", CancelButtonText = "Không" } );
-       if (result.Value == true)
+        var result = await dialogSvc.Confirm("Bạn có chắc muốn hủy?", "Xác nhận", new ConfirmOptions() { OkButtonText = "Có Hủy", CancelButtonText = "Không" });
+        if (result.Value == true)
         {
             await _svc.CancelOrder(orderId);
             await GetOrders();
@@ -106,15 +114,6 @@
 
     }
 
-    //public async Task OnConfirmDeleteTask(bool deleteConfirmed)
-    //{
-    //    if (deleteConfirmed)
-    //    {
-    //        await _svc.CancelOrder(OrderId);
-    //        await GetOrders();
-    //        StateHasChanged();
-    //    }
-    //}
     private void ViewDetail(string orderID)
       => NavigationManager.NavigateTo($"/order/{orderID}");
 }

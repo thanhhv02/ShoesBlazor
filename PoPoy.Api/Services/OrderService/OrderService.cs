@@ -55,6 +55,7 @@ namespace PoPoy.Api.Services.OrderService
                 OrderDate = x.o.OrderDate,
                 TotalPrice = x.o.TotalPrice,
                 PaymentMode = x.o.PaymentMode,
+                PaymentStatus = x.o.PaymentStatus,
                 OrderStatus = x.o.OrderStatus,
                 OrderDetails = orderDetails
             }).ToListAsync();
@@ -256,6 +257,48 @@ namespace PoPoy.Api.Services.OrderService
                  .Include(p => p.User).Include(p => p.Address)
                  .Include(p => p.Shipper).Where(p => p.ShipperId == userid).ToListAsync(); ;
             return orderDetails;
+        }
+
+
+        public async Task<bool> SavePaymentUrl(string orderId)
+        {
+            try
+            {
+                var paymentUrl = "";
+                var order = _context.Orders.FirstOrDefault(x => x.Id == orderId);
+                if (order.PaymentMode == "PayPal")
+                {
+                    paymentUrl = "https://www.sandbox.paypal.com/signin";
+                }
+                else if (order.PaymentMode == "VNPay")
+                {
+                    paymentUrl = "https://sandbox.vnpayment.vn/paymentv2";
+                }
+                order.PaymentGateUrl = paymentUrl;
+                _context.Orders.Update(order);
+                var result = await _context.SaveChangesAsync();
+                if (result == 1)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<string> GetPaymentUrl(string orderId)
+        {
+            try
+            {
+                var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+                return order.PaymentGateUrl;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -12,9 +12,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace PoPoy.Admin.Services.AuthService
 {
@@ -39,17 +39,13 @@ namespace PoPoy.Admin.Services.AuthService
         {
             var result = await _httpClient.PostAsJsonAsync("/api/user/login", loginRequest);
             var content = await result.Content.ReadAsStringAsync();
-            var loginResponse = JsonSerializer.Deserialize<LoginResponse<AuthResponseDto>>(content,
-                new JsonSerializerOptions()
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+            var loginResponse = JsonSerializer.Deserialize<LoginResponse<AuthResponseDto>>(content,_options);
             if (!result.IsSuccessStatusCode)
             {
                 return loginResponse;
             }
-            await _localStorage.SetItemAsync("authToken", loginResponse.Data.Token);
             await _localStorage.SetItemAsync("refreshToken", loginResponse.Data.RefreshToken);
+            await _localStorage.SetItemAsync("authToken", loginResponse.Data.Token);
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResponse.Data.Token);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Data.Token);
             return loginResponse;

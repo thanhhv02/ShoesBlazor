@@ -462,10 +462,7 @@ namespace PoPoy.Api.Services.AuthService
             user.LastName = request.LastName;
             user.PhoneNumber = request.PhoneNumber;
             user.UserName = request.UserName;
-            if (!string.IsNullOrEmpty(request.Password))
-            {
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, request.Password);
-            }
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, request.Password);
 
             var result = await _userManager.UpdateAsync(user);
 

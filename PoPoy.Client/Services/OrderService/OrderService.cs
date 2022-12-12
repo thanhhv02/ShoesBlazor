@@ -103,5 +103,16 @@ namespace PoPoy.Client.Services.OrderService
         {
             await _http.DeleteAsync($"/api/order/{orderId}");
         }
+
+        public async Task SavePaymentUrl(string orderId)
+        {
+            await _http.GetFromJsonAsync($"/api/order/saveUrl/?orderId={orderId}", null);
+        }
+
+        public async Task<string> GetPaymentUrl(string orderId)
+        {
+            var url = await _http.GetStringAsync($"/api/order/getUrl/?orderId={orderId}");
+            return url;
+        }
     }
 }

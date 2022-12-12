@@ -17,14 +17,14 @@ else
                     <EditForm Model="User" OnValidSubmit="UpdateUser">
                         <DataAnnotationsValidator></DataAnnotationsValidator>
                         <div class="text-field col-lg-12 mb-4">
-                            <label for="FirstName">Họ</label>
-                            <InputText id="FirstName" class="form-control" @bind-Value="User.FirstName"></InputText>
-                            <ValidationMessage For="()=> User.FirstName"></ValidationMessage>
+                            <label for="lastname">Họ</label>
+                            <InputText id="lastname" class="form-control" @bind-Value="User.UserName"></InputText>
+                            <ValidationMessage For="()=> User.UserName"></ValidationMessage>
                         </div>
                         <div class="text-field col-lg-12 mb-4">
-                            <label for="LastName">Tên</label>
-                            <InputText id="LastName" class="form-control" @bind-Value="User.LastName"></InputText>
-                            <ValidationMessage For="()=> User.LastName"></ValidationMessage>
+                            <label for="firstname">Tên</label>
+                            <InputText id="firstname" class="form-control" @bind-Value="User.FirstName"></InputText>
+                            <ValidationMessage For="()=> User.FirstName"></ValidationMessage>
                         </div>
                         <div class="text-field col-lg-12 mb-4">
                             <label for="dob">Ngày tháng sinh</label>

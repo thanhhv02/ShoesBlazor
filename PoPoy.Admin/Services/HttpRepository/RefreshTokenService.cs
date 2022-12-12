@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System;
 using PoPoy.Admin.Services.AuthService;
 
-namespace PoPoy.Client.Services.HttpRepository
+namespace PoPoy.Admin.Services.HttpRepository
 {
     public class RefreshTokenService
     {

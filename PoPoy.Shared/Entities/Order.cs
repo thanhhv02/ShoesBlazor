@@ -19,6 +19,7 @@ namespace PoPoy.Shared.Dto
         [Column(TypeName = "decimal(18,0)")]
         public decimal TotalPrice { get; set; }
         public string PaymentMode { get; set; }
+        public string PaymentGateUrl { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public User User { get; set; }

@@ -27,5 +27,7 @@ namespace PoPoy.Api.Services.OrderService
         Task<Order> FindOrderById(string id);
         Task<bool> HasOrderById(string id);
         Task<Refund> CancelOrder(Order order);
+        Task<bool> SavePaymentUrl(string orderId);
+        Task<string> GetPaymentUrl(string orderId);
     }
 }

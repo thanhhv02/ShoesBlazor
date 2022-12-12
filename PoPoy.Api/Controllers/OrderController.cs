@@ -176,6 +176,41 @@ namespace PoPoy.Api.Controllers
             return BadRequest();
         }
 
+        [HttpGet("saveUrl")]
+        public async Task<IActionResult> SavePaymentUrl(string orderId)
+        {
+            try
+            {
+                var result = await _orderService.SavePaymentUrl(orderId);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("getUrl")]
+        public async Task<IActionResult> GetPaymentUrl(string orderId)
+        {
+            try
+            {
+                var result = await _orderService.GetPaymentUrl(orderId);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private Guid GetUserId() => Guid.Parse(_httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier).ToString());
     }
 }

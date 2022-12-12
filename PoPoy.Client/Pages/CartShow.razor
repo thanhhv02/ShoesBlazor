@@ -3,6 +3,7 @@
 @using Newtonsoft.Json.Linq
 @inject ICartService CartService
 @inject IAuthService AuthService
+@inject IOrderService OrderService 
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject IToastService _toastSvc
@@ -144,17 +145,17 @@ input[type=radio],input.radio {
     private List<ProductSize> List_Size = new List<ProductSize>();
     Address addressModel = new Address();
     PaymentModeModel paymentModel = new PaymentModeModel()
-        {
-            Name = "CashOnDelivery" // default value
-        };
+    {
+        Name = "CashOnDelivery" // default value
+    };
 
     //List<string> rdOptions = new List<string> { "CashOnDelivery", "PayPal", "VNPay" };
     Dictionary<string, string> rdOptions = new Dictionary<string, string>()
-        {
-            ["CashOnDelivery"] = "<img class=\"method - icon\" src=\"https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán khi nhận hàng",
-            ["PayPal"] = "<img class=\"method - icon\" src=\"https://sedberkdesign.com/wp-content/uploads/2020/06/kisspng-paypal-logo-brand-font-payment-paypal-logo-icon-paypal-icon-logo-png-and-vecto-5b7f273e45e8a9.9067728615350597742864.png\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán bằng PayPal",
-            ["VNPay"] = "<img class=\"method - icon\" src=\"https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-vnpay.png\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán bằng VNPay",
-        };
+    {
+        ["CashOnDelivery"] = "<img class=\"method - icon\" src=\"https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán khi nhận hàng",
+        ["PayPal"] = "<img class=\"method - icon\" src=\"https://sedberkdesign.com/wp-content/uploads/2020/06/kisspng-paypal-logo-brand-font-payment-paypal-logo-icon-paypal-icon-logo-png-and-vecto-5b7f273e45e8a9.9067728615350597742864.png\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán bằng PayPal",
+        ["VNPay"] = "<img class=\"method - icon\" src=\"https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-vnpay.png\" width=\"32\" height=\"32\" alt=\"icon\"> Thanh toán bằng VNPay",
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -270,7 +271,7 @@ input[type=radio],input.radio {
                         if (paymentModel.Name != "CashOnDelivery")
                         {
                             NavigationManager.NavigateTo(url);
-                            await LocalStorage.SetItemAsStringAsync("getUrlPayment", url);
+                            await OrderService.SavePaymentUrl(orderId);
                         }
                         else
                         {
