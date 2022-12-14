@@ -24,7 +24,7 @@
         </Authorized>
 
     </AuthorizeView>
-    <AuthorizeView Roles="@(RoleName.Staff + "," + RoleName.Admin)">
+    <AuthorizeView Roles="@(RoleName.Admin)">
 
         <Authorized>
             <li class="nav-item">
@@ -38,6 +38,12 @@
                 <NavLink class="nav-link collapsed" href="/listUser">
                     <i class="fas fa-user"></i>
                     <span>Người dùng</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link collapsed" href="/logs">
+                    <i class="fas fa-history"></i>
+                    <span>Logs</span>
                 </NavLink>
             </li>
 

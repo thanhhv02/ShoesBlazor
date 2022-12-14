@@ -15,7 +15,11 @@
 
                             <div class="col-lg-12  ">
                                 <RadzenCard Class="m-3">
-                                    <h6 style="color:#012970">Mã đơn hàng <b>#@item.Id</b></h6>
+                                    <div class="row">
+                                        <h6 class="text-start" style="color:#012970">Mã đơn hàng <b>#@item.Id</b></h6>
+                                        <h6 class="text-end" >Ngày bàn giao <b>#@item.OrderDate</b></h6>
+
+                                    </div>
                                     <RadzenCard Class="my-3 --rz-series-7  rz-shadow-0  rz-border-radius-0" style="margin: 0 calc(-1 * var(--rz-card-padding)); padding: 2rem; background-color:rgba(67, 64, 210, 0.12)">
                                         <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary-light"><strong>Thông tin người nhận</strong></RadzenText>
                                         <div class="row">

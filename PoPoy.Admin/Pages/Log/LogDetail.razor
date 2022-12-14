@@ -1,0 +1,40 @@
+﻿@using PoPoy.Shared.Entities;
+@using PoPoy.Admin.Services.LogService;
+@inject ILogService logService;
+<div class="container ml-3 col-12">
+
+       <div class="row">
+        <div class="text-field col-md-4 mb-2">
+                <label for="name">Level</label>
+                <input type="text" readonly class="text-control_input" value="@log.LogLevel.ToString()" />
+            </div>
+        <div class="text-field col-md-4 mb-2">
+                <label for="name">Sự kiện</label>
+                <input type="text" readonly class="text-control_input" value="@log.EventName?.ToString()" />
+            </div>
+
+        <div class="text-field col-md-4 mb-2">
+                <label for="name">Nguồn</label>
+                <input type="text" readonly class="text-control_input" value="@log.Source?.ToString()" />
+            </div>
+        <div class="text-field col-md-12 mb-2">
+                <label for="name">Message</label>
+                <textarea readonly class="text-control_input w-100 p-2" value="@log.Message?.ToString()"></textarea>
+            </div>
+            <div class="text-field col-md-12 mb-2">
+                <label for="name">Chi tiết</label>
+            <textarea class="w-100 text-start border border-danger pt-4 p-2" readonly cols="30" rows="30" >@log.StackTrace?.ToString()</textarea>
+            </div>
+       </div>
+</div>
+@code {
+    [Parameter]
+    public string Id { get; set; } = "0";
+    public Logs log = new Logs();
+    protected override async Task OnInitializedAsync()
+    {
+        log = await logService.GetLogById(int.Parse(Id));
+        StateHasChanged();
+    }
+
+}

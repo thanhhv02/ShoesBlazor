@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using PoPoy.Api.Configurations;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
@@ -85,8 +86,11 @@ namespace PoPoy.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
+            var dbContext = serviceProvider.GetRequiredService<DataContext>();
+            loggerFactory.AddProvider(new ApplicationLoggerProvider(dbContext));
             if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();

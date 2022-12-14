@@ -134,7 +134,7 @@
 
     public async Task OpenDetail(string id)
     {
-        await DialogService.OpenAsync<OrderDetail>($"",
+        await DialogService.OpenAsync<ListOrderDetails>($"",
                new Dictionary<string, object>() { { "OrderID", id } },
                new DialogOptions() { Width = "1400px", Height = "712px", Resizable = true, Draggable = false, CssClass = "modal-content" });
 

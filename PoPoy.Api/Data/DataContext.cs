@@ -58,6 +58,7 @@ namespace PoPoy.Api.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Refund> Refunds { get; set; }
+        public DbSet<Logs> Logs { get; set; }
 
 
     }

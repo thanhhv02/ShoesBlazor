@@ -58,7 +58,7 @@ namespace PoPoy.Api.Services.OrderService
                 PaymentStatus = x.o.PaymentStatus,
                 OrderStatus = x.o.OrderStatus,
                 OrderDetails = orderDetails
-            }).ToListAsync();
+            }).OrderByDescending(p => p.OrderDate).ToListAsync();
         }
 
         public async Task<List<OrderDetails>> GetOrderDetails(string orderId)
@@ -66,7 +66,7 @@ namespace PoPoy.Api.Services.OrderService
             var orderDetails = await (from od in _context.OrderDetails
                                       join o in _context.Orders on od.OrderIdFromOrder equals o.Id
                                       where od.OrderIdFromOrder == orderId
-                                      select od).OrderByDescending(p => p.Order.OrderDate).ToListAsync();
+                                      select od).ToListAsync();
 
             return orderDetails;
         }
@@ -97,7 +97,7 @@ namespace PoPoy.Api.Services.OrderService
         {
             var orderDetails = await _context.Orders.Include(p => p.OrderDetails).ThenInclude(p => p.Product).ThenInclude(p => p.ProductImages)
                  .Include(p => p.User).Include(p => p.Address)
-                 .Include(p => p.Shipper).Where(p => p.ShipperId == input.ShipperId && p.OrderStatus == input.Status).ToListAsync(); ;
+                 .Include(p => p.Shipper).Where(p => p.ShipperId == input.ShipperId && p.OrderStatus == input.Status).OrderByDescending(p => p.OrderDate).ToListAsync(); ;
             return orderDetails;
 
         }

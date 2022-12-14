@@ -15,6 +15,7 @@ using PoPoy.Api.Services.CategoryService;
 using PoPoy.Api.Services.ChatService;
 using PoPoy.Api.Services.DashBoard;
 using PoPoy.Api.Services.FileStorageService;
+using PoPoy.Api.Services.LogService;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.OrderService;
 using PoPoy.Api.Services.ProductColorService;
@@ -144,6 +145,7 @@ namespace PoPoy.Api.Extensions
             services.AddTransient<IDashBoardService, DashBoardService>();
             services.AddTransient<IProductSizeService, ProductSizeService>();
             services.AddTransient<IProductColorService, ProductColorService>();
+            services.AddTransient<ILogService, LogService>();
 
 
             return services;

@@ -1,0 +1,77 @@
+﻿@page "/logs"
+@using PoPoy.Admin.Helper
+@using PoPoy.Admin.Services.LogService;
+@using PoPoy.Shared.Entities;
+@inject ILogService logService;
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+<RadzenButton Icon="trash" Text="Xoá sạch lịch sử" class="col-lg-4 " ButtonStyle="ButtonStyle.Danger" Click=@Delete />
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="mt-4 ml-3 mb-3 card-title" style="color:#012970">Danh sách logs</h2>
+        <div class="row mt-4 ml-3">
+            <RadzenDataGrid Responsive AllowFiltering="true" AllowColumnResize="true"
+                            FilterMode="Radzen.FilterMode.Simple" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Center" AllowPaging="true" AllowSorting="true" Data="@logs" TItem="Logs" ColumnWidth="300px"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            LogicalFilterOperator="LogicalFilterOperator.Or"
+                            SelectionMode="DataGridSelectionMode.Single">
+                <Columns>
+                    <RadzenDataGridColumn Filterable="false" TItem="ProductSizeDto" Property="Id" Title="Id" Width="50px" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Logs" Property="LogLevel" Title="Level" CssClass="MyInputClass" />
+                    <RadzenDataGridColumn TItem="Logs" Property="EventName" Title="Sự kiện" CssClass="MyInputClass" />
+                    @*<RadzenDataGridColumn TItem="Logs" Property="Message" Title="Tin nhắn" CssClass="MyInputClass" />*@
+                    <RadzenDataGridColumn TItem="Logs" Property="CreateDate" Title="Ngày" CssClass="MyInputClass" />
+
+
+                    <RadzenDataGridColumn TItem="Logs" Context="log" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                        <Template>
+                            <RadzenButton Text="Xem chi tiết" Icon="info" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Dark" Class="m-1" Click="args => OpenDetal(log.LogId.ToString())">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+
+        </div>
+    </div>
+</div>
+
+
+@inject DialogService DialogService
+@code {
+    private List<Logs> logs { get; set; } = new();
+    private int logId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetLogs();
+        await base.OnInitializedAsync();
+    }
+
+   
+
+
+    private async Task GetLogs()
+    {
+         logs = await logService.GetLogs();
+
+    }
+    private async Task Delete()
+    {
+        await logService.ClearLog();
+        await GetLogs();
+
+    }
+
+
+
+
+    public async Task OpenDetal(string id)
+    {
+        await DialogService.OpenAsync<LogDetail>($"Chi tiết log",
+               new Dictionary<string, object>() { { "Id", id } },
+               new DialogOptions() { Width = "60vw", Height = "60vh", Resizable = true, Draggable = false, CssClass = "modal-content" });
+
+    }
+
+}

@@ -19,6 +19,7 @@ using PoPoy.Admin.Services.ProductSizeService;
 using PoPoy.Admin.Services.ProductColorService;
 using PoPoy.Admin.Services.HttpRepository;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using PoPoy.Admin.Services.LogService;
 
 namespace PoPoy.Admin
 {
@@ -39,6 +40,7 @@ namespace PoPoy.Admin
             builder.Services.AddScoped<IDashBoardService, DashBoarchService>();
             builder.Services.AddScoped<IProductSizeService , ProductSizeService>();
             builder.Services.AddScoped<IProductColorService, ProductColorService>();
+            builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<RefreshTokenService>();
             builder.Services.AddScoped<HttpInterceptorService>();
             builder.Services.AddBlazoredToast();
