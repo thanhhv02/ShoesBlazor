@@ -249,7 +249,7 @@ namespace PoPoy.Api.Services.AuthService
                 return new ServiceErrorResponse<bool>("Email đã tồn tại");
             }
 
-            if (await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == user.PhoneNumber) != null)
+            if (await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber) != null)
                 return new ServiceErrorResponse<bool>("Số điện thoại đã được đăng ký");
 
             if(EmailValidator.Validate(request.Email))
@@ -793,42 +793,6 @@ namespace PoPoy.Api.Services.AuthService
             return paymentUrl;
         }
 
-        private async void SendMailOrderSuccessfully(string OrderId, Order order, User user, List<string> products, Cart detail)
-        {
-            var path = Path.Combine(_env.ContentRootPath, "wwwroot/ordersuccesfullymail.html");
-            string bodyBuilder = null;
-            using (StreamReader SourceReader = System.IO.File.OpenText(path))
-            {
-                bodyBuilder = SourceReader.ReadToEnd();
-            }
-
-            bodyBuilder = bodyBuilder.Replace("[oder-id]", OrderId.ToString().ToUpper());
-            bodyBuilder = bodyBuilder.Replace("[user-first-name]", user.FirstName);
-            bodyBuilder = bodyBuilder.Replace("[order-date]", order.OrderDate.ToString("dddd, dd MMMM yyyy HH:mm:ss"));
-            bodyBuilder = bodyBuilder.Replace("[user-full-name]", user.LastName + " " + user.FirstName);
-            bodyBuilder = bodyBuilder.Replace("[user-mail]", user.Email);
-            bodyBuilder = bodyBuilder.Replace("[user-list-order]", _configuration["ClientUrl"] + "/user/list-order");
-            bodyBuilder = bodyBuilder.Replace("[user-phone-number]", user.PhoneNumber);
-            bodyBuilder = bodyBuilder.Replace("[payment-mode]", order.PaymentMode);
-            bodyBuilder = bodyBuilder.Replace("[total-price]", order.TotalPrice.ToString());
-            bodyBuilder = bodyBuilder.Replace("[all-products]", String.Join("", products.ToArray()));
-            bodyBuilder = bodyBuilder.Replace("[user-address]", await _context.Addresses.Where(x => x.UserId == detail.UserId)
-                .Select(x => x.Street + " " + x.Ward + " " + x.District + " " + x.City).FirstOrDefaultAsync());
-            EmailDto emailDto = new EmailDto
-            {
-                Subject = $"[Popoy] Xác nhận đơn hàng #{OrderId.ToString().ToUpper()}",
-                Body = bodyBuilder,
-                To = user.Email
-            };
-            try
-            {
-                _emailService.SendEmail(emailDto);
-            }
-            catch
-            {
-
-            }
-        }
 
         public async Task<User> GetCurrentUserAsync()
         {
