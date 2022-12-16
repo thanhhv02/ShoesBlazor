@@ -52,5 +52,28 @@ namespace PoPoy.Api.Extensions
 
             return products.OrderBy(orderQuery);
         }
+        public static IQueryable<Product> SortByPrice(this IQueryable<Product> products, string orderByQueryString, DataContext dataContext)
+        {
+            if (string.IsNullOrWhiteSpace(orderByQueryString))
+                return products.OrderBy(e => e.Title);
+            if (orderByQueryString.ToLower().Contains("price"))
+            {
+                if (orderByQueryString.ToLower().EndsWith(" desc"))
+                {
+                    return (from t1 in dataContext.Products
+                            join t2 in dataContext.ProductQuantities on t1.Id equals t2.Id
+                            orderby t2.Price descending
+                            select t1);
+                }
+                else
+                {
+                    return (from t1 in dataContext.Products
+                            join t2 in dataContext.ProductQuantities on t1.Id equals t2.Id
+                            orderby t2.Price ascending
+                            select t1);
+                }
+            }
+            return products;
+        }
     }
 }

@@ -39,7 +39,12 @@ namespace PoPoy.Api.Data
             modelBuilder.ApplyConfiguration(new ProductColorConfiguration());
             modelBuilder.ApplyConfiguration(new ProductQuantityConfiguration());
             modelBuilder.ApplyConfiguration(new RefundConfiguration());
-
+            modelBuilder.Entity<OrderCoupon>()
+                .HasKey(c => new
+                {
+                    c.CouponId,
+                    c.OrderId
+                });
             modelBuilder.Seed();
 
         }
@@ -59,7 +64,6 @@ namespace PoPoy.Api.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Refund> Refunds { get; set; }
         public DbSet<Logs> Logs { get; set; }
-
-
+        public DbSet<Coupon> Coupon { get; set; }
     }
 }

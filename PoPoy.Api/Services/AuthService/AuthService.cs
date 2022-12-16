@@ -1,4 +1,5 @@
-﻿using MailKit.Search;
+﻿using EmailValidation;
+using MailKit.Search;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -251,6 +252,9 @@ namespace PoPoy.Api.Services.AuthService
             if (await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == user.PhoneNumber) != null)
                 return new ServiceErrorResponse<bool>("Số điện thoại đã được đăng ký");
 
+            if(EmailValidator.Validate(request.Email))
+                return new ServiceErrorResponse<bool>("Cần nhập đúng định dạng email");
+
             user = new User()
             {
                 Dob = request.Dob,
@@ -303,6 +307,9 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<ServiceResponse<string>> ResetPassword(ResetPasswordRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+            if (EmailValidator.Validate(model.Email))
+                return new ServiceErrorResponse<string>("Cần nhập đúng định dạng email");
+
             if (user == null)
                 return new ServiceErrorResponse<string>("No user associated with email");
 

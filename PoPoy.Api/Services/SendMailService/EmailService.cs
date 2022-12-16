@@ -5,6 +5,7 @@ using MimeKit;
 using MimeKit.Text;
 using PoPoy.Shared.Dto.ApiModels;
 using System;
+using System.Security.Authentication;
 
 namespace PoPoy.Api.SendMailService
 {
@@ -26,11 +27,18 @@ namespace PoPoy.Api.SendMailService
             email.Subject = request.Subject;
             email.Body = new TextPart(TextFormat.Html) { Text = request.Body };
 
-            using var smtp = new SmtpClient();
-            smtp.Connect(_config.GetSection("EmailHost").Value, Convert.ToInt32(_config.GetSection("EmailPort").Value), SecureSocketOptions.StartTls);
-            smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
-            smtp.Send(email);
-            smtp.Disconnect(true);
+            using (var smtp = new SmtpClient())
+            {
+                smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                smtp.SslProtocols = SslProtocols.Ssl3 | SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12 | SslProtocols.Tls13;
+                smtp.CheckCertificateRevocation = false;
+                smtp.Connect(_config.GetSection("EmailHost").Value, Convert.ToInt32(_config.GetSection("EmailPort").Value), SecureSocketOptions.Auto);
+                smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
+                smtp.Send(email);
+                smtp.Disconnect(true);
+            } ;
+            
+            
         }
     }
 }

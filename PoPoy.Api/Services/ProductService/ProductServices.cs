@@ -46,6 +46,7 @@ namespace PoPoy.Api.Services.ProductService
                 var list_product = await _dataContext.Products
                     .Search(productParameters.searchText)
                     .Sort(productParameters.OrderBy)
+                    .SortByPrice(productParameters.OrderBy, _dataContext)
                     .Include(x => x.ProductImages)
                     .Include(x=>x.ProductQuantities)
                     .ToListAsync();
