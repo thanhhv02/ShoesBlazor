@@ -342,7 +342,9 @@ namespace PoPoy.Api.Services.ProductService
                                       join c in _dataContext.Categories on pic.CategoryId equals c.Id into picc
                                       from c in picc.DefaultIfEmpty()
                                       where c.Url == categoryUrl
-                                      select p).Sort(productParameters.OrderBy)
+                                      select p)
+                                      .Sort(productParameters.OrderBy)
+                                      .SortByPrice(productParameters.OrderBy, _dataContext)
                                       .Include(x=>x.ProductQuantities)
                                       .Include(x => x.ProductImages).ToListAsync();
             return PagedList<Product>
