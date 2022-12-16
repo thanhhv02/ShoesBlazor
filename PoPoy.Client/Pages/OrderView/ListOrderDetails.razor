@@ -10,23 +10,29 @@
 @inject DialogService dialogService
 
 <div class="bg-main">
-<div class="container">
+    <div class="container">
         <div class="box">
             <div class="breadcumb">
-               @* <a href="./index.html">home</a>
+                @* <a href="./index.html">home</a>
                 <span><i class='bx bxs-chevrons-right'></i></span>
                 <a href="./products.html">all products</a>*@
             </div>
         </div>
-@if (order != null)
-{
+        @if (order != null)
+        {
             <div class="  ">
 
-        <div class="pb-3">
-            <h2 class="card-title" style="color:#012970">Chi tiết đơn hàng <b>#@orderId</b></h2>
-            <RadzenSteps   ShowStepsButtons="false">
+                <div class="pb-3">
+                    <h2 class="card-title" style="color:#012970">
+                        Chi tiết đơn hàng <b>#@orderId</b>
+                        @if (order.Refund != null)
+                        {
+                            <p>Đã hủy vào lúc @order.Refund.DateRefunded</p>
+                        }
+                    </h2>
+                    <RadzenSteps ShowStepsButtons="false">
 
-                <Steps >
+                        <Steps>
                             <RadzenStepsItem Disabled="order.OrderStatus != OrderStatus.Processing" Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
 
                                 <div class="d-flex justify-content-center align-items-center">
@@ -34,36 +40,36 @@
 
                                         <h2 style="color:#012970">Đơn hàng của bạn đang chờ xác nhận </h2>
                                     </div>
-                                        <img src="/images/choxacnhan.png" width="100" />
+                                    <img src="/images/choxacnhan.png" width="100" />
 
                                 </div>
-                    </RadzenStepsItem>
+                            </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Confirmed" Disabled="order.OrderStatus != OrderStatus.Confirmed" Text="Đơn hàng đã được tiếp nhận">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div>
+                            <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Confirmed" Disabled="order.OrderStatus != OrderStatus.Confirmed" Text="Đơn hàng đã được tiếp nhận">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div>
 
-                                <h2 style="color:#012970">Đã bàn giao cho <b>@(order.Shipper != null ? order.Shipper.FirstName + " "+  order.Shipper.LastName : "")</b> !</h2>
-                            </div>
+                                        <h2 style="color:#012970">Đã bàn giao cho <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "")</b> !</h2>
+                                    </div>
 
-                            <img src="/images/choxacnhan.gif" width="100" />
-                        </div>
-                    </RadzenStepsItem>
+                                    <img src="/images/choxacnhan.gif" width="100" />
+                                </div>
+                            </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivering" Disabled="order.OrderStatus != OrderStatus.Delivering" Text="Đang trong quá trình vận chuyển">
-                          <div class="d-flex justify-content-center align-items-center">
-                            <div>
+                            <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivering" Disabled="order.OrderStatus != OrderStatus.Delivering" Text="Đang trong quá trình vận chuyển">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div>
 
-                                <h2 style="color:#012970">Shipper <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "") </b> đang giao hàng !</h2>
-                            </div>
+                                        <h2 style="color:#012970">Shipper <b>@(order.Shipper != null ? order.Shipper.FirstName + " " + order.Shipper.LastName : "") </b> đang giao hàng !</h2>
+                                    </div>
 
-                            <img src="/images/danggiaohang.gif" width="100" />
-                        </div>
-                    </RadzenStepsItem>
+                                    <img src="/images/danggiaohang.gif" width="100" />
+                                </div>
+                            </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivered ||order.OrderStatus == OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
-                          <div class="d-flex justify-content-center align-items-center">
-                                        
+                            <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivered ||order.OrderStatus == OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
+                                <div class="d-flex justify-content-center align-items-center">
+
                                     @if (order.OrderStatus == OrderStatus.Delivered)
                                     {
                                         <div>
@@ -81,10 +87,10 @@
 
                                     }
 
-                        </div>
-                    </RadzenStepsItem>
-                </Steps>
-            </RadzenSteps>
+                                </div>
+                            </RadzenStepsItem>
+                        </Steps>
+                    </RadzenSteps>
 
                     <hr />
                     @*<h6 style="color:#012970"><b>Thông tin người đặt</b></h6>*@
@@ -97,8 +103,11 @@
                                 </div>
                                 <div class="col-6">
                                     <label>Thao tác</label>
-                                    <RadzenButton  class="form-control" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                    @if (order.OrderStatus.ToString() != "Cancelled")
+                                    {
+                                        <RadzenButton class="form-control" Icon="ios_share" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
                                               Click="()=>SendChat(order)" Text="Gửi tin nhắn kèm thông tin "></RadzenButton>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -125,7 +134,7 @@
 
                     </div>
                     <hr />
-                    <RadzenFieldset AllowCollapse="true"  >
+                    <RadzenFieldset AllowCollapse="true">
                         <HeaderTemplate>
                             <span class="d-inline-flex align-items-center align-middle">
                                 <RadzenIcon Icon="account_box" Class="me-1" /><b>Sản phẩm đã mua</b>
@@ -155,7 +164,7 @@
                                             <div>
                                                 <h4 class="mb-0">@(orderDetail.Product.Title) - @orderDetail.SizeName - @orderDetail.ColorName</h4>
                                                 <div style="font-size: .8em">Size: @(orderDetail.SizeName), Số lượng: @(orderDetail.Quantity)</div>
-                                               
+
                                                 <RadzenButton Disabled="@(order.OrderStatus != OrderStatus.Delivered || order.OrderStatus == OrderStatus.Cancelled)" Text="Đánh giá" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenRate(orderDetail.ProductId)">
                                                 </RadzenButton>
                                             </div>
@@ -173,12 +182,13 @@
 
                 </div>
 
+            </div>
+        }
+        else
+        {
+            <h2>Chờ chút</h2>
+        }
     </div>
-}
-else{
-    <h2>Chờ chút</h2>
-}
-</div>
 </div>
 @code {
     [Parameter]
@@ -211,7 +221,7 @@ else{
     public async Task OpenRate(int productId)
     {
         await dialogService.OpenAsync<Rate>($"Đánh giá sản phẩm",
-              new Dictionary<string, object>() { { "ProductId", productId }, { "Mode" , FormEditMode.New} },
+              new Dictionary<string, object>() { { "ProductId", productId }, { "Mode", FormEditMode.New } },
               new DialogOptions() { Width = "400px", Height = "312px", Resizable = true, Draggable = false, CssClass = "modal-content" });
 
     }

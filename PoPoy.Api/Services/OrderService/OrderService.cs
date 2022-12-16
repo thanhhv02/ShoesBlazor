@@ -73,7 +73,7 @@ namespace PoPoy.Api.Services.OrderService
         public async Task<Order> GetOrderWithUser(string orderId)
         {
             var orderDetails = await _context.Orders.Include(p => p.OrderDetails).ThenInclude(p=>p.Product).ThenInclude(p => p.ProductImages)
-                .Include(p => p.User).Include(p => p.Address).Include(p=>p.Shipper).Where(p => p.Id == orderId).FirstOrDefaultAsync(); ;  
+                .Include(p => p.User).Include(p => p.Address).Include(p=>p.Shipper).Include(x=>x.Refund).Where(p => p.Id == orderId).FirstOrDefaultAsync(); 
 
             return orderDetails;
         }
