@@ -3,7 +3,9 @@
 @inject IToastService _toastSvc;
 @inject DialogService dialogSvc;
 @inject NavigationManager NavigationManager;
+@implements IDisposable
 <div class="cardify messaging_sidebar">
+    
     @try
     {
         if (_svc.ListOrderResponse.Items != null || _svc.ListOrderResponse.Items.Count > 0)
@@ -61,29 +63,33 @@
 
                         </div>
                     }
-                    <Pagination MetaData="@_svc.ListOrderResponse.MetaData" Spread="2" SelectedPage="SelectedPage" />
+                    
                 </div>
             </div>
+        }
+        else
+        {
+            <em>Không tìm thấy đơn hàng nào !</em>
         }
     }
     catch { }
 </div>
 
 @code {
-    [Parameter]
-    public string id { get; set; }
     private string url { get; set; }
-    private ProductParameters _productParameters = new ProductParameters();
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await GetOrders();
+        _svc.OrderListChanged += StateHasChanged;
     }
-    private async Task SelectedPage(int page)
+    protected override void OnParametersSet()
     {
-        _productParameters.PageNumber = page;
-
-        await GetOrders();
+        _svc.OrderListChanged += StateHasChanged;
     }
+    public void Dispose()
+    {
+        _svc.OrderListChanged -= StateHasChanged;
+    }
+    
 
     public async void RedirectToPayment(string orderId)
     {
@@ -91,11 +97,7 @@
         NavigationManager.NavigateTo(url);
     }
 
-    public async Task GetOrders()
-    {
-        await _svc.GetOrders(_productParameters);
-        await _svc.GetOrderDetails(_svc.ListOrderResponse.Items.FirstOrDefault().Id.ToString());
-    }
+    
     public async void Clicked(string id)
     {
         await _svc.GetOrderDetails(id);
@@ -107,7 +109,7 @@
         if (result.Value == true)
         {
             await _svc.CancelOrder(orderId);
-            await GetOrders();
+            //await GetOrders();
             StateHasChanged();
         }
 

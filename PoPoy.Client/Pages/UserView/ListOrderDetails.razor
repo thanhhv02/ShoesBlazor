@@ -14,88 +14,95 @@
         <div class="conversation">
             @if (_svc.ListOrderDetailsResponse == null)
             {
-<LoadingScreen></LoadingScreen> }
-else
-{
-<div class="head">
-    <div class="chat_avatar">
-        @*<img src="@_svc.ListOrderDetailsResponse.Products.FirstOrDefault().ProductImages.FirstOrDefault().ImagePath" alt="SW (Bá) avatar">*@
-    </div>
-    <div class="name_time">
-        @if (_svc.ListOrderDetailsResponse.PaymentMode != null)
-        {
-<div>
-    <div class="row">
-        <div class="col-6">
+                <LoadingScreen></LoadingScreen>
+            }
+            else
+            {
+                <div class="head">
+                    <div class="chat_avatar">
+                        @*<img src="@_svc.ListOrderDetailsResponse.Products.FirstOrDefault().ProductImages.FirstOrDefault().ImagePath" alt="SW (Bá) avatar">*@
+                    </div>
+                    <div class="name_time">
+                        @if (_svc.ListOrderDetailsResponse.PaymentMode != null)
+                        {
+                            <div>
+                                <div class="row">
+                                    <div class="col-6">
 
-            <span><strong style="font-size:15px;margin-right: 11px;">Tổng tiển: </strong></span><h4 style="font-size: 20px;font-weight:bold;color:#ff1818">@FormatData.FormatAsPrice(@_svc.ListOrderDetailsResponse.TotalPrice)</h4>
-        </div>
-        <div class="col-6">
-            <p>@_svc.ListOrderDetailsResponse.OrderDate</p>
-        </div>
-    </div>
-</div>
-                    <br />
-                                        <span class="paymentmode"><strong>Phương thức thanh toán:</strong> @_svc.ListOrderDetailsResponse.PaymentMode</span>
-                                                            <br />
-                                                                                <br />
-                                                                                                    <span class="orderstatus"><strong>Trạng thái đơn hàng:</strong> @_svc.ListOrderDetailsResponse.OrderStatus</span>
-                                                                                                                        <br />
-                                                                                                                                            <br />
-                                                                                                                                                                @if (_svc.ListOrderDetailsResponse.PaymentMode != "CashOnDelivery")
-                                                                                                                                                                {
-                                                                                                                                            <span class="orderstatus"><strong>Trạng thái thanh toán:</strong> @_svc.ListOrderDetailsResponse.PaymentStatus</span>}}
+                                        <span><strong style="font-size:15px;margin-right: 11px;">Tổng tiển: </strong></span><h4 style="font-size: 20px;font-weight:bold;color:#ff1818">@FormatData.FormatAsPrice(@_svc.ListOrderDetailsResponse.TotalPrice)</h4>
+                                    </div>
+                                    <div class="col-6">
+                                        <p>@_svc.ListOrderDetailsResponse.OrderDate</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <span class="paymentmode"><strong>Phương thức thanh toán:</strong> @_svc.ListOrderDetailsResponse.PaymentMode</span>
+                            <br />
+                            <br />
+                            <span class="orderstatus"><strong>Trạng thái đơn hàng:</strong> @_svc.ListOrderDetailsResponse.OrderStatus</span>
+                            <br />
+                            <br />
+                            @if (_svc.ListOrderDetailsResponse.PaymentMode != "CashOnDelivery")
+                            {
+                                <span class="orderstatus"><strong>Trạng thái thanh toán:</strong> @_svc.ListOrderDetailsResponse.PaymentStatus</span>
+                            }               }
 
-    </div>
+                    </div>
 
-</div>
+                </div>
                 <div class="body" style="word-break: break-word;">
                     <p>
                         <br>
                     </p>
                     @if (_svc.ListOrderDetailsResponse.Products != null)
                     {
-    <div class="row">
+                        <div class="row">
 
-        @foreach (var item in _svc.ListOrderDetailsResponse.Products)
-        {
-
-<div class="col-8">
-    <p><a href="/product-detail/@item.ProductId"><strong style="font-size:20px">@item.Title</strong></a></p>
-    <p style="font-size:17px;">Size: <strong>@item.ProductSize</strong></p>
-    <p style="font-size:17px;margin-bottom: 10px;">Số lượng: <strong>@item.Quantity</strong></p>
-
-    @*<button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
-        @onclick="@(() => WriteReview(item))">
-                Đánh giá sản phẩm này
-            </button>*@
-
-    <div class="d-flex">
-        <RadzenButton Disabled="@(_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Delivered || _svc.ListOrderDetailsResponse.OrderStatus == OrderStatus.Cancelled)" Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
-                      Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
-    </div>
-</div>
-                        <div class="col-4">
-                            @try
+                            @foreach (var item in _svc.ListOrderDetailsResponse.Products)
                             {
-    @if (item.ProductImages != null || item.ProductImages.Count > 0)
-    {
-@foreach (var item2 in item.ProductImages)
-{
-<div class="col-4">
-    <p><img src="@item2.ImagePath" alt="" class="fr-dii fr-draggable" title=""><br></p>
-</div>}}}
-catch { }
 
-                        </div>}
+                                <div class="col-8">
+                                    <p><a href="/product-detail/@item.ProductId"><strong style="font-size:20px">@item.Title</strong></a></p>
+                                    <p style="font-size:17px;">Size: <strong>@item.ProductSize</strong></p>
+                                    <p style="font-size:17px;margin-bottom: 10px;">Số lượng: <strong>@item.Quantity</strong></p>
 
-    </div>}
-                </div>}
+                                    @*<button class="btn btn-outline-secondary" style="height: 40px; width: 100px"
+                        @onclick="@(() => WriteReview(item))">
+                        Đánh giá sản phẩm này
+                        </button>*@
+
+                                    <div class="d-flex">
+                                        <RadzenButton Disabled="@(_svc.ListOrderDetailsResponse.OrderStatus != OrderStatus.Delivered || _svc.ListOrderDetailsResponse.OrderStatus == OrderStatus.Cancelled)" Icon="rate_review" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined"
+                                          Click="()=>OpenRate(item.ProductId)" Text="Đánh giá"></RadzenButton>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    @try
+                                    {
+                                        @if (item.ProductImages != null || item.ProductImages.Count > 0)
+                                        {
+                                            @foreach (var item2 in item.ProductImages)
+                                            {
+                                                <div class="col-4">
+                                                    <p><img src="@item2.ImagePath" alt="" class="fr-dii fr-draggable" title=""><br></p>
+                                                </div>
+                                            }                           }                      }
+                                    catch { }
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>
 
-@code { private string url { get; set; }
+@code {
+    private string url { get; set; }
 
     protected async override void OnInitialized()
     {
@@ -136,4 +143,5 @@ catch { }
     {
         await dialogService.OpenAsync<PoPoy.Client.Pages.Chat.Chat>("Hộp thư", options: new DialogOptions() { Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });
 
-    } }
+    }
+}

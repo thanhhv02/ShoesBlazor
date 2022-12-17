@@ -14,7 +14,7 @@
                 <a href="/products">Sản phẩm</a>*@
             </div>
         </div>
-        <Sort OnSortChanged="SortChanged"></Sort>
+        <Sort OnSortChanged="SortChanged" SortOptions="SortOptions"></Sort>
 
         <div class="box">
             <div class="row">
@@ -86,4 +86,15 @@
         _productParameters.OrderBy = orderBy;
         await GetProducts();
     }
+    Dictionary<string, string> SortOptions = new Dictionary<string, string>()
+        {
+            ["Price"] = "Giá Thấp - Cao",
+            ["Price desc"] = "Giá Cao - Thấp",
+            ["DateCreated desc"] = "Mới nhất",
+            ["Views desc"] = "Xem nhiều nhất",
+            ["ReviewAverage desc"] = "Đánh giá cao nhất",
+            ["Title"] = "Tên A-Z",
+            ["Title desc"] = "Tên Z-A",
+            ["CheckoutCount"] = "Sản phẩm mới",
+        };
 }

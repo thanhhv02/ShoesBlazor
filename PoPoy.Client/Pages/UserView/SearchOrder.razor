@@ -1,0 +1,41 @@
+﻿@using System.Threading
+@inject NavigationManager NavigationManager
+@inject IProductService ProductService
+<div class="search" style="margin: 0 auto;">
+    <input @bind-value="searchText"
+           @bind-value:event="oninput"
+           type="search"
+           list="products"
+           @onkeyup="HandleSearch"
+           class="form-control"
+           placeholder="Tìm kiếm theo mã sản phẩm, tên sản phẩm, tổng giá, phương thức thanh toán"
+           @ref="searchInput" />
+    <i class='bx bx-search-alt' @onclick="SearchOrders"></i>
+</div>
+@code {
+    private string searchText = string.Empty;
+    private List<string> suggestions = new List<string>();
+    protected ElementReference searchInput;
+    private Timer _timer;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await searchInput.FocusAsync();
+        }
+    }
+
+    public void SearchOrders()
+    {
+        NavigationManager.NavigateTo($"/user/list-order/search/{searchText}");
+    }
+
+    public async Task HandleSearch(KeyboardEventArgs args)
+    {
+        if ((args.Key == null || args.Key.Equals("Enter")) && searchText.Length >= 3)
+        {
+            SearchOrders();
+        }
+    }
+}

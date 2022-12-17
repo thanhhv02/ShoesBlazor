@@ -29,16 +29,9 @@
 </div>
 <Modal @ref="Modal"></Modal>
 @code {
-    Dictionary<string, string> SortOptions = new Dictionary<string, string>() {
-            ["Price"] = "Giá Thấp - Cao",
-            ["Price desc"] = "Giá Cao - Thấp",
-            ["DateCreated desc"] = "Mới nhất",
-            ["Views desc"] = "Xem nhiều nhất",
-            ["ReviewAverage desc"] = "Đánh giá cao nhất",
-            ["Title"] = "Tên A-Z",
-            ["Title desc"] = "Tên Z-A",
-        };
-    //List<string> SortOptions = new List<string> { "Mới nhất", "Xem nhiều nhất", "Nhiều nhận xét", "Đánh giá cao nhất", "A-Z", "Z-A" };
+    [Parameter]
+    public Dictionary<string, string> SortOptions{get;set;} = new Dictionary<string, string>();
+
     private PoPoy.Client.Shared.MainLayoutView.Modal Modal { get; set; }
     [Parameter]
     public EventCallback<string> OnSortChanged { get; set; }

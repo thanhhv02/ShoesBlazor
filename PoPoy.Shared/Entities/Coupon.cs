@@ -11,7 +11,6 @@ namespace PoPoy.Shared.Dto
         [Key]
         public int Id { get; set; }
         public string Key { get; set; }
-        public Product Product { get; set; }
         public int Type { get; set; }
         public int Quantity { get; set; }
         public DateTime? DateExpired { get; set; }

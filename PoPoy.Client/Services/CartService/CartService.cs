@@ -119,7 +119,7 @@ namespace PoPoy.Client.Services.CartService
                 });
             }
 
-            return result;
+            return result.ToList();
             //return products.Select(p => new Cart
             //{
             //    Quantity = storages.FirstOrDefault(s => s.ProductId == p.ProductId).Quantity,

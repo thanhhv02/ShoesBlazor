@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PoPoy.Api.Extensions;
 
 namespace PoPoy.Api.Services.OrderService
 {
@@ -179,7 +180,7 @@ namespace PoPoy.Api.Services.OrderService
                 PaymentStatus = o.PaymentStatus,
                 PaymentMode = o.PaymentMode
             }));
-
+            orderResponse = orderResponse.AsQueryable().Search(productParameters.searchText).ToList();
             return PagedList<OrderOverviewResponse>.ToPagedList(orderResponse, productParameters.PageNumber, productParameters.PageSize);
 
         }

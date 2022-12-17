@@ -10,6 +10,7 @@ namespace PoPoy.Client.Services.OrderService
 {
     public interface IOrderService
     {
+        event Action OrderListChanged;
         event Action OrderDetailsChanged;
         PagingResponse<OrderOverviewResponse> ListOrderResponse { get; set; }
         OrderDetailsResponse ListOrderDetailsResponse { get; set; }

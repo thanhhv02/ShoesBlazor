@@ -47,6 +47,7 @@ namespace PoPoy.Client.Services.OrderService
         public OrderDetailsResponse ListOrderDetailsResponse { get; set; } = new OrderDetailsResponse();
 
         public event Action OrderDetailsChanged;
+        public event Action OrderListChanged;
 
         public async Task<Refund> CancelOrder(string id)
         {
@@ -75,7 +76,10 @@ namespace PoPoy.Client.Services.OrderService
             httpInterceptorService.RegisterEvent();
             var queryStringParam = new Dictionary<string, string>
             {
-                ["pageNumber"] = productParameters.PageNumber.ToString()
+                ["pageNumber"] = productParameters.PageNumber.ToString(),
+                ["searchText"] = productParameters.searchText == null ? "" : productParameters.searchText,
+                ["pageSize"] = productParameters.PageSize.ToString(),
+                ["orderBy"] = productParameters.OrderBy
             };
             var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user", queryStringParam));
 
@@ -90,6 +94,8 @@ namespace PoPoy.Client.Services.OrderService
             ListOrderResponse.Items = JsonConvert.DeserializeObject<List<OrderOverviewResponse>>(content);
      
             ListOrderResponse.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
+
+            OrderListChanged.Invoke();
         }
 
 

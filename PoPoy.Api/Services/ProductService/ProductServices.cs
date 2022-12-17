@@ -45,8 +45,8 @@ namespace PoPoy.Api.Services.ProductService
             {
                 var list_product = await _dataContext.Products
                     .Search(productParameters.searchText)
-                    .Sort(productParameters.OrderBy)
-                    .SortByPrice(productParameters.OrderBy, _dataContext)
+                    .Sort(productParameters.OrderBy)//sort by product coloumn 
+                    .SortByPrice(productParameters.OrderBy, _dataContext)//sort by product quantity column
                     .Include(x => x.ProductImages)
                     .Include(x=>x.ProductQuantities)
                     .ToListAsync();
@@ -215,6 +215,8 @@ namespace PoPoy.Api.Services.ProductService
                             .Where(x => x.ProductId == p.Id)
                                 .Include(x => x.Product)
                                 .ThenInclude(x => x.ProductImages)
+                                .Include(x => x.Product)
+                                .ThenInclude(x => x.ProductQuantities)
                             .Where(x => x.SizeId == p.SizeId)
                                 .Include(x => x.Size)
                             .Where(x => x.ColorId == p.ColorId)

@@ -1,4 +1,6 @@
 ﻿@page "/user/list-order"
+@page "/user/list-order/search/{searchText}"
+@page "/user/list-order/search/"
 @inject IOrderService _svc;
 
 <UserNav></UserNav>
@@ -6,9 +8,14 @@
     <Authorized>
         <section class="message_area">
             <div class="container" style="margin-bottom:30px">
+                <Sort OnSortChanged="SortChanged" SortOptions="SortOptions"></Sort>
+                <div style="margin: 0 auto;">
+                    <SearchOrder></SearchOrder>
+                </div>
                 <div class="row">
                     <div class="col-lg-5">
-                        <ListOrder id="@id"></ListOrder>
+                        <ListOrder></ListOrder>
+                        @*<Pagination MetaData="@_svc.ListOrderResponse.MetaData" Spread="2" SelectedPage="SelectedPage" />*@
                     </div>
                     <div class="col-lg-7">
                         <ListOrderDetails></ListOrderDetails>
@@ -21,4 +28,48 @@
 @code {
     [Parameter]
     public string id { get; set; }
+    [Parameter]
+    public string searchText { get; set; }
+
+    private ProductParameters _productParameters = new ProductParameters();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (searchText != null)
+        {
+            _productParameters.PageNumber = 1;
+            _productParameters.searchText = searchText;
+        }
+        else
+        {
+            _productParameters = new ProductParameters();
+
+        }
+        await GetOrders();
+    }
+    private async Task SelectedPage(int page)
+    {
+        _productParameters.PageNumber = page;
+
+        await GetOrders();
+    }
+    public async Task GetOrders()
+    {
+        await _svc.GetOrders(_productParameters);
+        await _svc.GetOrderDetails(_svc.ListOrderResponse.Items.FirstOrDefault().Id.ToString());
+    }
+    private async Task SortChanged(string orderBy)
+    {
+        _productParameters.searchText = orderBy;
+        Console.WriteLine("orderBy " + _productParameters.searchText);
+        await GetOrders();
+    }
+    Dictionary<string, string> SortOptions = new Dictionary<string, string>()
+        {
+            ["Processing"] = "Đang xử lý",
+            ["Confirmed"] = "Được xác nhận",
+            ["Delivering"] = "Đang giao hàng",
+            ["Delivered"] = "Đã giao",
+            ["Cancelled"] = "Đã hủy",
+        };
 }

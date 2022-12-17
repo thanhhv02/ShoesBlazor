@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,5 +30,11 @@ namespace PoPoy.Shared.Dto
         public List<ProductInCategory> ProductInCategories { get; set; }
         public List<ProductQuantity> ProductQuantities { get; set; }
         public ICollection<Coupon> Coupons { get; set; }
+        [NotMapped]
+        [JsonIgnore]
+        public decimal MinPrice => ProductQuantities != null && ProductQuantities.Any() ? ProductQuantities.Min(x=>x.Price) : 0;
+        [NotMapped]
+        [JsonIgnore]
+        public decimal MaxPrice => ProductQuantities != null && ProductQuantities.Any() ? ProductQuantities.Max(x=>x.Price) : 0;
     }
 }
