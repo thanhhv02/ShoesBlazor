@@ -60,14 +60,14 @@ namespace PoPoy.Api.Extensions
             {
                 if (orderByQueryString.ToLower().EndsWith(" desc"))
                 {
-                    return (from t1 in dataContext.Products
+                    return (from t1 in products
                             join t2 in dataContext.ProductQuantities on t1.Id equals t2.Id
                             orderby t2.Price descending
                             select t1);
                 }
                 else
                 {
-                    return (from t1 in dataContext.Products
+                    return (from t1 in products
                             join t2 in dataContext.ProductQuantities on t1.Id equals t2.Id
                             orderby t2.Price ascending
                             select t1);
