@@ -22,18 +22,18 @@ namespace PoPoy.Api.Extensions
             return products.Where(p => p.Title.ToLower().Contains(lowerCaseSearchTerm) ||
                                     p.Description.ToLower().Contains(lowerCaseSearchTerm));
         }
-        public static IQueryable<Product> Sort(this IQueryable<Product> products, string orderByQueryString, DataContext dataContext)
+        public static IQueryable<Product> Sort(this IQueryable<Product> products, string orderByQueryString)
         {
             if (string.IsNullOrWhiteSpace(orderByQueryString))
                 return products.OrderBy(e => e.Title);
 
-            var t = from p in products
-                    join pq in dataContext.ProductQuantities on p.Id equals pq.ProductId
-                    join pc in dataContext.ProductColors on pq.ColorId equals pc.Id
-                    select new
-                    {
-                        p, pq, pc
-                    };
+            //var t = from p in products
+            //        join pq in dataContext.ProductQuantities on p.Id equals pq.ProductId
+            //        join pc in dataContext.ProductColors on pq.ColorId equals pc.Id
+            //        select new
+            //        {
+            //            p, pq, pc
+            //        };
             var orderParams = orderByQueryString.Trim().Split(',');
             var propertyInfos = typeof(Product).GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var orderQueryBuilder = new StringBuilder();
