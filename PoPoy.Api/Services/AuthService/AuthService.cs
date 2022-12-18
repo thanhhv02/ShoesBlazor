@@ -252,7 +252,7 @@ namespace PoPoy.Api.Services.AuthService
             if (await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber) != null)
                 return new ServiceErrorResponse<bool>("Số điện thoại đã được đăng ký");
 
-            if(EmailValidator.Validate(request.Email))
+            if(!EmailValidator.Validate(request.Email))
                 return new ServiceErrorResponse<bool>("Cần nhập đúng định dạng email");
 
             user = new User()
