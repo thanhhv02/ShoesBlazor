@@ -102,7 +102,7 @@ namespace PoPoy.Admin.Services.BroadCastService
 
         }
 
-        public async Task ReadChat(Guid senderId) 
+        public async Task ReadChat(HubConnection hubConnection, Guid senderId)
         {
             if (senderId == Guid.Empty)
             {
@@ -110,8 +110,12 @@ namespace PoPoy.Admin.Services.BroadCastService
             }
             var cl = await _authenticationStateProvider.GetAuthenticationStateAsync();
             var id = cl.User.GetUserId();
-         
-            var resp = await httpClient.PostAsync($"/api/BroadCast/ReadMessage?receiverId={id}&senderId={senderId}" , null);
+            var model = new ReadChatDto
+            {
+                SenderId = senderId, ReceiverId = Guid.Parse(id)
+            };
+            await  hubConnection.InvokeAsync("ReadChat", model);
+            //var resp = await httpClient.PostAsync($"/api/BroadCast/ReadMessage?receiverId={id}&senderId={senderId}" , null);
         }
 
         public async Task<ServiceResponse<List<ListChatSender>>> GetListChatSender()

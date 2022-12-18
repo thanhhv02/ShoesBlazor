@@ -31,9 +31,7 @@ namespace PoPoy.Admin.Pages.Chat
         protected override async Task OnInitializedAsync()
         {
             await LoadDataAsync();
-            var cr = ListChatSenders.FirstOrDefault();
-            if (cr != null) await SelectUserChat(cr.Id);
-            StateHasChanged();
+           
             Avatar = await broadCastService.GetUserAvtChat();
             hubConnection = await broadCastService.BuidHubWithToken(BroadCastType.Message);
             SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
@@ -45,7 +43,6 @@ namespace PoPoy.Admin.Pages.Chat
                         await ReceiveAsync(chat.Message, chat.Created.ToString("HH:mm"), chat.Avatar, chat.Data);
                         await jSRuntime.InvokeVoidAsync("sendChatmini2", chat.Message, chat.SenderId);
                         Current.SenderChats.Add(chat);
-                        await ScrollToBottom();
                     }
                     else
                     {
@@ -68,7 +65,11 @@ namespace PoPoy.Admin.Pages.Chat
 
                 });
             await broadCastService.StartAsync(hubConnection);
+            var cr = ListChatSenders.FirstOrDefault();
+            if (cr != null) await GetUserChat(cr.User.UserId);
             await ScrollToBottom();
+            StateHasChanged();
+
         }
         private async Task LoadDataAsync()
         {
@@ -88,25 +89,32 @@ namespace PoPoy.Admin.Pages.Chat
             await InvokeAsync(StateHasChanged);
         }
 
-        private async Task SelectUserChat(Guid id)
+        private async Task GetUserChat(Guid? id)
         {
-       
             var chats = new List<ChatDto>();
             ChatDtos = new List<ChatDto>();
-            Current = ListChatSenders.FirstOrDefault(p => p.Id == id);
+            Current = ListChatSenders.FirstOrDefault(p => p.User.UserId == id);
             chats = new List<ChatDto>(Current.SenderChats);
       
 
 
             chats.AddRange(Current.ReceiverChats);
             ChatDtos = chats.OrderBy(p => p.Created).ToList();
-            await broadCastService.ReadChat(Current.User.UserId.GetValueOrDefault());
+            await broadCastService.ReadChat(hubConnection,Current.User.UserId.GetValueOrDefault());
 
             StateHasChanged();
             await ScrollToBottom();
             await jSRuntime.InvokeVoidAsync("clearChat");
             await jSRuntime.InvokeVoidAsync("hideCount" , Current.User.UserId);
 
+        }
+
+        private async Task SelectUserChat(Guid? id)
+        {
+
+            var result = await broadCastService.GetListChatSender();
+            ListChatSenders = result.Data;
+            await GetUserChat(id);  
         }
 
 
@@ -126,7 +134,7 @@ namespace PoPoy.Admin.Pages.Chat
                 await jSRuntime.InvokeVoidAsync("sendChatmini2", Message, Current.User.UserId);
 
                 Message = string.Empty;
-
+           
             }
         }
 

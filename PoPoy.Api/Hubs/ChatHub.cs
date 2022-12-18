@@ -6,6 +6,7 @@ using PoPoy.Api.Services.BroadCastService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.Chats;
 using PoPoy.Shared.Enum;
+using PoPoy.Shared.ViewModels;
 using System;
 using System.Threading.Tasks;
 
@@ -37,7 +38,10 @@ namespace PoPoy.Api.Hubs
             var chat = mapper.Map<ChatDto>(chatDto);
             await broadCastService.SendMessageAllAdmin(chat);
         }
-
+        public async Task ReadChat(ReadChatDto chatDto)
+        {
+            await broadCastService.ReadMessage(chatDto.ReceiverId,chatDto.SenderId);
+        }
         public override Task OnConnectedAsync()
         {
             if (UserHandler.UserListChat.Count == 0)

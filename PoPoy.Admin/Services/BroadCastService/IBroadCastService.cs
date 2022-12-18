@@ -22,7 +22,7 @@ namespace PoPoy.Admin.Services.BroadCastService
         Task SendNotiCurrentUser(NotiSendConfig config); // send cho chính mình 
         Task SendMessageAllAdmin(string message, string dataImgBase64 = null);
         Task SendMessageUserId(HubConnection hub,string message, Guid? receiverId, string dataImgBase64 = null);
-        Task ReadChat(Guid senderId);
+        Task ReadChat(HubConnection hubConnection, Guid senderId);
         Task<string> GetUserAvtChat();
         Task SendInfoOrderId(string orderId);
         Task SendInfoOrderProductModel(OrderDetailsProductResponse product, OrderDetailsResponse order);

@@ -103,7 +103,7 @@ let best_product_list = document.querySelector('#best-products')
 
 products.forEach(e => {
     let prod = `
-        <div class="col-3 col-md-6 col-sm-12">
+        <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="product-card">
                 <div class="product-card-img">
                     <img src="${e.image1}" alt="">

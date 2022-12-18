@@ -19,14 +19,14 @@
         <div class="box">
             <div class="row">
                 @{ var isActive = IsFilter ? "active" : ""; }
-                <div class="col-xl-3 filter-col @isActive" id="filter-col">
-                    <div class="box filter-toggle-box">
+                <div class="col-xl-3 d-sm-none d-xl-block filter-col @isActive" id="filter-col">
+                    <div class="box d-none filter-toggle-box">
                         <button class="btn-flat btn-hover" @onclick="()=>ButtonFilterClick(false)" id="filter-close">Đóng</button>
                     </div>
                     <CategoryFilter></CategoryFilter>
                 </div>
-                <div class="col-xl-9">
-                    <div class="box filter-toggle-box">
+                <div class="col-xl-9 box_product">
+                    <div class="box d-none filter-toggle-box">
                         <button class="btn-flat btn-hover" @onclick="()=>ButtonFilterClick(true)" id="filter-toggle">Lọc</button>
                     </div>
                     <ProductList></ProductList>
