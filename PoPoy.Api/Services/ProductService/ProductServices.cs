@@ -47,6 +47,7 @@ namespace PoPoy.Api.Services.ProductService
                     .Search(productParameters.searchText)
                     .Sort(productParameters.OrderBy)//sort by product coloumn 
                     .SortByPrice(productParameters.OrderBy, _dataContext)//sort by product quantity column
+                    .SortByColor(productParameters.ColorId, _dataContext)//sort by product quantity column
                     .Include(x => x.ProductImages)
                     .Include(x=>x.ProductQuantities)
                     .ToListAsync();
