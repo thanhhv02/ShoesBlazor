@@ -89,13 +89,13 @@
     <footer class="bg-second">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <CategoryFilter></CategoryFilter>
                     <p>☎️&nbsp;<strong>Hotline Bán Hàng: 0909.300.746 - 0909.45.0001</strong></p>
                     <p>☎️&nbsp;<strong>Hotline CSKH: 0898 515 689</strong></p>
                 </div>
                 
-                <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="contact">
                         <h3 class="contact-header">
                             <img src="./images/logo.png" style="width:180px;height:75px;"/>
@@ -150,11 +150,7 @@
     public HttpInterceptorService Interceptor { get; set; }
     [Inject]
     public IAuthService authService{get;set;}
-    protected async override Task OnInitializedAsync()
-    {
-        if(await authService.IsUserAuthenticated())
-            Interceptor.RegisterEvent();
-    }
+
     public void Dispose() => Interceptor.DisposeEvent();
 }
 

@@ -35,7 +35,7 @@ namespace PoPoy.Api.Services.DashBoard
                 var query = dataContext.Orders.Where(p => p.OrderStatus == OrderStatus.Delivered);
                 var query2 = query.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:
@@ -264,6 +264,7 @@ namespace PoPoy.Api.Services.DashBoard
                     ProductId = p.ProductId,
                     OrderId = p.Order.Id,
                     Status = p.Order.OrderStatus,
+                    Date = p.Order.OrderDate
 
                 }).Take(10).ToListAsync();
 
@@ -297,7 +298,7 @@ namespace PoPoy.Api.Services.DashBoard
                         result.Add(itemP);
                     }
                 }
-               
+                result = result.Take(5).OrderByDescending(p => p.Count).ToList();
                 return new ServiceSuccessResponse<List<ReportProductTop>>(result);
             }
             catch (Exception e)                     

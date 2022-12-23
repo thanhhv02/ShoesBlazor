@@ -88,7 +88,7 @@ else
 
                     <RadzenDataGridColumn TItem="UserVM" Context="user" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
                         <Template>
-                            <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(user.Id.ToString())">
+                            <RadzenButton Text="Sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(user.Id.ToString())">
                             </RadzenButton>
                             <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask(user.Id)">
                             </RadzenButton>

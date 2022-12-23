@@ -644,11 +644,32 @@ progress {
   .container-sm, .container {
     max-width: 540px;
   }
+
+    .rz-steps ul{
+        display: block;
+    }
+    .rz-steps-number {
+        width: 40px;
+        height: 30px;
+        text-align: center;
+    }
 }
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
     max-width: 720px;
   }
+    .rz-steps ul {
+        display: block;
+    }
+
+    .rz-steps-number {
+        width: 40px;
+        height: 30px;
+        text-align: center;
+    }
+    #main {
+        padding: 9px;
+    }
 }
 @media (min-width: 992px) {
   .container-lg, .container-md, .container-sm, .container {

@@ -20,7 +20,9 @@ $(function() {
 
 $(document).ready(function () {
     window.scrollToBottom = function (id) {
-        $(id).animate({ scrollTop: $(id).prop("scrollHeight") }, "slow");
+        $("#chat2").focus(false);
+    
+        $(id).animate({ scrollTop: $(id).prop("scrollHeight") }, { queue: false, duration: 100 });
     }
     window.sendChat = function (message, time, srcAvt, data) {
         var srcData = message;

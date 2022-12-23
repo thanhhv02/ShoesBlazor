@@ -14,20 +14,19 @@
         @foreach (var item in notifications)
         {
             var isread = item.IsRead ? "read" : "text-danger";
-            var NewText = item.IsRead ? "" : "[New]";
             <div class="messages ">
                 <a href="@item.DataUrl" class="message recent" @onclick="() => ReadNoti(item)">
                     <div class="message_data">
                         <div class="name_time">
                             <div class="name">
-                                <b class="text-break text-wrap @isread">@item.Title @NewText</b>
+                                <b class="text-break text-wrap @isread">@item.Title</b>
                                 <div style="max-height: 100%; font-size: 13px; font-weight: 200" class="text-wrap  ">@item.Message</div>
 
                             </div>
                             <span class="time">
 
                             </span>
-                            <p>@item.Created.ToString("dd/MM/yyyy HH:mm")</p>
+                            <p>@AppExtensions.TimeAgo(item.Created)</p>
                         </div>
                     </div>
                 </a>

@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -14,12 +15,13 @@ namespace PoPoy.Client.Shared.Notify
 {
     public partial class Notify
     {
-         private HubConnection hubConnection { get; set; }
+        [Inject] private HubConnection hubConnection { get; set; }
         [Inject] private IConfiguration configuration { get; set; }
         [Inject] public ILocalStorageService localStorageService { get; set; }
         [Inject] public IBroadCastService broadCastService { get; set; }
         [Inject] public NavigationManager navigationManager { get; set; }
 
+        [Inject] public IToastService toastService { get; set; }
 
 
         private List<NotificationDto> notifications = new();
@@ -35,16 +37,16 @@ namespace PoPoy.Client.Shared.Notify
         protected override async Task OnInitializedAsync()
         {
             await Reload();
-            hubConnection = await broadCastService.BuidHubWithToken();
             SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
                 noti =>
                 {
+                    noti.IsRead = false;
                     notifications.Add(noti);
                     notifications =  notifications.OrderByDescending(p => p.Created).ToList();
+                    toastService.ShowInfo(noti.Message, noti.Title); 
                     StateHasChanged();
                 });
-
-            await broadCastService.StartAsync(hubConnection);
+            broadCastService.SetHub(hubConnection);
         }
 
     

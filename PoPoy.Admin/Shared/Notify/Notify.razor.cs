@@ -3,6 +3,7 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
+using Microsoft.JSInterop;
 using PoPoy.Admin.Services.BroadCastService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Enum;
@@ -15,12 +16,13 @@ namespace PoPoy.Admin.Shared.Notify
 {
     public partial class Notify
     {
-        private HubConnection hubConnection { get; set; }
+        [Inject] private HubConnection hubConnection { get; set; }
         [Inject] private IConfiguration configuration { get; set; }
         [Inject] public ILocalStorageService localStorageService { get; set; }
         [Inject] public IBroadCastService broadCastService { get; set; }
 
         [Inject] public IToastService toastService { get; set; }
+        [Inject] public IJSRuntime jSRuntime { get; set; }
 
         [Inject] public NavigationManager navigationManager { get; set; }
 
@@ -40,17 +42,17 @@ namespace PoPoy.Admin.Shared.Notify
         protected override async Task OnInitializedAsync()
         {
             await Reload();
-            hubConnection = await broadCastService.BuidHubWithToken();
+  
             SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
-                noti =>
+                async noti =>
                 {
                     notifications.Add(noti);
                     notifications = notifications.OrderByDescending(p => p.Created).ToList();
-                    toastService.ShowInfo(noti.Message);
+                    toastService.ShowInfo(noti.Message , noti.Title);
+                    await jSRuntime.InvokeVoidAsync("PlayTing");
                     StateHasChanged();
                 });
 
-            await broadCastService.StartAsync(hubConnection);
         }
 
 

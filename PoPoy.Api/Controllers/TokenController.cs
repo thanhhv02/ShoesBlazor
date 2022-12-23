@@ -25,22 +25,31 @@ namespace PoPoy.Api.Controllers
         [Route("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto tokenDto)
         {
-            if (tokenDto is null)
+            try
             {
-                return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request" });
+                if (tokenDto is null)
+                {
+                    return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request" });
+                }
+                var principal = _tokenService.GetPrincipalFromExpiredToken(tokenDto.Token);
+                var username = principal.Identity.Name;
+                var user = await _userManager.FindByNameAsync(username);
+                if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+                    return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request 2" });
+                var signingCredentials = _tokenService.GetSigningCredentials();
+                var claims = await _tokenService.GetClaims(user);
+                var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
+                var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                user.RefreshToken = _tokenService.GenerateRefreshToken();
+                await _userManager.UpdateAsync(user);
+                return Ok(new AuthResponseDto { Token = token, RefreshToken = user.RefreshToken, IsAuthSuccessful = true });
             }
-            var principal = _tokenService.GetPrincipalFromExpiredToken(tokenDto.Token);
-            var username = principal.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-            if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-                return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request 2" });
-            var signingCredentials = _tokenService.GetSigningCredentials();
-            var claims = await _tokenService.GetClaims(user);
-            var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            user.RefreshToken = _tokenService.GenerateRefreshToken();
-            await _userManager.UpdateAsync(user);
-            return Ok(new AuthResponseDto { Token = token, RefreshToken = user.RefreshToken, IsAuthSuccessful = true });
+            catch (Exception e)
+            {
+
+                return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = e.Message });
+
+            }
         }
     }
 }

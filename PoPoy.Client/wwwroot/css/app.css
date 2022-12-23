@@ -1116,12 +1116,12 @@ footer ul li {
 
     .slide-next,
     .slider:hover .slide-next {
-        right: 40%;
+        right: 11%;
     }
 
     .slide-prev,
     .slider:hover .slide-prev {
-        left: 40%;
+        left: 11%;
     }
 
     .slide-next,
@@ -1204,6 +1204,55 @@ footer ul li {
 }
 
 
+@media (max-width: 768px) {
+    .container-md, .container-sm, .container {
+        max-width: 720px;
+    }
+
+    .rz-steps [role='tablist'] {
+        display: block;
+    }
+
+    .rz-steps-number {
+        max-width: 40px;
+        max-height: 30px;
+        min-width: 40px;
+        min-height: 30px;
+        text-align: center;
+    }
+
+    .rz-steps-item {
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    #main {
+        padding: 9px;
+    }
+
+    .rz-tabview-nav {
+        display: block;
+    }
+    .dropdowns.dropdown--author {
+        right: -73% !important;
+    }
+    .dropdowns.messaging--dropdown {
+        padding: 0 !important;
+        width: 92vw !important;
+        right: -125% !important;
+    }
+    #giohang {
+        width: 92vw !important;
+        right: -15px !important;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .rz-legend-right {
+        bottom: -292px;
+    }
+}
 
 
     

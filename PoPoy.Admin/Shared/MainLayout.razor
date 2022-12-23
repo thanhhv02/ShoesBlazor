@@ -1,5 +1,7 @@
 ﻿@using Blazored.Toast
 @using Blazored.Toast.Configuration
+@using Microsoft.AspNetCore.SignalR.Client;
+@using PoPoy.Admin.Services.BroadCastService;
 @inherits LayoutComponentBase
 @implements IDisposable;
 <!-- ======= Header ======= -->
@@ -170,12 +172,26 @@
 
     [Inject]
     public HttpInterceptorService Interceptor { get; set; }
+
+    [Inject]
+    public HubConnection hubConnection { get; set; }
+    [Inject]
+    public IBroadCastService broadCastService { get; set; }
+
+    [Inject]
+    public IToastService toastService { get; set; }
+    [Inject]
+    public NavigationManager navigationManager { get; set; }
     [Inject]
     public IAuthService authService { get; set; }
+    [Inject]
+    public IJSRuntime jSRuntime { get; set; }
     protected async override Task OnInitializedAsync()
     {
         if (await authService.IsUserAuthenticated())
             Interceptor.RegisterEvent();
+        await broadCastService.StartAsync(hubConnection);
+
     }
     public void Dispose() => Interceptor.DisposeEvent();
 }

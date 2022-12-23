@@ -47,8 +47,51 @@ namespace PoPoy.Client.Helper
     {
         public static string FormatAsPrice(object value)
         {
+            return String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", decimal.Parse(value.ToString())).Replace("₫", "VNĐ");
 
-            return String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", decimal.Parse(value.ToString()));
+        }
+
+        public static string TimeAgo(this DateTime dateTime)
+        {
+            string result = string.Empty;
+            var timeSpan = DateTime.Now.Subtract(dateTime);
+
+            if (timeSpan <= TimeSpan.FromSeconds(60))
+            {
+                result = timeSpan.Seconds == 0 ? "Vừa mới đây" : string.Format("{0} giây trước", timeSpan.Seconds);
+            }
+            else if (timeSpan <= TimeSpan.FromMinutes(60))
+            {
+                result = timeSpan.Minutes > 1 ?
+                    String.Format("{0} phút trước", timeSpan.Minutes) :
+                    "khoảng một phút trước";
+            }
+            else if (timeSpan <= TimeSpan.FromHours(24))
+            {
+                result = timeSpan.Hours > 1 ?
+                    String.Format("{0} giờ trước", timeSpan.Hours) :
+                    "khoảng 1 giờ trước";
+            }
+            else if (timeSpan <= TimeSpan.FromDays(30))
+            {
+                result = timeSpan.Days > 1 ?
+                    String.Format("{0} ngày trước", timeSpan.Days) :
+                    "Hôm qua";
+            }
+            else if (timeSpan <= TimeSpan.FromDays(365))
+            {
+                result = timeSpan.Days > 30 ?
+                    String.Format("{0} tháng trước", timeSpan.Days / 30) :
+                    "khoảng một tháng trước";
+            }
+            else
+            {
+                result = timeSpan.Days > 365 ?
+                    String.Format("{0} năm trước", timeSpan.Days / 365) :
+                    "khoảng một năm trước";
+            }
+
+            return result;
         }
     }
 }

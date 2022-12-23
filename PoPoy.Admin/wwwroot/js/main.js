@@ -9,7 +9,7 @@ $(document).ready(function () {
         else {
             $('body').removeClass('toggle-sidebar');
         }
-        
+
     }
 
 
@@ -17,12 +17,13 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    window.currentChatUserId = '#chat-user'; 
+    window.currentChatUserId = '#chat-user';
     window.setId = function (userId) {
         currentChatUserId = "#chat-user_" + userId;
     }
     window.scrollToBottom = function (id) {
         $(id).animate({ scrollTop: $(id).prop("scrollHeight") }, { queue: false, duration: 0 });
+        $("#chatNe").focus()
     }
     window.sendChatmini = function (message, id) {
         if (message == "{{html}}") {
@@ -50,11 +51,9 @@ $(document).ready(function () {
         $("#chat-user_sub").empty();
     }
 
-    window.sendChat = function (message, time, srcAvt , data) {
-        if (!srcAvt) {
-            srcAvt = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp";
-        }
-      
+    window.sendChat = function (message, time, srcAvt, data) {
+        srcAvt = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp";
+
         html = `
                                             <div class="chat-message-right pb-4">
 												<div>
@@ -73,7 +72,7 @@ $(document).ready(function () {
     window.receiveChat = function (message, time, srcAvt, data) {
         debugger
         if (!srcAvt) {
-            srcAvt = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp";
+            srcAvt = "https://www.bootdey.com/img/Content/avatar/avatar5.png";
         }
         var srcData = message;
         if (srcData == "{{html}}") {
@@ -90,7 +89,13 @@ $(document).ready(function () {
 											</div>
 										</div>`;
         $("#chat-user_sub").append(html);
+        PlayMessage();
         scrollToBottom("#chat-user");
     }
-
+    window.PlayTing = function () {
+        document.getElementById("audioTing").play();
+    }
+    window.PlayMessage = function () {
+        document.getElementById("audioTingMessage").play();
+    }
 })

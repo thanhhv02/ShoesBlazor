@@ -29,7 +29,7 @@ namespace PoPoy.Admin.Services.BroadCastService
         private readonly IOrderService orderService;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IConfiguration configuration;
-
+        public HubConnection hubConnection { get; private set; }
         public BroadCastService(HttpClient httpClient, IAuthService authService, ILocalStorageService localStorageService, IOrderService orderService, AuthenticationStateProvider authenticationStateProvider, IConfiguration configuration)
         {
             this.httpClient = httpClient;
@@ -54,7 +54,8 @@ namespace PoPoy.Admin.Services.BroadCastService
         public async Task SendNotiAllAdmin(NotiSendConfig config)
         {
             var data = SetConfigNoti(config);
-            var resp = await httpClient.PostAsync($"/api/BroadCast/SendNotiAllAdmin", data.ToJsonBody());
+            await hubConnection.InvokeAsync("SendNotiAllAdmin", data);
+
         }
 
 
@@ -64,7 +65,8 @@ namespace PoPoy.Admin.Services.BroadCastService
             var cl = await _authenticationStateProvider.GetAuthenticationStateAsync();
             var id = cl.User.GetUserId();
             data.UserId = Guid.Parse(id);
-            var resp = await httpClient.PostAsync($"/api/BroadCast/SendNotiUserId", data.ToJsonBody());
+            await hubConnection.InvokeAsync("SendNotiUserId", data);
+
         }
 
 
@@ -74,7 +76,8 @@ namespace PoPoy.Admin.Services.BroadCastService
             if (UserId != Guid.Empty)
             {
                 data.UserId = UserId;
-                var resp = await httpClient.PostAsync($"/api/BroadCast/SendNotiUserId", data.ToJsonBody());
+                await hubConnection.InvokeAsync("SendNotiUserId", data);
+
             }
         }
 
@@ -82,7 +85,8 @@ namespace PoPoy.Admin.Services.BroadCastService
         {
 
             CreateOrUpdateChatDto model = new() { Data = data, Message = message, Avatar = await GetUserAvtChat() };
-            var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
+            await hubConnection.InvokeAsync("SendNotiUserId", model);
+
 
         }
 
@@ -90,19 +94,12 @@ namespace PoPoy.Admin.Services.BroadCastService
         public async Task SendMessageUserId(string message, Guid? receiverId, string data = null)
         {
 
-            CreateOrUpdateChatDto model = new() { Data = data, Message = message, ReceiverId = receiverId, Avatar = await GetUserAvtChat() };
-            var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageUserId", model.ToJsonBody());
-
-        }
-        public async Task SendMessageUserId(HubConnection hub ,string message, Guid? receiverId, string data = null)
-        {
-
             CreateOrUpdateChatDto model = new() { Data = data, Message = message, ReceiverId = receiverId, Avatar = await GetUserAvtChat() , SenderId = Guid.Parse(await GetUserIdCurrentChat()) };
-            await hub.InvokeAsync("SendMessageUserId" , model);
+            await hubConnection.InvokeAsync("SendMessageUserId", model);
 
         }
 
-        public async Task ReadChat(HubConnection hubConnection, Guid senderId)
+        public async Task ReadChat( Guid senderId)
         {
             if (senderId == Guid.Empty)
             {
@@ -115,6 +112,7 @@ namespace PoPoy.Admin.Services.BroadCastService
                 SenderId = senderId, ReceiverId = Guid.Parse(id)
             };
             await  hubConnection.InvokeAsync("ReadChat", model);
+
             //var resp = await httpClient.PostAsync($"/api/BroadCast/ReadMessage?receiverId={id}&senderId={senderId}" , null);
         }
 
@@ -144,7 +142,10 @@ namespace PoPoy.Admin.Services.BroadCastService
             return AvatarPath;
         }
 
-
+        public void SetHub(HubConnection hub)
+        {
+            this.hubConnection = hub;
+        }
 
         public async Task<ServiceResponse<List<ListChatUser>>> GetListChatUser()
         {
@@ -245,12 +246,12 @@ namespace PoPoy.Admin.Services.BroadCastService
                              <p class=""col-12""><b>Thông tin đơn hàng: mã đơn hàng #{order.Id}</b></p>
                         </div>
                         <div class=""row"">
-                            <div class=""col-6 text-nowrap""><div class=""h5 pb-2 border-bottom border-danger"">Ngày đặt</div> {order.OrderDate}</div>
-                            <div class=""col-6 text-nowrap""><div class=""h5 pb-2 border-bottom border-danger"">Trạng thái</div> {order.OrderStatus}</div>
+                            <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Ngày đặt</div> {order.OrderDate}</div>
+                            <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Trạng thái</div> {order.OrderStatus}</div>
                         </div>
                         <div class=""row"">
-                            <div class=""col-6 text-nowrap""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {order.TotalPrice}</div>
-                            <div class=""col-6 text-nowrap""><div class=""h5 pb-2 border-bottom border-danger"">Phương thức</div> {order.PaymentMode}</div>
+                            <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {order.TotalPrice}</div>
+                            <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Phương thức</div> {order.PaymentMode}</div>
 
                         </div>
                         <div>
@@ -276,16 +277,19 @@ namespace PoPoy.Admin.Services.BroadCastService
             var resp = await httpClient.PostAsync($"/api/BroadCast/ReadAllNoti?userId={id}", null);
         }
 
-        public async Task<HubConnection> BuidHubWithToken(string broadCastType = BroadCastType.Notify)
+        public HubConnection BuidHubWithToken()
         {
-            var hubstring = broadCastType == BroadCastType.Notify ? "notificationHub" : broadCastType == BroadCastType.Order ? "orderhub" : "chathub";
-            var token = await localStorageService.GetItemAsStringAsync("authToken");
-            token = token.Remove(0, 1);
-            token = token.Remove(token.Length - 1, 1);
+
             var hostApi = configuration["BackendApiUrl"];
-            return new HubConnectionBuilder().WithUrl(hostApi + hubstring, options =>
+            return new HubConnectionBuilder().WithUrl(hostApi + "appHub", options =>
             {
-                options.AccessTokenProvider = () => Task.FromResult(token);
+                options.AccessTokenProvider = async () =>
+                {
+                    var token = await localStorageService.GetItemAsStringAsync("authToken");
+                    token = token.Remove(0, 1);
+                    token = token.Remove(token.Length - 1, 1);
+                    return token;
+                };
             }).WithAutomaticReconnect().Build();
         }
 
@@ -297,6 +301,8 @@ namespace PoPoy.Admin.Services.BroadCastService
                 else
                     Console.WriteLine("Connected to Hub ^^");
             });
+            this.hubConnection = hubConnection;
+
         }
     }
 }

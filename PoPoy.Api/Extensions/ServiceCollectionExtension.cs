@@ -112,9 +112,7 @@ namespace PoPoy.Api.Extensions
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                ((path.StartsWithSegments("/notificationHub") ||
-                                (path.StartsWithSegments("/chatHub")) ||
-                                (path.StartsWithSegments("/orderhub")))))
+                                path.StartsWithSegments("/appHub"))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;

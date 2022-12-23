@@ -79,7 +79,7 @@ namespace PoPoy.Admin.Pages.Dashboard
         {
             //Console.WriteLine((decimal)(value));
             //return ((decimal)value).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
-            return String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", decimal.Parse(value.ToString()));
+            return String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", decimal.Parse(value.ToString())).Replace("₫", "VNĐ");
         }
         string FormatAsDay(object value)
         {

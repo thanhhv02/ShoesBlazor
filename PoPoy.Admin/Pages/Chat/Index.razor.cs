@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
@@ -19,11 +20,13 @@ namespace PoPoy.Admin.Pages.Chat
         [Inject] IBroadCastService broadCastService { get; set; }
         [Inject] IConfiguration configuration { get; set; }
         [Inject] private IJSRuntime jSRuntime { get; set; }
+        [Inject] private IToastService toastService { get; set; }
+        [Inject] private NavigationManager navigationManager { get; set; }
 
         private List<ListChatSender> ListChatSenders = new();
         private ListChatSender Current;
         private List<ChatDto> ChatDtos = new List<ChatDto>();
-        private HubConnection hubConnection { get; set; }
+        [Inject] private HubConnection hubConnection { get; set; }
         private string hostClient;
         private string Message = string.Empty;
         private string Avatar = string.Empty;
@@ -33,14 +36,16 @@ namespace PoPoy.Admin.Pages.Chat
             await LoadDataAsync();
            
             Avatar = await broadCastService.GetUserAvtChat();
-            hubConnection = await broadCastService.BuidHubWithToken(BroadCastType.Message);
+            Console.WriteLine("chat");
+            broadCastService.SetHub(hubConnection);
+            hubConnection.Remove(BroadCastType.Message);
             SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
                 async chat =>
                 {
                     chat.IsMe = false;
                     if (chat.SenderId == Current.User.UserId)
                     {
-                        await ReceiveAsync(chat.Message, chat.Created.ToString("HH:mm"), chat.Avatar, chat.Data);
+                        await ReceiveAsync(chat.Message, AppExtensions.TimeAgo(chat.Created), chat.Avatar, chat.Data);
                         await jSRuntime.InvokeVoidAsync("sendChatmini2", chat.Message, chat.SenderId);
                         Current.SenderChats.Add(chat);
                     }
@@ -62,9 +67,10 @@ namespace PoPoy.Admin.Pages.Chat
 
                     StateHasChanged();
 
-
                 });
-            await broadCastService.StartAsync(hubConnection);
+            
+            hubConnection.On<ChatDto>(BroadCastType.Message, p => toastService.ShowInfo(p.Message == "{{html}}" ? "Thông tin đơn hàng" : p.Message, "Tin nhắn mới", async () => { hubConnection.Remove(BroadCastType.Message);  navigationManager.NavigateTo("/chat"); await jSRuntime.InvokeVoidAsync("PlayMessage"); hubConnection.Remove(BroadCastType.Message); }));
+
             var cr = ListChatSenders.FirstOrDefault();
             if (cr != null) await GetUserChat(cr.User.UserId);
             await ScrollToBottom();
@@ -100,7 +106,7 @@ namespace PoPoy.Admin.Pages.Chat
 
             chats.AddRange(Current.ReceiverChats);
             ChatDtos = chats.OrderBy(p => p.Created).ToList();
-            await broadCastService.ReadChat(hubConnection,Current.User.UserId.GetValueOrDefault());
+            await broadCastService.ReadChat(Current.User.UserId.GetValueOrDefault());
 
             StateHasChanged();
             await ScrollToBottom();
@@ -130,7 +136,7 @@ namespace PoPoy.Admin.Pages.Chat
             if (!string.IsNullOrEmpty(Message))
             {
                 await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.Now.ToString("HH:mm"), Avatar);
-                await broadCastService.SendMessageUserId(hubConnection,Message , Current.User.UserId);
+                await broadCastService.SendMessageUserId(Message , Current.User.UserId);
                 await jSRuntime.InvokeVoidAsync("sendChatmini2", Message, Current.User.UserId);
 
                 Message = string.Empty;

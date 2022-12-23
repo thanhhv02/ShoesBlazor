@@ -54,17 +54,16 @@
                             }
                             <div class="col-sm-8">
                                 <h4 style="font-weight:bold">@cart.Product.Title</h4> <span class="xmark">X</span>
-                                <p class="badge bg-secondary" id="autos"><strong>Size Giày: @cart.SizeName</strong></p> <span class="badge bg-secondary" id="autos2"><strong>Color: @cart.ColorName</strong></span>
-                                <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" MAX_QUANTITY_PRODUCT="@cart.ProductVariantQuantity" QuantityChanged="() => StateHasChanged()" />
+                                <p class="badge bg-secondary" style="font-size: 15px" id="autos"><strong>Size Giày: @cart.SizeName</strong></p> <span style="font-size: 15px" class="badge bg-secondary" id="autos2"><strong>Color: @cart.ColorName</strong></span>
                                 <div class="d-flex flex-row align-items-center mt-3">
-                                    <i class="oi oi-trash"></i>
+                                <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" MAX_QUANTITY_PRODUCT="@cart.ProductVariantQuantity" QuantityChanged="() => StateHasChanged()" />
                                     @*<button class="btn btn-danger deleteBtn" href="javascript:void(0)" @onclick="@(() => RemoveCart(cart))">Xóa</button>*@
                                     <RadzenButton Icon="delete_forever" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Danger" Class="m-1 deleteBtn" Click="args => RemoveCart(cart)">
                                     </RadzenButton>
                                 </div>
                             </div>
-                            <div class="col-sm-2 priceInfo">
-                                <h4>@cart.Price.ToString("n0") ₫</h4>
+                            <div class="col-sm-4 priceInfo">
+                                <h5>@cart.Price.ToString("n0") VNĐ</h5>
                             </div>
                         </div>
                         <hr />
@@ -75,7 +74,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2">Tổng : @(CalcTotalQuantity()) sản phẩm (đã bao gồm <span style="color:tomato">10%</span> thuế)  </h5>
-                        <h4 class="card-title text-danger priceTotal">@CalcTotalAmount().ToString("n0") ₫</h4>
+                        <h4 class="card-title text-danger priceTotal">@CalcTotalAmount().ToString("n0") VNĐ</h4>
                         <div style="text-align:left;margin:0px;">
                             <style>
                                 fieldset {

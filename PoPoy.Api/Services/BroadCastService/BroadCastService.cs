@@ -16,17 +16,13 @@ namespace PoPoy.Api.Services.BroadCastService
 {
     public class BroadCastService : IBroadCastService
     {
-        private readonly IHubContext<OrderHub> orderContext;
-        private readonly IHubContext<NotificationHub> hubContext;
-        private readonly IHubContext<ChatHub> chatHubContext;
+        private readonly IHubContext<AppHub> appHubContext;
         private readonly INotificationService notificationService;
         private readonly IChatService chatService;
 
-        public BroadCastService(IHubContext<OrderHub> orderContext, IHubContext<NotificationHub> hubContext, IHubContext<ChatHub> chatHubContext, INotificationService notificationService, IChatService chatService)
+        public BroadCastService(IHubContext<AppHub> appHubContext, INotificationService notificationService, IChatService chatService)
         {
-            this.orderContext = orderContext;
-            this.hubContext = hubContext;
-            this.chatHubContext = chatHubContext;
+            this.appHubContext = appHubContext;
             this.notificationService = notificationService;
             this.chatService = chatService;
         }
@@ -45,7 +41,7 @@ namespace PoPoy.Api.Services.BroadCastService
             notification.Created = DateTime.Now;
             notification.IsRead = false;
             await notificationService.CreateNotification(notification);
-            await hubContext.Clients.All.SendAsync(BroadCastType.Notify, notification);
+            await appHubContext.Clients.All.SendAsync(BroadCastType.Notify, notification);
         }
 
         public async Task SendNotifyAllAdmin(NotificationDto notification)
@@ -54,7 +50,7 @@ namespace PoPoy.Api.Services.BroadCastService
             notification.Created = DateTime.Now;
             notification.IsRead = false;
             var userIds = await notificationService.CreateNotificationAllAdmin(notification);
-            await hubContext.Clients.Users(userIds).SendAsync(BroadCastType.Notify, notification);
+            await appHubContext.Clients.Users(userIds).SendAsync(BroadCastType.Notify, notification);
         }
 
         public async Task SendNotifyUserId(NotificationDto notification)
@@ -63,7 +59,7 @@ namespace PoPoy.Api.Services.BroadCastService
             notification.Created = DateTime.Now;
             notification.IsRead = false;
             await notificationService.CreateNotificationUserId(notification);
-            await hubContext.Clients.User(notification.UserId.ToString()).SendAsync(BroadCastType.Notify, notification);
+            await appHubContext.Clients.User(notification.UserId.ToString()).SendAsync(BroadCastType.Notify, notification);
         }
 
         public async Task<List<ListChatSender>> GetListChatSender(Guid userId)
@@ -91,7 +87,7 @@ namespace PoPoy.Api.Services.BroadCastService
             chatDto.IsRead = false;
             chatDto.IsMe = true;
             var userIds = await chatService.CreateChatAllAdmin(chatDto);
-            await chatHubContext.Clients.Users(userIds).SendAsync(BroadCastType.Message, chatDto);
+            await appHubContext.Clients.Users(userIds).SendAsync(BroadCastType.Message, chatDto);
         }
 
         public async Task SendMessageUserId(ChatDto chatDto)
@@ -100,13 +96,13 @@ namespace PoPoy.Api.Services.BroadCastService
             chatDto.IsRead = false;
             chatDto.IsMe = true;
             await chatService.CreateChatUserId(chatDto);
-            await chatHubContext.Clients.User(chatDto.ReceiverId.ToString()).SendAsync(BroadCastType.Message, chatDto);
+            await appHubContext.Clients.User(chatDto.ReceiverId.ToString()).SendAsync(BroadCastType.Message, chatDto);
         }
 
         public async Task SendOrderForShipper(Guid shipperId)
         {
            
-            await orderContext.Clients.User(shipperId.ToString()).SendAsync(BroadCastType.Order,"Đơn hàng mới");
+            await appHubContext.Clients.User(shipperId.ToString()).SendAsync(BroadCastType.Order,"Đơn hàng mới");
         }
 
 

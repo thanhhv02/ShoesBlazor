@@ -1,7 +1,7 @@
 ﻿@page "/chat"
 @attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
 
-<div class="card">
+<div class="card mb-3" style="max-height:100vh">
     <div class="card-body card-chat">
 
         <div class="">
@@ -23,7 +23,7 @@
                             @{
                             }
                             <div id="usercount_@item.User.UserId" style="display: @(item.User.CountUnRead > 0 ? "block" : "none")" class="badge bg-success main-chat_count ">@item.User.CountUnRead</div>
-                            <div class="d-flex align-items-start">
+                            <div class="d-flex align-items-start p-1 mr-1">
                                 @{
                                     item.User.AvatarPath = string.IsNullOrEmpty(item.User.AvatarPath) ? "https://bootdey.com/img/Content/avatar/avatar5.png" : item.User.AvatarPath;
                                 }
@@ -84,7 +84,7 @@
                                                         @((MarkupString)message.Data)
 
                                                     </div>
-                                                    <div class="text-muted small text-nowrap mt-2 text-end">@message.Created.ToString("hh:mm")</div>
+                                                    <div class="text-muted small text-nowrap mt-2 text-end">@AppExtensions.TimeAgo(message.Created)</div>
 
                                                 </div>
                                             </div>
@@ -98,7 +98,7 @@
                                                 <div class="flex-shrink-1 bg-light rounded py-1 px-3 ml-3">
                                                     @*<div class="font-weight-bold mb-1">You</div>*@
                                                     @message.Message
-                                                    <div class="text-muted small text-nowrap mt-2 text-end">@message.Created.ToString("hh:mm")</div>
+                                                    <div class="text-muted small text-nowrap mt-2 text-end">@AppExtensions.TimeAgo(message.Created)</div>
 
                                                 </div>
                                             </div>
@@ -120,7 +120,7 @@
                                                         @((MarkupString)message.Data)
 
                                                     </div>
-                                                    <div class="text-muted small text-nowrap mt-2">@message.Created.ToString("hh:mm")</div>
+                                                    <div class="text-muted small text-nowrap mt-2">@AppExtensions.TimeAgo(message.Created)</div>
 
                                                 </div>
                                             </div>
@@ -134,7 +134,7 @@
                                                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3 text_message">
                                                     @*<div class="font-weight-bold mb-1">@Current.User.FullName</div>*@
                                                     @message.Message
-                                                    <div class="text-muted small text-nowrap mt-2">@message.Created.ToString("hh:mm")</div>
+                                                    <div class="text-muted small text-nowrap mt-2">@AppExtensions.TimeAgo(message.Created)</div>
 
                                                 </div>
                                             </div>
@@ -150,17 +150,21 @@
                             </div>
                         </div>
 
-                        <form @onsubmit="SendAsync" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-
-                            <input @bind="Message" type="text" class="form-control form-control-lg"
-                                   placeholder="Type message">
-
-                            <a class="ms-3" @onclick="SendAsync " href="javascript:void(0)"><i class="fas fa-paper-plane"></i></a>
-                        </form>
 
                     </div>
+
                 }
             </div>
+
         </div>
+
     </div>
+
+    <form @onsubmit="SendAsync" class="card-footer text-muted d-flex justify-content-start align-items-center p-3 col-12 m-0">
+
+        <input id="chatNe" @bind="Message" type="text" class="form-control form-control-lg"
+               placeholder="Nhập tin nhắn">
+
+        <a class="ms-3" @onclick="SendAsync " href="javascript:void(0)"><i class="fas fa-paper-plane"></i></a>
+    </form>
 </div>

@@ -107,9 +107,7 @@ namespace PoPoy.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ChatHub>("/chathub");
-                endpoints.MapHub<NotificationHub>("/notificationhub");
-                endpoints.MapHub<OrderHub>("/orderhub");
+                endpoints.MapHub<AppHub>("/Apphub");
 
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();

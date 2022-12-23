@@ -22,7 +22,7 @@ namespace PoPoy.Client.Pages.Chat
         [Inject] private NavigationManager navigationManager { get; set; }
         [Inject] private DialogService dialogService { get; set; }
 
-        private HubConnection hubConnection { get; set; }
+        [Inject] private HubConnection hubConnection { get; set; }
         private string currentUserIdChat = string.Empty;
         private string Message = string.Empty;
         private string AvatarPath;
@@ -31,34 +31,17 @@ namespace PoPoy.Client.Pages.Chat
         protected override async Task OnInitializedAsync()
         {
 
-            hubConnection = await broadCastService.BuidHubWithToken(BroadCastType.Message);
-            await hubConnection.StartAsync();
-
-            SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
-                async chat =>
-                {
-                    if (chat.SenderId == Guid.Parse(currentUserIdChat))
-                    {
-                        await jSRuntime.InvokeVoidAsync("sendChat", chat.Message, chat.Created.ToString("HH:mm"), AvatarPath , chat.Data);
-
-                    }
-                    else
-                    {
-                        await ReceiveAsync(chat.Message, chat.Created.ToString("HH:mm") , chat.Avatar);
-
-                    }
-                    await ScrollToBottom();
-                    StateHasChanged();
-                });
 
             await LoadDataAsync();
 
             currentUserIdChat = await broadCastService.GetUserIdCurrentChat();
             string path = await broadCastService.GetUserAvtChat();
             AvatarPath = string.IsNullOrEmpty(path) ? "/images/avatar.jpg" : path;
+
             StateHasChanged();
+
         }
-   
+
         private async void OpenChat()
         {
             await dialogService.OpenAsync<Chat>("Hộp thư", options: new DialogOptions() { Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });
@@ -71,7 +54,7 @@ namespace PoPoy.Client.Pages.Chat
 
         private async Task ScrollToBottom()
         {
-            await Task.Delay(200);
+            await Task.Delay(300);
             await jSRuntime.InvokeVoidAsync("scrollToBottom", "#chat-user");
         }
 
@@ -83,7 +66,7 @@ namespace PoPoy.Client.Pages.Chat
                 await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.Now.ToString("HH:mm"), AvatarPath);
                 CreateOrUpdateChatDto model = new() { Data = null, Message = Message, Avatar =  AvatarPath, SenderId = Guid.Parse(currentUserIdChat) };
                 // var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
-                await broadCastService.SendMessageAllAdmin(hubConnection, message: Message);
+                await broadCastService.SendMessageAllAdmin( message: Message);
                 Message = string.Empty;
 
             }
@@ -109,10 +92,9 @@ namespace PoPoy.Client.Pages.Chat
             ListChat = result.Data;
 
         }
-        protected async override Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await ScrollToBottom();
-
         }
     }
 }

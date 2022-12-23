@@ -1,6 +1,7 @@
 ﻿using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.JSInterop;
 using PoPoy.Admin.Services.AuthService;
 using PoPoy.Admin.Services.BroadCastService;
 using PoPoy.Admin.Services.OrderService;
@@ -19,9 +20,10 @@ namespace PoPoy.Admin.Pages.Shipper
         [Inject] private IAuthService authService { get; set; }
         [Inject] private IBroadCastService broadCastService { get; set; }
         [Inject] private IToastService toastService { get; set; }
+        [Inject] private IJSRuntime jSRuntime { get; set; }
 
 
-        private HubConnection hubConnection { get; set; }
+        [Inject] private HubConnection hubConnection { get; set; }
 
         private List<Order> orders = new();
         private Guid userId;
@@ -31,13 +33,14 @@ namespace PoPoy.Admin.Pages.Shipper
             await LoadOrder();
 
 
-            hubConnection = await broadCastService.BuidHubWithToken(BroadCastType.Order);
             //SubscribeBroadCastChat(broadCastType: BroadCastType.Order, async p => await LoadOrder());
             SubscribeBroadCastChat(BroadCastType.Order, async p => {
                 Console.WriteLine(p);
+                await jSRuntime.InvokeVoidAsync("PlayTing");
+
                 await LoadOrder();
             });
-            await broadCastService.StartAsync(hubConnection);
+
 
             StateHasChanged();
 
@@ -61,7 +64,7 @@ namespace PoPoy.Admin.Pages.Shipper
                 OrderStatus = orderStatus
             };
             var result = await orderService.UpdateStatusOrder(input);
-            var notiUser = orderStatus == OrderStatus.Delivering ? $"Đơn hàng của bạn đã được shipper {currentName} tiếp nhận" : $"Đơn hàng của bạn đang vận chuyển";
+            var notiUser = orderStatus == OrderStatus.Delivering ? $"Đơn hàng của bạn đã được shipper {currentName} tiếp nhận" : $"Đơn hàng của bạn đang tìm shipper mới";
             var notiAdmin = orderStatus == OrderStatus.Delivering ? $"Đơn hàng đã được shipper {currentName} tiếp nhận" : $"shipper {currentName} đã từ chối nhận đơn hàng";
 
             if (result)

@@ -3,6 +3,8 @@
 @inject IToastService _toastSvc;
 @inject DialogService dialogSvc;
 @inject NavigationManager NavigationManager;
+@inject IBroadCastService broadCastService;
+
 @implements IDisposable
 <div class="cardify messaging_sidebar">
     
@@ -89,7 +91,7 @@
     {
         _svc.OrderListChanged -= StateHasChanged;
     }
-    
+
 
     public async void RedirectToPayment(string orderId)
     {
@@ -97,7 +99,7 @@
         NavigationManager.NavigateTo(url);
     }
 
-    
+
     public async void Clicked(string id)
     {
         await _svc.GetOrderDetails(id);
@@ -108,8 +110,12 @@
         var result = await dialogSvc.Confirm("Bạn có chắc muốn hủy?", "Xác nhận", new ConfirmOptions() { OkButtonText = "Có Hủy", CancelButtonText = "Không" });
         if (result.Value == true)
         {
+            var noti = new NotiSendConfig("Đơn hàng bị huỷ" , $"Đơn hàng #{orderId} đã được huỷ", $"/order/{orderId}");
+            await broadCastService.SendNotiAllAdmin(noti);
+
             await _svc.CancelOrder(orderId);
-            //await GetOrders();
+            NavigationManager.NavigateTo($"/order/{orderId}");
+            // await GetOrders();
             StateHasChanged();
         }
 

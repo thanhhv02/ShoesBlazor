@@ -10,52 +10,7 @@
 
 @inject IOrderService OrderService
 @inject IProductService ProductService
-@*<div class="row">
-        <h2 class="ml-2 mt-4 mb-3 col-11" style="color:darkblue">Chi tiết đơn hàng</h2>
-        <a href="/listOrder" class="btn btn-danger col-1 mt-4" style="height:40px;width:40px"><i class="oi oi-arrow-left"></i></a>
-    </div>
 
-
-    <div class="row mt-4 ml-3">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Mã đơn hàng
-                    </th>
-                    <th>
-                        Tên hàng
-                    </th>
-                    <th>
-                        Kích cỡ
-                    </th>
-                    <th>
-                        Số lượng
-                    </th>
-                    <th>
-                        Giá 1 đơn vị
-                    </th>
-                    <th>
-                        Tổng đơn hàng
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var items in OrderDetails)
-                {
-                    <tr>
-                        <td>@items.OrderId</td>
-                        <td>@Products.FirstOrDefault(x => x.Id == items.ProductId).Title</td>
-                        <td>@items.Size</td>
-                        <td>@items.Quantity</td>
-                        <td>@items.Price</td>
-                        <td>@items.TotalPrice</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>*@
 @if (order != null)
 {
     <div class="card">
@@ -65,7 +20,7 @@
             <RadzenSteps ShowStepsButtons="false">
 
                 <Steps>
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
+                    <RadzenStepsItem  Selected="order.OrderStatus == OrderStatus.Processing" Text="Xác nhận thông tin & Bàn giao Shipper ">
                         <hr />
                         @*<h6 style="color:#012970"><b>Thông tin người đặt</b></h6>*@
                         <div class="row mt-1">
@@ -148,7 +103,7 @@
                         </EditForm>
                     </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Confirmed" Disabled="order.OrderStatus != OrderStatus.Confirmed" Text="Đơn hàng đã được tiếp nhận">
+                    <RadzenStepsItem  Selected="order.OrderStatus == OrderStatus.Confirmed" Disabled="order.OrderStatus != OrderStatus.Confirmed" Text="Đơn hàng đã được tiếp nhận">
                         <div class="d-flex justify-content-center align-items-center">
                             <div>
 
@@ -159,7 +114,7 @@
                         </div>
                     </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivering" Disabled="order.OrderStatus != OrderStatus.Delivering" Text="Đang trong quá trình vận chuyển">
+                    <RadzenStepsItem  Selected="order.OrderStatus == OrderStatus.Delivering" Disabled="order.OrderStatus != OrderStatus.Delivering" Text="Đang trong quá trình vận chuyển">
                         <div class="d-flex justify-content-center align-items-center">
                             <div>
 
@@ -170,7 +125,7 @@
                         </div>
                     </RadzenStepsItem>
 
-                    <RadzenStepsItem Selected="order.OrderStatus == OrderStatus.Delivered ||order.OrderStatus == OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
+                    <RadzenStepsItem   Selected="order.OrderStatus == OrderStatus.Delivered ||order.OrderStatus == OrderStatus.Cancelled" Disabled="order.OrderStatus != OrderStatus.Delivered && order.OrderStatus != OrderStatus.Cancelled " Text="Hoàn tất đơn hàng">
                         <div class="d-flex justify-content-center align-items-center">
                             @if (order.OrderStatus == OrderStatus.Delivered)
                             {
@@ -183,7 +138,7 @@
                             else if (order.OrderStatus == OrderStatus.Cancelled)
                             {
                                 <div>
-                                    <h2 style="color:#012970">Đơn hàng giao không thành công !</h2>
+                                    <h2 style="color:#012970">Đơn hàng thất bại!</h2>
                                 </div>
                                 <img src="/images/giaothatbai.png" width="100" />
 
@@ -215,15 +170,7 @@ else
 
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        shippers = await OrderService.GetShippers();
 
-        shipperId = order.ShipperId.ToString();
-        await GetOrderDetails();
-
-        StateHasChanged();
-    }
 
     private async Task GetOrderDetails()
     {
@@ -260,7 +207,10 @@ else
             await GetOrderDetails();
             // thông báo cho shippẻ
             var noti = new NotiSendConfig("Đơn hàng ship mới", "Bạn được bàn giao một đơn hàng mới", "/shipper");
-            await broadCastService.SendNotiUserId(noti, Guid.Parse(shipperId));
+
+            noti = new NotiSendConfig("Trạng thái đơn hàng", "Đơn hàng đã được bàn giao cho vận chuyển", $"/order/{order.Id}");
+
+            await broadCastService.SendNotiUserId(noti, order.UserId);
             StateHasChanged();
         }
         else
@@ -288,5 +238,13 @@ else
         toastService.ShowSuccess("Gửi thông tin thành công");
     }
 
+    protected async override Task OnParametersSetAsync()
+    {
+        shippers = await OrderService.GetShippers();
 
+        shipperId = order.ShipperId.ToString();
+        await GetOrderDetails();
+
+        StateHasChanged();
+    }
 }

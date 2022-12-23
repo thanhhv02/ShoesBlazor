@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PoPoy.Client.Extensions;
+using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Shared.Common;
 using Syncfusion.Blazor;
 using System;
@@ -33,6 +34,15 @@ namespace PoPoy.Client
         new LoggerFilterRule(null, "Microsoft.AspNetCore.Authorization.*", LogLevel.None, null)
         ));
             builder.Services.AddSyncfusionBlazor();
+
+
+            builder.Services.AddScoped(sp =>
+            {
+                var broadCastService = sp.GetRequiredService<IBroadCastService>();
+
+                return broadCastService.BuidHubWithToken();
+            });
+
             await builder.Build().RunAsync();
         }
     }

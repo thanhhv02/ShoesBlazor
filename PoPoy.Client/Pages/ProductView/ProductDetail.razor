@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="row product-row">
-            <div class="col-5">
+            <div class="col-lg-5 col-sm-12">
                 @try
                 {
                     @if (product.ProductImages.Any())
@@ -51,7 +51,7 @@
 
 
             </div>
-            <div class="col-7">
+            <div class="col-lg-7 col-sm-12">
                 <div class="product-info detailInfo">
                     <h1>
                         @product.Title <br />
@@ -94,8 +94,10 @@
                             @FormatData.FormatAsPrice(Price)
                         
                     </div>
-                    
-                    <SelectSize productVariants="@product.ProductQuantities" Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="GetPriceProduct"></SelectSize>
+                     <div class="p-0 m-0">
+                        <SelectSize productVariants="@product.ProductQuantities" Model="@cart" CartUpdateType="CartUpdateType.Add" Product_Id="@id" QuantityChanged="GetPriceProduct"></SelectSize>
+
+                     </div>
 
                     }
                     <div>

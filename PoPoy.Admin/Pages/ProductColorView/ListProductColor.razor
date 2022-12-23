@@ -22,7 +22,7 @@
 
                     <RadzenDataGridColumn TItem="ProductColorDto" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
                         <Template>
-                            <RadzenButton Text="Chỉnh sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(product.Id.ToString())">
+                            <RadzenButton Text="Sửa" Icon="edit" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Class="m-1" Click="args => OpenEdit(product.Id.ToString())">
                             </RadzenButton>
                             <RadzenButton Text="Xoá" Icon="delete_forever" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Class="m-1" Click="args => OnDeleteTask((int)product.Id)">
                             </RadzenButton>

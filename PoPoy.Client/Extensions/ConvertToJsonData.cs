@@ -18,7 +18,7 @@ namespace PoPoy.Client.Extensions
         public static string FormatAsPrice(object value)
         {
            
-            return String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", decimal.Parse(value.ToString()));
+            return String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", decimal.Parse(value.ToString())).Replace("₫", "VNĐ");
         }
     }
 }

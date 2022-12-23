@@ -81,7 +81,7 @@
                                     else if (order.OrderStatus == OrderStatus.Cancelled)
                                     {
                                         <div>
-                                            <h2 style="color:#012970">Đơn hàng giao không thành công !</h2>
+                                            <h2 style="color:#012970">Đơn hàng thất bại !</h2>
                                         </div>
                                         <img src="/images/giaothatbai.png" width="100" />
 
@@ -151,7 +151,7 @@
                                                 @*<b>@(order.ShipName)</b>*@
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-Vn"), "{0:C}", orderDetail.Price).Replace(",00","")}") />
+                                                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{AppExtensions.FormatAsPrice(orderDetail.Price)}") />
                                             </div>
                                         </div>
                                         <hr style="border: none; background-color: rgba(0,0,0,.08); height: 1px; margin: 1rem 0;" />
@@ -201,7 +201,7 @@
 
 
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         await GetOrderDetails();
         StateHasChanged();

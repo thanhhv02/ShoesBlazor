@@ -20,8 +20,7 @@ namespace PoPoy.Client.Services.BroadCastService
         Task SendNotiUserId(NotiSendConfig dto, Guid UserId);
 
         Task SendNotiCurrentUser(NotiSendConfig config); // send cho chính mình 
-        Task SendMessageAllAdmin(HubConnection hub,  string message, string dataImgBase64 = null);
-        Task SendMessageUserId(string message, Guid? receiverId, string dataImgBase64 = null);
+        Task SendMessageAllAdmin( string message, string dataImgBase64 = null);
         Task<string> GetUserAvtChat();
         Task SendInfoOrderId(string orderId);
         Task SendInfoOrderModel(OrderDetailsProductResponse product, OrderDetailsResponse order);
@@ -30,7 +29,8 @@ namespace PoPoy.Client.Services.BroadCastService
         Task<ServiceResponse<List<ListChatUser>>> GetListChatUser();
         Task<ServiceResponse<List<ListChatSender>>> GetListChatSender();
 
-        Task<HubConnection> BuidHubWithToken(string broadCastType = BroadCastType.Notify);
+        void SetHub(HubConnection hub);
+        HubConnection BuidHubWithToken();
         Task StartAsync(HubConnection hubConnection);
     }
 }

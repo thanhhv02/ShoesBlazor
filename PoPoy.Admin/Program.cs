@@ -57,7 +57,16 @@ namespace PoPoy.Admin
                 BaseAddress = new Uri(builder.Configuration["BackendApiUrl"])
             }.EnableIntercept(sp));
             builder.Services.AddHttpClientInterceptor();
-            
+
+
+
+            builder.Services.AddScoped(sp =>
+            {
+                var broadCastService = sp.GetRequiredService<IBroadCastService>();
+
+                return broadCastService.BuidHubWithToken();
+            });
+
             await builder.Build().RunAsync();
         }
     }

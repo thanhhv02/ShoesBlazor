@@ -78,7 +78,7 @@
                                     <i class="bi bi-currency-dollar"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <RadzenText TextStyle="TextStyle.DisplayH6" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", double.Parse(ReportInCome == null ? "0" : ReportInCome?.Count))}")></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.DisplayH6" Text=@($"{String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", double.Parse(ReportInCome == null ? "0" : ReportInCome?.Count)).Replace("₫", "VNĐ")}")></RadzenText>
                                     @*<h6>@($"{String.Format(new System.Globalization.CultureInfo("vi-VND"), "{0:C}", ReportInCome.Count).Replace(",00","")}") VNĐ</h6>*@
                                     <span>@(ReportInCome.IsDecrease ? "Giảm " : "Tăng ") </span>  <span class="@(ReportInCome.IsDecrease ? "text-danger" : "text-success") small pt-1 fw-bold">@ReportInCome.Percent</span> <span class="text-muted small pt-2 ps-1"><i class="fa-solid fa-repeat"></i> @titleInCome trước</span>
 
@@ -208,6 +208,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col">Thời gian</th>
                                         <th scope="col">Người mua</th>
                                         <th scope="col">Sản phẩm</th>
                                         <th scope="col">Giá</th>
@@ -219,9 +220,10 @@
                                     {
                                         <tr>
                                             <th scope="row"><a href="/order/@item.OrderId">#@item.OrderId</a></th>
+                                            <td>@AppExtensions.TimeAgo(item.Date)</td>
                                             <td>@item.FullName</td>
                                             <td><a href="/order/@item.OrderId" class="text-primary">@item.ProductName</a></td>
-                                            <td>@($"{String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", item.Price)}")</td>
+                                            <td>@($"{String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C}", item.Price).Replace("₫", "VNĐ")}")</td>
                                             @switch (item.Status)
                                             {
                                                 case OrderStatus.Processing:
@@ -317,9 +319,12 @@
                         @foreach (var noti in notifications)
                         {
                             <div class="activity-item d-flex">
-                                <div class="activite-label">@noti.CreatedDate.ToShortTimeString()</div>
+                                <div class="activite-label" style="max-width: 25%;
+    min-width: 25%;">
+                                    @AppExtensions.TimeAgo(noti.CreatedDate)
+                                </div>
                                 <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                <div class="activity-content">
+                                <div style="max-width: 70%" class="activity-content">
                                     @if (noti.IsCustommer)
                                     {
                                         <span class="fw-bold text-dark">Hoạt động của @noti.FullName: </span>
