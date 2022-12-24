@@ -152,7 +152,7 @@ namespace PoPoy.Api.Services.ProductService
                 //OriginalPrice = request.OriginalPrice,
                 Description = request.Description,
                 Views = 0,
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.UtcNow
             };
 
             _dataContext.Products.Add(product);
@@ -279,7 +279,7 @@ namespace PoPoy.Api.Services.ProductService
                 {
                     ProductId = productId,
                     ImagePath = _configuration["ApiUrl"] + "/uploads/" + untrustedFileName,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     FileSize = file.Length
                 };
                 _dataContext.ProductImages.Add(productImg);

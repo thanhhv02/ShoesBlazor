@@ -135,7 +135,7 @@ namespace PoPoy.Admin.Pages.Chat
 
             if (!string.IsNullOrEmpty(Message))
             {
-                await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.Now.ToString("HH:mm"), Avatar);
+                await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.UtcNow.ToString("HH:mm"), Avatar);
                 await broadCastService.SendMessageUserId(Message , Current.User.UserId);
                 await jSRuntime.InvokeVoidAsync("sendChatmini2", Message, Current.User.UserId);
 

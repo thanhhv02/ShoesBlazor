@@ -200,7 +200,7 @@ namespace PoPoy.Api.Extensions
                     Description = "MẪU GIÀY CHẠY ĐƯỢC THIẾT KẾ ĐỂ TĂNG TỐC ĐỘ, SỨC MẠNH VÀ SỰ LINH HOẠT.\r\nVới thiết kế chuyên dùng cho các vận động viên muốn nâng cao kỹ năng, đôi giày chạy bộ dành cho nam này là lựa chọn lý tượng cho các bài tập nặng và rèn luyện tốc độ. Lớp đệm mật độ kép và các tấm ổn định tăng cường khả năng nâng đỡ cho đế giữa để tăng khả năng kiểm soát trong các động tác đa hướng. Thân giày trên nhẹ và thoáng khí giúp nâng đỡ bàn chân những khi bạn cần nhất.",
                     //Price = 2150000,
                     CategoryId = 1,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 2150000,
                      
                 },
@@ -211,7 +211,7 @@ namespace PoPoy.Api.Extensions
                     Description = "ADIDAS NMD R1 SERIAL PACK METAL GREY",
                     //Price = 1650000,
                     CategoryId = 1,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 1650000,
                      
                 },
@@ -222,7 +222,7 @@ namespace PoPoy.Api.Extensions
                     Description = "ADIDAS SEAN WOTHERSPOON X SUPERSTAR ‘SUPER EARTH – BLACK’",
                     //Price = 3250000,
                     CategoryId = 1,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 3250000,
                      
                 },
@@ -233,7 +233,7 @@ namespace PoPoy.Api.Extensions
                     Description = "ADIDAS SUPERSTAR OG ‘VINTAGE WHITE’",
                     //Price = 1650000,
                     CategoryId = 1,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 1650000,
                      
                 },
@@ -244,7 +244,7 @@ namespace PoPoy.Api.Extensions
                     Description = "ADIDAS NMD R1 TOKYO DRAGON",
                     //Price = 1850000,
                     CategoryId = 1,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 1850000,
                      
                 },
@@ -255,7 +255,7 @@ namespace PoPoy.Api.Extensions
                     Description = "ADIDAS ULTRA BOOST 20 NASA CLOUD WHITE ",
                     //Price = 2550000,
                     CategoryId = 1,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 2550000,
                      
                 },
@@ -266,7 +266,7 @@ namespace PoPoy.Api.Extensions
                     Description = "AIR JORDAN 1 HIGH ‘BORDEAUX’",
                     //Price = 6100000,
                     CategoryId = 2,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 6100000,
                      
                 },
@@ -277,7 +277,7 @@ namespace PoPoy.Api.Extensions
                     Description = "AIR JORDAN 1 HIGH OG “BUBBLE GUM”",
                     //Price = 6450000,
                     CategoryId = 2,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 6450000,
                      
                 },
@@ -288,7 +288,7 @@ namespace PoPoy.Api.Extensions
                     Description = "AIR JORDAN 1 HIGH RETRO ‘HERITAGE’ GS ",
                     //Price = 4850000,
                     CategoryId = 2,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 4850000,
                      
                 },
@@ -299,7 +299,7 @@ namespace PoPoy.Api.Extensions
                     Description = "AIR JORDAN 1 HIGH ZOOM ‘CANYON RUST’ ",
                     //Price = 5550000,
                     CategoryId = 2,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 5550000,
                      
                 },
@@ -310,7 +310,7 @@ namespace PoPoy.Api.Extensions
                     Description = "AIR JORDAN 1 LOW GS TRIPLE WHITE ",
                     //Price = 3850000,
                     CategoryId = 2,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 3850000,
                      
                 },
@@ -321,7 +321,7 @@ namespace PoPoy.Api.Extensions
                     Description = "AIR JORDAN 1 LOW GS RUSH BLUE BRILL ",
                     //Price = 4350000,
                     CategoryId = 2,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 4350000,
                      
                 },
@@ -332,7 +332,7 @@ namespace PoPoy.Api.Extensions
                     Description = "CR7 X AIR MAX 97 GS ‘PORTUGAL PATCHWORK’ ",
                     //Price = 4300000,
                     CategoryId = 3,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 4300000,
                      
                 },
@@ -343,7 +343,7 @@ namespace PoPoy.Api.Extensions
                     Description = "GIÀY NIKE DUNK LOW DISRUPT 2 ‘MALACHITE’ ",
                     //Price = 4850000,
                     CategoryId = 3,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 4850000,
                      
                 },
@@ -354,7 +354,7 @@ namespace PoPoy.Api.Extensions
                     Description = "NIKE AIR FORCE 1 LOW BY YOU CUSTOM – GUCCI ",
                     //Price = 3950000,
                     CategoryId = 3,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 3950000,
                      
                 },
@@ -365,7 +365,7 @@ namespace PoPoy.Api.Extensions
                     Description = "NIKE AIR FORCE 1 GS LOW WHITE PINK FOAM ",
                     //Price = 2950000,
                     CategoryId = 3,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 2950000,
                      
                 },
@@ -376,7 +376,7 @@ namespace PoPoy.Api.Extensions
                     Description = "NIKE AIR FORCE 1 GS WHITE UNIVERSITY RED ",
                     //Price = 2850000,
                     CategoryId = 3,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 2850000,
                      
                 },
@@ -387,7 +387,7 @@ namespace PoPoy.Api.Extensions
                     Description = "NIKE AIR FORCE 1 LOW ’07 ESSENTIAL WHITE METALLIC SILVER BLACK ",
                     //Price = 3200000,
                     CategoryId = 3,
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow,
                     //OriginalPrice = 3200000,
                      
                 }

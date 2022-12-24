@@ -242,7 +242,7 @@ namespace PoPoy.Api.Services.OrderService
         {
             var refund = new Refund
             {
-                DateRefunded = DateTime.Now,
+                DateRefunded = DateTime.UtcNow,
             };
 
             order.Refund = refund;
