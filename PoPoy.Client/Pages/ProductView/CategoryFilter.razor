@@ -1,6 +1,6 @@
 ﻿@inject ICategoryService CategoryService
-
-@if(name != null)
+@inject IProductService _productSvc
+@if (name != null)
 {
     <PageInfos Title="@name"></PageInfos>
 }
@@ -15,12 +15,40 @@
         }
     </ul>
 </div>
+<div class="box">
+    <span class="filter-header">
+        Màu
+    </span>
+    <ul class="filter-list">
+        @if (productColors != null)
+        {
+            foreach (var item in productColors)
+            {
+                <li>
+                    <div class="group-checkbox">
+                        <input type="checkbox" id="@item.Id">
+                        <label for="@item.Id">
+                            @item.ColorName
+                            <i class="bx bx-check"></i>
+                        </label>
+                    </div>
+                </li>
+            }
+        }
+        else
+        {
+            <em>Không có màu nào !</em>
+        }
+    </ul>
+</div>
 
 @code {
-    public string name{ get; set; }
+    public string name { get; set; }
+    List<ProductColor> productColors = new List<ProductColor>();
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.GetCategories();
+        productColors = await _productSvc.GetColorProduct();
     }
     public void OnClicked(string name)
     {

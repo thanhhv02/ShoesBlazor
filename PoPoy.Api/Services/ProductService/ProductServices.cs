@@ -50,16 +50,24 @@ namespace PoPoy.Api.Services.ProductService
                     .Sort(productParameters.OrderBy)//sort by product coloumn 
                     .SortByPrice(productParameters.OrderBy, _dataContext)//sort by product quantity column
                     .Include(x => x.ProductImages)
-                    .Include(x=>x.ProductQuantities)
-                    .SortByColor(productParameters.ColorId, _dataContext)
+                    .Include(x => x.ProductQuantities)
                     .ToListAsync();
 
-                //var query = (from p in list_product
-                //             join pq in _dataContext.ProductQuantities
-                //             on p.Id equals pq.ProductId
-                //             select pq).Where(x => productParameters.ColorId.Contains(x.ColorId.ToString()));
+                if(productParameters.ColorId != null)
+                {
+                    list_product = (from p in list_product
+                                    join pq in _dataContext.ProductQuantities
+                                    on p.Id equals pq.ProductId
+                                    select pq).Where(x => productParameters.ColorId.Contains(x.ColorId.ToString())).Select(x => x.Product).ToList();
+                }
 
-                //list_product = query.Select(x => x.Product).ToList();
+                if(productParameters.SizeId is not null)
+                {
+                    list_product = (from p in list_product
+                                    join pq in _dataContext.ProductQuantities
+                                    on p.Id equals pq.ProductId
+                                    select pq).Where(x => productParameters.SizeId.Contains(x.SizeId.ToString())).Select(x => x.Product).ToList();
+                }
 
                 list_product = list_product.DistinctBy(x => x.Id).ToList();
                 //list_product.Shuffle();
@@ -145,7 +153,7 @@ namespace PoPoy.Api.Services.ProductService
                 Description = product.Description,
                 //OriginalPrice = product.OriginalPrice,
                 //Price = product.Price,
-      
+
                 Views = product.Views,
                 Categories = categories,
                 Sizes = productQuantities,
@@ -358,7 +366,7 @@ namespace PoPoy.Api.Services.ProductService
                                       select p)
                                       .Sort(productParameters.OrderBy)
                                       .SortByPrice(productParameters.OrderBy, _dataContext)
-                                      .Include(x=>x.ProductQuantities)
+                                      .Include(x => x.ProductQuantities)
                                       .Include(x => x.ProductImages).ToListAsync();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
@@ -415,7 +423,7 @@ namespace PoPoy.Api.Services.ProductService
                             Price = item.Price
                         });
                     }
-                    else if (productQuantity != null && item.Selected == true 
+                    else if (productQuantity != null && item.Selected == true
                         && (productQuantity.Quantity != item.Qty || productQuantity.Price != item.Price))
                     {
                         productQuantity.Quantity = item.Qty;
@@ -577,8 +585,8 @@ namespace PoPoy.Api.Services.ProductService
             //var result = new List<string>();
             var temp = new List<int>();
             var list_quantity = await _dataContext.ProductQuantities.Where(x => x.ProductId == productId)
-                .Include(x=>x.Color)
-                .Include(x=>x.Size)
+                .Include(x => x.Color)
+                .Include(x => x.Size)
                 .ToListAsync();
 
             object result = new

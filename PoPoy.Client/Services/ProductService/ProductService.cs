@@ -28,6 +28,7 @@ namespace PoPoy.Client.Services.ProductService
         Task<List<ProductSize>> GetSizeProduct(int id);
         ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes, int[] color);
         Task<List<string>> GetProductSearchSuggestions(string searchText);
+        Task<List<ProductColor>> GetColorProduct();
     }
     public class ProductService : IProductService
     {
@@ -98,6 +99,11 @@ namespace PoPoy.Client.Services.ProductService
 
             Products.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
             ProductsChanged.Invoke();
+        }
+
+        public async Task<List<ProductColor>> GetColorProduct()
+        {
+            return await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
         }
 
         public async Task GetProductForSlide()
