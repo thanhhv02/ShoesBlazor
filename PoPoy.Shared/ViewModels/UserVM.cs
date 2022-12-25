@@ -23,8 +23,11 @@ namespace PoPoy.Shared.ViewModels
         [Display(Name = "Tài khoản")]
         public string UserName { get; set; }
         [Display(Name = "Mật khẩu mã hóa")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
+
+        [Compare("Password", ErrorMessage = "Mật khẩu nhập lại không đúng" )]
+        public string PasswordConfirm { get; set; } = string.Empty;
         [Display(Name = "Email")]
         public string Email { get; set; }
 

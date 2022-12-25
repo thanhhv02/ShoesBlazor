@@ -34,7 +34,7 @@ namespace PoPoy.Admin.Pages.Chat
         protected override async Task OnInitializedAsync()
         {
             await LoadDataAsync();
-           
+            broadCastService.SetHub(hubConnection);
             Avatar = await broadCastService.GetUserAvtChat();
             Console.WriteLine("chat");
             broadCastService.SetHub(hubConnection);
