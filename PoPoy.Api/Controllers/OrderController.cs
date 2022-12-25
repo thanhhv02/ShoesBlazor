@@ -70,8 +70,8 @@ namespace PoPoy.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{orderId}")]
-        public async Task<IActionResult> DeleteProduct(string orderId)
+        [HttpDelete("DeleteOrder/{orderId}")]
+        public async Task<IActionResult> DeleteOrder(string orderId)
         {
             var affectedResult = await _orderService.DeleteOrder(orderId);
             if (affectedResult == 0)

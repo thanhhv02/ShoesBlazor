@@ -25,6 +25,9 @@
     public EventCallback<IEnumerable<int>> ColorChanged { get; set; }
     [Parameter]
     public EventCallback<IEnumerable<int>> SizeChanged { get; set; }
+
+    [Parameter]
+    public bool ShowFiller { get; set; } = true;
     List<ProductColor> productColors = new List<ProductColor>();
     List<ProductSize> productSizes = new List<ProductSize>();
     IEnumerable<int> ColorIdSelecteds = new int[] {  };
@@ -35,11 +38,11 @@
         productColors = await _productSvc.GetAllColorProduct();
         productSizes = await _productSvc.GetAllSizeProduct();
     }
-    async void OnSelectColor()
+    async Task OnSelectColor()
     {
         await ColorChanged.InvokeAsync(ColorIdSelecteds);
     }
-    async void OnSelectSize()
+    async Task OnSelectSize()
     {
         await SizeChanged.InvokeAsync(SizeIdSelecteds);
     }
