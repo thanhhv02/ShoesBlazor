@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoPoy.Client.Extensions;
+using PoPoy.Client.Helper;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.OrderService;
 using PoPoy.Shared.Common;
@@ -172,7 +173,7 @@ namespace PoPoy.Client.Services.BroadCastService
                                 <h5>{item.Title}</h5>
                                 <p class=""text-justify text-truncate para mb-0"">Ngày đặt: {order.OrderDate}<br><br></p>
                                 <p class=""text-justify text-truncate para mb-0"">Trạng thái: {order.OrderStatus}<br><br></p>
-                                <p class=""text-justify text-truncate para mb-0"">Tổng tiền: {order.TotalPrice}<br><br></p>
+                                <p class=""text-justify text-truncate para mb-0"">Tổng tiền: {AppExtensions.FormatAsPrice(order.TotalPrice)}<br><br></p>
                                 <p class=""text-justify text-truncate para mb-0"">Phương thức: {order.PaymentMode}<br><br></p>
                             </div>
                             <div class=""align-items-center align-content-center col-md-3 border-left mt-1"">
@@ -205,7 +206,7 @@ namespace PoPoy.Client.Services.BroadCastService
                             <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Trạng thái</div> {order.OrderStatus}</div>
                         </div>
                         <div class=""row"">
-                            <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {order.TotalPrice}</div>
+                            <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {AppExtensions.FormatAsPrice(order.TotalPrice)}</div>
                             <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Phương thức</div> {order.PaymentMode}</div>
 
                         </div>
@@ -233,7 +234,7 @@ namespace PoPoy.Client.Services.BroadCastService
                             <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Trạng thái</div> {order.OrderStatus}</div>
                         </div>
                         <div class=""row"">
-                            <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {order.TotalPrice}</div>
+                            <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {AppExtensions.FormatAsPrice(order.TotalPrice)}</div>
                             <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Phương thức</div> {order.PaymentMode}</div>
 
                         </div>
@@ -260,7 +261,7 @@ namespace PoPoy.Client.Services.BroadCastService
                             <div class=""col-6""><div class=""h5 pb-2 border-bottom border-danger"">Trạng thái</div> {order.OrderStatus}</div>
                         </div>
                         <div class=""row"">
-                            <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {order.TotalPrice}</div>
+                            <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Tổng tiền</div> {AppExtensions.FormatAsPrice(order.TotalPrice)}</div>
                             <div class=""col-6 ""><div class=""h5 pb-2 border-bottom border-danger"">Phương thức</div> {order.PaymentMode}</div>
 
                         </div>

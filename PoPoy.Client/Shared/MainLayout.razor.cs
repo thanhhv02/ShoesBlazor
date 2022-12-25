@@ -26,19 +26,30 @@ namespace PoPoy.Client.Shared
             if (await authService.IsUserAuthenticated())
                 Interceptor.RegisterEvent();
 
+        
+        }
+
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
             await broadCastService.StartAsync(hubConnection);
 
-            SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
+            if (firstRender)
+            {
+                hubConnection.Remove(BroadCastType.Message);
+                SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
                    async chat =>
                    {
+                       Console.WriteLine(chat.Message);
+                       Console.WriteLine(chat.Data);
 
-                       await ReceiveAsync(chat.Message, AppExtensions.TimeAgo(chat.Created), chat.Avatar);
+                       await ReceiveAsync(chat.Message, AppExtensions.TimeAgo(chat.Created), chat.Avatar, chat.Data);
                        toastService.ShowInfo(chat.Message == "{{html}}" ? "Thông tin đơn hàng" : chat.Message, "Có một tin nhắn mới", OpenChat);
                        await jSRuntime.InvokeVoidAsync("scrollToBottom", "#chat-user");
                        StateHasChanged();
                    });
-        }
+            }
 
+        }
         public async void OpenChat()
         {
 

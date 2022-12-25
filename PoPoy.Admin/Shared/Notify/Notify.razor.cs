@@ -42,17 +42,25 @@ namespace PoPoy.Admin.Shared.Notify
         protected override async Task OnInitializedAsync()
         {
             await Reload();
-  
-            SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
-                async noti =>
-                {
-                    notifications.Add(noti);
-                    notifications = notifications.OrderByDescending(p => p.Created).ToList();
-                    toastService.ShowInfo(noti.Message , noti.Title);
-                    await jSRuntime.InvokeVoidAsync("PlayTing");
-                    StateHasChanged();
-                });
+            
+          
 
+        }
+        protected  override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                hubConnection.Remove(BroadCastType.Notify);
+                SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
+                  async noti =>
+                  {
+                      notifications.Add(noti);
+                      notifications = notifications.OrderByDescending(p => p.Created).ToList();
+                      toastService.ShowInfo(noti.Message, noti.Title);
+                      await jSRuntime.InvokeVoidAsync("PlayTing");
+                      StateHasChanged();
+                  });
+            }
         }
 
 

@@ -38,44 +38,49 @@ namespace PoPoy.Admin.Pages.Chat
             Avatar = await broadCastService.GetUserAvtChat();
             Console.WriteLine("chat");
             broadCastService.SetHub(hubConnection);
-            hubConnection.Remove(BroadCastType.Message);
-            SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
-                async chat =>
-                {
-                    chat.IsMe = false;
-                    if (chat.SenderId == Current.User.UserId)
-                    {
-                        await ReceiveAsync(chat.Message, AppExtensions.TimeAgo(chat.Created), chat.Avatar, chat.Data);
-                        await jSRuntime.InvokeVoidAsync("sendChatmini2", chat.Message, chat.SenderId);
-                        Current.SenderChats.Add(chat);
-                    }
-                    else
-                    {
-
-                        await  jSRuntime.InvokeVoidAsync("sendChatmini", chat.Message, chat.SenderId);
-
-                        foreach (var item in ListChatSenders)
-                        {
-                            if (item.User.UserId == chat.SenderId)
-                            {
-                                item.SenderChats.Add(chat);
-                                break;
-
-                            }
-                        }
-                    }
-
-                    StateHasChanged();
-
-                });
-            
-            hubConnection.On<ChatDto>(BroadCastType.Message, p => toastService.ShowInfo(p.Message == "{{html}}" ? "Thông tin đơn hàng" : p.Message, "Tin nhắn mới", async () => { hubConnection.Remove(BroadCastType.Message);  navigationManager.NavigateTo("/chat"); await jSRuntime.InvokeVoidAsync("PlayMessage"); hubConnection.Remove(BroadCastType.Message); }));
+           
 
             var cr = ListChatSenders.FirstOrDefault();
             if (cr != null) await GetUserChat(cr.User.UserId);
             await ScrollToBottom();
             StateHasChanged();
 
+        }
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                SubscribeBroadCastChat(broadCastType: BroadCastType.Message,
+               async chat =>
+               {
+                   chat.IsMe = false;
+                   if (chat.SenderId == Current.User.UserId)
+                   {
+                       await ReceiveAsync(chat.Message, AppExtensions.TimeAgo(chat.Created), chat.Avatar, chat.Data);
+                       await jSRuntime.InvokeVoidAsync("sendChatmini2", chat.Message, chat.SenderId);
+                       Current.SenderChats.Add(chat);
+                   }
+                   else
+                   {
+
+                       await jSRuntime.InvokeVoidAsync("sendChatmini", chat.Message, chat.SenderId);
+
+                       foreach (var item in ListChatSenders)
+                       {
+                           if (item.User.UserId == chat.SenderId)
+                           {
+                               item.SenderChats.Add(chat);
+                               break;
+
+                           }
+                       }
+                   }
+
+                   StateHasChanged();
+
+               });
+
+            }
         }
         private async Task LoadDataAsync()
         {

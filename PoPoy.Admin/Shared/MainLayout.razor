@@ -190,7 +190,18 @@
     {
         if (await authService.IsUserAuthenticated())
             Interceptor.RegisterEvent();
+
+    }
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        //if (firstRender)
+        //{
+        //    hubConnection.On<ChatDto>(BroadCastType.Message, p => toastService.ShowInfo(p.Message == "{{html}}" ? "Thông tin đơn hàng" : p.Message, "Tin nhắn mới", async () => { hubConnection.Remove(BroadCastType.Message); navigationManager.NavigateTo("/chat"); await jSRuntime.InvokeVoidAsync("PlayMessage");  }));
+
+        //}
         await broadCastService.StartAsync(hubConnection);
+
 
     }
     public void Dispose() => Interceptor.DisposeEvent();

@@ -22,7 +22,7 @@ $(document).ready(function () {
     window.scrollToBottom = function (id) {
         $("#chat2").focus(false);
     
-        $(id).animate({ scrollTop: $(id).prop("scrollHeight") }, { queue: false, duration: 100 });
+        $(id).animate({ scrollTop: $(id).prop("scrollHeight") }, { queue: false, duration: 200 });
     }
     window.sendChat = function (message, time, srcAvt, data) {
         var srcData = message;
@@ -46,7 +46,7 @@ $(document).ready(function () {
     }
     window.receiveChat = function (message, time, srcAvt, data) {
         var srcData = message;
-
+        debugger
         if (message == "{{html}}") {
             srcData = data;
         }
