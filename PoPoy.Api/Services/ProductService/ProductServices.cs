@@ -43,15 +43,25 @@ namespace PoPoy.Api.Services.ProductService
         {
             using (_dataContext)
             {
-                var list_product = await _dataContext.Products
+                var list_product = new List<Product>();
+
+                list_product = await _dataContext.Products
                     .Search(productParameters.searchText)
                     .Sort(productParameters.OrderBy)//sort by product coloumn 
                     .SortByPrice(productParameters.OrderBy, _dataContext)//sort by product quantity column
-                    .SortByColor(productParameters.ColorId, _dataContext)//sort by product quantity column
                     .Include(x => x.ProductImages)
                     .Include(x=>x.ProductQuantities)
+                    .SortByColor(productParameters.ColorId, _dataContext)
                     .ToListAsync();
 
+                //var query = (from p in list_product
+                //             join pq in _dataContext.ProductQuantities
+                //             on p.Id equals pq.ProductId
+                //             select pq).Where(x => productParameters.ColorId.Contains(x.ColorId.ToString()));
+
+                //list_product = query.Select(x => x.Product).ToList();
+
+                list_product = list_product.DistinctBy(x => x.Id).ToList();
                 //list_product.Shuffle();
                 return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);

@@ -75,20 +75,15 @@ namespace PoPoy.Api.Extensions
             }
             return products;
         }
-        public static IQueryable<Product> SortByColor(this IQueryable<Product> products, string orderByQueryString, DataContext dataContext)
+        public static IQueryable<Product> SortByColor(this IQueryable<Product> products, string[] orderByQueryString, DataContext dataContext)
         {
-            if (string.IsNullOrWhiteSpace(orderByQueryString))
+            if (orderByQueryString is null)
                 return products.OrderBy(e => e.Title);
-            if (orderByQueryString.ToLower().Contains("price"))
-            {
 
-                    return (from t1 in products
-                            join t2 in dataContext.ProductQuantities on t1.Id equals t2.Id
-                            join t3 in dataContext.ProductColors on t2.ColorId equals t3.Id
-                            where t3.Id == int.Parse(orderByQueryString)
-                            select t1);
-
-            }
+            products = (from p in products
+                        join pq in dataContext.ProductQuantities
+                        on p.Id equals pq.ProductId
+                        select pq).Where(x => orderByQueryString.Contains(x.ColorId.ToString())).Select(x => x.Product);
             return products;
         }
     }

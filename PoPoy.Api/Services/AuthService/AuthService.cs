@@ -314,7 +314,7 @@ namespace PoPoy.Api.Services.AuthService
                 return new ServiceErrorResponse<string>("No user associated with email");
 
             if (model.NewPassword != model.ConfirmPassword)
-                return new ServiceErrorResponse<string>("Password doesn't match its confirmation");
+                return new ServiceErrorResponse<string>("Mật khẩu phải trùng khớp");
 
 
             var decodedToken = WebEncoders.Base64UrlDecode(model.Token);
