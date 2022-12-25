@@ -15,7 +15,7 @@ else
             <RadzenTabs>
                 <Tabs>
                     <RadzenTabsItem Text="Thông tin chung">
-                        <EditForm Model="User" OnValidSubmit="UpdateUser">
+                        <EditForm Model="User" OnValidSubmit="UpdateUser" >
                             <DataAnnotationsValidator></DataAnnotationsValidator>
                             <div class="text-field col-lg-12 mb-4">
                                 <label for="lastname">Họ</label>
@@ -52,6 +52,11 @@ else
                                 <label for="password">Mật khẩu mới</label>
                                 <InputText id="password" type="password" class="form-control" @bind-Value="User.Password"></InputText>
                                 <ValidationMessage For="()=> User.Password"></ValidationMessage>
+                            </div>
+                           <div class="text-field col-lg-12 mb-4">
+                                <label for="password">Xác nhận lại mật khẩu mới</label>
+                                <InputText id="PasswordConfirm" type="password" class="form-control"  @bind-Value="User.PasswordConfirm"></InputText>
+                                <ValidationMessage For="()=> User.PasswordConfirm"></ValidationMessage>
                             </div>
                             <div class="row mt-2 ">
                                 <div class="col-md-12 text-end">

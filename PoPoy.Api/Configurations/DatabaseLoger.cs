@@ -33,7 +33,7 @@ namespace PoPoy.Api.Configurations
             log.Message = exception?.Message ?? string.Empty;
             log.StackTrace = exception?.StackTrace ?? string.Empty;
             log.Source = exception?.Source ?? string.Empty;
-            log.CreateDate = DateTime.Now;
+            log.CreateDate = DateTime.UtcNow;
 
             dataContext.Add(log);
             dataContext.SaveChanges();

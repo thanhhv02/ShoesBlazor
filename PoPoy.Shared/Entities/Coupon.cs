@@ -17,7 +17,7 @@ namespace PoPoy.Shared.Dto
         public double Reduction { get; set; }
         [NotMapped]
         public bool IsValid =>
-            Type == (int) CouponType.Date ? DateTime.Now < DateExpired : Quantity > 0;
+            Type == (int) CouponType.Date ? DateTime.UtcNow < DateExpired : Quantity > 0;
         public bool Deleted { get; set; }
         public ICollection<OrderCoupon> OrderCoupons { get; set; }
     }

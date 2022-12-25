@@ -24,7 +24,7 @@
             {
                 <div class="user-rate">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-lg-4 col-sm-12">
                             <div class="user-info">
                                 <div class="user-avt">
                                     <img src="@(review.User.AvatarPath != null ? review.User.AvatarPath : "/images/avatar.jpg")" alt="">
@@ -39,20 +39,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8">
+                        <div class="col-lg-8 col-sm-12">
                             <strong class="h3">@review.Title</strong>
                             <div class="user-rate-content">
                                 @review.ReviewText
                             </div>
 
                             <br />
-                            <div style="display:inline-block;">
+                            <div class="row d-flex" style="display:inline-block;">
               
                                 @if (userId == review.UserId)
                                 {
 
-                                    <a class="btn-flat btn-hover" href="javascript:void(0)" @onclick="() => OpenRate(ProductId , review.Id)">Sửa review</a>
-                                    <a class="btn-flat btn-hover" href="javascript:void(0)"
+                                    <a class="btn-flat btn-hover   col-xs-12 text-center mb-2 mr-lg-1" href="javascript:void(0)" @onclick="() => OpenRate(ProductId , review.Id)">Sửa review</a>
+                                    <a class="btn-flat btn-hover  col-xs-12 text-center mb-2 " href="javascript:void(0)"
                            @onclick="@(() => DeleteReview(review))">Xóa review</a>
 
 

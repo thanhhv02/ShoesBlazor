@@ -35,7 +35,7 @@ namespace PoPoy.Api.Services.DashBoard
                 var query = dataContext.Orders.Where(p => p.OrderStatus == OrderStatus.Delivered);
                 var query2 = query.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.Now;
+                var now = DateTime.UtcNow;
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:
