@@ -28,7 +28,8 @@ namespace PoPoy.Client.Services.ProductService
         Task<List<ProductSize>> GetSizeProduct(int id);
         ValueTask<List<ProductQuantity>> FilterAllByIdsAsync(int[] ids, int[] sizes, int[] color);
         Task<List<string>> GetProductSearchSuggestions(string searchText);
-        Task<List<ProductColor>> GetColorProduct();
+        Task<List<ProductColor>> GetAllColorProduct();
+        Task<List<ProductSize>> GetAllSizeProduct();
     }
     public class ProductService : IProductService
     {
@@ -80,15 +81,33 @@ namespace PoPoy.Client.Services.ProductService
 
         public async Task GetAll(ProductParameters productParameters, string? categoryUrl)
         {
+            var colorid = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            var sizeid = System.Web.HttpUtility.ParseQueryString(string.Empty);
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString(),
                 ["searchText"] = productParameters.searchText == null ? "" : productParameters.searchText,
                 ["pageSize"] = productParameters.PageSize.ToString(),
-                ["orderBy"] = productParameters.OrderBy
+                ["orderBy"] = productParameters.OrderBy,
             };
+            if (productParameters.ColorId is not null)
+            {
+                
+                foreach (var id in productParameters.ColorId)
+                {
+                    colorid.Add("ColorId", id.ToString());
+                }
+            }
+            if (productParameters.SizeId is not null)
+            {
+
+                foreach (var id in productParameters.SizeId)
+                {
+                    sizeid.Add("SizeId", id.ToString());
+                }
+            }
             var response = categoryUrl == null ?
-                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product", queryStringParam)) :
+                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product{(colorid!=null?"?"+colorid:null)}{(sizeid != null ? "&?" + sizeid : null)}", queryStringParam)) :
                         await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product/category/{categoryUrl}", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
@@ -101,7 +120,7 @@ namespace PoPoy.Client.Services.ProductService
             ProductsChanged.Invoke();
         }
 
-        public async Task<List<ProductColor>> GetColorProduct()
+        public async Task<List<ProductColor>> GetAllColorProduct()
         {
             return await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
         }
@@ -134,6 +153,11 @@ namespace PoPoy.Client.Services.ProductService
         {
             var getSizeProduct = await _httpClient.GetFromJsonAsync<List<ProductSize>>($"/api/product/get-size-product/" + id);
             return getSizeProduct;
+        }
+
+        public async Task<List<ProductSize>> GetAllSizeProduct()
+        {
+            return await _httpClient.GetFromJsonAsync<List<ProductSize>>("api/product/getSizes");
         }
     }
 }

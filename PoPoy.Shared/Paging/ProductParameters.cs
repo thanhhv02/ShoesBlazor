@@ -11,7 +11,7 @@ namespace PoPoy.Shared.Paging
     {
         public string OrderBy { get; set; } = "name";
         public string searchText { get; set; } = null;
-        public string[] ColorId { get; set; } = null;
-        public string[] SizeId { get; set; } = null;
+        public int[] ColorId { get; set; } = null;
+        public int[] SizeId { get; set; } = null;
     }
 }

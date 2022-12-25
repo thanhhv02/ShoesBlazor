@@ -23,7 +23,7 @@
                     <div class="box d-none filter-toggle-box">
                         <button class="btn-flat btn-hover" @onclick="()=>ButtonFilterClick(false)" id="filter-close">Đóng</button>
                     </div>
-                    <CategoryFilter></CategoryFilter>
+                    <CategoryFilter productParameters="@_productParameters" ColorChanged="GetColor" SizeChanged="GetSize"></CategoryFilter>
 
                 </div>
                 <div class="col-xl-9 box_product">
@@ -85,6 +85,18 @@
     private async Task SortChanged(string orderBy)
     {
         _productParameters.OrderBy = orderBy;
+        await GetProducts();
+    }
+    private async void GetColor(IEnumerable<int> color)
+    {
+        _productParameters.ColorId = null;
+        _productParameters.ColorId = color.ToArray();
+        await GetProducts();
+    }
+    private async void GetSize(IEnumerable<int> size)
+    {
+        _productParameters.SizeId = null;
+        _productParameters.SizeId = size.ToArray();
         await GetProducts();
     }
     Dictionary<string, string> SortOptions = new Dictionary<string, string>()
