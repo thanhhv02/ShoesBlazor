@@ -307,7 +307,7 @@ namespace PoPoy.Api.Services.AuthService
         public async Task<ServiceResponse<string>> ResetPassword(ResetPasswordRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (EmailValidator.Validate(model.Email))
+            if (!EmailValidator.Validate(model.Email))
                 return new ServiceErrorResponse<string>("Cần nhập đúng định dạng email");
 
             if (user == null)
