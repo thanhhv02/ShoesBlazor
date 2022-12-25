@@ -52,11 +52,14 @@
 @code{
     private string _paymentId;
     private string _payerId;
+    private string _VnPayTransactionStatus;
 
     protected async override void OnAfterRender(bool firstRender)
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         var queryStrings = QueryHelpers.ParseQuery(uri.Query);
+        var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
+
         if (queryStrings.TryGetValue("paymentId", out var paymentId))
         {
             _paymentId = paymentId;
@@ -65,7 +68,21 @@
         {
             _payerId = payerId;
         }
-        var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
-        await AuthService.PaymentPaypal(paymentId, payerId, userId);
+        if (queryStrings.TryGetValue("vnp_TransactionStatus", out var VnPayTransactionStatus))
+        {
+            _VnPayTransactionStatus = VnPayTransactionStatus;
+        }
+
+        // Lấy thông tin trạng thái thanh toán của PayPal
+        if (_payerId != null && _paymentId != null)
+        {
+            await AuthService.PaymentPaypal(_paymentId, _payerId, userId);
+        }
+
+        // Lấy thông tin trạng thái thanh toán của VNPay
+        if (_VnPayTransactionStatus != null)
+        {
+            await AuthService.PaymentVnpay(_VnPayTransactionStatus, userId);
+        }
     }
 }

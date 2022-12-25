@@ -3,7 +3,7 @@
 @using PoPoy.Admin.Services.LogService;
 @using PoPoy.Shared.Entities;
 @inject ILogService logService;
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 <RadzenButton Icon="trash" Text="Xoá sạch lịch sử" class="col-lg-4 " ButtonStyle="ButtonStyle.Danger" Click=@Delete />
 
 <div class="card">

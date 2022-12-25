@@ -258,15 +258,14 @@
                         StateHasChanged();
                         //send thông báo cho admin
 
-                        var hostAdmin = configuration["AdminUrl"];
                         NotiSendConfig config = new NotiSendConfig(title: "Có đơn hàng mới",
-                        message: $"Có một đơn hàng mới được đặt", dataUrl: $"{hostAdmin}/listOrderDetails/{orderId}");
+                        message: $"Có một đơn hàng mới được đặt", dataUrl: $"/order/{orderId}");
                         await broadCastService.SendNotiAllAdmin(config);
 
                         //send thông báo cho người đặt hàng
 
                         NotiSendConfig config2 = new NotiSendConfig(title: "Đặt hàng thành công",
-                        message: $"Đơn hàng {orderId} được đặt thành công", dataUrl: $"user/list-order");
+                        message: $"Đơn hàng {orderId} được đặt thành công", dataUrl: $"/order/{orderId}");
                         await broadCastService.SendNotiCurrentUser(config2);
                         if (paymentModel.Name != "CashOnDelivery")
                         {

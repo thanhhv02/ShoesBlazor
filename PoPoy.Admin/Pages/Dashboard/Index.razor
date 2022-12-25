@@ -1,6 +1,6 @@
 ﻿@page "/Dashboard"
 @page "/"
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff + "," + RoleName.Shipper)]
+@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Shipper)]
 @using PoPoy.Shared.ViewModels.DashBoard;
 @inject IConfiguration _config;
 <div class="pagetitle">

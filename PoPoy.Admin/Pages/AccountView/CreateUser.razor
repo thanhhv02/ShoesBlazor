@@ -3,6 +3,7 @@
 @inject IAuthService Authservice
 @inject NavigationManager NavigationManager
 @inject Radzen.DialogService dialogService;
+@attribute [Authorize(Roles = RoleName.Admin )]
 
 @if (ShowErrors)
 {
@@ -91,7 +92,7 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        UserModel.Roles.Add(RoleName.Staff);
+        UserModel.Roles.Add(RoleName.Customer);
         await LoadRoles();
 
     }

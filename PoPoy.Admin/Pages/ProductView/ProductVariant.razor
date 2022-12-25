@@ -1,5 +1,5 @@
 ﻿@page "/product-variant/{Id}"
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 
 @inject IConfiguration Configuration
 @inject IProductService ProductService

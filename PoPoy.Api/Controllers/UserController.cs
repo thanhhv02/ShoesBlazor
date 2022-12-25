@@ -287,7 +287,24 @@ namespace PoPoy.Api.Controllers
                 throw ex;
             }
         }
-
+        [HttpGet("paymentVnpay")]
+        public async Task<IActionResult> PaymentVnpay(string vnPayTransactionStatus, Guid userId)
+        {
+            try
+            {
+                // Trạng thái thanh toán thành công ( TransactionStatus = 00 )
+                if (vnPayTransactionStatus == "00")
+                {
+                    var result = await _authService.UpdatePaymentVnPayStatus(userId);
+                    return Ok(result);
+                }
+                return BadRequest("Không thanh toán thành công!");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpGet("checkoutPayPal")]
         public async Task<IActionResult> CheckoutPayPal(double total)
         {
@@ -309,6 +326,7 @@ namespace PoPoy.Api.Controllers
             return Ok(data);
         }
 
+       
         [HttpGet("getAddress")]
         public async Task<ActionResult<ServiceResponse<Address>>> GetAddress(Guid userId)
         {

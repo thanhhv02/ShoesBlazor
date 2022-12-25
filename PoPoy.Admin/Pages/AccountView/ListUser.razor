@@ -2,6 +2,7 @@
 
 @inject IConfiguration Configuration
 @inject IAuthService AuthService
+@attribute [Authorize(Roles = RoleName.Admin)]
 
 @if (ShowErrors)
 {

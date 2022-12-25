@@ -41,9 +41,7 @@ namespace PoPoy.Api.Services.ChatService
             // gửi cho userId thuoc admin va staff
             var listUser = new List<User>();
             var userAdminIds = await userManager.GetUsersInRoleAsync(RoleName.Admin);
-            var userStaffIds = await userManager.GetUsersInRoleAsync(RoleName.Staff);
             listUser.AddRange(userAdminIds);
-            listUser.AddRange(userStaffIds);
             listUser = listUser.DistinctBy(p => p.Id).ToList();
             var chats = new List<Chat>();
             foreach (var id in listUser.Select(p => p.Id))

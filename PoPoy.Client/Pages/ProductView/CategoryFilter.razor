@@ -20,12 +20,17 @@
         Màu
     </span>
     <ul class="filter-list">
+       
         @if (productColors != null)
         {
-            foreach (var item in productColors)
+            <RadzenCheckBoxList @bind-Value=@ColorIdSelecteds Change="OnSelectColor" TValue="int" Orientation="Orientation.Vertical"
+                            Data="@productColors" TextProperty="ColorName" ValueProperty="Id" />
+        @* foreach (var item in productColors)
             {
                 <li>
-                    <div class="group-checkbox">
+                    <RadzenCheckBox @bind-Value=@item.Id Name="@item.ColorName" TValue="int"  />
+                    <RadzenLabel Text="CheckBox" Component="@item.ColorName" Style="margin-left: 8px; vertical-align: middle;" />
+                      <div class="group-checkbox">
                         <input type="checkbox" id="@item.Id">
                         <label for="@item.Id">
                             @item.ColorName
@@ -33,7 +38,7 @@
                         </label>
                     </div>
                 </li>
-            }
+            }*@
         }
         else
         {
@@ -45,10 +50,18 @@
 @code {
     public string name { get; set; }
     List<ProductColor> productColors = new List<ProductColor>();
+    IEnumerable<int> ColorIdSelecteds = new int[] {  };
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.GetCategories();
         productColors = await _productSvc.GetColorProduct();
+
+
+    }
+    void OnSelectColor()
+    {
+
+        Console.WriteLine("Id color da chon: " + string.Join(",", ColorIdSelecteds));
     }
     public void OnClicked(string name)
     {

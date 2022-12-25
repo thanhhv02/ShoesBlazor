@@ -43,5 +43,6 @@ namespace PoPoy.Api.Services.AuthService
         Task<User> GetCurrentUserAsync();
         Task<ServiceResponse<bool>> UpdateUserProfile(User user);
         Task<bool> DeleteUserAvatar(string id);
+        Task<bool> UpdatePaymentVnPayStatus(Guid userId);
     }
 }

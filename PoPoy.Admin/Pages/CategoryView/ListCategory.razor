@@ -2,7 +2,7 @@
 @using PoPoy.Admin.Helper
 @inject IConfiguration Configuration
 @inject ICategoryService CategoryService
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 @*<div class="input-group" style="left: 950px;">
         <div class="form-outline">
             <input @bind-value="searchText"

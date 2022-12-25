@@ -1,5 +1,5 @@
 ﻿@page "/listOrder"
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 
 @inject IOrderService OrderService
 @inject IAuthService AuthService

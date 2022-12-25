@@ -647,6 +647,30 @@ namespace PoPoy.Api.Services.AuthService
                 return ex.Message;
             }
         }
+
+        public async Task<bool> UpdatePaymentVnPayStatus(Guid userId)
+        {
+            try
+            {
+                var orders = _context.Orders.Where(x => x.UserId == userId && x.PaymentMode == "VNPay").Select(o => o);
+                foreach (var order in orders)
+                {
+                    order.PaymentStatus = PaymentStatus.Paid;
+                    _context.Orders.Update(order);
+                }
+
+                var result = await _context.SaveChangesAsync();
+                if (result == 1)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task<bool> CreateAddress(Address address)
         {
             Address add = new Address()

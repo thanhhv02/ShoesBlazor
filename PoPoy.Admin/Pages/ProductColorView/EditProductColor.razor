@@ -4,7 +4,7 @@
 @inject IProductColorService productColorService;
 @inject NavigationManager NavigationManager
 @inject Radzen.DialogService dialogService;
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 <div class="container ml-3 col-12">
 
     <EditForm Model="ProductColorDto" OnValidSubmit="Edit">

@@ -185,5 +185,10 @@ namespace PoPoy.Client.Services.AuthService
                 return true;
             return false;
         }
+
+        public async Task PaymentVnpay(string vnPayTransactionStatus, Guid userId)
+        {
+            await _httpClient.GetFromJsonAsync($"/api/user/paymentVnpay/?vnPayTransactionStatus={vnPayTransactionStatus}&userId={userId}", null);
+        }
     }
 }

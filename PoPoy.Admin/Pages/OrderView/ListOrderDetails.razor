@@ -5,7 +5,7 @@
 @using PoPoy.Admin.Services.BroadCastService
 @using PoPoy.Shared.Common
 @using PoPoy.Shared.Entities.OrderDto
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 
 
 @inject IOrderService OrderService

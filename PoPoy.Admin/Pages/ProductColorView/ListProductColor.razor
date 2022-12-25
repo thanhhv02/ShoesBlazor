@@ -3,7 +3,7 @@
 @using PoPoy.Admin.Services.ProductColorService;
 @inject IConfiguration Configuration
 @inject IProductColorService productColorService
-@attribute [Authorize(Roles = RoleName.Admin + "," + RoleName.Staff)]
+@attribute [Authorize(Roles = RoleName.Admin )]
 
 <RadzenButton Icon="add_circle_outline" Text="Tạo loại màu sắc" class="col-lg-4" ButtonStyle="ButtonStyle.Success" Click=@OpenCreate />
 <div class="card">
