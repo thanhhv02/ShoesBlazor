@@ -368,6 +368,23 @@ namespace PoPoy.Api.Services.ProductService
                                       .SortByPrice(productParameters.OrderBy, _dataContext)
                                       .Include(x => x.ProductQuantities)
                                       .Include(x => x.ProductImages).ToListAsync();
+            if (productParameters.ColorId != null)
+            {
+                list_product = (from p in list_product
+                                join pq in _dataContext.ProductQuantities
+                                on p.Id equals pq.ProductId
+                                select pq).Where(x => productParameters.ColorId.Contains(x.ColorId)).Select(x => x.Product).ToList();
+            }
+
+            if (productParameters.SizeId is not null)
+            {
+                list_product = (from p in list_product
+                                join pq in _dataContext.ProductQuantities
+                                on p.Id equals pq.ProductId
+                                select pq).Where(x => productParameters.SizeId.Contains(x.SizeId)).Select(x => x.Product).ToList();
+            }
+
+            list_product = list_product.DistinctBy(x => x.Id).ToList();
             return PagedList<Product>
                             .ToPagedList(list_product, productParameters.PageNumber, productParameters.PageSize);
         }

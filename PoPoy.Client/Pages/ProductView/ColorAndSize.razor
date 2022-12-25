@@ -1,21 +1,41 @@
 ﻿@inject ICategoryService CategoryService
 @inject IProductService _productSvc
-@if (name != null)
-{
-    <PageInfos Title="@name"></PageInfos>
-}
+
+
 <div class="box">
-    <h3 class="filter-header">
-        Danh mục
-    </h3>
+    <span class="filter-header">
+        Màu
+    </span>
     <ul class="filter-list">
-        @foreach (var category in CategoryService.Categories)
+       
+        @if (productColors != null)
         {
-            <li><a href="/category/@category.Url" style="width:1000px" @onclick="()=>OnClicked(category.Name)">@category.Name</a></li>
+            <RadzenCheckBoxList @bind-Value=@ColorIdSelecteds Change="OnSelectColor" TValue="int" Orientation="Orientation.Vertical"
+                            Data="@productColors" TextProperty="ColorName" ValueProperty="Id" />
+        }
+        else
+        {
+            <li><em>Không có màu nào !</em></li>
         }
     </ul>
 </div>
+<div class="box">
+    <span class="filter-header">
+        Kích cỡ
+    </span>
+    <ul class="filter-list">
 
+        @if (productColors != null)
+        {
+            <RadzenCheckBoxList @bind-Value=@SizeIdSelecteds Change="OnSelectSize" TValue="int" Orientation="Orientation.Vertical"
+                            Data="@productSizes" TextProperty="SizeName" ValueProperty="Id" />
+        }
+        else
+        {
+                <li><em>Không có size nào !</em></li>
+        }
+    </ul>
+</div>
 
 @code {
     public string name { get; set; }
@@ -31,7 +51,6 @@
     IEnumerable<int> SizeIdSelecteds = new int[] {  };
     protected override async Task OnInitializedAsync()
     {
-        await CategoryService.GetCategories();
         productColors = await _productSvc.GetAllColorProduct();
         productSizes = await _productSvc.GetAllSizeProduct();
     }

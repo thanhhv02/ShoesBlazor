@@ -108,7 +108,7 @@ namespace PoPoy.Client.Services.ProductService
             }
             var response = categoryUrl == null ?
                         await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product{(colorid!=null?"?"+colorid:null)}{(sizeid != null ? "&?" + sizeid : null)}", queryStringParam)) :
-                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product/category/{categoryUrl}", queryStringParam));
+                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product/category/{categoryUrl}{(colorid != null ? "?" + colorid : null)}{(sizeid != null ? "&?" + sizeid : null)}", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
