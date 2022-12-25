@@ -15,40 +15,43 @@
         }
     </ul>
 </div>
-<div class="box">
-    <span class="filter-header">
-        Màu
-    </span>
-    <ul class="filter-list">
-       
-        @if (productColors != null)
-        {
-            <RadzenCheckBoxList @bind-Value=@ColorIdSelecteds Change="OnSelectColor" TValue="int" Orientation="Orientation.Vertical"
-                            Data="@productColors" TextProperty="ColorName" ValueProperty="Id" />
-        }
-        else
-        {
-            <li><em>Không có màu nào !</em></li>
-        }
-    </ul>
-</div>
-<div class="box">
-    <span class="filter-header">
-        Kích cỡ
-    </span>
-    <ul class="filter-list">
+@if (ShowFiller)
+{
+    <div class="box">
+        <span class="filter-header">
+            Màu
+        </span>
+        <ul class="filter-list">
 
-        @if (productColors != null)
-        {
-            <RadzenCheckBoxList @bind-Value=@SizeIdSelecteds Change="OnSelectSize" TValue="int" Orientation="Orientation.Vertical"
+            @if (productColors != null)
+            {
+                <RadzenCheckBoxList @bind-Value=@ColorIdSelecteds Change="OnSelectColor" TValue="int" Orientation="Orientation.Vertical"
+                            Data="@productColors" TextProperty="ColorName" ValueProperty="Id" />
+            }
+            else
+            {
+                <li><em>Không có màu nào !</em></li>
+            }
+        </ul>
+    </div>
+    <div class="box">
+        <span class="filter-header">
+            Kích cỡ
+        </span>
+        <ul class="filter-list">
+
+            @if (productColors != null)
+            {
+                <RadzenCheckBoxList @bind-Value=@SizeIdSelecteds Change="OnSelectSize" TValue="int" Orientation="Orientation.Vertical"
                             Data="@productSizes" TextProperty="SizeName" ValueProperty="Id" />
-        }
-        else
-        {
+            }
+            else
+            {
                 <li><em>Không có size nào !</em></li>
-        }
-    </ul>
-</div>
+            }
+        </ul>
+    </div>
+}
 
 @code {
     public string name { get; set; }
@@ -58,6 +61,9 @@
     public EventCallback<IEnumerable<int>> ColorChanged { get; set; }
     [Parameter]
     public EventCallback<IEnumerable<int>> SizeChanged { get; set; }
+
+    [Parameter]
+    public bool ShowFiller { get; set; } = true;
     List<ProductColor> productColors = new List<ProductColor>();
     List<ProductSize> productSizes = new List<ProductSize>();
     IEnumerable<int> ColorIdSelecteds = new int[] {  };
@@ -68,11 +74,11 @@
         productColors = await _productSvc.GetAllColorProduct();
         productSizes = await _productSvc.GetAllSizeProduct();
     }
-    async void OnSelectColor()
+    async Task OnSelectColor()
     {
         await ColorChanged.InvokeAsync(ColorIdSelecteds);
     }
-    async void OnSelectSize()
+    async Task OnSelectSize()
     {
         await SizeChanged.InvokeAsync(SizeIdSelecteds);
     }

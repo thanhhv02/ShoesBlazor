@@ -442,6 +442,13 @@ namespace PoPoy.Api.Services.AuthService
 
         public async Task<ServiceResponse<bool>> DeleteUser(Guid id)
         {
+            var chats = _context.Chats.Where(p => p.SenderId == id || p.ReceiverId == id);
+            _context.Chats.RemoveRange(chats);
+            var notis = _context.Notifications.Where(p => p.UserId == id);
+            _context.Notifications.RemoveRange(notis);
+            var orders = _context.Orders.Where(p => p.UserId == id).Include( p => p.OrderDetails).Include(p => p.Refund);
+            _context.RemoveRange(orders);
+            await _context.SaveChangesAsync();
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {

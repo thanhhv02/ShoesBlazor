@@ -78,7 +78,7 @@ namespace PoPoy.Admin.Services.OrderService
         }
         public async Task DeleteOrder(string orderId)
         {
-            await _httpClient.DeleteAsync($"/api/order/{orderId}");
+            await _httpClient.DeleteAsync($"/api/order/DeleteOrder/{orderId}");
         }
 
         public async Task<List<Order>> GetOrderHistoryShipper()
