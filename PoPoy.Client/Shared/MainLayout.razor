@@ -1,8 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization;
 @using Blazored.Toast.Configuration
+@inject NavigationManager _navigation
 @implements IDisposable;
+@{
+    var url = "";
+}
 <body>
+    <RadzenMediaQuery Query="(max-width: 768px)" Change="@OnChangeMedia">
+    </RadzenMediaQuery>
     <!-- header -->
     <header>
         <!-- mobile menu -->
@@ -59,10 +65,17 @@
                 <div class="bottom-header container">
                     <ul class="main-menu">
                         <li><ReloadPage Title="Trang chủ" Uri="/"></ReloadPage></li>
-                        <li><a href="/products">Sản phẩm</a></li>
+                        @{
+                           var  urlP = "/products";
+
+                        }
+                        <li><a class="pointer pointer-event" @onclick="() => _navigation.NavigateTo(urlP , forceLoad)">Sản phẩm</a></li>
                         <!-- mega menu -->
                         <li class="mega-dropdown">
-                            <a href="./products">Danh mục cửa hàng<i class='bx bxs-chevron-down'></i></a>
+                            @{
+                               var  urlP2 = "./products";
+                            }
+                            <a class="pointer" @onclick="() => _navigation.NavigateTo(urlP2 , forceLoad)">Danh mục cửa hàng<i class='bx bxs-chevron-down'></i></a>
                             <div class="mega-content">
                                 <div class="row">
                                     <div class="col-lg-3 col-md-12">
@@ -73,7 +86,10 @@
                             </div>
                         </li>
                         <!-- end mega menu -->
-                        <li><a href="/location">Liên hệ</a></li>
+                          @{
+                            url = "/location";
+                          }
+                        <li><a class="pointer" @onclick="() => _navigation.NavigateTo(url , forceLoad)">Liên hệ</a></li>
                     </ul>
                 </div>
             </div>
@@ -143,6 +159,7 @@
 @code{
     public bool collapse { get; set; } = false;
     public string active => collapse ? "active" : null;
+    private bool forceLoad = true;
     public void Collapse(){
         collapse = !collapse;
     }
@@ -152,6 +169,11 @@
     public IAuthService authService{get;set;}
 
     public void Dispose() => Interceptor.DisposeEvent();
+
+    private void OnChangeMedia(bool matches)
+    {
+        forceLoad = matches;
+    }
 }
 
 <RadzenDialog />

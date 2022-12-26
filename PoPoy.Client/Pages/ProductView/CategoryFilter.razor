@@ -1,17 +1,21 @@
 ﻿@inject ICategoryService CategoryService
 @inject IProductService _productSvc
+@inject NavigationManager  navigationManager
+
 @if (name != null)
 {
     <PageInfos Title="@name"></PageInfos>
 }
-<div class="box">
+<RadzenMediaQuery Query="(max-width: 768px)" Change="@OnChangeMedia">
+</RadzenMediaQuery>
+    <div class="box">
     <h3 class="filter-header">
         Danh mục
     </h3>
     <ul class="filter-list">
         @foreach (var category in CategoryService.Categories)
         {
-            <li><a href="/category/@category.Url" style="width:1000px" @onclick="()=>OnClicked(category.Name)">@category.Name</a></li>
+            <li><a class="pointer"  style="width:1000px" @onclick="()=>OnClicked(category)">@category.Name</a></li>
         }
     </ul>
 </div>
@@ -32,6 +36,7 @@
     List<ProductSize> productSizes = new List<ProductSize>();
     IEnumerable<int> ColorIdSelecteds = new int[] {  };
     IEnumerable<int> SizeIdSelecteds = new int[] {  };
+    private bool forceLoad = true;
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.GetCategories();
@@ -46,9 +51,13 @@
     {
         await SizeChanged.InvokeAsync(SizeIdSelecteds);
     }
-    public void OnClicked(string name)
+    public void OnClicked(CateVM cate)
     {
-        this.name = name;
+        this.name = cate.Name;
+        navigationManager.NavigateTo($"/category/{cate.Url}", true);
     }
-
+    private void OnChangeMedia(bool matches)
+    {
+        forceLoad = matches;
+    }
 }

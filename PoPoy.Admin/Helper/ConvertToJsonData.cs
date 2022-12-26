@@ -54,7 +54,7 @@ namespace PoPoy.Admin.Extensions
         public static string TimeAgo(this DateTime dateTime)
         {
             string result = string.Empty;
-            var timeSpan = DateTime.UtcNow.Subtract(dateTime);
+            var timeSpan = DateTime.UtcNow.ToLocalTime().Subtract(dateTime);
 
             if (timeSpan <= TimeSpan.FromSeconds(60))
             {

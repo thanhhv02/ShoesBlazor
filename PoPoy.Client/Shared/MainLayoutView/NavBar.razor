@@ -7,7 +7,7 @@
 @inject NavigationManager _navigation;
 @inject IAuthService AuthService;
 @inject ILocalStorageService LocalStorage;
-@inject DialogService DialogService
+@inject DialogService DialogService;
 
 <div class="bg-main">
     <div class="mid-header container">
@@ -15,13 +15,24 @@
         <a href="/"><img src="./images/logoTop.png" style="width:180px;height:75px;"/></a>
         <Search></Search>
         <ul class="user-menu">
+            <RadzenMediaQuery Query="(max-width: 768px)" Change="@OnChangeMedia">
+            </RadzenMediaQuery>
             <AuthorizeView>
                 <NotAuthorized>
+                    @*<RadzenMediaQuery Query="(max-width: 768px)" Change=@OnChange />*@
+            
                     <li class="dropdown">
-                        <a href="/login?returnUrl=@_navigation.ToBaseRelativePath(_navigation.Uri)"><i class='bx bx-user-circle'></i></a>
+                        @{
+                           var  urlL = $"/login?returnUrl={_navigation.ToBaseRelativePath(_navigation.Uri)}";
+                        }
+                        <a class="pointer" @onclick="() => _navigation.NavigateTo(urlL,forceLoad)"><i class='bx bx-user-circle'></i></a>
                         <ul class="dropdown-content" style="width:115px">
-                            <li><a href="/register">Đăng ký</a></li>
-                            <li><a href="/login?returnUrl=@_navigation.ToBaseRelativePath(_navigation.Uri)">Đăng nhập</a></li>
+                               @{
+                               var urlR = $"/register";
+                            }
+                            <li><a class="pointer" @onclick="() => _navigation.NavigateTo(urlR,forceLoad)">Đăng ký</a></li>
+                          
+                            <li><a @onclick="() => _navigation.NavigateTo(urlL , forceLoad)" class="pointer">Đăng nhập</a></li>
                         </ul>
                     </li>
                 </NotAuthorized>
@@ -41,17 +52,26 @@
                         <div class="dropdowns dropdown--author" style="background: white;">
                             <ul>
                                 <li>
-                                    <a href="/user/profile/@context.User.GetUserId()">
+                                    @{
+                                       var url1 = $"/user/profile/{context.User.GetUserId()}";
+                                    }
+                                    <a class="pointer" @onclick="() => _navigation.NavigateTo(url1 , forceLoad)">
                                         <span class="fas fa-user"></span>Hồ sơ
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/user/list-order">
+                                    @{
+                                        var url2 = $"/user/list-order";
+                                    }
+                                    <a class="pointer" @onclick="() => _navigation.NavigateTo(url2 , forceLoad)">
                                         <span class='bx bx-file'></span>Lịch sử
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/logout">
+                                    @{
+                                       var url3 = $"/logout";
+                                    }
+                                    <a class="pointer" @onclick="() => _navigation.NavigateTo(url3 , forceLoad)" href="/logout">
                                         <span class="fas fa-sign-out-alt"></span>Đăng xuất
                                     </a>
                                 </li>
@@ -88,7 +108,10 @@
                 <div class="dropdowns messaging--dropdown" id="giohang"  style="background: white;">
                     <div class="dropdown_module_header">
                         <h4>Giỏ hàng</h4>
-                        <a href="/cart">Xem tất cả</a>
+                        @{
+                            var urlC = "/cart";
+                        }
+                        <a class="pointer" @onclick="() => _navigation.NavigateTo(urlC , forceLoad: forceLoad)">Xem tất cả</a>
                     </div>
                     @if (carts is null)
                     {
@@ -105,7 +128,7 @@
                         @foreach (var cart in carts)
                         {
                             <div class="messages">
-                                <a href="/product-detail/@cart.Product.Id" class="message recent">
+                                <a href="/@AppExtensions.ConvertToUrlFriendly(cart.Product.Title)/@cart.Product.Id" class="message recent">
                                     <div class="message__actions_avatar">
                                         <div class="avatar">
                                             @try
@@ -153,13 +176,14 @@
     public User user = new User();
     public string AvatarPath { get; set; }
     string html = string.Empty;
+    private bool forceLoad = true;
     [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
     protected override async Task OnInitializedAsync()
     {
         cartCount = await GetCartCount();
         CartState.OnQuantityChanged += OnCountChanged;
         carts = await _cartSvc.GetAllAsync();
-     
+
         await CheckUserAvatarPath();
     }
 
@@ -178,6 +202,10 @@
         var carts = await _cartSvc.GetAllAsync();
         return carts.Sum(x => x.Quantity);
     }
+    private void OnChangeMedia(bool matches)
+    {
+        forceLoad = matches;
+    }
 
     private async void OnCountChanged(int count)
     {
@@ -187,7 +215,7 @@
         StateHasChanged();
     }
 
-
+  
     public async Task OpenChat()
     {
           await DialogService.OpenAsync<PoPoy.Client.Pages.Chat.Chat>("Hộp thư",options: new DialogOptions() {  Width = "1200px", Height = "712px", Resizable = true, Draggable = true, CssClass = "modal-content", CloseDialogOnOverlayClick = true });

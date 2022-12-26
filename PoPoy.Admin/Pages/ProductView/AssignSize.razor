@@ -103,7 +103,15 @@
     private async Task AssignSizes()
     {
         var code = await ProductService.AssignSize(Model);
-        toastService.ShowInfo(code.StatusCode.ToString());
+        if (code.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            toastService.ShowSuccess("Cập nhật thành công");
+
+        }
+        else
+        {
+            toastService.ShowError("Cập nhật thất bại");
+        }
 
         StateHasChanged();
     }

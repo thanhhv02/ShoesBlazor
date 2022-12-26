@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Google.Maps.DistanceMatrix.DistanceMatrixResponse;
 
 namespace PoPoy.Api.Services.OrderService
 {
@@ -27,7 +28,9 @@ namespace PoPoy.Api.Services.OrderService
         Task<Order> FindOrderById(string id);
         Task<bool> HasOrderById(string id);
         Task<Refund> CancelOrder(Order order);
-        Task<bool> SavePaymentUrl(string orderId);
+       // Task<bool> SavePaymentUrl(string orderId);
+        Task<bool> SavePaymentUrl(string orderId, string paymentUrl);
+        Task<DistanceDto> DrivingDistancebyAddress(string address);
         Task<string> GetPaymentUrl(string orderId);
     }
 }

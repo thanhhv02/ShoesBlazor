@@ -53,7 +53,7 @@ namespace PoPoy.Api.Services.ReviewService
         {
             using (context)
             {
-                var now = DateTime.UtcNow;
+                var now = DateTime.UtcNow.ToLocalTime();
                 review.CreateDate = now;
                 review.UpdateDate = now;
                 review.UserId = userId;
@@ -79,7 +79,7 @@ namespace PoPoy.Api.Services.ReviewService
                 dbReview.Rating = review.Rating;
                 dbReview.Title = review.Title;
                 dbReview.ReviewText = review.ReviewText;
-                dbReview.UpdateDate = DateTime.UtcNow;
+                dbReview.UpdateDate = DateTime.UtcNow.ToLocalTime();
                 await context.SaveChangesAsync();
                 await UpdateRatingAvergare(review);
                 return StatusCodes.Status204NoContent;

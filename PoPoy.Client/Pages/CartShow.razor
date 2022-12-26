@@ -13,7 +13,7 @@
 @attribute [Authorize]
 <PageInfos Title="Giỏ hàng"></PageInfos>
 
-<div class="container">
+<div class="container mb-5">
 
 
     @if (carts is null)
@@ -35,9 +35,8 @@
     else
     {
         <h2>Giỏ hàng</h2>
-
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-lg-7 col-sm-12">
                 <hr />
                 @foreach (var cart in carts)
                 {
@@ -53,7 +52,7 @@
                                 <img src="@cart.Product.ProductImages.FirstOrDefault().ImagePath" class="col-sm-2" style=" height: 150px; object-fit: contain;">
                             }
                             <div class="col-sm-8">
-                                <h4 style="font-weight:bold">@cart.Product.Title</h4> <span class="xmark">X</span>
+                                <h5 style="font-weight:bold">@cart.Product.Title</h5> <span class="xmark">X</span>
                                 <p class="badge bg-secondary" style="font-size: 15px" id="autos"><strong>Size Giày: @cart.SizeName</strong></p> <span style="font-size: 15px" class="badge bg-secondary" id="autos2"><strong>Color: @cart.ColorName</strong></span>
                                 <div class="d-flex flex-row align-items-center mt-3">
                                 <SelectQuantity Model="@cart" CartUpdateType="CartUpdateType.Update" MAX_QUANTITY_PRODUCT="@cart.ProductVariantQuantity" QuantityChanged="() => StateHasChanged()" />
@@ -70,11 +69,27 @@
                     }
                 }
             </div>
-            <div class="col-sm-4">
-                <div class="card">
+            <div class="col-lg-5 col-sm-12">
+                <RadzenCard>
+                    <h6><b>Tổng:</b> @(CalcTotalQuantity()) sản phẩm</h6>
+                    <h6><b>Thuế:</b> <span style="color:tomato">2%</span> thuế </h6>
+                    @if (!string.IsNullOrEmpty(addressString))
+                    {
+                        <h6><b>Địa chỉ:</b> @addressString </h6>
+                            
+                                var numC = CalcTotalQuantity() * 2000;
+
+                        <h6><b>Giá vận chuyển:</b> @AppExtensions.FormatAsPrice(distance.Price + numC) <i>(@distance?.Distance , phí trọng lượng 1 đôi là 2.000 VNĐ ( + @numC))</i> </h6>
+                        <h6><b>Thời gian nhận ước tính:</b> @distance?.Time</h6>
+
+                    }
+                    <hr>
+                    <h4 class=" text-end"><b>Tổng tiền: </b> <b class="text-success">@CalcTotalAmount().ToString("n0") VNĐ</b></h4>
+                </RadzenCard>
+                <hr>
+                <RadzenCard class="">
                     <div class="card-body">
-                        <h5 class="card-subtitle mb-2">Tổng : @(CalcTotalQuantity()) sản phẩm (đã bao gồm <span style="color:tomato">10%</span> thuế)  </h5>
-                        <h4 class="card-title text-danger priceTotal">@CalcTotalAmount().ToString("n0") VNĐ</h4>
+                       
                         <div style="text-align:left;margin:0px;">
                             <style>
                                 fieldset {
@@ -126,7 +141,7 @@
                             </div>
                         }
                     </div>
-                </div>
+                </RadzenCard>
             </div>
         </div>
     }
@@ -139,6 +154,9 @@
     public bool ContinueCheckout = true;
     public int productStock { get; set; }
     public int productQuantity { get; set; }
+    private Address address { get; set; }
+    private string addressString { get; set; }
+    private DistanceDto distance { get; set; }
     [Inject] private IBroadCastService broadCastService { get; set; }
     [Inject] private IConfiguration configuration { get; set; }
 
@@ -161,13 +179,18 @@
     {
         var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
         carts = await CartService.GetAllAsync();
-
+        address = await AuthService.GetAddress(userId);
+        if (address!= null)
+        {
+            addressString = address?.Ward + ", " + address?.City + ", " + address?.District + ", Việt Nam";
+            distance = await OrderService.DrivingDistancebyAddress(addressString);
+        }
         await CartState.UpdateAsync();
         addressModel.UserId = userId;
     }
 
     private decimal CalcTotalAmount()
-        => carts.Sum(x => x.CalcAmount() + 100000);
+        => AppExtensions.RoundMoney(carts.Sum(x => x.CalcAmount() +  2000) + 20000 + (decimal)(distance != null ? distance.Price : 0));
 
     private int CalcTotalQuantity()
         => carts.Sum(x => x.Quantity);
@@ -186,7 +209,6 @@
         {
             var url = "";
             var userId = await LocalStorage.GetItemAsync<Guid>("getUserId");
-            var address = await AuthService.GetAddress(userId);
             var finalTotal = CalcTotalAmount();
             foreach (var item in carts)
             {
@@ -270,7 +292,7 @@
                         if (paymentModel.Name != "CashOnDelivery")
                         {
                             NavigationManager.NavigateTo(url);
-                            await OrderService.SavePaymentUrl(orderId);
+                            await OrderService.SavePaymentUrl(orderId , Uri.EscapeDataString(url));
                         }
                         else
                         {

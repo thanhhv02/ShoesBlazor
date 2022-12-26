@@ -19,6 +19,7 @@ using PoPoy.Client.Extensions;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.HttpRepository;
 using PoPoy.Shared.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace PoPoy.Client.Services.OrderService
 {
@@ -110,11 +111,15 @@ namespace PoPoy.Client.Services.OrderService
             await _http.DeleteAsync($"/api/order/{orderId}");
         }
 
-        public async Task SavePaymentUrl(string orderId)
+        public async Task SavePaymentUrl(string orderId, string url)
         {
-            await _http.GetFromJsonAsync($"/api/order/saveUrl/?orderId={orderId}", null);
+            await _http.GetFromJsonAsync($"/api/order/saveUrl/?orderId={orderId}&url={url}", null);
         }
-
+        public async Task<DistanceDto> DrivingDistancebyAddress(string address)
+        {
+            var result = await _http.GetFromJsonAsync<DistanceDto>($"/api/Order/DrivingDistancebyAddress?address={address}", null);
+            return result;
+        }
         public async Task<string> GetPaymentUrl(string orderId)
         {
             var url = await _http.GetStringAsync($"/api/order/getUrl/?orderId={orderId}");

@@ -14,7 +14,7 @@ namespace PoPoy.Shared.Dto
         public string Id { get; set; }
         public Guid UserId { get; set; }
         public int AddressId { get; set; }
-        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        public DateTime OrderDate { get; set; } = DateTime.Now;
 
         [Column(TypeName = "decimal(18,0)")]
         public decimal TotalPrice { get; set; }

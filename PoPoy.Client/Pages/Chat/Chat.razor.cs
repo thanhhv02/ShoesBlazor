@@ -11,6 +11,7 @@ using PoPoy.Client.Services.BroadCastService;
 using Blazored.Toast.Services;
 using Radzen;
 using PoPoy.Client.Services;
+using PoPoy.Client.Helper;
 
 namespace PoPoy.Client.Pages.Chat
 {
@@ -63,7 +64,7 @@ namespace PoPoy.Client.Pages.Chat
 
             if (!string.IsNullOrEmpty(Message))
             {
-                await jSRuntime.InvokeVoidAsync("sendChat", Message, DateTime.UtcNow.ToString("HH:mm"), AvatarPath);
+                await jSRuntime.InvokeVoidAsync("sendChat", Message, AppExtensions.TimeAgo(DateTime.UtcNow.ToLocalTime()), AvatarPath);
                 CreateOrUpdateChatDto model = new() { Data = null, Message = Message, Avatar =  AvatarPath, SenderId = Guid.Parse(currentUserIdChat) };
                 // var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
                 await broadCastService.SendMessageAllAdmin( message: Message);

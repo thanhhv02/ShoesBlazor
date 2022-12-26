@@ -177,11 +177,11 @@ namespace PoPoy.Api.Controllers
         }
 
         [HttpGet("saveUrl")]
-        public async Task<IActionResult> SavePaymentUrl(string orderId)
+        public async Task<IActionResult> SavePaymentUrl(string orderId , string url)
         {
             try
             {
-                var result = await _orderService.SavePaymentUrl(orderId);
+                var result = await _orderService.SavePaymentUrl(orderId , url);
                 if (result)
                 {
                     return Ok(result);
@@ -192,6 +192,13 @@ namespace PoPoy.Api.Controllers
             {
                 throw ex;
             }
+        }
+        [AllowAnonymous]
+        [HttpGet("DrivingDistancebyAddress")]
+        public async Task<IActionResult> DrivingDistancebyAddress(string address)
+        {
+            var result = await _orderService.DrivingDistancebyAddress(address);
+            return Ok(result);
         }
 
         [HttpGet("getUrl")]

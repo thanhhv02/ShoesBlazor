@@ -35,7 +35,7 @@ namespace PoPoy.Api.Services.DashBoard
                 var query = dataContext.Orders.Where(p => p.OrderStatus == OrderStatus.Delivered);
                 var query2 = query.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.UtcNow;
+                var now = DateTime.UtcNow.ToLocalTime();
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:
@@ -100,7 +100,7 @@ namespace PoPoy.Api.Services.DashBoard
 
                 var query2 = query.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:
@@ -166,7 +166,7 @@ namespace PoPoy.Api.Services.DashBoard
                 var query = users.AsQueryable();
                 var query2 = users.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:
@@ -342,7 +342,7 @@ namespace PoPoy.Api.Services.DashBoard
                 var query = dataContext.Orders.Include(p => p.OrderDetails).Where(p => p.OrderStatus == OrderStatus.Delivered);
                 var query2 = query.AsQueryable();
                 var datepast = GetDateTime(reportDateType);
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 switch (reportDateType)
                 {
                     case ReportDateType.Day:
@@ -381,12 +381,12 @@ namespace PoPoy.Api.Services.DashBoard
             switch (reportDateType)
             {
                 case ReportDateType.Day:
-                   return DateTime.UtcNow.AddDays(-1);
+                   return DateTime.Now.AddDays(-1);
                 case ReportDateType.Month:
-                   return DateTime.UtcNow.AddMonths(-1);
+                   return DateTime.Now.AddMonths(-1);
                 case ReportDateType.Year:
-                    return DateTime.UtcNow.AddYears(-1);
-                default: return DateTime.UtcNow.AddDays(-1); 
+                    return DateTime.Now.AddYears(-1);
+                default: return DateTime.Now.AddDays(-1); 
             }
         }
     }

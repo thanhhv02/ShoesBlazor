@@ -30,7 +30,7 @@ namespace PoPoy.Api.Services.ChatService
         public async Task<bool> CreateChatUserId(ChatDto chatDto)
         {
             var chat = mapper.Map<Chat>(chatDto);
-            chat.Created = DateTime.UtcNow;
+            chat.Created = DateTime.UtcNow.ToLocalTime();
             chat.IsRead = false;
             await dataContext.Chats.AddAsync(chat);
             return  await dataContext.SaveChangesAsync() > 0;

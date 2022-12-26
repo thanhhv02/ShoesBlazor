@@ -54,7 +54,7 @@ namespace PoPoy.Client.Helper
         public static string TimeAgo(this DateTime dateTime)
         {
             string result = string.Empty;
-            var timeSpan = DateTime.UtcNow.Subtract(dateTime);
+            var timeSpan = DateTime.UtcNow.ToLocalTime().Subtract(dateTime);
 
             if (timeSpan <= TimeSpan.FromSeconds(60))
             {
@@ -92,6 +92,36 @@ namespace PoPoy.Client.Helper
             }
 
             return result;
+        }
+
+        public static string ConvertToUrlFriendly(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), "-");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D').Replace(@"""" , "").Replace("“" ,"").Replace("”" , "");
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+
+            return str2.ToLower().Replace(" " , "-");
+        }
+        public static decimal RoundMoney(decimal amount)
+        {
+            decimal fraction = amount - Math.Truncate(amount);
+            if (fraction > 0.5m)
+            {
+                return Math.Ceiling(amount);
+            }
+            else
+            {
+                return Math.Floor(amount);
+            }
         }
     }
 }

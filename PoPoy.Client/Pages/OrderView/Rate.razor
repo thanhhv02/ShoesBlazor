@@ -83,7 +83,7 @@
     private async Task Post()
     {
         await ReviewService.PostAsync(review);
-        NavigationManager.NavigateTo($"/product-detail/{review.ProductId}");
+        NavigationManager.NavigateTo($"/{AppExtensions.ConvertToUrlFriendly(review.Title)}/{review.ProductId}");
         //await JSRuntime.InvokeVoidAsync("showInfoToast", "レビューを投稿しました。");
     }
 

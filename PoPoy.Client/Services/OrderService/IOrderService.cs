@@ -19,7 +19,8 @@ namespace PoPoy.Client.Services.OrderService
         Task DeleteOrder(string orderId);
         Task<Order> GetOrderWithUser(string orderId);
         Task<Refund> CancelOrder(string id);
-        Task SavePaymentUrl(string orderId);
+        Task SavePaymentUrl(string orderId, string url);
         Task<string> GetPaymentUrl(string orderId);
+        Task<DistanceDto> DrivingDistancebyAddress(string address);
     }
 }

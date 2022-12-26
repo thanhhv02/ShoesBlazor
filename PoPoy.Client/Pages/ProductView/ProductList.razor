@@ -3,7 +3,7 @@
 @inject IToastService _toastSvc;
 @implements IDisposable;
 @inject IPublicReviewService PublicReviewService
-<div class="box">
+<div class="box col-12">
     @if (Box_Header != null)
     {
         <div class="box-header">
@@ -11,10 +11,10 @@
         </div>
     }
     <div class="row" id="products">
-        @if (_productSvc.Products.Items == null || _productSvc.Products.Items.Count == 0)
-        {
-            <em>Không tìm thấy sản phẩm nào !</em>
-        }
+            @if (_productSvc.Products.Items == null || _productSvc.Products.Items.Count == 0)
+            {
+               <em>Đang lấy danh sách sản phẩm</em>
+            }
         else
         {
             foreach (var item in _productSvc.Products.Items)
@@ -49,7 +49,7 @@
                         </div>
                         <div class="product-card-info">
                             <div class="product-btn">
-                                <a href="/product-detail/@item.Id" class="btn-flat btn-hover btn-shop-now">mua ngay</a>
+                                <a href="/@AppExtensions.ConvertToUrlFriendly(item.Title)/@item.Id" class="btn-flat btn-hover btn-shop-now">mua ngay</a>
                             </div>
                             <div class="product-card-name" style="font-size: 14px">
                                 @item.Title | Lượt xem: @item.Views

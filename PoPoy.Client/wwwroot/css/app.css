@@ -990,7 +990,8 @@ footer ul li {
 
 /* responsive */
 
-@media only screen and (max-width: 1280px) {
+@media only screen and (max-width: 768px) {
+    /*1280px*/
     .mobile-menu {
         display: flex;
     }
@@ -1179,6 +1180,9 @@ footer ul li {
         justify-content: center;
     }
 }
+.pointer {
+    cursor: pointer;
+}
 
 @media only screen and (max-width: 750px) {
     .hero {
@@ -1200,6 +1204,9 @@ footer ul li {
 
     .promotion-box {
         height: unset;
+    }
+    .filter-col{
+        display:none;
     }
 }
 

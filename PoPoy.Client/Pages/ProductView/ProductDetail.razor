@@ -1,4 +1,4 @@
-﻿@page "/product-detail/{id:int}"
+﻿@page "/{productName}/{id:int}"
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @using PoPoy.Client.Extensions;
@@ -135,6 +135,8 @@
 @code {
     [Parameter]
     public int id { get; set; }
+    [Parameter]
+    public string ProductName { get; set; }
     private Cart cart = new Cart();
     private Product product;
     [Inject] private IBroadCastService broadCastService { get; set; }

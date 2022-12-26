@@ -24,7 +24,7 @@ namespace PoPoy.Client.Services.HttpRepository
             var exp = user.FindFirst(c => c.Type.Equals("exp")).Value;
             var expTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(exp));
 
-            var timeUTC = DateTime.UtcNow;
+            var timeUTC = DateTime.UtcNow.ToLocalTime();
 
             var diff = expTime - timeUTC;
             if (diff.TotalMinutes <= 2)
