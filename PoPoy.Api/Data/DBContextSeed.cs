@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PoPoy.Api.Helpers;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Enum;
 using System;
@@ -49,7 +50,7 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032132131",
                     UserName = "Admin",
                     NormalizedUserName = "ADMIN",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = AppExtensions.GetDateTimeNow(),
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
                 await userManager.CreateAsync(useradmin, "Admin@123$");
@@ -73,7 +74,7 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032232131",
                     UserName = "thanhitc",
                     NormalizedUserName = "THANHITC",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = AppExtensions.GetDateTimeNow(),
 
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
@@ -95,7 +96,7 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032232131",
                     UserName = "thanhhv",
                     NormalizedUserName = "THANHHV",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = AppExtensions.GetDateTimeNow(),
 
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
@@ -118,7 +119,7 @@ namespace PoPoy.Api.Data
                     PhoneNumber = "032232151",
                     UserName = "shipper",
                     NormalizedUserName = "Long",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = AppExtensions.GetDateTimeNow(),
                     EmailConfirmed = true // không cần xác thực email nữa , 
                 };
                 await userManager.CreateAsync(shipper, "thanh123");

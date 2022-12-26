@@ -158,7 +158,7 @@ namespace PoPoy.Api.Controllers
 
             if (result.Success)
             {
-                return Redirect($"{_configuration["ApiUrl"]}/ConfirmEmail.html");
+                return Redirect($"{_configuration["ClientUrl"]}/ConfirmEmail");
             }
 
             return BadRequest(result);

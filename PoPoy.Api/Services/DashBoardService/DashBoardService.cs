@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Polly;
 using PoPoy.Api.Data;
+using PoPoy.Api.Helpers;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Enum;
 using PoPoy.Shared.ViewModels;
@@ -35,7 +36,7 @@ namespace PoPoy.Api.Services.DashBoard
                 var query = dataContext.Orders.Where(p => p.OrderStatus == OrderStatus.Delivered);
                 var query2 = query.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.UtcNow.ToLocalTime();
+                var now = AppExtensions.GetDateTimeNow();
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:

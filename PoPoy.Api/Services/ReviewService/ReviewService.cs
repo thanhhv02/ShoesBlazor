@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PoPoy.Api.Data;
+using PoPoy.Api.Helpers;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
 
@@ -53,7 +54,7 @@ namespace PoPoy.Api.Services.ReviewService
         {
             using (context)
             {
-                var now = DateTime.UtcNow.ToLocalTime();
+                var now = AppExtensions.GetDateTimeNow();
                 review.CreateDate = now;
                 review.UpdateDate = now;
                 review.UserId = userId;
@@ -79,7 +80,7 @@ namespace PoPoy.Api.Services.ReviewService
                 dbReview.Rating = review.Rating;
                 dbReview.Title = review.Title;
                 dbReview.ReviewText = review.ReviewText;
-                dbReview.UpdateDate = DateTime.UtcNow.ToLocalTime();
+                dbReview.UpdateDate = AppExtensions.GetDateTimeNow();
                 await context.SaveChangesAsync();
                 await UpdateRatingAvergare(review);
                 return StatusCodes.Status204NoContent;

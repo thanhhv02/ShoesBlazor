@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using System;
 using PoPoy.Shared.ViewModels;
+using PoPoy.Api.Helpers;
 
 namespace PoPoy.Api.Controllers
 {
@@ -34,7 +35,7 @@ namespace PoPoy.Api.Controllers
                 var principal = _tokenService.GetPrincipalFromExpiredToken(tokenDto.Token);
                 var username = principal.Identity.Name;
                 var user = await _userManager.FindByNameAsync(username);
-                if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow.ToLocalTime())
+                if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= AppExtensions.GetDateTimeNow())
                     return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request 2" });
                 var signingCredentials = _tokenService.GetSigningCredentials();
                 var claims = await _tokenService.GetClaims(user);

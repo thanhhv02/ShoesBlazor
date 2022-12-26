@@ -140,7 +140,7 @@ namespace PoPoy.Admin.Pages.Chat
 
             if (!string.IsNullOrEmpty(Message))
             {
-                await jSRuntime.InvokeVoidAsync("sendChat", Message, AppExtensions.TimeAgo(DateTime.UtcNow.ToLocalTime()), Avatar);
+                await jSRuntime.InvokeVoidAsync("sendChat", Message, AppExtensions.TimeAgo(AppExtensions.GetDateTimeNow()), Avatar);
                 await broadCastService.SendMessageUserId(Message , Current.User.UserId);
                 await jSRuntime.InvokeVoidAsync("sendChatmini2", Message, Current.User.UserId);
 

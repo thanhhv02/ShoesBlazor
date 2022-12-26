@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Microsoft.Extensions.Internal;
+using System.Reflection.Metadata;
+using NodaTime;
 
 namespace PoPoy.Admin.Extensions
 {
@@ -54,7 +57,7 @@ namespace PoPoy.Admin.Extensions
         public static string TimeAgo(this DateTime dateTime)
         {
             string result = string.Empty;
-            var timeSpan = DateTime.UtcNow.ToLocalTime().Subtract(dateTime);
+            var timeSpan = GetDateTimeNow().Subtract(dateTime);
 
             if (timeSpan <= TimeSpan.FromSeconds(60))
             {
@@ -92,6 +95,17 @@ namespace PoPoy.Admin.Extensions
             }
 
             return result;
+        }
+
+        public static DateTime GetDateTimeNow()
+        {
+            // Lấy thời gian hiện tại
+            Instant now = NodaTime.SystemClock.Instance.GetCurrentInstant();
+     
+            // Chuyển đổi sang giờ Việt Nam
+            DateTimeZone vietnamTimeZone = DateTimeZoneProviders.Tzdb["Asia/Saigon"];
+            DateTime vietnamTime = now.InZone(vietnamTimeZone).ToDateTimeUnspecified();
+            return vietnamTime;
         }
     }
 }

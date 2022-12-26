@@ -30,6 +30,7 @@ namespace PoPoy.Shared.ViewModels
         [Display(Name = "Mật khẩu")]
         public string Password { get; set; }
 
+
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
     }

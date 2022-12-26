@@ -3,22 +3,15 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using PoPoy.Client.Extensions;
 using PoPoy.Client.Helper;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.OrderService;
-using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.Chats;
-using PoPoy.Shared.Enum;
 using PoPoy.Shared.ViewModels;
-using Radzen.Blazor.Rendering;
-using Syncfusion.Blazor.RichTextEditor;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -30,7 +23,7 @@ namespace PoPoy.Client.Services.BroadCastService
         private readonly IAuthService authService;
         private readonly ILocalStorageService localStorageService;
         private readonly IOrderService orderService;
-        private readonly AuthenticationStateProvider _authenticationStateProvider; 
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IConfiguration configuration;
         public HubConnection hubConnection { get; private set; }
         [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
@@ -69,7 +62,7 @@ namespace PoPoy.Client.Services.BroadCastService
             var cl = await _authenticationStateProvider.GetAuthenticationStateAsync();
             var id = cl.User.GetUserId();
             data.UserId = Guid.Parse(id);
-            await  hubConnection.InvokeAsync("SendNotiUserId", data);
+            await hubConnection.InvokeAsync("SendNotiUserId", data);
         }
 
         public async Task SendNotiUserId(NotiSendConfig config, Guid UserId)
@@ -306,7 +299,8 @@ namespace PoPoy.Client.Services.BroadCastService
         }
         public async Task StartAsync(HubConnection hubConnection)
         {
-            await hubConnection.StartAsync().ContinueWith(t => {
+            await hubConnection.StartAsync().ContinueWith(t =>
+            {
                 if (t.IsFaulted)
                     Console.WriteLine(t.Exception.GetBaseException());
                 else
@@ -315,6 +309,6 @@ namespace PoPoy.Client.Services.BroadCastService
             this.hubConnection = hubConnection;
         }
 
-     
+
     }
 }

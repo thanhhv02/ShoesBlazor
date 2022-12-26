@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using System.Threading.Tasks;
-using System;
+using PoPoy.Client.Helper;
 using PoPoy.Client.Services.AuthService;
+using System;
+using System.Threading.Tasks;
 
 namespace PoPoy.Client.Services.HttpRepository
 {
@@ -24,7 +25,7 @@ namespace PoPoy.Client.Services.HttpRepository
             var exp = user.FindFirst(c => c.Type.Equals("exp")).Value;
             var expTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(exp));
 
-            var timeUTC = DateTime.UtcNow.ToLocalTime();
+            var timeUTC = AppExtensions.GetDateTimeNow();
 
             var diff = expTime - timeUTC;
             if (diff.TotalMinutes <= 2)

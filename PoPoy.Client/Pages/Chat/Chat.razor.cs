@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
-using PoPoy.Shared.Dto.Chats;
+using PoPoy.Client.Helper;
+using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Shared.Dto;
-using PoPoy.Shared.Enum;
+using PoPoy.Shared.Dto.Chats;
+using Radzen;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-using PoPoy.Client.Services.BroadCastService;
-using Blazored.Toast.Services;
-using Radzen;
-using PoPoy.Client.Services;
-using PoPoy.Client.Helper;
 
 namespace PoPoy.Client.Pages.Chat
 {
@@ -64,19 +62,19 @@ namespace PoPoy.Client.Pages.Chat
 
             if (!string.IsNullOrEmpty(Message))
             {
-                await jSRuntime.InvokeVoidAsync("sendChat", Message, AppExtensions.TimeAgo(DateTime.UtcNow.ToLocalTime()), AvatarPath);
-                CreateOrUpdateChatDto model = new() { Data = null, Message = Message, Avatar =  AvatarPath, SenderId = Guid.Parse(currentUserIdChat) };
+                await jSRuntime.InvokeVoidAsync("sendChat", Message, AppExtensions.TimeAgo(AppExtensions.GetDateTimeNow()), AvatarPath);
+                CreateOrUpdateChatDto model = new() { Data = null, Message = Message, Avatar = AvatarPath, SenderId = Guid.Parse(currentUserIdChat) };
                 // var resp = await httpClient.PostAsync($"/api/BroadCast/SendMessageAllAdmin", model.ToJsonBody());
-                await broadCastService.SendMessageAllAdmin( message: Message);
+                await broadCastService.SendMessageAllAdmin(message: Message);
                 Message = string.Empty;
 
             }
         }
 
-        private async Task ReceiveAsync(string message, string time , string avt, string data = null)
+        private async Task ReceiveAsync(string message, string time, string avt, string data = null)
         {
-            await jSRuntime.InvokeVoidAsync("receiveChat", message, time , avt , data);
-             
+            await jSRuntime.InvokeVoidAsync("receiveChat", message, time, avt, data);
+
         }
 
 

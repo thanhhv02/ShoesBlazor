@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System;
 using PoPoy.Admin.Services.AuthService;
+using PoPoy.Admin.Extensions;
 
 namespace PoPoy.Admin.Services.HttpRepository
 {
@@ -24,7 +25,7 @@ namespace PoPoy.Admin.Services.HttpRepository
             var exp = user.FindFirst(c => c.Type.Equals("exp")).Value;
             var expTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(exp));
 
-            var timeUTC = DateTime.UtcNow.ToLocalTime();
+            var timeUTC = AppExtensions.GetDateTimeNow();
 
             var diff = expTime - timeUTC;
             Console.WriteLine("diff: " + diff);

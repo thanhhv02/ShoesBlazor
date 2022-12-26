@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using PoPoy.Client.Extensions;
+using PoPoy.Shared.Dto;
+using PoPoy.Shared.Paging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.WebUtilities;
-using Newtonsoft.Json;
-using PoPoy.Client.Extensions;
-using PoPoy.Shared.Dto;
-using PoPoy.Shared.Paging;
 
 namespace PoPoy.Client.Services
 {
@@ -31,7 +31,7 @@ namespace PoPoy.Client.Services
             {
                 ["pageNumber"] = productParameters.PageNumber.ToString()
             };
-            
+
             var response = await httpClient.GetAsync(QueryHelpers.AddQueryString($"api/review/filter/{productId}", queryStringParam));
             await response.HandleError();
             var content = await response.Content.ReadAsStringAsync();

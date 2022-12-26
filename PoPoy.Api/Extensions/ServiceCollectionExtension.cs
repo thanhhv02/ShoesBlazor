@@ -153,7 +153,7 @@ namespace PoPoy.Api.Extensions
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("HVT"));
+                options.UseSqlServer(configuration.GetConnectionString("publishConnection"));
             });
             return services;
         }

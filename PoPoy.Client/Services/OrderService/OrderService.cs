@@ -1,25 +1,21 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using PoPoy.Shared.ViewModels;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Net.Http.Json;
-using PoPoy.Shared.Paging;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.WebUtilities;
-using System;
 using Newtonsoft.Json;
-using PoPoy.Shared.Dto;
-using System.Linq;
-using Syncfusion.Blazor.Kanban.Internal;
-using System.Transactions;
-using System.Net.Http.Headers;
-using Blazored.LocalStorage;
 using PoPoy.Client.Extensions;
 using PoPoy.Client.Services.AuthService;
 using PoPoy.Client.Services.HttpRepository;
+using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities;
-using Microsoft.EntityFrameworkCore;
+using PoPoy.Shared.Paging;
+using PoPoy.Shared.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace PoPoy.Client.Services.OrderService
 {
@@ -85,7 +81,7 @@ namespace PoPoy.Client.Services.OrderService
             var response = await _http.GetAsync(QueryHelpers.AddQueryString($"/api/Order/get-all-order-user", queryStringParam));
 
             await response.CheckAuthorized(authService);
-            
+
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -93,7 +89,7 @@ namespace PoPoy.Client.Services.OrderService
                 throw new ApplicationException(content);
             }
             ListOrderResponse.Items = JsonConvert.DeserializeObject<List<OrderOverviewResponse>>(content);
-     
+
             ListOrderResponse.MetaData = JsonConvert.DeserializeObject<MetaData>(response.Headers.GetValues("X-Pagination").First());
 
             OrderListChanged.Invoke();

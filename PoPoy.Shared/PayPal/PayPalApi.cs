@@ -106,8 +106,8 @@ namespace PoPoy.Shared.PayPal
                 intent = "sale",
                 redirect_urls = new
                 {
-                    return_url = "https://localhost:5002/payment-thanks",
-                    cancel_url = "https://localhost:5002/cart"
+                    return_url = "http://popoy.online/payment-thanks",
+                    cancel_url = "http://popoy.online/cart"
                 },
                 payer = new { payment_method = "paypal" },
                 transactions = JArray.FromObject(new[]

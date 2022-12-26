@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
+using PoPoy.Client.Helper;
 using PoPoy.Client.Services.BroadCastService;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Enum;
-using System.Collections.Generic;
+using Radzen;
 using System;
 using System.Threading.Tasks;
-using Radzen;
-using PoPoy.Client.Helper;
 
 namespace PoPoy.Client.Shared
 {
@@ -26,7 +25,7 @@ namespace PoPoy.Client.Shared
             if (await authService.IsUserAuthenticated())
                 Interceptor.RegisterEvent();
 
-        
+
         }
 
         protected async override Task OnAfterRenderAsync(bool firstRender)

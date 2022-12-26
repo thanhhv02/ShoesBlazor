@@ -18,7 +18,7 @@ namespace PoPoy.Api.Data
                    .AddJsonFile("appsettings.json")
                    .Build();
 
-            var connectionstring = configuration.GetConnectionString("HVT");
+            var connectionstring = configuration.GetConnectionString("publishConnection");
 
             var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
             optionsBuilder.UseSqlServer(connectionstring);

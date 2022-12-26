@@ -1,9 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Components;
 using PoPoy.Shared.Paging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PoPoy.Client.Shared.PaginationView

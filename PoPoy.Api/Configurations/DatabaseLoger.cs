@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using PoPoy.Api.Data;
+using PoPoy.Api.Helpers;
 using PoPoy.Shared.Entities;
 using System;
 using System.Security.Cryptography;
@@ -33,7 +34,7 @@ namespace PoPoy.Api.Configurations
             log.Message = exception?.Message ?? string.Empty;
             log.StackTrace = exception?.StackTrace ?? string.Empty;
             log.Source = exception?.Source ?? string.Empty;
-            log.CreateDate = DateTime.UtcNow;
+            log.CreateDate = AppExtensions.GetDateTimeNow();
 
             dataContext.Add(log);
             dataContext.SaveChanges();

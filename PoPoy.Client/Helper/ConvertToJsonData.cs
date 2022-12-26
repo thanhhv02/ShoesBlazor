@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+using NodaTime;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace PoPoy.Client.Helper
 {
@@ -35,12 +36,12 @@ namespace PoPoy.Client.Helper
             return str2.ToLower();
         }
 
-     
-            public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
-            {
-                return listToClone.Select(item => (T)item.Clone()).ToList();
-            }
-  
+
+        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+        {
+            return listToClone.Select(item => (T)item.Clone()).ToList();
+        }
+
     }
 
     public static class AppExtensions
@@ -54,7 +55,7 @@ namespace PoPoy.Client.Helper
         public static string TimeAgo(this DateTime dateTime)
         {
             string result = string.Empty;
-            var timeSpan = DateTime.UtcNow.ToLocalTime().Subtract(dateTime);
+            var timeSpan = AppExtensions.GetDateTimeNow().Subtract(dateTime);
 
             if (timeSpan <= TimeSpan.FromSeconds(60))
             {
@@ -103,13 +104,13 @@ namespace PoPoy.Client.Helper
             }
             Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
             string str = input.Normalize(NormalizationForm.FormD);
-            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D').Replace(@"""" , "").Replace("“" ,"").Replace("”" , "");
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D').Replace(@"""", "").Replace("“", "").Replace("”", "");
             while (str2.IndexOf("?") >= 0)
             {
                 str2 = str2.Remove(str2.IndexOf("?"), 1);
             }
 
-            return str2.ToLower().Replace(" " , "-");
+            return str2.ToLower().Replace(" ", "-");
         }
         public static decimal RoundMoney(decimal amount)
         {
@@ -122,6 +123,17 @@ namespace PoPoy.Client.Helper
             {
                 return Math.Floor(amount);
             }
+        }
+
+        public static DateTime GetDateTimeNow()
+        {
+            // Lấy thời gian hiện tại
+            Instant now = SystemClock.Instance.GetCurrentInstant();
+
+            // Chuyển đổi sang giờ Việt Nam
+            DateTimeZone vietnamTimeZone = DateTimeZoneProviders.Tzdb["Asia/Saigon"];
+            DateTime vietnamTime = now.InZone(vietnamTimeZone).ToDateTimeUnspecified();
+            return vietnamTime;
         }
     }
 }

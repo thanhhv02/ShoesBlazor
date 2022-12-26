@@ -1,9 +1,8 @@
-﻿using System;
+﻿using PoPoy.Client.Extensions;
+using PoPoy.Shared.Dto;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using PoPoy.Client.Extensions;
-using PoPoy.Shared.Dto;
 
 namespace PoPoy.Client.Services
 {

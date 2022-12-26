@@ -1,13 +1,10 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using PoPoy.Client.Extensions;
-using PoPoy.Client.Services.HttpRepository;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
-using Syncfusion.Blazor.Kanban.Internal;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -41,7 +38,7 @@ namespace PoPoy.Client.Services.AuthService
         {
             var result = await _httpClient.PostAsJsonAsync("/api/user/login", loginRequest);
             var content = await result.Content.ReadAsStringAsync();
-            var loginResponse = JsonSerializer.Deserialize<ServiceResponse<AuthResponseDto>>(content,_options);
+            var loginResponse = JsonSerializer.Deserialize<ServiceResponse<AuthResponseDto>>(content, _options);
             if (!result.IsSuccessStatusCode)
             {
                 return loginResponse;
@@ -164,7 +161,7 @@ namespace PoPoy.Client.Services.AuthService
                 await Logout();
                 return null;
             }
-            Console.WriteLine("REFRESH TOEKN !!! "+ result.IsAuthSuccessful);
+            Console.WriteLine("REFRESH TOEKN !!! " + result.IsAuthSuccessful);
             await _localStorage.SetItemAsync("authToken", result.Token);
             await _localStorage.SetItemAsync("refreshToken", result.RefreshToken);
 

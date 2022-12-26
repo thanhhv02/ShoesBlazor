@@ -3,7 +3,6 @@ using PoPoy.Shared.Entities;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PoPoy.Client.Services.OrderService

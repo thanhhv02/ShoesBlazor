@@ -4,15 +4,12 @@ using Newtonsoft.Json;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Paging;
 using PoPoy.Shared.ViewModels;
-using Syncfusion.Blazor.Kanban.Internal;
-using Syncfusion.Blazor.PdfViewer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace PoPoy.Client.Services.ProductService
 {
@@ -92,7 +89,7 @@ namespace PoPoy.Client.Services.ProductService
             };
             if (productParameters.ColorId is not null)
             {
-                
+
                 foreach (var id in productParameters.ColorId)
                 {
                     colorid.Add("ColorId", id.ToString());
@@ -107,7 +104,7 @@ namespace PoPoy.Client.Services.ProductService
                 }
             }
             var response = categoryUrl == null ?
-                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product{(colorid!=null?"?"+colorid:null)}{(sizeid != null ? "&?" + sizeid : null)}", queryStringParam)) :
+                        await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product{(colorid != null ? "?" + colorid : null)}{(sizeid != null ? "&?" + sizeid : null)}", queryStringParam)) :
                         await _httpClient.GetAsync(QueryHelpers.AddQueryString($"/api/product/category/{categoryUrl}{(colorid != null ? "?" + colorid : null)}{(sizeid != null ? "&?" + sizeid : null)}", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)

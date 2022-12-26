@@ -2,7 +2,6 @@
 using Blazored.LocalStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoPoy.Client.Services;
 using PoPoy.Client.Services.AreaService;
@@ -17,10 +16,6 @@ using PoPoy.Client.Services.UserAvatarService;
 using PoPoy.Client.State;
 using PoPoy.Shared.Common;
 using Radzen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PoPoy.Client.Extensions
 {

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Polly;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
+using PoPoy.Api.Helpers;
 using PoPoy.Api.Services.SortService;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
@@ -170,7 +171,7 @@ namespace PoPoy.Api.Services.ProductService
                 //OriginalPrice = request.OriginalPrice,
                 Description = request.Description,
                 Views = 0,
-                DateCreated = DateTime.UtcNow.ToLocalTime()
+                DateCreated = AppExtensions.GetDateTimeNow()
             };
 
             _dataContext.Products.Add(product);
@@ -297,7 +298,7 @@ namespace PoPoy.Api.Services.ProductService
                 {
                     ProductId = productId,
                     ImagePath = _configuration["ApiUrl"] + "/uploads/" + untrustedFileName,
-                    DateCreated = DateTime.UtcNow.ToLocalTime(),
+                    DateCreated = AppExtensions.GetDateTimeNow(),
                     FileSize = file.Length
                 };
                 _dataContext.ProductImages.Add(productImg);

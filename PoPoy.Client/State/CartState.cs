@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Blazored.LocalStorage;
+using PoPoy.Shared.Dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blazored.LocalStorage;
-using PoPoy.Shared.Dto;
 
 namespace PoPoy.Client.State
 {

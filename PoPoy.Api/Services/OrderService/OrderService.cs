@@ -21,6 +21,7 @@ using Google.Maps.DistanceMatrix;
 using Google.Maps.Direction;
 using Google.Maps.Geocoding;
 using static Google.Maps.DistanceMatrix.DistanceMatrixResponse;
+using PoPoy.Api.Helpers;
 
 namespace PoPoy.Api.Services.OrderService
 {
@@ -251,7 +252,7 @@ namespace PoPoy.Api.Services.OrderService
         {
             var refund = new Refund
             {
-                DateRefunded = DateTime.UtcNow.ToLocalTime(),
+                DateRefunded = AppExtensions.GetDateTimeNow(),
             };
 
             order.Refund = refund;

@@ -54,7 +54,7 @@
     public void OnClicked(CateVM cate)
     {
         this.name = cate.Name;
-        navigationManager.NavigateTo($"/category/{cate.Url}", true);
+        navigationManager.NavigateTo($"/category/{cate.Url}", forceLoad);
     }
     private void OnChangeMedia(bool matches)
     {

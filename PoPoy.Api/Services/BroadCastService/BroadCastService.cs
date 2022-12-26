@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using PoPoy.Api.Services.NotificationService;
 using PoPoy.Api.Services.ChatService;
 using PoPoy.Shared.Dto.Chats;
+using PoPoy.Api.Helpers;
 
 namespace PoPoy.Api.Services.BroadCastService
 {
@@ -38,7 +39,7 @@ namespace PoPoy.Api.Services.BroadCastService
         }
         public async Task SendNotifyAll(NotificationDto notification)
         {
-            notification.Created = DateTime.UtcNow.ToLocalTime();
+            notification.Created = AppExtensions.GetDateTimeNow();
             notification.IsRead = false;
             await notificationService.CreateNotification(notification);
             await appHubContext.Clients.All.SendAsync(BroadCastType.Notify, notification);
@@ -47,7 +48,7 @@ namespace PoPoy.Api.Services.BroadCastService
         public async Task SendNotifyAllAdmin(NotificationDto notification)
         {
             // gui thong bao cho tat ca cac nguoi admin
-            notification.Created = DateTime.UtcNow.ToLocalTime();
+            notification.Created = AppExtensions.GetDateTimeNow();
             notification.IsRead = false;
             var userIds = await notificationService.CreateNotificationAllAdmin(notification);
             await appHubContext.Clients.Users(userIds).SendAsync(BroadCastType.Notify, notification);
@@ -56,7 +57,7 @@ namespace PoPoy.Api.Services.BroadCastService
         public async Task SendNotifyUserId(NotificationDto notification)
         {
             // gui thong bao cho user Id
-            notification.Created = DateTime.UtcNow.ToLocalTime();
+            notification.Created = AppExtensions.GetDateTimeNow();
             notification.IsRead = false;
             await notificationService.CreateNotificationUserId(notification);
             await appHubContext.Clients.User(notification.UserId.ToString()).SendAsync(BroadCastType.Notify, notification);
@@ -83,7 +84,7 @@ namespace PoPoy.Api.Services.BroadCastService
 
         public async Task SendMessageAllAdmin(ChatDto chatDto)
         {
-            chatDto.Created = DateTime.UtcNow.ToLocalTime();
+            chatDto.Created = AppExtensions.GetDateTimeNow();
             chatDto.IsRead = false;
             chatDto.IsMe = true;
             var userIds = await chatService.CreateChatAllAdmin(chatDto);
@@ -92,7 +93,7 @@ namespace PoPoy.Api.Services.BroadCastService
 
         public async Task SendMessageUserId(ChatDto chatDto)
         {
-            chatDto.Created = DateTime.UtcNow.ToLocalTime();
+            chatDto.Created = AppExtensions.GetDateTimeNow();
             chatDto.IsRead = false;
             chatDto.IsMe = true;
             await chatService.CreateChatUserId(chatDto);

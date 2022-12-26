@@ -1,5 +1,4 @@
-﻿using System;
-namespace PoPoy.Client.EventArgs
+﻿namespace PoPoy.Client.EventArgs
 {
     public class ReviewAverageCalculatedEventArgs
     {

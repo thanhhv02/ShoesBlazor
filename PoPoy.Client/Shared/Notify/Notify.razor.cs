@@ -42,14 +42,14 @@ namespace PoPoy.Client.Shared.Notify
                 {
                     noti.IsRead = false;
                     notifications.Add(noti);
-                    notifications =  notifications.OrderByDescending(p => p.Created).ToList();
-                    toastService.ShowInfo(noti.Message, noti.Title); 
+                    notifications = notifications.OrderByDescending(p => p.Created).ToList();
+                    toastService.ShowInfo(noti.Message, noti.Title);
                     StateHasChanged();
                 });
             broadCastService.SetHub(hubConnection);
         }
 
-    
+
         private void SubscribeBroadCastNoti(string broadCastType, Action<NotificationDto> action)
         {
             hubConnection.On<NotificationDto>(broadCastType, action);

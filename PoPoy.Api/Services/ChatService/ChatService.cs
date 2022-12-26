@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PoPoy.Api.Data;
 using PoPoy.Api.Extensions;
+using PoPoy.Api.Helpers;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.Chats;
 using PoPoy.Shared.Enum;
@@ -30,7 +31,7 @@ namespace PoPoy.Api.Services.ChatService
         public async Task<bool> CreateChatUserId(ChatDto chatDto)
         {
             var chat = mapper.Map<Chat>(chatDto);
-            chat.Created = DateTime.UtcNow.ToLocalTime();
+            chat.Created = AppExtensions.GetDateTimeNow();
             chat.IsRead = false;
             await dataContext.Chats.AddAsync(chat);
             return  await dataContext.SaveChangesAsync() > 0;
