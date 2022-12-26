@@ -38,7 +38,7 @@ namespace PoPoy.Admin.Pages.Chat
             Avatar = await broadCastService.GetUserAvtChat();
             Console.WriteLine("chat");
             broadCastService.SetHub(hubConnection);
-           
+
 
             var cr = ListChatSenders.FirstOrDefault();
             if (cr != null) await GetUserChat(cr.User.UserId);
@@ -106,7 +106,7 @@ namespace PoPoy.Admin.Pages.Chat
             ChatDtos = new List<ChatDto>();
             Current = ListChatSenders.FirstOrDefault(p => p.User.UserId == id);
             chats = new List<ChatDto>(Current.SenderChats);
-      
+
 
 
             chats.AddRange(Current.ReceiverChats);
@@ -116,7 +116,7 @@ namespace PoPoy.Admin.Pages.Chat
             StateHasChanged();
             await ScrollToBottom();
             await jSRuntime.InvokeVoidAsync("clearChat");
-            await jSRuntime.InvokeVoidAsync("hideCount" , Current.User.UserId);
+            await jSRuntime.InvokeVoidAsync("hideCount", Current.User.UserId);
 
         }
 
@@ -125,13 +125,13 @@ namespace PoPoy.Admin.Pages.Chat
 
             var result = await broadCastService.GetListChatSender();
             ListChatSenders = result.Data;
-            await GetUserChat(id);  
+            await GetUserChat(id);
         }
 
 
         private async Task ScrollToBottom()
         {
-           
+
             await jSRuntime.InvokeVoidAsync("scrollToBottom", "#chat-user");
         }
 
@@ -141,17 +141,17 @@ namespace PoPoy.Admin.Pages.Chat
             if (!string.IsNullOrEmpty(Message))
             {
                 await jSRuntime.InvokeVoidAsync("sendChat", Message, AppExtensions.TimeAgo(AppExtensions.GetDateTimeNow()), Avatar);
-                await broadCastService.SendMessageUserId(Message , Current.User.UserId);
+                await broadCastService.SendMessageUserId(Message, Current.User.UserId);
                 await jSRuntime.InvokeVoidAsync("sendChatmini2", Message, Current.User.UserId);
 
                 Message = string.Empty;
-           
+
             }
         }
 
-        private async Task ReceiveAsync(string message, string time , string avt, string data)
+        private async Task ReceiveAsync(string message, string time, string avt, string data)
         {
-            await jSRuntime.InvokeVoidAsync("receiveChat", message, time , avt, data);
+            await jSRuntime.InvokeVoidAsync("receiveChat", message, time, avt, data);
 
         }
 

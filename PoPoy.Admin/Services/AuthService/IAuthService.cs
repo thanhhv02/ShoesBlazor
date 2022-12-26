@@ -3,7 +3,6 @@ using PoPoy.Shared.Dto.RefreshToken;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PoPoy.Admin.Services.AuthService

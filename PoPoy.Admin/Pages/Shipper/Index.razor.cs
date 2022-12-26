@@ -34,7 +34,8 @@ namespace PoPoy.Admin.Pages.Shipper
 
 
             //SubscribeBroadCastChat(broadCastType: BroadCastType.Order, async p => await LoadOrder());
-            SubscribeBroadCastChat(BroadCastType.Order, async p => {
+            SubscribeBroadCastChat(BroadCastType.Order, async p =>
+            {
                 Console.WriteLine(p);
                 await jSRuntime.InvokeVoidAsync("PlayTing");
 
@@ -56,7 +57,7 @@ namespace PoPoy.Admin.Pages.Shipper
             StateHasChanged();
         }
 
-        private async Task UpdateStatus(string orderId , OrderStatus orderStatus ,  Guid userId , string currentName)
+        private async Task UpdateStatus(string orderId, OrderStatus orderStatus, Guid userId, string currentName)
         {
             UpdateStatusOrderDto input = new UpdateStatusOrderDto()
             {
@@ -77,7 +78,8 @@ namespace PoPoy.Admin.Pages.Shipper
                 toastService.ShowSuccess("Cập nhật thành công");
             }
             else
-            {                toastService.ShowSuccess("Cập nhật thất bại");
+            {
+                toastService.ShowSuccess("Cập nhật thất bại");
 
             }
             await LoadOrder();

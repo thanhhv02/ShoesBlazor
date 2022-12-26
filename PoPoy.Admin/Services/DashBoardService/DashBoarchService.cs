@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using PoPoy.Admin.Extensions;
-using PoPoy.Shared.Common;
+﻿using PoPoy.Admin.Extensions;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Entities.OrderDto;
 using PoPoy.Shared.ViewModels;

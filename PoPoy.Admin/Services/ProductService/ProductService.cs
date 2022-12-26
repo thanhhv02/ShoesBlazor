@@ -1,7 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.ViewModels;
@@ -10,9 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace PoPoy.Admin.Services.ProductService
 {
@@ -108,7 +106,7 @@ namespace PoPoy.Admin.Services.ProductService
             var prodObj = await _httpClient.GetFromJsonAsync<ProductVM>($"/api/product/getProductById/{productId}");
             var sizeObj = await _httpClient.GetFromJsonAsync<List<ProductSize>>("api/product/getSizes");
             var colorObj = await _httpClient.GetFromJsonAsync<List<ProductColor>>("api/product/get-all-color");
-            var test = sizeObj.Zip(colorObj, (s,c) => (s,c) );
+            var test = sizeObj.Zip(colorObj, (s, c) => (s, c));
             var sizeAssignRequest = new SizeAssignRequest();
             foreach (var item in test)
             {
@@ -127,7 +125,7 @@ namespace PoPoy.Admin.Services.ProductService
                     Price = Convert.ToInt32(price)
                 });
             }
-          
+
             return sizeAssignRequest;
         }
 
@@ -141,7 +139,7 @@ namespace PoPoy.Admin.Services.ProductService
             var res = await _httpClient.GetStringAsync($"/api/product/get-product-variant/{productId}");
             var result = JsonConvert.DeserializeObject(res.ToString()) as JObject;
             return JsonConvert.DeserializeObject<List<ProductQuantity>>(result["variants"].ToString());
-            
+
         }
     }
 }

@@ -30,7 +30,7 @@ namespace PoPoy.Admin.Shared.Notify
 
         private List<NotificationDto> notifications = new();
 
-     
+
         async Task Reload()
         {
             var result = await broadCastService.GetNotificationsByUserJwt();
@@ -42,11 +42,11 @@ namespace PoPoy.Admin.Shared.Notify
         protected override async Task OnInitializedAsync()
         {
             await Reload();
-            
-          
+
+
 
         }
-        protected  override void OnAfterRender(bool firstRender)
+        protected override void OnAfterRender(bool firstRender)
         {
             if (firstRender)
             {

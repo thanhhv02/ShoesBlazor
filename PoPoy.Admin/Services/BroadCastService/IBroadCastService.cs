@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.Chats;
-using PoPoy.Shared.Enum;
 using PoPoy.Shared.ViewModels;
 using System;
 using System.Collections.Generic;

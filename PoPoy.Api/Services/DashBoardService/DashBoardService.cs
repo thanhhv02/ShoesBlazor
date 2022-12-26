@@ -101,7 +101,7 @@ namespace PoPoy.Api.Services.DashBoard
 
                 var query2 = query.AsEnumerable();
                 var datepast = GetDateTime(reportSearch.ReportDate);
-                var now = DateTime.Now;
+                var now = AppExtensions.GetDateTimeNow();
                 switch (reportSearch.ReportDate)
                 {
                     case ReportDateType.Day:

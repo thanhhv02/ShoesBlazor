@@ -1,14 +1,10 @@
-﻿using Blazored.Toast.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using PoPoy.Admin.Services.AuthService;
+using PoPoy.Admin.Services.OrderService;
 using PoPoy.Shared.Dto;
-using PoPoy.Shared.Entities.OrderDto;
-using PoPoy.Shared.Enum;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-using PoPoy.Admin.Services.OrderService;
-using PoPoy.Admin.Services.BroadCastService;
-using PoPoy.Admin.Services.AuthService;
 
 namespace PoPoy.Admin.Pages.Shipper
 {
@@ -35,6 +31,6 @@ namespace PoPoy.Admin.Pages.Shipper
             StateHasChanged();
         }
 
-       
+
     }
 }

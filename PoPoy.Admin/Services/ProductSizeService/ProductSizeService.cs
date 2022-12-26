@@ -47,5 +47,5 @@ namespace PoPoy.Admin.Services.ProductSizeService
             await _httpClient.DeleteAsync($"/api/ProductSize/{id}");
         }
     }
- 
+
 }

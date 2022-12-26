@@ -1,5 +1,4 @@
-﻿using PoPoy.Admin.Services.ProductSizeService;
-using PoPoy.Shared.ViewModels;
+﻿using PoPoy.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -48,5 +47,5 @@ namespace PoPoy.Admin.Services.ProductColorService
             await _httpClient.DeleteAsync($"/api/ProductColor/{id}");
         }
     }
- 
+
 }

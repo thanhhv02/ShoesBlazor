@@ -37,16 +37,24 @@ namespace PoPoy.Client.Shared.Notify
         protected override async Task OnInitializedAsync()
         {
             await Reload();
-            SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
-                noti =>
-                {
-                    noti.IsRead = false;
-                    notifications.Add(noti);
-                    notifications = notifications.OrderByDescending(p => p.Created).ToList();
-                    toastService.ShowInfo(noti.Message, noti.Title);
-                    StateHasChanged();
-                });
-            broadCastService.SetHub(hubConnection);
+      
+        }
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                hubConnection.Remove(BroadCastType.Notify);
+                SubscribeBroadCastNoti(broadCastType: BroadCastType.Notify,
+                    noti =>
+                    {
+                        noti.IsRead = false;
+                        notifications.Add(noti);
+                        notifications = notifications.OrderByDescending(p => p.Created).ToList();
+                        toastService.ShowInfo(noti.Message, noti.Title);
+                        StateHasChanged();
+                    });
+                broadCastService.SetHub(hubConnection);
+            }
         }
 
 

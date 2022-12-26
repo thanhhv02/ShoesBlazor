@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+using NodaTime;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq;
-using Microsoft.Extensions.Internal;
-using System.Reflection.Metadata;
-using NodaTime;
 
 namespace PoPoy.Admin.Extensions
 {
@@ -38,12 +36,12 @@ namespace PoPoy.Admin.Extensions
             return str2.ToLower();
         }
 
-     
-            public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
-            {
-                return listToClone.Select(item => (T)item.Clone()).ToList();
-            }
-  
+
+        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+        {
+            return listToClone.Select(item => (T)item.Clone()).ToList();
+        }
+
     }
 
     public static class AppExtensions
@@ -101,7 +99,7 @@ namespace PoPoy.Admin.Extensions
         {
             // Lấy thời gian hiện tại
             Instant now = NodaTime.SystemClock.Instance.GetCurrentInstant();
-     
+
             // Chuyển đổi sang giờ Việt Nam
             DateTimeZone vietnamTimeZone = DateTimeZoneProviders.Tzdb["Asia/Saigon"];
             DateTime vietnamTime = now.InZone(vietnamTimeZone).ToDateTimeUnspecified();

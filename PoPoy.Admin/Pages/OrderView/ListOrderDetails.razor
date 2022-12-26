@@ -207,6 +207,7 @@ else
             await GetOrderDetails();
             // thông báo cho shippẻ
             var noti = new NotiSendConfig("Đơn hàng ship mới", "Bạn được bàn giao một đơn hàng mới", "/shipper");
+            await broadCastService.SendNotiUserId(noti, Guid.Parse(shipperId));
 
             noti = new NotiSendConfig("Trạng thái đơn hàng", "Đơn hàng đã được bàn giao cho vận chuyển", $"/order/{order.Id}");
 

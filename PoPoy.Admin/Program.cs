@@ -1,25 +1,25 @@
 using Blazored.LocalStorage;
-using PoPoy.Shared.Common;
+using Blazored.Toast;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using PoPoy.Admin.Services.AuthService;
+using PoPoy.Admin.Services.BroadCastService;
+using PoPoy.Admin.Services.CategoryService;
+using PoPoy.Admin.Services.DashBoardService;
+using PoPoy.Admin.Services.HttpRepository;
+using PoPoy.Admin.Services.LogService;
+using PoPoy.Admin.Services.OrderService;
+using PoPoy.Admin.Services.ProductColorService;
+using PoPoy.Admin.Services.ProductService;
+using PoPoy.Admin.Services.ProductSizeService;
+using PoPoy.Shared.Common;
+using Radzen;
+using Smart.Blazor;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Authorization;
-using PoPoy.Admin.Services.AuthService;
-using PoPoy.Admin.Services.ProductService;
-using PoPoy.Admin.Services.CategoryService;
-using PoPoy.Admin.Services.OrderService;
-using PoPoy.Admin.Services.BroadCastService;
-using Blazored.Toast;
-using Smart.Blazor;
-using Radzen;
-using PoPoy.Admin.Services.DashBoardService;
-using PoPoy.Admin.Services.ProductSizeService;
-using PoPoy.Admin.Services.ProductColorService;
-using PoPoy.Admin.Services.HttpRepository;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
-using PoPoy.Admin.Services.LogService;
 
 namespace PoPoy.Admin
 {
@@ -38,7 +38,7 @@ namespace PoPoy.Admin
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IBroadCastService, BroadCastService>();
             builder.Services.AddScoped<IDashBoardService, DashBoarchService>();
-            builder.Services.AddScoped<IProductSizeService , ProductSizeService>();
+            builder.Services.AddScoped<IProductSizeService, ProductSizeService>();
             builder.Services.AddScoped<IProductColorService, ProductColorService>();
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<RefreshTokenService>();

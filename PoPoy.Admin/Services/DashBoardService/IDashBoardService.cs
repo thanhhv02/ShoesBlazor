@@ -1,9 +1,8 @@
-﻿using PoPoy.Shared.ViewModels.DashBoard;
-using PoPoy.Shared.ViewModels;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using PoPoy.Shared.Dto;
+﻿using PoPoy.Shared.ViewModels;
+using PoPoy.Shared.ViewModels.DashBoard;
 using PoPoy.Shared.ViewModels.Report;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PoPoy.Admin.Services.DashBoardService
 {

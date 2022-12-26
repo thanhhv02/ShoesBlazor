@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+	  <BlazorBinariesExtension>.bin</BlazorBinariesExtension>
+
   </PropertyGroup>
 
   <ItemGroup>

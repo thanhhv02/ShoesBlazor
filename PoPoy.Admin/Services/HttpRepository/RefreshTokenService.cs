@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using System.Threading.Tasks;
-using System;
-using PoPoy.Admin.Services.AuthService;
 using PoPoy.Admin.Extensions;
+using PoPoy.Admin.Services.AuthService;
+using System;
+using System.Threading.Tasks;
 
 namespace PoPoy.Admin.Services.HttpRepository
 {

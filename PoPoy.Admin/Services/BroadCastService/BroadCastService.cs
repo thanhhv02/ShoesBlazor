@@ -1,21 +1,16 @@
 ﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using PoPoy.Admin.Extensions;
 using PoPoy.Admin.Services.AuthService;
 using PoPoy.Admin.Services.OrderService;
-using PoPoy.Shared.Common;
 using PoPoy.Shared.Dto;
 using PoPoy.Shared.Dto.Chats;
-using PoPoy.Shared.Enum;
 using PoPoy.Shared.ViewModels;
-using Radzen.Blazor.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -94,12 +89,12 @@ namespace PoPoy.Admin.Services.BroadCastService
         public async Task SendMessageUserId(string message, Guid? receiverId, string data = null)
         {
 
-            CreateOrUpdateChatDto model = new() { Data = data, Message = message, ReceiverId = receiverId, Avatar = await GetUserAvtChat() , SenderId = Guid.Parse(await GetUserIdCurrentChat()) };
+            CreateOrUpdateChatDto model = new() { Data = data, Message = message, ReceiverId = receiverId, Avatar = await GetUserAvtChat(), SenderId = Guid.Parse(await GetUserIdCurrentChat()) };
             await hubConnection.InvokeAsync("SendMessageUserId", model);
 
         }
 
-        public async Task ReadChat( Guid senderId)
+        public async Task ReadChat(Guid senderId)
         {
             if (senderId == Guid.Empty)
             {
@@ -109,9 +104,10 @@ namespace PoPoy.Admin.Services.BroadCastService
             var id = cl.User.GetUserId();
             var model = new ReadChatDto
             {
-                SenderId = senderId, ReceiverId = Guid.Parse(id)
+                SenderId = senderId,
+                ReceiverId = Guid.Parse(id)
             };
-            await  hubConnection.InvokeAsync("ReadChat", model);
+            await hubConnection.InvokeAsync("ReadChat", model);
 
             //var resp = await httpClient.PostAsync($"/api/BroadCast/ReadMessage?receiverId={id}&senderId={senderId}" , null);
         }
@@ -235,7 +231,7 @@ namespace PoPoy.Admin.Services.BroadCastService
             await SendMessageAllAdmin("{{html}}", parent);
         }
 
-        public async Task SendInfoOrderModelToUserId(Order order , Guid userId)
+        public async Task SendInfoOrderModelToUserId(Order order, Guid userId)
         {
 
             var parent = @$"
@@ -295,7 +291,8 @@ namespace PoPoy.Admin.Services.BroadCastService
 
         public async Task StartAsync(HubConnection hubConnection)
         {
-            await hubConnection.StartAsync().ContinueWith(t => {
+            await hubConnection.StartAsync().ContinueWith(t =>
+            {
                 if (t.IsFaulted)
                     Console.WriteLine(t.Exception.GetBaseException());
                 else

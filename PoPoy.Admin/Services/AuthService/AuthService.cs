@@ -12,9 +12,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Text;
 
 namespace PoPoy.Admin.Services.AuthService
 {
@@ -39,7 +39,7 @@ namespace PoPoy.Admin.Services.AuthService
         {
             var result = await _httpClient.PostAsJsonAsync("/api/user/login", loginRequest);
             var content = await result.Content.ReadAsStringAsync();
-            var loginResponse = JsonSerializer.Deserialize<LoginResponse<AuthResponseDto>>(content,_options);
+            var loginResponse = JsonSerializer.Deserialize<LoginResponse<AuthResponseDto>>(content, _options);
             if (!result.IsSuccessStatusCode)
             {
                 return loginResponse;
@@ -152,7 +152,7 @@ namespace PoPoy.Admin.Services.AuthService
         public async Task<List<string>> GetRoleNames()
         {
             var result = await _httpClient.GetFromJsonAsync<List<RoleVM>>("/api/user/getRoles");
-            return result.Select(p => p.Name).ToList() ;
+            return result.Select(p => p.Name).ToList();
         }
         public async Task<string> RefreshToken()
         {

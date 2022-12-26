@@ -1,13 +1,10 @@
 ﻿using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using PoPoy.Admin.Services.DashBoardService;
-using PoPoy.Shared.Dto;
 using PoPoy.Shared.ViewModels.DashBoard;
 using PoPoy.Shared.ViewModels.Report;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Threading.Tasks;
 namespace PoPoy.Admin.Pages.Dashboard
 {
@@ -16,7 +13,7 @@ namespace PoPoy.Admin.Pages.Dashboard
         [Inject] private IDashBoardService dashBoardService { get; set; }
         [Inject] private IToastService toastService { get; set; }
 
-        private ReportModel ReportOrder  = new ReportModel();
+        private ReportModel ReportOrder = new ReportModel();
         private ReportModel ReportInCome = new ReportModel();
         private ReportModel ReportCustomer = new ReportModel();
         private List<NotiActivities> notifications = new();
@@ -28,7 +25,7 @@ namespace PoPoy.Admin.Pages.Dashboard
 
         protected override async Task OnInitializedAsync()
         {
-            
+
             await LoadALl();
             await LoadNoti();
             await LoadOrder();
@@ -74,7 +71,7 @@ namespace PoPoy.Admin.Pages.Dashboard
                 toastService.ShowError(result.Message);
             }
         }
-   
+
         string FormatAsPrice(object value)
         {
             //Console.WriteLine((decimal)(value));
@@ -85,7 +82,7 @@ namespace PoPoy.Admin.Pages.Dashboard
         {
             if (value != null)
             {
-                return "Ngày " +  Convert.ToDateTime(value).ToString("dd");
+                return "Ngày " + Convert.ToDateTime(value).ToString("dd");
             }
 
             return string.Empty;
@@ -123,12 +120,12 @@ namespace PoPoy.Admin.Pages.Dashboard
         }
         private async Task LoadDataReport(ReportSearchModel input)
         {
-            var    result = await dashBoardService.GetReport(input);
+            var result = await dashBoardService.GetReport(input);
             if (result.Success)
             {
                 switch (result.Data.Type)
                 {
-                
+
                     case ReportType.Order:
                         ReportOrder = result.Data;
                         break;
