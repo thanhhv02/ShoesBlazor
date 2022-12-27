@@ -77,7 +77,6 @@
             <div class="col-lg-5 col-sm-12">
                 <RadzenCard>
                     <h6><b>Tổng:</b> @(CalcTotalQuantity()) sản phẩm</h6>
-                    <h6><b>Thuế:</b> <span style="color:tomato">2%</span> thuế </h6>
                     @if (!string.IsNullOrEmpty(addressString))
                     {
                         <h6><b>Địa chỉ:</b> @addressString </h6>
@@ -195,7 +194,7 @@
     }
 
     private decimal CalcTotalAmount()
-        => AppExtensions.RoundMoney(carts.Sum(x => x.CalcAmount() +  2000) + 20000 + (decimal)(distance != null ? distance.Price : 0));
+        => AppExtensions.RoundMoney(carts.Sum(x => x.CalcAmount() +  2000) + (decimal)(distance != null ? distance.Price : 0));
 
     private int CalcTotalQuantity()
         => carts.Sum(x => x.Quantity);
