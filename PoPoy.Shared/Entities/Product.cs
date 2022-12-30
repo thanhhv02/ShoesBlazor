@@ -30,6 +30,7 @@ namespace PoPoy.Shared.Dto
         public List<ProductInCategory> ProductInCategories { get; set; }
         public List<ProductQuantity> ProductQuantities { get; set; }
         public ICollection<Coupon> Coupons { get; set; }
+        public bool IsDeleted { get; set; } = false;
        
     }
 }

@@ -15,5 +15,6 @@ namespace PoPoy.Shared.Dto
         public string Name { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;
         public List<ProductInCategory> ProductInCategories { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

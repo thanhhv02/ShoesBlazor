@@ -52,6 +52,7 @@ namespace PoPoy.Api.Services.ProductService
                     .SortByPrice(productParameters.OrderBy, _dataContext)//sort by product quantity column
                     .Include(x => x.ProductImages)
                     .Include(x => x.ProductQuantities)
+                    .Where(x=>x.IsDeleted == false)
                     .ToListAsync();
 
                 if(productParameters.ColorId != null)
@@ -107,6 +108,7 @@ namespace PoPoy.Api.Services.ProductService
                         from c in picc.DefaultIfEmpty()
                         join pi in _dataContext.ProductImages on p.Id equals pi.ProductId into ppi
                         from pi in ppi.DefaultIfEmpty()
+                        where p.IsDeleted == false
                         select new { p, pic, pi };
 
             //var productQuantities = await (from pq in _dataContext.ProductQuantities
@@ -203,10 +205,11 @@ namespace PoPoy.Api.Services.ProductService
         public async Task<int> DeleteProduct(int productId)
         {
             var product = await _dataContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
+            product.IsDeleted = true;
             if (product == null) throw new Exception($"Cannot find image: {productId}");
 
 
-            _dataContext.Products.Remove(product);
+            _dataContext.Products.Update(product);
 
             return await _dataContext.SaveChangesAsync();
         }
@@ -465,6 +468,7 @@ namespace PoPoy.Api.Services.ProductService
                                 .Where(p => p.Title.ToLower().Contains(productParameters.searchText.ToLower()) ||
                                     p.Description.ToLower().Contains(productParameters.searchText.ToLower()))
                                 .Include(p => p.ProductImages)
+                                .Where(x=>x.IsDeleted == false)
                                 .ToListAsync();
 
                 return PagedList<Product>
@@ -508,8 +512,8 @@ namespace PoPoy.Api.Services.ProductService
         private async Task<List<Product>> FindProductsBySearchText(string searchText)
         {
             return await _dataContext.Products
-                                .Where(p => p.Title.ToLower().Contains(searchText.ToLower()) ||
-                                    p.Description.ToLower().Contains(searchText.ToLower()))
+                                .Where(p => (p.Title.ToLower().Contains(searchText.ToLower()) ||
+                                    p.Description.ToLower().Contains(searchText.ToLower()) && p.IsDeleted == false))
                                 .ToListAsync();
         }
 

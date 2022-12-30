@@ -22,7 +22,7 @@ namespace PoPoy.Api.Services.CategoryService
         public async Task<List<CateVM>> GetAllCategories()
         {
             var query = from c in _context.Categories
-                        where c.Status.Equals(Status.Active)
+                        where c.Status.Equals(Status.Active) && c.IsDeleted == false
                         select new { c };
             return await query.Select(x => new CateVM()
             {
@@ -102,9 +102,10 @@ namespace PoPoy.Api.Services.CategoryService
         public async Task<int> DeleteCategory(int categoryId)
         {
             var category = await _context.Categories.FindAsync(categoryId);
+            category.IsDeleted = true;
             if (category == null) throw new Exception($"Cannot find a product: {categoryId}");
 
-            _context.Categories.Remove(category);
+            _context.Categories.Update(category);
 
             return await _context.SaveChangesAsync();
         }
